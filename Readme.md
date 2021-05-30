@@ -1,13 +1,16 @@
-### Graph Path 
+### `Graph Path` 
 
 ## Compiled by team `No Cap`
 
-## Introdution
+## `Introdution`
 Graph Path is a project management tool that represents task in a form of a 
 directed acyclic graph. The representation is chosen because it is intuitive
-and the graph will clearly layout the paths that are critical paths.  
+and the graph will clearly layout the paths that are critical paths. 
+A graph can have alternate paths to another node from the start node. 
+This would gives a visual stimuli of how the project flows from node to node. 
 
-### Team Members
+
+### `Team Members`
 
 
 <p> Godiragetse Naane</p>
