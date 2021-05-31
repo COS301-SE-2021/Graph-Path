@@ -7,7 +7,7 @@ Graph Path is a project management tool that represents task in a form of a
 directed acyclic graph. The representation is chosen because it is intuitive
 and the graph will clearly layout the paths that are critical paths. 
 A graph can have alternate paths to another node from the start node. 
-This would gives a visual stimuli of how the project flows from node to node. 
+This provides a visual stimuli of how the project flows from node to node. 
 
 
 ### `Team Members`
@@ -21,3 +21,15 @@ This would gives a visual stimuli of how the project flows from node to node.
 <p><a href="https://github.com/nanitight" target="_blank"> Github</a></p>
 <p>email: ntpnaane@gmail.com or u17132330@tuks.co.za</p>
 <p>Interests: Music + Eating !!!</p>
+
+###Branching Strategy 
+<h2>
+    Monorepo strategy
+    <ul>
+        <ul>
+            <li>
+                master
+            </li>
+          </ul>  
+    </ul>
+</h2>
