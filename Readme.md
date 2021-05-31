@@ -22,14 +22,26 @@ This provides a visual stimuli of how the project flows from node to node.
 <p>email: ntpnaane@gmail.com or u17132330@tuks.co.za</p>
 <p>Interests: Music + Eating !!!</p>
 
-###Branching Strategy 
+### Branching Strategy 
 <h2>
     Monorepo strategy
     <ul>
+        <li>
+                master
+        </li>
         <ul>
             <li>
-                master
+                develop
             </li>
-          </ul>  
+            <br>
+            <ul>
+                <li>
+                    feature-front
+                </li>
+                <li>
+                    feature-back
+                </li>
+            </ul>
+        </ul>  
     </ul>
 </h2>
