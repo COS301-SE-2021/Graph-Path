@@ -22,6 +22,15 @@ This provides a visual stimuli of how the project flows from node to node.
 <p>email: ntpnaane@gmail.com or u17132330@tuks.co.za</p>
 <p>Interests: Music + Eating !!!</p>
 
+<p> Kagiso Monareng </p>
+<img src="" >
+<p> Student Number : u17049106 </p>
+<p><a href="#"> Linkedin </a></p>
+<p> <a href="#"> Github </p>
+<p> email : u17049106@tuks.co.za </p>
+<p> interests: </p>
+
+
 ###Branching Strategy 
 <h2>
     Monorepo strategy
