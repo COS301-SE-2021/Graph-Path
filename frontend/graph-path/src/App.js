@@ -1,4 +1,5 @@
 import './App.css';
+import Dashboard from './components/Dashboard' ;
 
 function App() {
   return (
@@ -6,9 +7,7 @@ function App() {
       <header className="App-header">
         Graph Path
         </header>
-        <div className="GraphDashboard">
-          Dashboard
-        </div>
+       <Dashboard />
     </div>
   );
 }
