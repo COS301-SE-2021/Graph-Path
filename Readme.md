@@ -37,13 +37,12 @@ This provides a visual stimuli of how the project flows from node to node.
     Monorepo strategy
     <ul>
         <li>
-                master
+            master
         </li>
         <ul>
             <li>
                 develop
             </li>
-            <br>
             <ul>
                 <li>
                     feature-front
