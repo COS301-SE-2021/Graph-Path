@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-router.get('/:projectName' , (req,res,nextTick) =>{
+router.get('/:projectName' , (req,res,next) =>{
 
     const projectName = req.params.projectName;
     res.status(200).json({
@@ -20,3 +20,24 @@ router.get('/:projectName' , (req,res,nextTick) =>{
     })
 
 })
+
+router.get('/:projectId' , (req,res,next) =>{
+
+    res.status(200).json({
+
+        Name: "Demo project",
+        id: "000",
+        startDate: "2021-01-01",
+        dueDate:"2021-05-05",
+        Members:{
+            developer1 : "Person 1",
+            developer2 : "Person 2",
+            developer3 : "Person 3",
+        },
+        Owner: "Bob Vans",
+        Graph:" some object" ,
+    })
+
+})
+
+module.exports = router
