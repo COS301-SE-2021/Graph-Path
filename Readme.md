@@ -32,6 +32,15 @@ This provides a visual stimuli of how the project flows from node to node.
 <p> interests: </p>
 
 <br>
+<p> Aliandro Pretorius </p>
+<img src="" >
+<p> Student Number : u19016477 </p>
+<p><a href="https://www.linkedin.com/in/aliandro-pretorius-66916a210/"> Linkedin </a></p>
+<p> <a href="#"> Github</a> </p>
+<p> email : u19016477@tuks.co.za </p>
+<p> interests: Gaming + sleeping </p>
+
+<br>
 <p> Mvhali Livhuwani </p>
 <img src=" style="width: 160px; height: 160px; margin: 22.15px 0px;"/>
 <p> Student Number: u17262578</p>
