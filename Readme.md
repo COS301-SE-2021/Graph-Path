@@ -31,6 +31,13 @@ This provides a visual stimuli of how the project flows from node to node.
 <p> email : u17049106@tuks.co.za </p>
 <p> interests: </p>
 
+<br>
+<img src="https://media-exp1.licdn.com/dms/image/C4D35AQFo6p4ezsh_tA/profile-framedphoto-shrink_400_400/0/1616789797250?e=1622631600&v=beta&t=kjqvTmYEEQ9XJ6uI1HH2BQygmryRFfdhKqk0wTj6HCM" style="width: 160px; height: 160px; margin: 22.15px 0px;">
+<p> Student Number: u17262578</p>
+<p><a href="https://www.linkedin.com/in/livhuwani-mvhali-163679208/" target="_blank">LinkedIn</a></p>
+<p><a href="" target="_blank"> Github</a></p>
+<p>email: u17262578@tuks.co.za</p>
+<p>Interests: Music, Gym & Cars</p>
 
 ### Branching Strategy 
 <h2>
