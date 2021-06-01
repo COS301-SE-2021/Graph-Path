@@ -27,13 +27,13 @@ This provides a visual stimuli of how the project flows from node to node.
 <img src="" >
 <p> Student Number : u17049106 </p>
 <p><a href="#"> Linkedin </a></p>
-<p> <a href="#"> Github </p>
+<p> <a href="#"> Github</a> </p>
 <p> email : u17049106@tuks.co.za </p>
 <p> interests: </p>
 
 <br>
 <p> Mvhali Livhuwani </p>
-<img src=" style="width: 160px; height: 160px; margin: 22.15px 0px;">
+<img src=" style="width: 160px; height: 160px; margin: 22.15px 0px;"/>
 <p> Student Number: u17262578</p>
 <p><a href="https://www.linkedin.com/in/livhuwani-mvhali-163679208/" target="_blank">LinkedIn</a></p>
 <p><a href="" target="_blank"> Github</a></p>
