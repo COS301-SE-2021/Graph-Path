@@ -40,6 +40,15 @@ This provides a visual stimuli of how the project flows from node to node.
 <p>email: u17262578@tuks.co.za</p>
 <p>Interests: Music, Gym & Cars</p>
 
+<br>
+<p> Thabo Mndebele </p>
+<img src="" >
+<p> Student Number : u16103948 </p>
+<p><a href="https://www.linkedin.com/in/thabo-mndebele-5973b8112/"> Linkedin </a></p>
+<p> <a href="https://github.com/Unabashed-Thabo"> Github</a> </p>
+<p> email : u16103948@tuks.co.za </p>
+<p> interests: Unpopular Opinions </p>
+
 ### Branching Strategy 
 <h2>
     Monorepo strategy
