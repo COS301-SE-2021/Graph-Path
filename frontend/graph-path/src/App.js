@@ -1,4 +1,4 @@
-import './App.css';
+import './css/App.css';
 import Dashboard from './components/Dashboard' ;
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
         Graph Path
         </header>
        <Dashboard />
+       
     </div>
   );
 }

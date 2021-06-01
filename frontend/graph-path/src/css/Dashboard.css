@@ -1,0 +1,9 @@
+
+.GraphDashboard{
+    display: flex;
+    flex-direction: column; 
+    background-color: #F00112;
+    color: white;
+    text-align: center;
+    align-items: center;
+  }
