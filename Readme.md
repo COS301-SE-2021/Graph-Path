@@ -36,7 +36,7 @@ This provides a visual stimuli of how the project flows from node to node.
 <img src="" >
 <p> Student Number : u19016477 </p>
 <p><a href="https://www.linkedin.com/in/aliandro-pretorius-66916a210/"> Linkedin </a></p>
-<p> <a href="#"> Github</a> </p>
+<p> <a href="https://github.com/Ali-Stack-2000"> Github</a> </p>
 <p> email : u19016477@tuks.co.za </p>
 <p> interests: Gaming + sleeping </p>
 
