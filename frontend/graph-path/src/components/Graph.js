@@ -12,20 +12,15 @@ class Graph extends React.Component{
     }
 
     render(){
-        var number = prompt('How many nodes?') ;
-        for(var i =0 ; i < number ; i++){
-            return (
-                <div>
-                    {/* <p>Is called {this.props.project.name}
-                    </p> */}
-                    {/* <Node /> */}
-                    
-                    <Node key={i}
-                     color={"blue"}/> 
-                    <Edge />
-                </div>
-            ) ; 
-        }
+        return (
+            <div>
+                {/* <p>Is called {this.props.project.name}
+                </p> */}
+                {/* <Node /> */}
+                <Node color={"blue"}/> 
+                <Edge />
+            </div>
+        ) ; 
     }
 }
 

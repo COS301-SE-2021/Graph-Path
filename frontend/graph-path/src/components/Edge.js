@@ -7,7 +7,7 @@ class Edge extends React.Component{
     render(){
         return (
             <svg className="GraphLine">
-                <line x1="50" x2="50" y1="0" y2="1000" style={{stroke:'#00000F',
+                <line x1="0" x2="250" y1="75" y2="75" style={{stroke:'#00000F',
             strokeWidth:'20',}}></line>
             </svg>
         )

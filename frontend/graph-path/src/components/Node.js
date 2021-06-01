@@ -18,7 +18,7 @@ class Node extends React.Component{
 
         return (
             <a href="#" >
-        <svg>
+        <svg width="120">
             <circle cx="60" cy="80" r="50" fill={color} onClick={this.displayTask}/>
             {/* <div>{this.state.task}</div> */}
         </svg>
