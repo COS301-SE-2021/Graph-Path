@@ -1,22 +1,21 @@
 const express = require('express');
 const app = require('../../app');
 const createNewProject = require('../../Services/CreateNewProject');
-const retriveProject = require('../../Services/RetrieveProjects');
+//const retriveProject = require('../../Services/RetrieveProjects');
 
 const router = express.Router();
 
 router.post('/newProject' , (req,res,next) =>{
     data  = req.body;
-    console.log(data);
-    status = createNewProject(data);
-    if(status ==1)
+    Status = createNewProject(data);
+    Status = 1;
+    if(Status ==1)
     {
         res.status(200).json({
 
             statusCode : 1,
             message : "new project creation successful",
-            error : "",
-            body: ""
+
 
         })
     }
