@@ -1,5 +1,8 @@
 import './css/App.css';
 import Dashboard from './components/Dashboard' ;
+import Register from './components/Register';
+import Login from './components/Login'
+
 
 function App() {
   return (
@@ -8,7 +11,10 @@ function App() {
         Graph Path
         </header>
        <Dashboard />
-       
+
+        <Register/>
+
+        <Login />
     </div>
   );
 }
