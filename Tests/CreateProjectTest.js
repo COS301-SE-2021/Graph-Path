@@ -14,11 +14,7 @@ describe("the create new Project function" , function(){
                 id: "000",
                 startDate:"2021-01-01",
                 dueDate:"2021-05-05",
-                Members:{
-                    developer1 : "Person 1",
-                    developer2 : "Person 2",
-                    developer3 : "Person 3",
-                },
+                Members:'{developer1 : "Person 1",developer2 : "Person 2",developer3 : "Person 3",}',
                 Owner: "Bob Vans",
                 Graph:" some object" ,
 
