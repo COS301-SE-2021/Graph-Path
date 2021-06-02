@@ -1,13 +1,13 @@
 import React from 'react'
 
 class Node extends React.Component{
-    constructor(props){
-        super(props) ; 
-        this.state ={
-            task:"No Task Yet" ,
-            started: false
-        }
-    }
+    // constructor(props){
+    //     super(props) ; 
+    //     this.state ={
+    //         task:this.props.task ,
+    //         started: false
+    //     }
+    // }
 
     render(){
         var color = "red"
@@ -17,7 +17,7 @@ class Node extends React.Component{
         }
 
         return (
-            <a href="#" >
+            <a >
         <svg width="120">
             <circle cx="60" cy="80" r="50" fill={color} onClick={this.displayTask}/>
             {/* <div>{this.state.task}</div> */}
@@ -27,7 +27,7 @@ class Node extends React.Component{
     }
 
     displayTask =()=>{
-        alert(this.state.task) ;
+        alert(this.props.task) ;
     }
 }
 
