@@ -6,7 +6,8 @@ const retriveProject = require('../../Services/RetrieveProjects');
 const router = express.Router();
 
 router.post('/newProject' , (req,res,next) =>{
-    data  = req.body
+    data  = req.body;
+    console.log(data);
     status = createNewProject(data);
     if(status ==1)
     {
