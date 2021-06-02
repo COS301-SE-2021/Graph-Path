@@ -33,6 +33,7 @@ class Login extends React.Component{
                        onChange={e=>this.change(e)}
                 />
                 <br />
+
                 Password<br />
                 <input name='password'
                        type='password'
