@@ -40,6 +40,8 @@ function createNewProject(MetaData)
 
         })
 
+    return 1;
+
 }
 
 module.exports = createNewProject;
