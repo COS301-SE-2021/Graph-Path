@@ -1,6 +1,50 @@
+const fs = require('fs');
+const addNewProject = require('../Controllers/DBcontroller');
+const mongoose = require('mongoose');
+const ProjectModel = require('../Models/ProjectModel');
 
-function creatNewProject(JsonObj)
+
+
+function createNewProject(MetaData)
 {
+
+    mongoose.connect(DB_URI, {useNewUrlParser: true , useUnifiedTopology: true})
+        .then((result) =>{
+
+            console.log("connected");
+        })
+        .catch((err) => {
+
+        })
+
+    const project = new ProjectModel ({
+
+        _id: mongoose.Types.ObjectId(),
+        Name: MetaData['Name'],
+        id: MetaData['id'],
+        startDate: MetaData['startDate'],
+        dueDate: MetaData['dueDate'],
+        Members: MetaData['Members'],
+        Owner: MetaData['Owner'],
+        Graph: MetaData['Graph']
+    });
+
+    project.save().then(result =>{
+
+        console.log(result);
+        status = 1;
+        return status;
+
+    })
+        .catch(err=>{
+            console.log("error saving document: "+ err);
+            status = 0;
+            return 0;
+        })
+
+
 
 
 }
+
+module.exports = createNewProject;
