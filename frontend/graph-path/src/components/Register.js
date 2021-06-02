@@ -1,5 +1,6 @@
 import React from 'react'
 import Dashboard from "./Dashboard";
+import '../css/Register.css'
 
 class Register extends React.Component{
     state ={
@@ -25,20 +26,28 @@ class Register extends React.Component{
         return (
 
             <form>
+                First Name
+                <br />
                 <input name='firstName'
                        placeholder='FirstName' value={this.state.firstName}
                         onChange={e=>this.change(e)}
                 />
+                <br />
+                Lastname
                 <br />
                 <input name='lastName'
                        placeholder='lastName' value={this.state.lastName}
                        onChange={e=>this.change(e)}
                 />
                 <br />
+                Username
+                <br />
                 <input name= 'userName'
                        placeholder='UserName' value={this.state.userName}
                        onChange={e=>this.change(e)}
                 />
+                <br />
+                Email
                 <br />
                 <input name = 'email'
                        type='email'
@@ -46,13 +55,15 @@ class Register extends React.Component{
                        onChange={e=>this.change(e)}
                 />
                 <br />
+                Password
+                <br />
                 <input name='password'
                        type='password'
                        placeholder='Password' value={this.state.password}
                        onChange={e=>this.change(e)}
                 />
              <br />
-                    <button onClick={(e) => this.onSubmit(e)} > Submit </button>
+                    <button  id='btn1' onClick={(e) => this.onSubmit(e)} > Submit </button>
             </form>
 
         );
