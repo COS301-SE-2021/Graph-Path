@@ -29,6 +29,28 @@ describe("the create new Project function" , function(){
         assert.strictEqual(result,1);
     });
 
+    it('it should fail to create an project with missing fields', function(){
+
+
+
+    });
+
+
+    it('No two projects with the same id should be created ', function(){
+
+
+    });
+
+
+    it('should return 1 when creation was succesful', function(){
+
+
+    });
+
+    it('should return 0 when creation was unsuccesful', function(){
+
+
+    });
 
 
 });
