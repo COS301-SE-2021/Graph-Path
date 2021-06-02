@@ -19,8 +19,8 @@ function createNewProject(MetaData)
 
     const project = new ProjectModel ({
 
-        _id: mongoose.Types.ObjectId(),
-        Name: MetaData['Name'],
+        _id: mongoose.Types.ObjectId,
+        name: MetaData['Name'],
         id: MetaData['id'],
         startDate: MetaData['startDate'],
         dueDate: MetaData['dueDate'],
