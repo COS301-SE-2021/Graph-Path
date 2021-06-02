@@ -35,6 +35,38 @@ router.post('/newProject' , (req,res,next) =>{
 
 
 })
+
+router.get('/retrieveByName/:projectName' , (req,res,next) =>{
+
+    console.log("get by ID");
+    ProjectJsonObj = retriveProject.getProjectByName(req.params.projectName);
+    console.log(ProjectJsonObj);
+    found =1 ;
+    if (found == 1)
+    {
+        res.status(200).json({
+
+            statusCode : 1,
+            message : ProjectJsonObj,
+            error : "",
+            body: ProjectJsonObj
+
+        })
+    }
+
+    else
+    {
+        res.status(200).json({
+            statusCode : 0,
+            message : "retrival for "+req.params.projectId +"failed",
+            error : "",
+            body: ""
+        })
+    }
+
+})
+
+
 router.get('/:projectId' , (req,res,next) =>{
 
     res.status(200).json({
