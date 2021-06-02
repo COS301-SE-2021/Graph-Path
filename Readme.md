@@ -24,10 +24,10 @@ This provides a visual stimuli of how the project flows from node to node.
 
 <br>
 <p> Kagiso Monareng </p>
-<img src="" >
+<img src="https://media-exp1.licdn.com/dms/image/C4D03AQGJqebCY-XVWA/profile-displayphoto-shrink_200_200/0/1618732785194?e=1628121600&v=beta&t=ltY7hxsXI95m-Pnpz710vnmowd0iR4UI1Iz_LKFRa6k" >
 <p> Student Number : u17049106 </p>
-<p><a href="#"> Linkedin </a></p>
-<p> <a href="#"> Github</a> </p>
+<p><a href="https://www.linkedin.com/in/kagiso-monareng-23a684a1/"> Linkedin </a></p>
+<p> <a href="https://github.com/Kage-001/Kage-001.github.io"> Github</a> </p>
 <p> email : u17049106@tuks.co.za </p>
 <p> interests: </p>
 
