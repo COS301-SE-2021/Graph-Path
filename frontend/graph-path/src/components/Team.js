@@ -1,4 +1,5 @@
 import React from 'react';
+import '../css/Team.css'
 
 class Team extends React.Component{
     render(){

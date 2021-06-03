@@ -1,5 +1,6 @@
 import React from 'react';
 import Team from './Team';
+import '../css/Team.css'
 
 
 class TeamMembers extends React.Component{
