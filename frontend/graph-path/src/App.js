@@ -1,11 +1,13 @@
 import React from 'react';
 import Header from './components/Header' ; 
 import './css/App.css';
+import React, { Component}from 'react' ;
+/*import React, { Component} from 'react'*/
 import Dashboard from './components/Dashboard' ;
 import Register from './components/Register';
 import Login from './components/Login'
 
-
+/*Changed this to class type*/
 class App extends React.Component {
 
   constructor(props){
