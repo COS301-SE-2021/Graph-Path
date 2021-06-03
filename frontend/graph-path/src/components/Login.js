@@ -1,11 +1,13 @@
 import React from 'react'
-import Dashboard from "./Dashboard";
 import '../css/Login.css'
 
 class Login extends React.Component{
-    state ={
-        email:'',
-        password:''
+    constructor(props){
+        super(props) ; 
+        this.state ={
+            email:'',
+            password:''
+        }
     }
 
     change =(e) => {
@@ -16,14 +18,18 @@ class Login extends React.Component{
 
     onSubmit =e=>{
         e.preventDefault(); /*So the values entered don't show on URL*/
-        console.log(this.state)
+
+        // send data to server 
+        console.log(this.state)  ;
+
+        //change status of login
+        this.props.changeLog() ; 
     }
     render(){
 
         return (
 
-            <form>
-
+            <form onSubmit= {this.onSubmit}>
                 <br />
                 <br />
                 Email<br />
@@ -41,7 +47,7 @@ class Login extends React.Component{
                        onChange={e=>this.change(e)}
                 />
                 <br />
-                <button id='btn1' onClick={(e) => this.onSubmit(e)} > Submit </button>
+                <input type="submit" id='btn1' value="Submit" / > 
             </form>
 
         );
