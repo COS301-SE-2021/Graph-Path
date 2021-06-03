@@ -21,6 +21,15 @@ class Register extends React.Component{
         e.preventDefault(); /*So the values entered don't show on URL*/
         this.props.onSubmit(this.state);
         console.log(this.state)
+
+        /*Clear inputs once you click on submit*/
+        this.setState({
+            firstName:'',
+            lastName:'',
+            userName:'',
+            email:'',
+            password:''
+        });
     }
     render(){
 
