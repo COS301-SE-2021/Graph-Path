@@ -19,6 +19,11 @@ class Login extends React.Component{
         this.props.onSubmit(this.state);
         console.log(this.state)
 
+        /*Clear inputs once you click on submit*/
+        this.setState({
+            email:'',
+            password:''
+        });
     }
     render(){
 
