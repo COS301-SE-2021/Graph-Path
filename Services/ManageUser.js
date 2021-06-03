@@ -4,9 +4,25 @@ const UserModel = require('../Models/UserModel');
 DB_URI = "mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/GraphPath?retryWrites=true&w=majority";
 
 
-function getAllUsers(body){
+function getAllUsers(body){//getAllUsers(body)
+    var arr =[];
+    mongoose.connect(DB_URI, {useNewUrlParser: true , useUnifiedTopology: true})
+        .then((result) =>{
+            console.log("Successful connection to DB");
+            //const filter = {};
+           var User;
+           UserModel.find({},(err, users)=>{
+               if(err){
+                   res.send("Couldn't retrieve users");
+               }
+               res.json(users);
+           }); //= UserModel.find(filter);
 
-        const user = new UserModel({
+        })
+
+
+
+      /*  const user = new UserModel({
             _id: mongoose.Types.ObjectId(),
             name: body.name,
             Surname: body.Surname,
@@ -16,6 +32,8 @@ function getAllUsers(body){
             type: body.type,
             Notification: body.Notification
         });
+
+       */
 
         return 0;
 
