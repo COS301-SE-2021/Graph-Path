@@ -4,8 +4,8 @@ const mongo = require('mongodb').MongoClient;
 const assert = require('assert');
 
 var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-//var url = 'mongodb+srv://Aliandro:Aliandro2000@cluster0.y5ggo.mongodb.net/Graph-Path?retryWrites=true&w=majority';
-//var url = 'mongodb://localhost:27017/test';
+//var url = 'mongodb+srv://Aliandro:Aliandro2000@cluster0.y5ggo.mongodb.net/Graph-Path?retryWrites=true&w=majorityvar '
+//url = 'mongodb://localhost:27017/test';
 router.get('/users',(req, res, next)=> {
 
 
