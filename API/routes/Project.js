@@ -50,6 +50,16 @@ router.get('/:projectId' , (req,res,next) =>{
 
 router.post('/insertProject',(req, res, next)=>{
     var project ={
+        Name: "graph-path",
+        id: "00",
+        startDate:"2021-02-23",
+        endDate:"2022-02-24",
+        owner:"5DT",
+        members:{
+            developer1 : "Person 1",
+            developer2 : "Person 2",
+            developer3 : "Person 3",
+        }
 
     }
     mongo.connect(url,(err, db)=>{
