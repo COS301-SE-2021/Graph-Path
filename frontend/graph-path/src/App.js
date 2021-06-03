@@ -1,22 +1,32 @@
 import './css/App.css';
+import React, { Component}from 'react' ;
+/*import React, { Component} from 'react'*/
 import Dashboard from './components/Dashboard' ;
 import Register from './components/Register';
 import Login from './components/Login'
 
+/*Changed this to class type*/
+class App extends Component {
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        Graph Path
-        </header>
-       <Dashboard />
+    /*Check the user inputs*/
+    onSubmit =fields =>{
+        console.log('User inputs: ', fields);
+    }
+    render(){
+    return (
+            <div className="App">
+                <header className="App-header">
+                 Graph Path
+                </header>
+                     <Dashboard />
 
-        <Register/>
+                    <Register onSubmit={fields=> this.onSubmit(fields)}/>
 
-        <Login />
-    </div>
-  );
+                    <Login onSubmit={fields=> this.onSubmit(fields)}/>
+            </div>
+);
+}
+
 }
 
 export default App;

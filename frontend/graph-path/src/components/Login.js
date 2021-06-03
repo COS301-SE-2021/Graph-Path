@@ -16,7 +16,9 @@ class Login extends React.Component{
 
     onSubmit =e=>{
         e.preventDefault(); /*So the values entered don't show on URL*/
+        this.props.onSubmit(this.state);
         console.log(this.state)
+        
     }
     render(){
 
