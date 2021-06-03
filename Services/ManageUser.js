@@ -2,7 +2,17 @@ const mongoose = require('mongoose');
 const Usermodel = require('../Models/UserModel');
 
 function getAllUsers(body){
-
+    const user = new UserModel({
+        _id: mongoose.Types.ObjectId(),
+        name: body.name,
+        Surname: body.Surname,
+        email:body.email,
+        password: body.password,
+        username: body.username,
+        type: body.type,
+        Notification: body.Notification
+    });
+    return 0;
 }
 
 function manageUser(body) {
