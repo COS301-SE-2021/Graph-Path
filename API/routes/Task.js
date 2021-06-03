@@ -31,11 +31,11 @@ router.get('/tasklist',(req, res, next)=> {
 });
 
 router.post('/insertTask',(req, res, next)=>{
-    var user= {
+    var task= {
         Description: "Finish the getters and setters."
     }
     mongo.connect(url,(err, db)=>{
-        db.collection('Tasks').insertOne(user, (err,result)=>{
+        db.collection('Tasks').insertOne(task, (err,result)=>{
             console.log("We inserted the task into the database: " + Task);
             db.close();
         });
