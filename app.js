@@ -1,20 +1,13 @@
-//npm module require
-const express = require('express') ;
-const cors = require('cors') ;
-
-//added files require
-const ProjectRoute = require('./api/routes/Project')
-
-//Initialize APP
+const express = require('express')
 const app = express();
 
-//Middleware
-app.use(cors()) ; 
-app.use(express.json()) ; 
-app.use(express.urlencoded({extended:true})) ; 
 
-//Routes
+const ProjectRoute = require('./api/routes/Project');
+const UserRoute = require('./api/routes/User');
+const TaskRoute = require('./api/routes/Task');
+
+
 app.use('/project' , ProjectRoute);
-
-//Module Export
+app.use('/user', UserRoute);
+app.use('/task',TaskRoute);
 module.exports = app;
