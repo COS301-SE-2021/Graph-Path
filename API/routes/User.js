@@ -4,11 +4,25 @@ const userManagement = require('../../Services/ManageUser')
 
 router.get('/userlist',(req, res, next)=> {
 
-    body = req.body;
+    var body = req.body;
     res.status(200).json({
         body
     })
-    //
+    if( userManagement.getAllUsers(body) ==0){
+        res.status(200).json({
+
+            status: true,
+            message: "The users was retrieved successfully."
+
+        })
+    }else{
+        res.status(200).json({
+
+            status: false,
+            message: "The users weren't retrieved successfully."
+
+        })
+    }
 });
 
 router.post('/insertUser',(req, res, next)=> {
