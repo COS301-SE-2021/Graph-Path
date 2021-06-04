@@ -1,8 +1,8 @@
-.Login{
-
+.logForm {
+    align-items: center;
 }
 
-#btn1{
+.btn1{
     background-color: #04AA6D;
     color: white;
     padding: 14px 20px;
@@ -12,3 +12,6 @@
     width: 40%;
 }
 
+input {
+    position: relative;
+}

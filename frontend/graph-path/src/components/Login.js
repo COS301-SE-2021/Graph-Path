@@ -1,5 +1,6 @@
 import React from 'react'
 import '../css/Login.css'
+import axios from 'axios' ;
 
 class Login extends React.Component{
     constructor(props){
@@ -21,6 +22,19 @@ class Login extends React.Component{
 
         // send data to server 
         console.log(this.state)  ;
+        // fetch(`http:`)
+        const form = document.getElementById('inForm') ; 
+        var data = new FormData(form) ;
+
+        // console.log(data);
+        // axios.post(``,)
+        // .then(res => res.json())
+        // .then(res => this.setState({
+
+        // }))
+        // .catch(err => {
+        //     console.log('error while connecting to server')
+        // })
 
         //change status of login
         this.props.changeLog() ; 
@@ -29,7 +43,7 @@ class Login extends React.Component{
 
         return (
 
-            <form onSubmit= {this.onSubmit}>
+            <form className="logForm" id="inForm" onSubmit= {this.onSubmit}>
                 <br />
                 <br />
                 Email<br />
@@ -47,7 +61,7 @@ class Login extends React.Component{
                        onChange={e=>this.change(e)}
                 />
                 <br />
-                <input type="submit" id='btn1' value="Submit" / > 
+                <input type="submit" className="btn1" value="Submit" / > 
             </form>
 
         );

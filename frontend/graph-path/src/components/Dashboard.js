@@ -9,15 +9,21 @@ import  "whatwg-fetch" ;
 const ProjectView = (props) =>{
     var data = props.proj ; 
     // console.log(data) ;
+    // function change (){
+    //     props.default() ; 
+    // }
 
     if (data === undefined){
-        return <div>Error somewhere:  data in Project View is Undefined</div>
+        //if not defined
+        return <div className="error">
+        Error somewhere:  data in Project View is Undefined</div>
     }
 
     if (data==="newProject"){
         return (
             <div className="GraphDashboard">
-                New Project 
+                <p>New Project </p>
+
             </div> ) 
     }
     
@@ -30,7 +36,7 @@ const ProjectView = (props) =>{
 class Dashboard extends React.Component{
     constructor(props){
         super(props) ; 
-        this.views =  ["default", "newProject"] ; 
+        this.views =  ["default", "newProject", "project"] ; 
         this.state={
             projects: null ,
             view: this.views[0] 
@@ -42,11 +48,12 @@ class Dashboard extends React.Component{
     // }
 
     createProject = () => {
-        console.log('works')
+        // console.log('works')
         //send project deeds to backend for saving 
         this.setState({
             view: this.views[1] 
         }) ;
+        // this.props.too
         
 
         //after receiving confirmation
@@ -63,7 +70,7 @@ class Dashboard extends React.Component{
     viewProjectsFromAPI =()=>{
         // console.log('call to api') ;
         // axios.get('http://graphpath.herokuapp.com/Project/Demo_project')
-        fetch('http://localhost:3002/Project/Demo_project1')
+        fetch('http://localhost:3000/Project/Demo_project1')
         .then(res =>res.json()) 
         .then(data => {
             // console.log(data) ;
@@ -90,16 +97,25 @@ class Dashboard extends React.Component{
         ) 
     }
 
+    changeToDefault = () =>{
+        this.setState({
+            projects:null,
+            view:this.views[0]
+        })
+    }
+
     render(){
         if (this.state.projects === null && this.state.view === this.views[0]){
+            //Default View,  When no project available and View is explicitly default
             return <this.defaultView />
         }
         else if (this.state.projects !== null) {
+            //
             console.log(this.state.projects) ;
             //retrieve the projects and start working from there
             return (
                 <div>
-                    <ProjectView proj={this.state.projects.Name}/>
+                    <ProjectView default={this.changeToDefault} proj={this.state.projects.Name}/>
                     <Graph project={this.state.projects}/>
                     </div>
                 ) 
@@ -108,7 +124,7 @@ class Dashboard extends React.Component{
             return (
                 <div className="NewProject">
                     <ProjectView proj={this.views[1]} />
-                    <NewProject />
+                    <NewProject default={this.changeToDefault} />
                 </div>
             )
         }

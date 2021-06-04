@@ -13,8 +13,8 @@ class Header extends React.Component{
                 <header className="App-header">
                 <div>Graph Path</div>    
                 <div>
-                    <form onClick={this.props.logOut}>
-                        <input type="submit" value="LogOff"/>    
+                    <form >
+                        <input type="submit" value="LogOff" onClick={this.props.to} />  
                     </form></div>
                 </header>
             )

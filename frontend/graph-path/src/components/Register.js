@@ -19,7 +19,8 @@ class Register extends React.Component{
 
     onSubmit =e=>{
         e.preventDefault(); /*So the values entered don't show on URL*/
-        this.props.onSubmit(this.state);
+        // this.props.onSubmit(this.state);
+        
         console.log(this.state)
 
         /*Clear inputs once you click on submit*/
@@ -35,7 +36,7 @@ class Register extends React.Component{
 
         return (
 
-            <form>
+            <form className="logForm" onSubmit={this.onSubmit} >
                 First Name
                 <br />
                 <input name='firstName'
@@ -73,7 +74,7 @@ class Register extends React.Component{
                        onChange={e=>this.change(e)}
                 />
              <br />
-                    <button  id='btn1' onClick={(e) => this.onSubmit(e)} > Submit </button>
+                    <button  className="btn1" type="submit"> Submit </button>
             </form>
 
         );

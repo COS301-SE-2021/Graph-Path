@@ -1,5 +1,5 @@
 import  React from 'react' ; 
-
+import '../css/Login.css'
 
 class NewProject extends React.Component{
     constructor(props){
@@ -8,8 +8,8 @@ class NewProject extends React.Component{
             projName: null , 
             members: [] ,
             startDate:null,
-            endDate:null,
-            member: '',
+            dueDate:null,
+            member: "",
             numberMembers: 0 
         }
     }
@@ -17,11 +17,13 @@ class NewProject extends React.Component{
 
     addMember = () =>{
         if (this.state.member !== "" ){
-            this.state = {
-                members:this.state.members.push(this.state.member)  ,
+            const memberName = this.state.member ;
+            this.setState({
+                members:this.state.members.push(memberName)  ,
                 numberMembers: this.state.numberMembers+1
-            }
-            document.getElementById('member').value = '' ; 
+            }, () =>
+            document.getElementById('member').value = ""
+            ) ; 
         }
         else{
             console.log('member name is empty') ;
@@ -29,17 +31,17 @@ class NewProject extends React.Component{
     }
     
 
-    increaseMembers = () =>{
-        this.setState({
-            
-        }) ;
+    changeToDefault = () =>{
+        this.props.default() ;
     }
 
     render(){
         return (
-        <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
+        <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit} className="logForm">
             <input type="text" required="true" name="projName" placeholder="Project Name" onChange={this.updateField} />
-            <p>Start Date</p>
+            <br/>
+            Start Date
+            <br/>
             <input type="date" name="startDate" onChange={this.updateField} />
             <br/>
             <p>Due Date</p>
@@ -50,20 +52,26 @@ class NewProject extends React.Component{
             <br/>
             <input type="text" name="graph" placeholder="Graph" />
             <br/>
-            <input type="submit" value="Add New"  />
+            <input type="submit" value="Add New" className="btn1"  />
 
 
         </form>
         )
     }
+
     handleSubmit = (event) =>{
         event.preventDefault() ; 
 
         //communicate with the API
-
+        window.alert(`created project: ${this.state.projName} \n 
+        starts:${this.state.startDate} \n ends:${this.state.dueDate} \n members:${this.state.members.toString()}`
+        ) ; 
 
         //wait for response
+        this.changeToDefault() ;
     }
+
+
 
     updateField = (event) =>{
         this.setState({
