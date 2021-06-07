@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const db = require('../Controllers/DBController') ;
+
 const ProjectSchema = mongoose.Schema({
 
     _id: mongoose.Schema.Types.ObjectId,
@@ -9,7 +11,6 @@ const ProjectSchema = mongoose.Schema({
     Members: String,
     Owner: String,
     Graph: String
-
 
 });
 

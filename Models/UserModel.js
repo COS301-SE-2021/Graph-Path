@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+const db =  require('../Controllers/DBController') ;
+
 const UserSchema = mongoose.Schema({
 
     _id: mongoose.Schema.Types.ObjectId,
-    name: String,
-    Surname: String,
+    firstName: String,
+    surname: String,
     email:String,
     password: String,
     username: String,
@@ -12,4 +14,6 @@ const UserSchema = mongoose.Schema({
 
 });
 
-module.exports  = mongoose.model("UserModel",UserSchema);
+const dbUserModel = db.model('UserModel',UserSchema,'Users') ;
+module.exports = dbUserModel ;
+// module.exports  = mongoose.model("UserModel",UserSchema);

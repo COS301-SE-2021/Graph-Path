@@ -4,7 +4,9 @@ const cors = require('cors') ;
 const ProjectRoute = require('./api/routes/Project')
 const UserRoute= require('./API/routes/User');
 app.use(cors()) ;
+
 app.use(express.urlencoded({extended:true}));
+app.use(express.json()) ;
 
 app.use('/project' , ProjectRoute);
 app.use('/user', UserRoute);
@@ -12,7 +14,7 @@ app.use('/user', UserRoute);
 
 //Handling Errors?
 app.use((req,res,next)=>{
-    const error = new Error('Not found') ;
+    const error = new Error(`Not found. ${req.url}`) ;
     error.status = 404 ;
     next(error) ;
     // console.log('Created Error') ;

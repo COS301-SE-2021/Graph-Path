@@ -8,21 +8,19 @@ const router = express.Router();
 router.post('/newProject' , (req,res,next) =>{
     data  = req.body;
     Status = createNewProject(data);
-    Status = 1;
+    // Status = 1;
     if(Status ==1)
     {
         res.status(200).json({
 
             statusCode : 1,
-            message : "new project creation successful",
-
-
+            message : "new project creation successful"
         })
     }
 
     else
     {
-        res.status(200).json({
+        res.status(400).json({
 
             statusCode : 0,
             message : "Projection creation failed",
