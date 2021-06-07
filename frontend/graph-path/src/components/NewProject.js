@@ -5,12 +5,14 @@ class NewProject extends React.Component{
     constructor(props){
         super(props) ;
         this.state = {
-            projName: null , 
+            name: null , 
             members: [] ,
             startDate:null,
             dueDate:null,
-            member: "",
-            numberMembers: 0 
+            Members: "",
+            numberMembers: 0 ,
+            Owner:"Nani",
+            Graph:"No Projects Yet"
         }
     }
 
@@ -38,7 +40,7 @@ class NewProject extends React.Component{
     render(){
         return (
         <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit} className="logForm">
-            <input type="text" required="true" name="projName" placeholder="Project Name" onChange={this.updateField} />
+            <input type="text" required="true" name="name" placeholder="Project Name" onChange={this.updateField} />
             <br/>
             Start Date
             <br/>
@@ -47,7 +49,7 @@ class NewProject extends React.Component{
             <p>Due Date</p>
             <input type="date" name="dueDate" onChange={this.updateField}/>
             <br/>
-            <input type="text" id="member" name="member" placeholder="Add Member" onChange={this.updateField}/>
+            <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>
             <span className="newMember" onClick={this.addMember}><a>+ +</a></span>
             <br/>
             <input type="text" name="graph" placeholder="Graph" />
@@ -62,7 +64,29 @@ class NewProject extends React.Component{
     handleSubmit = (event) =>{
         event.preventDefault() ; 
 
+        const data = {
+            name:this.state.name,
+            startDate:this.state.startDate.toString(),
+            dueDate:this.state.dueDate.toString(),
+            Members:this.state.Members,
+            Owner:this.state.Owner,
+            Graph:this.state, //ES6
+        }
         //communicate with the API
+        fetch('http://localhost:9001/project/newProject',{
+            method:'POST',
+            body:data
+        }) 
+        .then( res => res.json())
+        .then(res => {
+            alert(res.message) ;
+            console.log(res) ;
+        })
+        .catch(err=>{
+            alert('there was an error')
+            console.log(err) ;
+        })
+        //
         window.alert(`created project: ${this.state.projName} \n 
         starts:${this.state.startDate} \n ends:${this.state.dueDate} \n members:${this.state.members.toString()}`
         ) ; 
@@ -71,6 +95,9 @@ class NewProject extends React.Component{
         this.changeToDefault() ;
     }
 
+    senddata = (data) =>{
+
+    }
 
 
     updateField = (event) =>{
