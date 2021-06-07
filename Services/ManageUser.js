@@ -41,6 +41,17 @@ function manageUser(body) {
 
 }
 
+getUserByUserNameOrEmail = (data) =>{
+    if (data.email !== null){
+        var ans = Usermodel.find({[email]:data}) ; 
+        return ans
+    }
+    else if (data.username){
+        var ans = Usermodel.find({[username]:data})
+        return ans ;
+    }
+}
+
 createUser = (data) =>{
     // Usermodel.watch().on('change',data =>console.log(new Date(),data)) ;
     console.log('Trying to create user',data)
@@ -49,9 +60,12 @@ createUser = (data) =>{
     var newUSer = data ;
     newUSer["_id"] = id ;
     Usermodel.create(newUSer)
-    .then(()=>{
+    .then((value)=>{
         status = 1 //saved
-        console.log('saved')
+        console.log(value,'saved')
+        },
+        (value) =>{
+            console.log('rejected: ',value) ;
         }
     )
     .catch(err =>{
