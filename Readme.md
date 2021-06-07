@@ -80,3 +80,10 @@ This provides a visual stimuli of how the project flows from node to node.
         </ul>  
     </ul>
 </h2>
+
+### Demo Video
+## Demo Video 1
+<h1> A link to the demo for  <a href="https://discordapp.com/channels/843485965448249415/843485965892976651/850238831197159435">
+demo 1</a>
+</h1>
+
