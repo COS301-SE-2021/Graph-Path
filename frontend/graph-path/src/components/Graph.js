@@ -12,6 +12,11 @@ class Graph extends React.Component{
     }
 
     render(){
+        if (!this.props.project){
+            return (<div>
+                Graph TExt FOr now
+            </div>)
+        }
         var objs = [] ; 
         // for (var item in Object.keys(this.props.project.Members)){
         //     objs.push(item) ;

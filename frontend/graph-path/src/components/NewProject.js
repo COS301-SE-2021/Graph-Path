@@ -50,7 +50,7 @@ class NewProject extends React.Component{
             <input type="date" name="dueDate" onChange={this.updateField}/>
             <br/>
             <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>
-            <span className="newMember" onClick={this.addMember}><a>+ +</a></span>
+            <span className="newMember" onClick={this.addMember}><a>+</a></span>
             <br/>
             <input type="text" name="graph" placeholder="Graph" />
             <br/>

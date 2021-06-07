@@ -1,6 +1,7 @@
 import React from 'react' ; 
 import Graph from './Graph';
 import NewProject from './NewProject' ;
+import '../css/App.css' ;
 import '../css/Dashboard.css'
 // import axios from 'axios' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
@@ -108,7 +109,20 @@ class Dashboard extends React.Component{
         return (
             <Router>
             <div className="GraphDashboard">
-                Dashboard Links....
+                <div className="App-link-routes" >
+                    <Link  to="/newProject">Create Project</Link>
+                
+                    <Link to="/viewProjects">View Projects</Link>
+                </div>
+                <Switch>
+                    <Route path="/newProject">
+                        <NewProject  default={this.changeToDefault}/>
+                    </Route>
+                    <Route path="/viewProjects">
+                    <Graph />
+
+                    </Route>
+                </Switch>
             </div>
             </Router>
         )
