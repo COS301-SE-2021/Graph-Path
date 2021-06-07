@@ -16,6 +16,17 @@ router.get('/userlist',(req, res, next)=> {
 
             status: true,
             message: "The users were retrieved successfully."
+=======
+   var body = req.body;
+    res.status(200).json({
+        body
+    })
+    if( userManagement.getAllUsers(body) ==0){
+        res.status(200).json({
+
+            status: true,
+            message: "The users was retrieved successfully."
+
 
         })
     }else{
@@ -25,9 +36,7 @@ router.get('/userlist',(req, res, next)=> {
             message: "The users weren't retrieved successfully."
 
         })
-    }
-
-    */
+    } */
 });
 
 router.post('/insertUser',(req, res, next)=> {

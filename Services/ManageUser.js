@@ -37,6 +37,17 @@ function getAllUsers(body){//getAllUsers(body)
 
         return 0;
 
+    const user = new UserModel({
+        _id: mongoose.Types.ObjectId(),
+        name: body.name,
+        Surname: body.Surname,
+        email:body.email,
+        password: body.password,
+        username: body.username,
+        type: body.type,
+        Notification: body.Notification
+    });
+    return 0;
 }
 
 function insertUser(body) {
