@@ -1,17 +1,22 @@
 const express = require('express')
 const app = express();
 const cors = require('cors') ;
+const path = require('path') ;
 const ProjectRoute = require('./api/routes/Project')
 const UserRoute= require('./API/routes/User');
-app.use(cors()) ;
+const Home = require('./API/routes/Home') ;
 
+//middleware
+app.use(cors()) ;
 app.use(express.urlencoded({extended:true}));
 app.use(express.json()) ;
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/project' , ProjectRoute);
 app.use('/user', UserRoute);
 
-
+//default /GET
+app.use('/',Home) ;
 //Handling Errors?
 app.use((req,res,next)=>{
     const error = new Error(`Not found. ${req.url}`) ;
