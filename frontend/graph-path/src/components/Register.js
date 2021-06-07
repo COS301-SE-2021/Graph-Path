@@ -1,5 +1,4 @@
 import React from 'react'
-import Dashboard from "./Dashboard";
 import '../css/Register.css'
 import axios from 'axios';
 
@@ -34,7 +33,7 @@ class Register extends React.Component{
             firstName:this.state.firstName ,
             surname:this.state.lastName,
             email:this.state.email,
-            userName:this.state.userName,
+            username:this.state.userName,
             password:this.state.password,
             type: "Standard User",
             Notification:"Email"

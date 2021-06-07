@@ -3,7 +3,7 @@ import Graph from './Graph';
 import NewProject from './NewProject' ;
 import '../css/Dashboard.css'
 // import axios from 'axios' ;
-import  "whatwg-fetch" ;
+import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
 
 const ProjectView = (props) =>{
@@ -105,40 +105,50 @@ class Dashboard extends React.Component{
     }
 
     render(){
-        if (this.state.projects === null && this.state.view === this.views[0]){
-            //Default View,  When no project available and View is explicitly default
-            return <this.defaultView />
-        }
-        else if (this.state.projects !== null) {
-            //
-            console.log(this.state.projects) ;
-            //retrieve the projects and start working from there
-            return (
-                <div>
-                    <ProjectView default={this.changeToDefault} proj={this.state.projects.Name}/>
-                    <Graph project={this.state.projects}/>
-                    </div>
-                ) 
-        }
-        else if (this.state.view === "newProject"){
-            return (
-                <div className="NewProject">
-                    <ProjectView proj={this.views[1]} />
-                    <NewProject default={this.changeToDefault} />
-                </div>
-            )
-        }
-        else{
-            return ( 
-                <div className="GraphDashboard">
-                    Dashboard Default View
-                    <div>
-                        <button onClick={this.createProject}>Create Project</button>
-                    </div>
-                </div>
-            ) ;
-        }
+        return (
+            <Router>
+            <div className="GraphDashboard">
+                Dashboard Links....
+            </div>
+            </Router>
+        )
     }
+
+    // render(){
+    //     if (this.state.projects === null && this.state.view === this.views[0]){
+    //         //Default View,  When no project available and View is explicitly default
+    //         return <this.defaultView />
+    //     }
+    //     else if (this.state.projects !== null) {
+    //         //
+    //         console.log(this.state.projects) ;
+    //         //retrieve the projects and start working from there
+    //         return (
+    //             <div>
+    //                 <ProjectView default={this.changeToDefault} proj={this.state.projects.Name}/>
+    //                 <Graph project={this.state.projects}/>
+    //                 </div>
+    //             ) 
+    //     }
+    //     else if (this.state.view === "newProject"){
+    //         return (
+    //             <div className="NewProject">
+    //                 <ProjectView proj={this.views[1]} />
+    //                 <NewProject default={this.changeToDefault} />
+    //             </div>
+    //         )
+    //     }
+    //     else{
+    //         return ( 
+    //             <div className="GraphDashboard">
+    //                 Dashboard Default View
+    //                 <div>
+    //                     <button onClick={this.createProject}>Create Project</button>
+    //                 </div>
+    //             </div>
+    //         ) ;
+    //     }
+    // }
 } 
 
 

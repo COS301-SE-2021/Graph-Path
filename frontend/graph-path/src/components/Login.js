@@ -7,7 +7,8 @@ class Login extends React.Component{
         super(props) ; 
         this.state ={
             email:'',
-            password:''
+            password:'',
+            ans: null
         }
     }
 
@@ -23,21 +24,35 @@ class Login extends React.Component{
         // send data to server 
         console.log(this.state)  ;
         // fetch(`http:`)
-        const form = document.getElementById('inForm') ; 
-        var data = new FormData(form) ;
+        // const form = document.getElementById('inForm') ; 
+        const data = {
+            email: this.state.email,
+            password:this.state.password
+        } ;
 
-        // console.log(data);
-        // axios.post(``,)
-        // .then(res => res.json())
-        // .then(res => this.setState({
-
-        // }))
-        // .catch(err => {
-        //     console.log('error while connecting to server')
-        // })
+        console.log(data);
+        this.sendData(data) ;
 
         //change status of login
-        this.props.changeLog() ; 
+        this.props.logIn() ; 
+    }
+    
+    async sendData(data){
+        try{
+            
+            const response =  await axios.post(`http://localhost:90001/users`,data)
+            if (response.status===400){
+                throw Error(response.statusText) ;
+            }
+            else{
+                this.setState({
+                    answer:response.data.message
+                })  ;
+            }
+        }
+        catch(error){
+            console.log(error) ;
+        }
     }
     render(){
 

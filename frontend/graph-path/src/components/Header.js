@@ -16,22 +16,36 @@ class Header extends React.Component{
     changeStatus = () =>{
         this.setState({
             log:!this.state.log
+        },()=> {
+            if (this.state.log && typeof this.props.logInValid === 'function'){
+                this.props.logInValid() ;
+            }
         }) ; 
     }
 
     render(){
         if (this.state.log){
             return (
-                <header className="App-header">
-                <div>Graph Path</div>    
-                <div>
-                    <form >
-                        <input className="App-link"
-                         type="submit" value="LogOff" 
-                         onClick={this.props.logOut} />  
-                    </form>
+                <Router>
+                    <div>
+                    <header className="App-header">
+                    <div>Graph Path</div>    
+                    <div className="App-link">
+                        {/* <form >
+                            <input className="App-link"
+                            type="submit" value="LogOff" 
+                            onClick={this.props.logOut} />  
+                        </form> */}
+                        <Link to="signOut">signOut</Link>
+                        </div>
+                    </header>
+                    <Switch path="sinOut">
+                        <Dashboard logOut={this.changeStatus} />
+                    </Switch>
+                    
+
                     </div>
-                </header>
+                </Router>
             )
 
         }

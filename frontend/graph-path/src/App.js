@@ -2,10 +2,6 @@ import React from 'react';
 import './css/App.css';
 import './css/Login.css'
 import Header from './components/Header' ; 
-import Dashboard from './components/Dashboard' ;
-import Register from './components/Register';
-import Login from './components/Login'
-
 /*Changed this to class type*/
 class App extends React.Component {
 
@@ -17,58 +13,63 @@ class App extends React.Component {
     }
   }
 
-  login = () =>{
+  logInValid = () =>{
     // console.log('App must login') ;
     this.setState({
       logged: true
     }) ; 
   }
 
-  logoff = () =>{
+  logOffValid = () =>{
     console.log('App must logout') ;
     this.setState({
       logged: false
     }) ; 
   }
 
-  dashboardViewToogle = () =>{
-    this.setState({
-      dash:!this.state.dash
-    }) ; 
-  }
+  // dashboardViewToogle = () =>{
+  //   this.setState({
+  //     dash:!this.state.dash
+  //   }) ; 
+  // }
 
 
 
   render(){
-
     if (this.state.logged){
+     
       return (
         <div className="App">
-        <Header log={this.state.logged} logOut={this.logoff} />
-        <Dashboard toogleDash={this.dashboardViewToogle}/>
+        <Header
+        logOut={this.logOffValid} />
       </div>
       ) ; 
-    }
-    else if (this.state.dash && this.state.logged){
-      return (
-        <div className="App">
-        <Header log={this.state.logged} logOut={this.logoff} dashboard={this.state.dash} dashboardView={this.dashboardViewToogle} />
-        <Dashboard toogleDash={this.dashboardViewToogle} />
-      </div>
-      ) ;
     }
     else{
 
       return (
           <div className="App">
-            <Header log={this.state.logged} />
-            <Register />
-
-            <Login changeLog={this.login} />
+            <Header logInValid={this.logInValid} />
+          <div>
+            <img src="#" alt="img1" webkitallowfullscreen="1" />
+          </div>
         </div>
       );
-    } //else
   }
 }
 
+}
+
 export default App;
+
+// **************************************************//
+
+
+    // else if (this.state.dash && this.state.logged){
+    //   return (
+    //     <div className="App">
+    //     <Header log={this.state.logged} logOut={this.logoff} dashboard={this.state.dash} dashboardView={this.dashboardViewToogle} />
+    //     <Dashboard toogleDash={this.dashboardViewToogle} />
+    //   </div>
+    //   ) ;
+    // }
