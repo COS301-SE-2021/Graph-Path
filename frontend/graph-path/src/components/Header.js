@@ -13,6 +13,11 @@ class Header extends React.Component{
             log:false
         }
     } 
+    changeStatus = () =>{
+        this.setState({
+            log:!this.state.log
+        }) ; 
+    }
 
     render(){
         if (this.state.log){
@@ -50,7 +55,7 @@ class Header extends React.Component{
                     {/* </form> */}
                     <Switch>
                         <Route path="/signIn">
-                            <Login logIn={this.props.LogIn} />
+                            <Login logIn={this.changeStatus} />
                         </Route>
                         <Route path="/signUp">
                             <Register />
