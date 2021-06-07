@@ -4,10 +4,19 @@
     flex-direction: column; 
     background-color: #F00112;
     color: white;
-    text-align: center;
-    align-items: center;
+    padding: 4px 4px 4px 4px;
+    /* text-align: center; */
+    /* align-items: center; */
   }
-
+  .App-link-routes {
+  display: inline;
+  padding: 4px 4px 4px 3px  ;
+}
 button{
   margin:2px 2px 2px 2px ; 
+}
+
+.App-link-routes > a {
+  margin:2px 2px 2px 2px ; 
+  border: solid 2px;
 }
