@@ -8,6 +8,11 @@ router.get('/userList',(req, res, next)=> {
     res.send(back);
 });
 
+router.get('/userEmail',(req, res, next)=>{
+    const back = ManageUser.getUserByEmail(req.body);
+    res.send(back);
+})
+
 router.post('/insertUser',(req, res, next)=> {
 
     const body= req.body;
