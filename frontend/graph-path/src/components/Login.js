@@ -8,7 +8,7 @@ class Login extends React.Component{
         this.state ={
             email:'',
             password:'',
-            ans: null
+            answer: null
         }
     }
 
@@ -32,6 +32,7 @@ class Login extends React.Component{
 
         console.log(data);
         this.sendData(data) ;
+        console.log(this.state.answer)
 
         //change status of login
         this.props.logIn() ; 
