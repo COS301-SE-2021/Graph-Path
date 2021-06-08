@@ -43,11 +43,11 @@ function manageUser(body) {
 
 getUserByUserNameOrEmail = (data) =>{
     if (data.email !== null){
-        var ans = Usermodel.find({[email]:data}) ; 
+        var ans = Usermodel.find({email:data.email}) ; 
         return ans
     }
     else if (data.username){
-        var ans = Usermodel.find({[username]:data})
+        var ans = Usermodel.find({usernam:data.username})
         return ans ;
     }
 }
@@ -65,6 +65,7 @@ createUser = (data) =>{
         console.log(value,'saved')
         },
         (value) =>{
+            status = 0 ;
             console.log('rejected: ',value) ;
         }
     )
