@@ -2,15 +2,15 @@ const express = require('express')
 const router = express.Router();
 const ManageUser = require('../../Services/ManageUser')
 
-router.get('/userlist',(req, res, next)=> {
+router.get('/userList',(req, res, next)=> {
 
-    var back = ManageUser.getAllUsers(body);
+    const back = ManageUser.getAllUsers(req.body);
     res.send(back);
 });
 
 router.post('/insertUser',(req, res, next)=> {
 
-    var body= req.body;
+    const body= req.body;
     if( ManageUser.insertNewUser(body) == 0){
         res.status(200).json({
 
