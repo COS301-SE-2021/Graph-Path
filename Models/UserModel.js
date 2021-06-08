@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.set('debug', true)
+
 const UserSchema = mongoose.Schema({
 
     _id: mongoose.Schema.Types.ObjectId,
@@ -13,5 +13,4 @@ const UserSchema = mongoose.Schema({
 
 },{collection :'User'});
 
-const User = mongoose.model("User",UserSchema);
-module.exports  = User;
+module.exports  = mongoose.model("User",UserSchema);
