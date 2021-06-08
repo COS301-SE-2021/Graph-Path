@@ -1,31 +1,51 @@
 const mongoose = require('mongoose');
-const UserModel = require('../Models/UserModel');
+const User= require('../Models/UserModel');
+const DB = require('../Controllers/DBController');
 
-DB_URI = "mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/GraphPath?retryWrites=true&w=majority";
+//DB_URI = "mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/GraphPath?retryWrites=true&w=majority";
+const db = new DB();
+
+async function getAllUsers(body){
+       // .then((result) =>{
+    //const Users = new UserModel({});
+           await User.find(
+
+             )
+                .then((doc)=>{
+
+                        console.log("This is doc: "+doc);
+                        res.send(doc);
 
 
-function getAllUsers(body){//getAllUsers(body)
-    var arr =[];
-    mongoose.connect(DB_URI, {useNewUrlParser: true , useUnifiedTopology: true})
-        .then((result) =>{
-            console.log("Successful connection to DB");
-            //const filter = {};
-           var User;
-           UserModel.find({},(err, users)=>{
-               if(err){
-                   res.send("Couldn't retrieve users");
-               }
-               res.json(users);
-           }); //= UserModel.find(filter);
+                })
+                .catch((err)=>{
+                    console.error("There was an error in retrieving the users: "+err);
+                })
 
-        })
+       // })
+}
+
+async function getUserByEmail(body){
+    await User.findOne({
+        email: body
+    },(err,data)=>{
+        if(err){
+            console.log("There was an error in retrieving the user by email: "+err);
+        }else{
+            return data;
+           // res.send(data);
+        }
+    })
+
 }
 
 function insertUser(body) {
     //connect to DB
-    mongoose.connect(DB_URI, {useNewUrlParser: true , useUnifiedTopology: true})
-        .then((result) =>{
-            const user = new UserModel({
+   // mongoose.connect(DB_URI, {useNewUrlParser: true , useUnifiedTopology: true})
+
+
+       // .then((result) =>{
+            const usr = new User({
                 _id: mongoose.Types.ObjectId(),
                 name: body.name,
                 Surname: body.Surname,
@@ -35,7 +55,7 @@ function insertUser(body) {
                 type: body.type,
                 Notification: body.Notification
             });
-            user.save().then(result=>{
+            usr.save().then(result=>{
                 return 0;
             })
             .catch((err) => {
@@ -43,7 +63,7 @@ function insertUser(body) {
                 return 1;
             })
 
-        })
+       // })
 
     //create user object for DB (create model for DB)
 
@@ -60,7 +80,8 @@ function insertUser(body) {
 
 }
 
-var ManageUser = {};
+const ManageUser = {};
 ManageUser.getAllUsers = getAllUsers;
 ManageUser.insertNewUser = insertUser;
+ManageUser.getUserByEmail = getUserByEmail;
 module.exports = ManageUser;
