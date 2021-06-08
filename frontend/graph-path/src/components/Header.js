@@ -36,7 +36,7 @@ class Header extends React.Component{
                             type="submit" value="LogOff" 
                             onClick={this.props.logOut} />  
                         </form> */}
-                        <Link to="signOut">signOut</Link>
+                        <Link to="/signOut" onClick={this.changeStatus}>signOut</Link>
                         </div>
                     </header>
                     <Switch path="sinOut">
