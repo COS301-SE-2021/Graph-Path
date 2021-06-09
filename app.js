@@ -6,6 +6,7 @@ const UserRoute= require('./API/routes/User');
 app.use(cors()) ;
 app.use(express.urlencoded({extended:true}));
 
+app.use(express.urlencoded({extended:true}));
 app.use('/project' , ProjectRoute);
 app.use('/user', UserRoute);
 
