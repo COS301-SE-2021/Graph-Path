@@ -26,7 +26,7 @@ class Register extends React.Component{
         //display loading screen
         this.setState({
             wait:true
-        }) ;  
+        }) ;
 
         console.log(this.state)
         const data = {
@@ -76,7 +76,7 @@ class Register extends React.Component{
 
     async sendData(data){
         try{
-            
+
             const response =  await axios.post(`${this.state.api}/user/newUser`,data)
             if (response.status===400){
                 throw Error(response.statusText) ;
@@ -97,8 +97,8 @@ class Register extends React.Component{
             document.getElementById("registerscreen").className.push('wait')
         }
         else{
-            var scrn = document.getElementById('registerscreen') ; 
-            if (scrn !== null) scrn.className ="" ; 
+            var scrn = document.getElementById('registerscreen') ;
+            if (scrn !== null) scrn.className ="" ;
         }
         var ans = this.state.answer ;
         if (ans != null || ans != undefined){
@@ -107,45 +107,38 @@ class Register extends React.Component{
 
         return (
             <div id="registerscreen">
+                <h4>Sign Up</h4>
                 <form className="logForm" onSubmit={this.onSubmit} >
-                    First Name
-                    <br />
-                    <input name='firstName'
-                        placeholder='FirstName' value={this.state.firstName}
-                            onChange={e=>this.change(e)}
+                    <p>First Name</p>
+                    <input name='firstName' type='text'
+                           placeholder='First Name' value={this.state.firstName}
+                           onChange={e=>this.change(e)}
                     />
-                    <br />
-                    Lastname
-                    <br />
-                    <input name='lastName'
-                        placeholder='lastName' value={this.state.lastName}
-                        onChange={e=>this.change(e)}
+                    <p>Last Name</p>
+                    <input name='lastName' type='text'
+                           placeholder='Last Name' value={this.state.lastName}
+                           onChange={e=>this.change(e)}
                     />
-                    <br />
-                    Username
-                    <br />
-                    <input name= 'userName'
-                        placeholder='UserName' value={this.state.userName}
-                        onChange={e=>this.change(e)}
+                    <p>Username</p>
+                    <input name= 'userName' type='text'
+                           placeholder='Username' value={this.state.userName}
+                           onChange={e=>this.change(e)}
                     />
-                    <br />
-                    Email
-                    <br />
+                    <p>Email</p>
                     <input name = 'email'
-                        type='email'
-                        placeholder='Email' value={this.state.email}
-                        onChange={e=>this.change(e)}
+                           type='email'
+                           placeholder='Email' value={this.state.email}
+                           onChange={e=>this.change(e)}
                     />
                     <br />
-                    Password
-                    <br />
+                    <p>Password</p>
                     <input name='password'
-                        type='password'
-                        placeholder='Password' value={this.state.password}
-                        onChange={e=>this.change(e)}
+                           type='password'
+                           placeholder='Password' value={this.state.password}
+                           onChange={e=>this.change(e)}
                     />
-                <br />
-                        <button  className="btn1" type="submit"> Submit </button>
+                    <br />
+                    <button  className="btn1" type="submit"> Submit </button>
                 </form>
             </div>
         );
