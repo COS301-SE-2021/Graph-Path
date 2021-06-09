@@ -10,7 +10,7 @@ const UserSchema = mongoose.Schema({
     password: String,
     username: String,
     type: String,
-    Notification: String
+    Notification: String,
 
 });
 
