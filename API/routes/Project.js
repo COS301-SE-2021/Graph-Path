@@ -1,6 +1,9 @@
 const express = require('express');
+const { response } = require('../../app');
 const app = require('../../app');
-const createNewProject = require('../../Services/CreateNewProject');
+// const createNewProject = require('../../Services/CreateNewProject');
+//swap out service
+const projectManager = require('../../Services/ProjectService');
 //const retriveProject = require('../../Services/RetrieveProjects');
 
 const router = express.Router();
@@ -13,33 +16,65 @@ var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstD
 
 
 
-router.post('/newProject' , (req,res,next) =>{
-    data  = req.body;
-    Status = createNewProject(data);
-    Status = 1;
-    if(Status ==1)
-    {
-        res.status(200).json({
+router.post('/newProject' ,  (req,res,next) =>{
+    console.log('received request ',req,'servicing.....') ;
+    // try{
 
-            statusCode : 1,
-            message : "new project creation successful",
+        
+        data  = req.body;
 
+        // let response = await projectManager.createProject(data);
+        // Status = 1;
+        projectManager.createProject(data)
+        .then(response=>{
+            console.log('res from await',response)
+            if(response ==1)
+            {
+                res.status(200).json({
 
+                    statusCode : 1,
+                    message : "new project creation successful",
+                    code:response
+                })
+            }
+            else if (response == -1 ){ //untouched -> we wait for it give it?
+                console.log('dead/loacking',response)
+            }
+            else{
+                console.log('error 400')
+                res.status(500).json({
+                    message:"request can't be fulfilled"
+                });
+            }
+        },(response)=>{
+            if (response == 0){
+                res.status(501).json({
+                    message:"An Error happened when saving.",
+                    code:response
+                }) ; 
+            }
         })
-    }
-
-    else
-    {
-        res.status(200).json({
-
-            statusCode : 0,
-            message : "Projection creation failed",
-            error : "",
-            body: ""
+        .catch(errr=>{
+            console.log('error from create',errr)
         })
+    // }
+    
+        // .catch(err=>{
+        //     console.log('cacth ',err)
+        //     res.status(400).json({
 
-    }
+        //         statusCode : 0,
+        //         message : "Projection creation failed",
+        //         error : "",
+        //         body: ""
+        //     })
 
+        // })
+    // }
+    // catch(err){
+    //     console.log(err) ;
+    //     return next(err)
+    // }
 
 
 })
