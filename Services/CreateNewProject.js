@@ -1,5 +1,3 @@
-const fs = require('fs');
-const addNewProject = require('../Controllers/DBcontroller');
 const mongoose = require('mongoose');
 const ProjectModel = require('../Models/ProjectModel');
 
