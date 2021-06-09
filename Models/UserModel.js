@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const UserSchema = mongoose.Schema({
 
     _id: mongoose.Schema.Types.ObjectId,
@@ -10,6 +11,6 @@ const UserSchema = mongoose.Schema({
     type: String,
     Notification: String
 
-});
+},{collection :'User'});
 
-module.exports  = mongoose.model("UserModel",UserSchema);
+module.exports  = mongoose.model("User",UserSchema);

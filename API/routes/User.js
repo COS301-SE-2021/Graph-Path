@@ -2,46 +2,20 @@ const express = require('express')
 const router = express.Router();
 const ManageUser = require('../../Services/ManageUser')
 
-router.get('/userlist',(req, res, next)=> {
+router.get('/userList',(req, res, next)=> {
 
-    var body = req.body;
-    console.log("User.js body: "+body);
-   // res.status(200).json({
-   //     body
-   // })
-    var back = ManageUser.getAllUsers(body);
-    res.json(back);
-   /* if( ManageUser.getAllUsers(body) ==0){//getAllUsers(body)
-        res.status(200).json({
-
-            status: true,
-            message: "The users were retrieved successfully."
-=======
-   var body = req.body;
-    res.status(200).json({
-        body
-    })
-    if( userManagement.getAllUsers(body) ==0){
-        res.status(200).json({
-
-            status: true,
-            message: "The users was retrieved successfully."
-
-
-        })
-    }else{
-        res.status(200).json({
-
-            status: false,
-            message: "The users weren't retrieved successfully."
-
-        })
-    } */
+    const back = ManageUser.getAllUsers(req.body);
+    res.send(back);
 });
+
+router.get('/userEmail',(req, res, next)=>{
+    const back = ManageUser.getUserByEmail(req.body);
+    res.send(back);
+})
 
 router.post('/insertUser',(req, res, next)=> {
 
-    var body= req.body;
+    const body= req.body;
     if( ManageUser.insertNewUser(body) == 0){
         res.status(200).json({
 
