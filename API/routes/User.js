@@ -1,34 +1,17 @@
 const express = require('express')
 const router = express.Router();
-const mongo = require('mongodb').MongoClient;
-const assert = require('assert');
+const ManageUser = require('../../Services/ManageUser')
 
-var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-//var url = 'mongodb+srv://Aliandro:Aliandro2000@cluster0.y5ggo.mongodb.net/Graph-Path?retryWrites=true&w=majorityvar '
-//url = 'mongodb://localhost:27017/test';
-router.get('/users',(req, res, next)=> {
+router.get('/userList',(req, res, next)=> {
 
-
-    res.status(200).json({
-            Name: "John",
-            Surname: "Doe"
-    })
-
-
+    const back = ManageUser.getAllUsers(req.body);
+    res.send(back);
 });
-router.get('/userlist',(req, res, next)=> {
 
-    var arr =[];
-    mongo.connect(url,(err,db)=>{
-        var cursor = db.collection('Users').find();
-        cursor.forEach((usr,err)=>{
-            arr.push(usr);
-        },()=>{
-            db.close();
-        });
-    });
-
-});
+router.get('/userEmail',(req, res, next)=>{
+    const back = ManageUser.getUserByEmail(req.body);
+    res.send(back);
+})
 
 router.post('/insertUser',(req, res, next)=> {
     var user = {
