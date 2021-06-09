@@ -1,5 +1,6 @@
 import  React from 'react' ; 
 import '../css/Login.css'
+import axios from 'axios' ;
 
 class NewProject extends React.Component{
     constructor(props){
@@ -9,10 +10,12 @@ class NewProject extends React.Component{
             members: [] ,
             startDate:null,
             dueDate:null,
-            Members: "",
+            Members: [],
             numberMembers: 0 ,
             Owner:"Nani",
-            Graph:"No Projects Yet"
+            Graph:"No Projects Yet" ,
+            api:'http://localhost:9001',
+            answer:null
         }
     }
 
@@ -35,6 +38,54 @@ class NewProject extends React.Component{
 
     changeToDefault = () =>{
         this.props.default() ;
+    }
+
+    
+    async sendData (data){
+        try{
+            //path to make the post and wait for the response
+           const response = await axios.post(`${this.state.api}/project/newProject`,data) 
+           if(response.status===400){
+               throw Error(response.statusText) ;
+           }//else
+           const res = response.data.json() ;
+           this.setState({
+               answer:res
+           },()=>{
+               if (this.state.answer!== null && this.state.answer.code==1){
+                   this.props.changeToDefault() ;
+               }
+           }) ;
+        }
+        catch(error){
+            console.log(error) ;
+        }
+    }
+    
+    handleSubmit = (event) =>{
+        event.preventDefault() ; 
+
+        const data = {
+            projectName:this.state.name,
+            startDate:this.state.startDate,
+            dueDate:this.state.dueDate,
+            groupMembers:this.state.Members,//this.state.Members,
+            owner:this.state.Owner, //add ownwer from dashboard
+            Graph:this.state, //ES6
+            //userId:from dashboard
+        }
+        //communicate with the API
+        this.sendData(data) ;
+        
+        //wait for response
+        // this.changeToDefault() ;
+    }
+
+
+    updateField = (event) =>{
+        this.setState({
+            [event.target.name]:event.target.value
+        }, console.log(this.state)) ;
     }
 
     render(){
@@ -60,51 +111,26 @@ class NewProject extends React.Component{
         </form>
         )
     }
-
-    handleSubmit = (event) =>{
-        event.preventDefault() ; 
-
-        const data = {
-            name:this.state.name,
-            startDate:this.state.startDate.toString(),
-            dueDate:this.state.dueDate.toString(),
-            Members:this.state.Members,
-            Owner:this.state.Owner,
-            Graph:this.state, //ES6
-        }
-        //communicate with the API
-        fetch('http://localhost:9001/project/newProject',{
-            method:'POST',
-            body:data
-        }) 
-        .then( res => res.json())
-        .then(res => {
-            alert(res.message) ;
-            console.log(res) ;
-        })
-        .catch(err=>{
-            alert('there was an error')
-            console.log(err) ;
-        })
-        //
-        window.alert(`created project: ${this.state.projName} \n 
-        starts:${this.state.startDate} \n ends:${this.state.dueDate} \n members:${this.state.members.toString()}`
-        ) ; 
-
-        //wait for response
-        this.changeToDefault() ;
-    }
-
-    senddata = (data) =>{
-
-    }
-
-
-    updateField = (event) =>{
-        this.setState({
-            [event.target.name]:event.target.value
-        }, console.log(this.state)) ;
-    }
 }
 
 export default NewProject ; 
+
+
+///////// Using alternative method
+// fetch('http://localhost:9001/project/newProject',{
+//             method:'POST',
+//             body:data
+//         }) 
+//         .then( res => res.json())
+//         .then(res => {
+//             alert(res.message) ;
+//             console.log(res) ;
+//         })
+//         .catch(err=>{
+//             alert('there was an error')
+//             console.log(err) ;
+//         })
+//         //
+//         window.alert(`created project: ${this.state.projName} \n 
+//         starts:${this.state.startDate} \n ends:${this.state.dueDate} \n members:${this.state.members.toString()}`
+//         ) ; 
