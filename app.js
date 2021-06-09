@@ -5,7 +5,9 @@ const path = require('path') ;
 const ProjectRoute = require('./api/routes/Project')
 const UserRoute= require('./API/routes/User');
 const Home = require('./API/routes/Home') ;
+require('dotenv').config()
 
+//console.log(process.env.TEST_MONGO_URL)
 //middleware
 app.use(cors()) ;
 app.use(express.urlencoded({extended:true}));
