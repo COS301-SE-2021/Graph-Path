@@ -18,24 +18,56 @@ function getAllUsers(body){
     return 0;
 }
 
-function manageUser(body) {
+async function getUserByEmail(body){
+    await User.findOne({
+        email: body
+    },(err,data)=>{
+        if(err){
+            console.log("There was an error in retrieving the user by email: "+err);
+        }else{
+            return data;
+           // res.send(data);
+        }
+    })
+
+}
+
+function insertUser(body) {
     //connect to DB
-    //create user object for DB{model}
-    const user = new UserModel({
-        _id: mongoose.Types.ObjectId(),
-        name: body.name,
-        Surname: body.Surname,
-        email:body.email,
-        password: body.password,
-        username: body.username,
-        type: body.type,
-        Notification: body.Notification
-    });
+   // mongoose.connect(DB_URI, {useNewUrlParser: true , useUnifiedTopology: true})
+
+
+       // .then((result) =>{
+            const usr = new User({
+                _id: mongoose.Types.ObjectId(),
+                name: body.name,
+                Surname: body.Surname,
+                email:body.email,
+                password: body.password,
+                username: body.username,
+                type: body.type,
+                Notification: body.Notification
+            });
+            usr.save().then(result=>{
+                return 0;
+            })
+            .catch((err) => {
+                console.log("Could not save the user: "+err);
+                return 1;
+            })
+
+       // })
+
+    //create user object for DB (create model for DB)
+
     //push/save user object in DB
 
-    //if(push successfull return true){
+    //if(push successful return true){
 
     //}else return false
+    .catch((err) => {
+
+    })
     return 0;
 
 
