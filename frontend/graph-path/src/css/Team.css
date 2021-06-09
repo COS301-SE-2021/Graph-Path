@@ -1,0 +1,13 @@
+button {
+    border: unset;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #04AA6D;
+    color: white;
+}
+
+.Member {
+    background-color: white;
+
+
+}

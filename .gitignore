@@ -72,6 +72,13 @@ captures/
 .externalNativeBuild
 .cxx/
 
+# node object file
+package.json
+package-lock.json
+
+#idead object files
+./idea
+
 # Google Services (e.g. APIs or Firebase)
 # google-services.json
 
