@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
-<<<<<<< HEAD
-=======
-const db =  require('../Controllers/DBController') ;
->>>>>>> feature-backend-userIntergrated
+// const db =  require('../Controllers/DBController') ;
 
 const UserSchema = mongoose.Schema({
 
@@ -17,10 +14,6 @@ const UserSchema = mongoose.Schema({
 
 },{collection :'User'});
 
-<<<<<<< HEAD
-module.exports  = mongoose.model("User",UserSchema);
-=======
-const dbUserModel = db.model('UserModel',UserSchema,'Users') ;
-module.exports = dbUserModel ;
-// module.exports  = mongoose.model("UserModel",UserSchema);
->>>>>>> feature-backend-userIntergrated
+// const dbUserModel = db.model('UserModel',UserSchema,'Users') ;
+// module.exports = dbUserModel ;
+module.exports  = mongoose.model("UserModel",UserSchema);

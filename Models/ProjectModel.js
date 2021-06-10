@@ -1,5 +1,5 @@
 const mongoose = require('mongoose') ;
-const db = require('../Controllers/DBController') ;
+// const db = require('../Controllers/DBController') ;
 
 const ProjectSchema = mongoose.Schema({
 
@@ -13,5 +13,6 @@ const ProjectSchema = mongoose.Schema({
 });
 
 // module.exports  = mongoose.model("ProjectModel",ProjectSchema);
-const ProjectModel = db.model('ProjectModel,', ProjectSchema,'Projects') ;  
-module.exports = ProjectModel ;
+// const ProjectModel = db.model('ProjectModel,', ProjectSchema,'Projects') ;  
+// module.exports = ProjectModel ;
+module.exports = ProjectSchema ;
