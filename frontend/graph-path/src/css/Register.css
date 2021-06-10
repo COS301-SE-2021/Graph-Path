@@ -25,7 +25,9 @@
 }
 
 #registerscreen input{
-    width: 100%;margin-bottom: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
 
 }
 
@@ -36,7 +38,7 @@
     height: 40px;
     color: white;
     padding-left: 3px;
-    font-size: 12px;
+    font-size: 14px;
     outline: none;
 }
 
