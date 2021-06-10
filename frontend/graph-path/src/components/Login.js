@@ -77,7 +77,7 @@ class Login extends React.Component{
                        onChange={e=>this.change(e)}
                 />
                 <br />
-                <input type="submit" className="btn1" value="Submit" / > 
+                <input type="submit" className="btn1" value="Login" / >
             </form>
 
         );

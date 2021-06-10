@@ -13,6 +13,11 @@ class Register extends React.Component{
         api:'http://localhost:9001',
         answer:null
     }
+/* Not sure what this is
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes*/
 
     change =(e) => {
         this.setState({
