@@ -51,7 +51,7 @@ This provides a visual stimuli of how the project flows from node to node.
 
 <br>
 <p> Thabo Mndebele </p>
-<img src="https://drive.google.com/file/d/1nYGYjSzNYzB3C_-pvne3zbRNfDJdmldR/view?usp=sharing" >
+<img src="[![snap.jpg](https://i.postimg.cc/hGRsqrzX/snap.jpg)](https://postimg.cc/Hr3Xwbtm)" alt="Thabo Snap">
 <p> Student Number : u16103948 </p>
 <p><a href="https://www.linkedin.com/in/thabo-mndebele-5973b8112/"> Linkedin </a></p>
 <p> <a href="https://github.com/Unabashed-Thabo"> Github</a> </p>
