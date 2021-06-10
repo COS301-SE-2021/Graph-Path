@@ -1,23 +1,20 @@
 const express = require('express');
-const { response } = require('../../app');
-const app = require('../../app');
 // const createNewProject = require('../../Services/CreateNewProject');
 //swap out service
 const projectManager = require('../../Services/ProjectService');
-//const retriveProject = require('../../Services/RetrieveProjects');
-
 const router = express.Router();
-const mongo = require('mongodb').MongoClient;
-const assert = require('assert');
 
-var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-//var url = 'mongodb+srv://Aliandro:Aliandro2000@cluster0.y5ggo.mongodb.net/Graph-Path?\n' +
+// var url = 'mongodb+srv://<p>:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+//var url = 'mongodb+srv://<p>:Aliandro2000@cluster0.y5ggo.mongodb.net/Graph-Path?\n' +
     //'retryWrites=true&w=majority';
-
-
 
 router.post('/newProject' ,  (req,res,next) =>{
     console.log('received request ',req,'servicing.....') ;
+
+}) ; 
+
+
+router.post('/createnewProject' ,  (req,res,next) =>{
     // try{
 
         
