@@ -19,26 +19,31 @@ router.post('/newProject' ,  (req,res,next) =>{
         console.log('no projec name')
         res.send({
             message:"Please specify a Project Name"
-        }) ;
+        }) 
 
     }
-    console.log('received request ',req.body,'servicing.....') ;
-    var data = req.body ;
-    const id = new mongoose.mongo.ObjectID() ;
-    data["_id"] = id ;
-    db.collection('Projects').insertOne(data) 
-    .then((ans)=>{
-        console.log('success',ans) ;
-        res.send(ans.ops) ;
-    },(ans)=>{
-        console.log('rejected',ans) ; 
-        res.send({
-            data:ans
-        }) ;
-    }) 
-    .catch(err=>{
-        console.log('from db req',err)
-    })
+    else{
+        console.log('received request ',req.body,'servicing.....') ;
+        var data = req.body ;
+        const id = new mongoose.mongo.ObjectID() ;
+        data["_id"] = id ;
+        db.collection('Projects').insertOne(data) 
+        .then((ans)=>{
+            console.log('success',ans.ops) ;
+            res.send({
+                message:"saved",
+                data: ans.ops
+            }) ;
+        },(ans)=>{
+            console.log('rejected',ans) ; 
+            res.send({
+                message:"request has been denied please try again"
+            }) ;
+        }) 
+        .catch(err=>{
+            console.log('from db req',err)
+        })
+    }
 }) ; 
 
 router.get('/find',(req,res,next)=>{
@@ -62,18 +67,29 @@ router.get('/find',(req,res,next)=>{
 
 router.get('/list',(req,res,next)=>{
     console.log('received request ',req.body,'servicing.....') ;
-    const projects = db.collection('Projects').find({})
-    console.log('success',ans) ;
-    if (projects){
+    db.collection('Projects').find({}).toArray()
+    .then((projects)=>{
+        console.log('success',projects) ;
+        if (projects.length>0){
+            res.send({
+                message:projects//.json()
+            }) ;
+        }
+        else{
+            res.send({
+                message:"No Projects found"
+            })
+        }
+    },(ans)=>{
+        console.log('rejected',ans) ; 
         res.send({
-            message:projects//.json()
+            data:ans
         }) ;
-    }
-    else{
-        res.send({
-            message:"Error"
-        })
-    }
+    }) 
+    .catch(err=>{
+        console.log('from db req',err)
+    })
+   
 })
 
 router.post('/createnewProject' ,  (req,res,next) =>{
