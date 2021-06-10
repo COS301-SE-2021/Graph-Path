@@ -83,7 +83,7 @@ This provides a visual stimuli of how the project flows from node to node.
 
 ### Demo Video
 ## Demo Video 1
-<h1> A link to the demo for  <a href="https://discordapp.com/channels/843485965448249415/843485965892976651/850238831197159435">
+<h1> A link to the demo for  <a href="https://drive.google.com/file/d/1B7ctsVdKP_q49-kl_uEkODWC584XsRPo/view?usp=sharing">
 demo 1</a>
 </h1>
 

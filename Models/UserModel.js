@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const db =  require('../Controllers/DBController') ;
+// const db =  require('../Controllers/DBController') ;
 
 const UserSchema = mongoose.Schema({
 
@@ -14,6 +14,6 @@ const UserSchema = mongoose.Schema({
 
 },{collection :'User'});
 
-const dbUserModel = db.model('UserModel',UserSchema,'Users') ;
-module.exports = dbUserModel ;
-// module.exports  = mongoose.model("UserModel",UserSchema);
+// const dbUserModel = db.model('UserModel',UserSchema,'Users') ;
+// module.exports = dbUserModel ;
+module.exports  = mongoose.model("UserModel",UserSchema);
