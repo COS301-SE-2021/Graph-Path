@@ -1,45 +1,155 @@
 const express = require('express');
-const app = require('../../app');
-const createNewProject = require('../../Services/CreateNewProject');
-//const retriveProject = require('../../Services/RetrieveProjects');
-
+// const createNewProject = require('../../Services/CreateNewProject');
+//swap out service
+const projectManager = require('../../Services/ProjectService');
+const mongoose = require('mongoose') ;
 const router = express.Router();
-const mongo = require('mongodb').MongoClient;
-const assert = require('assert');
-
-var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-//var url = 'mongodb+srv://Aliandro:Aliandro2000@cluster0.y5ggo.mongodb.net/Graph-Path?\n' +
+var db = require('../../Controllers/DBController').getDB() ;
+// var url = 'mongodb+srv://<p>:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+//var url = 'mongodb+srv://<p>:Aliandro2000@cluster0.y5ggo.mongodb.net/Graph-Path?\n' +
     //'retryWrites=true&w=majority';
 
-
-
-router.post('/newProject' , (req,res,next) =>{
-    data  = req.body;
-    Status = createNewProject(data);
-    Status = 1;
-    if(Status ==1)
-    {
-        res.status(200).json({
-
-            statusCode : 1,
-            message : "new project creation successful",
-
-
-        })
+router.post('/newProject' ,  (req,res,next) =>{
+    if (req == undefined || req.body == undefined ){
+        res.json({
+            message:"Req is null" 
+        }) ;
     }
-
-    else
-    {
-        res.status(200).json({
-
-            statusCode : 0,
-            message : "Projection creation failed",
-            error : "",
-            body: ""
-        })
+    if (req.body.projectName == undefined){
+        console.log('no projec name')
+        res.send({
+            message:"Please specify a Project Name"
+        }) 
 
     }
+    else{
+        console.log('received request ',req.body,'servicing.....') ;
+        var data = req.body ;
+        const id = new mongoose.mongo.ObjectID() ;
+        data["_id"] = id ;
+        db.collection('Projects').insertOne(data) 
+        .then((ans)=>{
+            console.log('success',ans.ops) ;
+            res.send({
+                message:"saved",
+                data: ans.ops
+            }) ;
+        },(ans)=>{
+            console.log('rejected',ans) ; 
+            res.send({
+                message:"request has been denied please try again"
+            }) ;
+        }) 
+        .catch(err=>{
+            console.log('from db req',err)
+        })
+    }
+}) ; 
 
+router.get('/find',(req,res,next)=>{
+    
+    db.collection('Projects').findOne({})
+    .then((ans)=>{
+        console.log('success',ans) ;
+        res.send({
+            data:ans
+        }) ;
+    },(ans)=>{
+        console.log('rejected',ans) ; 
+        res.send({
+            data:ans
+        }) ;
+    }) 
+    .catch(err=>{
+        console.log('from db req',err)
+    })
+}) ;
+
+router.get('/list',(req,res,next)=>{
+    console.log('received request ',req.body,'servicing.....') ;
+    db.collection('Projects').find({}).toArray()
+    .then((projects)=>{
+        console.log('success',projects) ;
+        if (projects.length>0){
+            res.send({
+                message:projects//.json()
+            }) ;
+        }
+        else{
+            res.send({
+                message:"No Projects found"
+            })
+        }
+    },(ans)=>{
+        console.log('rejected',ans) ; 
+        res.send({
+            data:ans
+        }) ;
+    }) 
+    .catch(err=>{
+        console.log('from db req',err)
+    })
+   
+})
+
+router.post('/createnewProject' ,  (req,res,next) =>{
+    // try{
+
+        
+        data  = req.body;
+
+        // let response = await projectManager.createProject(data);
+        // Status = 1;
+        projectManager.createProject(data)
+        .then(response=>{
+            console.log('res from await',response)
+            if(response ==1)
+            {
+                res.status(200).json({
+
+                    statusCode : 1,
+                    message : "new project creation successful",
+                    code:response
+                })
+            }
+            else if (response == -1 ){ //untouched -> we wait for it give it?
+                console.log('dead/loacking',response)
+            }
+            else{
+                console.log('error 400')
+                res.status(500).json({
+                    message:"request can't be fulfilled"
+                });
+            }
+        },(response)=>{
+            if (response == 0){
+                res.status(501).json({
+                    message:"An Error happened when saving.",
+                    code:response
+                }) ; 
+            }
+        })
+        .catch(errr=>{
+            console.log('error from create',errr)
+        })
+    // }
+    
+        // .catch(err=>{
+        //     console.log('cacth ',err)
+        //     res.status(400).json({
+
+        //         statusCode : 0,
+        //         message : "Projection creation failed",
+        //         error : "",
+        //         body: ""
+        //     })
+
+        // })
+    // }
+    // catch(err){
+    //     console.log(err) ;
+    //     return next(err)
+    // }
 
 
 })
