@@ -4,6 +4,7 @@ const cors = require('cors') ;
 const path = require('path') ;
 const mongoDBInstance = require('./Controllers/DBController')
 
+//console.log(process.env.TEST_MONGO_URL)
 //middleware
 app.use(cors()) ;
 app.use(express.urlencoded({extended:true}));
