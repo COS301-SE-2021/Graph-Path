@@ -29,32 +29,60 @@ class Login extends React.Component{
             email: this.state.email,
             password:this.state.password
         } ;
-
-        console.log(data);
-        this.sendData(data) ;
-        console.log(this.state.answer)
+        if (data.password==='' || data.password === undefined){
+            alert('please enter password') ;
+        }
+        else{            
+            console.log(data);
+            this.sendData(data) ;
+            console.log('answer from sendData',this.state.answer);
+        }
 
         //change status of login
-        this.props.logIn() ; 
     }
     
-    async sendData(data){
-        try{
-            
-            const response =  await axios.post(`http://localhost:90001/users`,data)
+    sendData(data){
+        try{  
+
+        // fetch(`http://localhost:90001/user/login/${data.email}`)
+        axios.get(`http://localhost:9001/user/login/${data.email}`)
+        .then((response)=>{
             if (response.status===400){
                 throw Error(response.statusText) ;
             }
-            else{
-                this.setState({
-                    answer:response.data.message
-                })  ;
-            }
+            console.log('from back end',response)
+
+            const res = response.data;
+            console.log(res) ;
+            this.setState({
+                answer:res.message,
+                responseData:res.data //data
+            },()=>{
+                alert('res:'+this.state.answer)
+                console.log(this.state)//Heavey checks
+                if (this.state.responseData === undefined ){
+                    alert('try again') ;
+                }
+                else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
+                    //access given
+                    this.props.logIn() ; 
+                }
+              }) ;
+            
+        },(response)=>{
+                console.log('rejected',response) ;
+    
+        })
+        .catch((error)=>{
+            console.log(error) ;
+        })
         }
         catch(error){
             console.log(error) ;
         }
+         
     }
+
     render(){
 
         return (
@@ -77,7 +105,7 @@ class Login extends React.Component{
                        onChange={e=>this.change(e)}
                 />
                 <br />
-                <input type="submit" className="btn1" value="Submit" / > 
+                <input type="submit" className="btn1" value="Submit"  /> 
             </form>
 
         );
