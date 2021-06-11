@@ -33,7 +33,7 @@ This provides a visual stimuli of how the project flows from node to node.
 
 <br>
 <p> Aliandro Pretorius </p>  
-<img src="">
+<img src="https://drive.google.com/file/d/16Q80ZgZa3kM59FwoYOQJ64SOQNOBrLFT/view?usp=sharing" style="width: 160px; height: 160px; margin: 22.15px 0px;">
   
 <p> Student Number : u19016477 </p>
 <p><a href="https://www.linkedin.com/in/aliandro-pretorius-66916a210/"> Linkedin </a></p>
