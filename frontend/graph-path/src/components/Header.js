@@ -10,7 +10,9 @@ class Header extends React.Component{
     constructor(props){
         super(props) ; 
         this.state = {
-            log:false
+            log:false,
+            status:this.props.status||"Please log in",
+
         }
     } 
     changeStatus = () =>{
@@ -18,7 +20,11 @@ class Header extends React.Component{
             log:!this.state.log
         },()=> {
             if (this.state.log && typeof this.props.logInValid === 'function'){
+                //first time loggging valid
                 this.props.logInValid() ;
+            }
+            else if (!this.state.log){
+
             }
         }) ; 
     }
@@ -31,11 +37,6 @@ class Header extends React.Component{
                     <header className="App-header">
                     <div>Graph Path</div>    
                     <div className="App-link">
-                        {/* <form >
-                            <input className="App-link"
-                            type="submit" value="LogOff" 
-                            onClick={this.props.logOut} />  
-                        </form> */}
                         <Link to="/signOut" onClick={this.changeStatus}>signOut</Link>
                         </div>
                     </header>
@@ -55,19 +56,12 @@ class Header extends React.Component{
                 <div>
                     <header className="App-header">
                     Graph Path
+                    <p>{this.state.status}</p>
                     </header>
-                    {/* <form className="form-header"> */}
                         <Link className="App-link" to="/signIn" >LogIn</Link>
-                        {/* <input className="App-link"
-                         type="submit" value="LogIn" 
-                         onClick={this.props.logOut} />  
-                         */}
+                        
                         <Link className="App-link" to="signUp">SignUp</Link>
-                        {/* <input className="App-link"
-                         type="submit" value="SignUp" 
-                         onClick={this.props.logOut} />  */}
-                    {/* </form> */}
-                    <Switch>
+                        <Switch>
                         <Route path="/signIn">
                             <Login logIn={this.changeStatus} />
                         </Route>
