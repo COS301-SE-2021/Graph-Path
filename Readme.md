@@ -32,8 +32,9 @@ This provides a visual stimuli of how the project flows from node to node.
 <p> interests: </p>
 
 <br>
-<p> Aliandro Pretorius </p>   <a href="https://drive.google.com/uc?export=view&id=16Q80ZgZa3kM59FwoYOQJ64SOQNOBrLFT"><img src="https://drive.google.com/uc?export=view&id=16Q80ZgZa3kM59FwoYOQJ64SOQNOBrLFT" style="width: 160px; height: 160px; margin: 22.15px 0px;" title="Click to enlarge picture" />
-    
+<p> Aliandro Pretorius </p>  
+<p style="width: 160px; height: 160px; margin: 22.15px 0px;"><img src="https://drive.google.com/uc?export=view&id=16Q80ZgZa3kM59FwoYOQJ64SOQNOBrLFT" > </p>
+  
 <p> Student Number : u19016477 </p>
 <p><a href="https://www.linkedin.com/in/aliandro-pretorius-66916a210/"> Linkedin </a></p>
 <p> <a href="https://github.com/Ali-Stack-2000"> Github</a> </p>
