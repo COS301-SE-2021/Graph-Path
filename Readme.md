@@ -52,7 +52,7 @@ This provides a visual stimuli of how the project flows from node to node.
 
 <br>
 <p> Thabo Mndebele </p>
-<img src="https://drive.google.com/uc?export=view&id=14lo5yKIMDlsz3yqx3Mw9VqgtSgfnQnJF" alt="Thabo Snap" width="200" height="200">
+<img src="https://drive.google.com/uc?export=view&id=14lo5yKIMDlsz3yqx3Mw9VqgtSgfnQnJF" alt="Thabo Snap" >
 <p> Student Number : u16103948 </p>
 <p><a href="https://www.linkedin.com/in/thabo-mndebele-5973b8112/"> Linkedin </a></p>
 <p> <a href="https://github.com/Unabashed-Thabo"> Github</a> </p>
