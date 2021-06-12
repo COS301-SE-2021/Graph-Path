@@ -51,7 +51,7 @@ class App extends React.Component {
           <div className="App">
             <Header logInValid={this.logInValid} />
           <div>
-            <img src="#" alt="img1" webkitallowfullscreen="1" />
+            {/*<img src="#" alt="img1" webkitallowfullscreen="1" />*/}
           </div>
         </div>
       );

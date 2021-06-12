@@ -2,6 +2,7 @@ import React from 'react' ;
 import Dashboard from './Dashboard' ;
 import Register from './Register';
 import Login from './Login' ;
+import '../css/Header.css';
 import '../css/App.css';
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
@@ -52,17 +53,23 @@ class Header extends React.Component{
         else{
             return (
                 <Router>
-                <div>
+                <div className="header_">
                     <header className="App-header">
                     Graph Path
                     </header>
                     {/* <form className="form-header"> */}
-                        <Link className="App-link" to="/signIn" >LogIn</Link>
+                        <div id="opts">
+                            <Link className="App-link" to="/signIn" >Sign In</Link>
+                        </div>
+
                         {/* <input className="App-link"
                          type="submit" value="LogIn" 
                          onClick={this.props.logOut} />  
                          */}
-                        <Link className="App-link" to="signUp">SignUp</Link>
+                    <div id="opts">
+                        <Link className="App-link" to="signUp">Sign Up</Link>
+                    </div>
+
                         {/* <input className="App-link"
                          type="submit" value="SignUp" 
                          onClick={this.props.logOut} />  */}
