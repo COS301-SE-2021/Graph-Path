@@ -1,0 +1,12 @@
+.newProject {
+    position: absolute;
+    width: 500px;
+    height: auto;
+    top: 400px;
+    left: 750px;
+    background-color: #001122;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 20px 40px;
+    border-radius: 20px;
+}
