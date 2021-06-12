@@ -110,9 +110,13 @@ class Dashboard extends React.Component{
             <Router>
             <div className="GraphDashboard">
                 <div className="App-link-routes" >
-                    <Link  to="/newProject">Create Project</Link>
-                
-                    <Link to="/viewProjects">View Projects</Link>
+                   <div id="opt">
+                       <Link  to="/newProject">Create Project</Link>
+                   </div>
+                    <div id="opt">
+                        <Link to="/viewProjects">View Projects</Link>
+                    </div>
+
                 </div>
                 <Switch>
                     <Route path="/newProject">
