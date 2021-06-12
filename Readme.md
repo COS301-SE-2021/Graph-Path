@@ -43,10 +43,10 @@ This provides a visual stimuli of how the project flows from node to node.
 
 <br>
 <p> Mvhali Livhuwani </p>
-<img src=" style="width: 160px; height: 160px; margin: 22.15px 0px;"/>
+<img src="https://avatars.githubusercontent.com/u/56004287?s=400&u=be411989cf8a5e962449f3081ac1a40add0c42e6&v=4 width="200" height="200"/>
 <p> Student Number: u17262578</p>
 <p><a href="https://www.linkedin.com/in/livhuwani-mvhali-163679208/" target="_blank">LinkedIn</a></p>
-<p><a href="" target="_blank"> Github</a></p>
+<p><a href="https://github.com/LivhuwaniLB" target="_blank"> Github</a></p>
 <p>email: u17262578@tuks.co.za</p>
 <p>Interests: Music, Gym & Cars</p>
 
