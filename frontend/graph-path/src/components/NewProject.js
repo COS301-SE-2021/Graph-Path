@@ -106,7 +106,7 @@ class NewProject extends React.Component{
                     <br/>
                     <input type="text" name="graph" placeholder="Graph" />
                     <br/>
-                    <input type="submit" value="Add New" className="btn1"  />
+                    <input type="submit" value="Create Project" className="btn1"  />
 
 
                 </form>
