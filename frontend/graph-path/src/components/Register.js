@@ -13,6 +13,11 @@ class Register extends React.Component{
         api:'http://localhost:9001',
         answer:null
     }
+/* Not sure what this is
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes*/
 
     change =(e) => {
         this.setState({
@@ -118,38 +123,32 @@ class Register extends React.Component{
 
         return (
             <div id="registerscreen">
+                <h4>Sign Up</h4>
                 <form className="logForm" onSubmit={this.onSubmit} >
-                    First Name
-                    <br />
+                    <p>First Name</p>
                     <input name='firstName'
-                        placeholder='FirstName' value={this.state.firstName}
+                           type='text'
+                        placeholder='First Name' value={this.state.firstName}
                             onChange={e=>this.change(e)}
                     />
-                    <br />
-                    Lastname
-                    <br />
-                    <input name='lastName'
-                        placeholder='lastName' value={this.state.lastName}
+                    <p>Last Name</p>
+                    <input name='lastName' type='text'
+                        placeholder='Last Name' value={this.state.lastName}
                         onChange={e=>this.change(e)}
                     />
-                    <br />
-                    Username
-                    <br />
-                    <input name= 'userName'
-                        placeholder='UserName' value={this.state.userName}
+                    <p>Username</p>
+                    <input name= 'userName' type='text'
+                        placeholder='Username' value={this.state.userName}
                         onChange={e=>this.change(e)}
                     />
-                    <br />
-                    Email
-                    <br />
+
+                    <p>Email</p>
                     <input name = 'email'
                         type='email'
                         placeholder='Email' value={this.state.email}
                         onChange={e=>this.change(e)}
                     />
-                    <br />
-                    Password
-                    <br />
+                    <p>Password</p>
                     <input name='password'
                         type='password'
                         placeholder='Password' value={this.state.password}
