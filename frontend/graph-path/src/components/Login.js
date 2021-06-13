@@ -105,6 +105,7 @@ class Login extends React.Component{
                     />
                     <br />
                     <input type="submit" className="btn1" value="Login" />
+                    Don't Have an Account? Register <a href="#">Here</a>
                 </form>
             </div>
 

@@ -1,11 +1,23 @@
 import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
-
+import {useState,useEffect} from 'react'
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 
+const useForm = () => {
+    const [values,setvalues]=useState({
+        firstName: '',
+        lastName:'',
+        userName:'',
+        email:'',
+        password:''
+    })
+}
+
+
 class Register extends React.Component{
+    //const [errors, setErrors]= useState({})
     state ={
         firstName:'',
         lastName:'',
@@ -136,7 +148,8 @@ class Register extends React.Component{
                 <h4>Sign Up</h4>
                 <form className="logForm" onSubmit={this.onSubmit} >
                     <p>First Name</p>
-                    <input name='firstName'
+                    <input
+                        name='firstName'
                            type='text'
                         placeholder='First Name' value={this.state.firstName}
                             onChange={e=>this.change(e)}
@@ -171,10 +184,12 @@ class Register extends React.Component{
                         placeholder='Password' value={this.state.password}
                         onChange={e=>this.change(e)}
                     />
-                   
+
                 <br />
                         <button  className="btn1" type="submit"> Submit </button>
-                        <small>Already Have an Account?</small>
+                        <small>
+                            Already Have an Account? Login <a href="#">Here</a>
+                        </small>
                 </form>
             </div>
         );
