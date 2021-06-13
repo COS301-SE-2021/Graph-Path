@@ -1,0 +1,44 @@
+.newProject {
+    position: absolute;
+    width: 500px;
+    height: auto;
+    top: 320px;
+    left: 750px;
+    background-color: #001122;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 20px 40px;
+    border-radius: 20px;
+}
+
+h4 {
+    margin: 0;
+    text-align: center;
+    padding: 0 0 10px;
+    font-size: 20px;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+input[type=date]{
+    outline: none;
+    background: transparent;
+    color: #878780;
+    border: 0;
+    text-transform: uppercase;
+    border-bottom: 1px solid #fff;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.newProject p {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-weight: bold;
+}
