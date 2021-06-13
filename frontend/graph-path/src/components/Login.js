@@ -60,7 +60,7 @@ class Login extends React.Component{
             },()=>{
                 alert('res:'+this.state.answer)
                 console.log(this.state)//Heavey checks
-                if (this.state.responseData === undefined ){
+                if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
                     alert('try again') ;
                 }
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){

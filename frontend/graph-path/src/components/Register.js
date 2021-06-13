@@ -89,7 +89,7 @@ class Register extends React.Component{
            answer:res.message,
            responseData:res.data //data
         },()=>{
-           alert('res:'+this.state.answer)
+        //    alert('res:'+this.state.answer)
            console.log(this.state)
            if (this.state.answer!== null && this.state.answer){
             //    this.props.changeToDefault() ;
