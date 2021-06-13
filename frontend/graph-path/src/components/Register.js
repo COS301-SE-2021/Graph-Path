@@ -2,6 +2,9 @@ import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
 
+
+const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+
 class Register extends React.Component{
     state ={
         firstName:'',
@@ -11,13 +14,14 @@ class Register extends React.Component{
         password:'',
         wait:false,
         api:'http://localhost:9001',
-        answer:null
-    }
-/* Not sure what this is
-<<<<<<< Updated upstream
-=======
+        answer:null,
 
->>>>>>> Stashed changes*/
+
+
+
+
+    }
+
 
     change =(e) => {
         this.setState({
@@ -26,12 +30,12 @@ class Register extends React.Component{
     }
 
     onSubmit =e=>{
-        e.preventDefault(); /*So the values entered don't show on URL*/
+        e.preventDefault(); /*So the values entered don't show on URL and NOT to submit by itself*/
         // this.props.onSubmit(this.state);
         //display loading screen
         this.setState({
             wait:true
-        }) ;  
+        }) ;
 
         console.log(this.state)
         const data = {
@@ -66,6 +70,9 @@ class Register extends React.Component{
         //     wait:true
         // })
         this.sendData(data) ;
+
+
+        /*...*/
 
 
         /*Clear inputs once you click on submit*/
@@ -109,6 +116,9 @@ class Register extends React.Component{
     })
 }
     render(){
+
+
+
         if (this.state.wait){
             document.getElementById("registerscreen").className.push('wait')
         }
@@ -131,31 +141,40 @@ class Register extends React.Component{
                         placeholder='First Name' value={this.state.firstName}
                             onChange={e=>this.change(e)}
                     />
+
                     <p>Last Name</p>
-                    <input name='lastName' type='text'
+                    <input
+                        name='lastName' type='text'
                         placeholder='Last Name' value={this.state.lastName}
                         onChange={e=>this.change(e)}
                     />
+
                     <p>Username</p>
-                    <input name= 'userName' type='text'
+                    <input
+                        name= 'userName' type='text'
                         placeholder='Username' value={this.state.userName}
                         onChange={e=>this.change(e)}
                     />
 
                     <p>Email</p>
-                    <input name = 'email'
+                    <input
+                        name = 'email'
                         type='email'
                         placeholder='Email' value={this.state.email}
                         onChange={e=>this.change(e)}
                     />
+
                     <p>Password</p>
-                    <input name='password'
+                    <input
+                        name='password'
                         type='password'
                         placeholder='Password' value={this.state.password}
                         onChange={e=>this.change(e)}
                     />
+                   
                 <br />
                         <button  className="btn1" type="submit"> Submit </button>
+                        <small>Already Have an Account?</small>
                 </form>
             </div>
         );
