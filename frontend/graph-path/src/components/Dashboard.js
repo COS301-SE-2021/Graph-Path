@@ -122,6 +122,7 @@ class Dashboard extends React.Component{
                     <Route path="/newProject">
                         <NewProject  default={this.changeToDefault}/>
                     </Route>
+                    
                     <Route path="/viewProjects">
                     <Graph />
 

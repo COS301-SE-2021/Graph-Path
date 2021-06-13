@@ -62,9 +62,9 @@ class Register extends React.Component{
         //     }
         // })
         //
-        this.setState({
-            wait:true
-        })
+        // this.setState({
+        //     wait:true
+        // })
         this.sendData(data) ;
 
 
@@ -78,25 +78,36 @@ class Register extends React.Component{
             wait:false
         });
     }
+    
+    sendData (data){
+        //path to make the post and wait for the response
+    axios.post(`${this.state.api}/user/newUser`,data) 
+    .then((response) =>{
+       if(response.status===400){
+           throw Error(response.statusText) ;
+       }//else
+       console.log('from back end',response)
 
-    async sendData(data){
-        try{
-            
-            const response =  await axios.post(`${this.state.api}/user/newUser`,data)
-            if (response.status===400){
-                throw Error(response.statusText) ;
-            }
-            else{
-                this.setState({
-                    answer:response.data.message
-                })  ;
-            }
-        }
-        catch(error){
-            console.log(error) ;
-        }
-    }
-
+       const res = response.data;
+       console.log(res) ;
+       this.setState({
+           answer:res.message,
+           responseData:res.data //data
+        },()=>{
+        //    alert('res:'+this.state.answer)
+           console.log(this.state)
+           if (this.state.answer!== null && this.state.answer){
+            //    this.props.changeToDefault() ;
+           }
+        }) 
+    
+    },(response)=>{
+        console.log('rejected',response) ;
+    })
+    .catch((error)=>{
+        console.log(error) ;
+    })
+}
     render(){
         if (this.state.wait){
             document.getElementById("registerscreen").className.push('wait')

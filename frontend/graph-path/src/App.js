@@ -8,8 +8,7 @@ class App extends React.Component {
   constructor(props){
     super(props) ; 
     this.state = {
-      logged: false ,
-      dash:false
+      logged: false
     }
   }
 
@@ -49,9 +48,9 @@ class App extends React.Component {
 
       return (
           <div className="App">
-            <Header logInValid={this.logInValid} />
+            <Header status="Please sign in, or sign up for an account" logInValid={this.logInValid} />
           <div>
-            {/*<img src="#" alt="img1" webkitallowfullscreen="1" />*/}
+            <img src="http://localhost:9001" alt="img1" />
           </div>
         </div>
       );
