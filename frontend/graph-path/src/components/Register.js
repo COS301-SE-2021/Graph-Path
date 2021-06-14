@@ -1,6 +1,7 @@
 import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
+import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
@@ -237,7 +238,10 @@ class Register extends React.Component{
                     )}
                     <br />
                     <button  className="btn1" type="submit"> Submit </button>
-                    <small>Already Have an Account? Login <a href="#">Here</a></small>
+                    <small>Already Have an Account? Login
+
+                                <Link to="/signIn"> Here</Link>
+                    </small>
                 </form>
             </div>
         );
