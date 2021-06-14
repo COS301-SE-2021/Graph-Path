@@ -5,7 +5,6 @@ const DB_URI = process.env.TEST_DB_URI || 'mongodb://127.0.0.1:27017'  ;
 const MAIN_DB_URI = process.env.MAIN_DB_URI;
 
 var db ;
-console.log(process.env.TEST_DB_URI)
 const dbController = {
     connect: (callback)=>{
         mongClient.connect(DB_URI,
