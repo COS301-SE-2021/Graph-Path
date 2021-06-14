@@ -17,6 +17,8 @@ function createNewProject(data){
     var newProject = data ;
     newProject["_id"] = id ;
     newProject["userID"] = id //should get user id from fronted or use schemasless mongdb;
+
+
     //save to the database
     ProjectModel.create(newProject) 
     .then((result) =>{
