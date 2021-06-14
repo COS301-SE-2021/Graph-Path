@@ -3,6 +3,7 @@ import Graph from './Graph';
 import NewProject from './NewProject' ;
 import '../css/App.css' ;
 import '../css/Dashboard.css'
+import Login from './Login'
 // import axios from 'axios' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
@@ -126,6 +127,11 @@ class Dashboard extends React.Component{
                     <Route path="/viewProjects">
                     <Graph />
 
+                    </Route>
+
+                    <Route>
+                        path="/Login"
+                        component={Login}
                     </Route>
                 </Switch>
             </div>
