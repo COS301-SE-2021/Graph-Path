@@ -129,10 +129,7 @@ class Dashboard extends React.Component{
 
                     </Route>
 
-                    <Route>
-                        path="/Login"
-                        component={Login}
-                    </Route>
+
                 </Switch>
             </div>
             </Router>
