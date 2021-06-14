@@ -9,7 +9,7 @@ const formValid = ({formErrors,...rest})=>{
     let valid =true;
 
     //Checks for individual null values
-    Object.values(formErrors).foreach(val=> {
+    Object.values(formErrors).forEach(val=> {
             val.length> 0 && (valid=false);
         }
     );
@@ -92,34 +92,39 @@ class Register extends React.Component{
         //display loading screen
 
 
+
             this.setState({
                 wait:true
             }) ;
 
+        if(formValid(this.state)) {
             console.log(this.state)
             const data = {
-                firstName:this.state.firstName ,
-                surname:this.state.lastName,
-                email:this.state.email,
-                username:this.state.userName,
-                password:this.state.password,
+                firstName: this.state.firstName,
+                surname: this.state.lastName,
+                email: this.state.email,
+                username: this.state.userName,
+                password: this.state.password,
                 type: "Standard User",
-                Notification:"Email"
+                Notification: "Email"
             }
 
             console.log(data)
 
-             this.sendData(data) ;
+            this.sendData(data);
 
-        /*Clear inputs once you click on submit*/
-        this.setState({
-            firstName:'',
-            lastName:'',
-            userName:'',
-            email:'',
-            password:'',
-            wait:false
-        });
+        }
+            /*Clear inputs once you click on submit*/
+            this.setState({
+                firstName:'',
+                lastName:'',
+                userName:'',
+                email:'',
+                password:'',
+                wait:false
+            });
+
+
     }
 
 
