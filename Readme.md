@@ -91,6 +91,37 @@ This provides a visual stimuli of how the project flows from node to node.
 </td>
 </tr>
 </table>
+     
+                                                                   
+                                                                   
+                                                                   
+## Documentation and demo recordings
+<table>
+<tr>
+<td>Demo 1 </td>
+<td>
+
+ <a href="https://www.overleaf.com/read/ftgrftddkkst"> SRS documentation (version 1)</a> <br>
+ <a href="https://drive.google.com/file/d/1B7ctsVdKP_q49-kl_uEkODWC584XsRPo/view?usp=sharing"> Demo video 1</a> <br>
+    
+</td>                                                                                                              
+                                                                                             
+ </tr>
+                                                                          
+<tr>	
+ <td>Demo 2 </td>
+<td>
+			
+<a href="https://www.overleaf.com/read/kpkxfrszpzfn"> SRS documentation (version 2)</a><br>
+<a href="https://www.overleaf.com/read/tncfphgpgkcv"> Architecture Documentation</a><br>
+<a href="###"> Demo video 2</a><br>
+
+			
+</td>
+
+</tr>
+</table>
+
 
 
 ### Branching Strategy 
@@ -115,10 +146,4 @@ This provides a visual stimuli of how the project flows from node to node.
         </ul>  
     </ul>
 </h2>
-
-### Demo Video
-## Demo Video 1
-<h1> A link to the demo for  <a href="https://drive.google.com/file/d/1B7ctsVdKP_q49-kl_uEkODWC584XsRPo/view?usp=sharing">
-demo 1</a>
-</h1>
 
