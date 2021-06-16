@@ -6,7 +6,7 @@ class GrapExample1 extends React.Component{
     
   render(){
     let graph = {
-      nodes:[{id:"n1",label:"A"},{id:"n2",label:"B"}],
+      nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"}],
       edges:[{id:"e1",source:"n1",target:"n2",label:"AB"}]
     }
     return (
@@ -17,8 +17,8 @@ class GrapExample1 extends React.Component{
           width:"200px" , height:"150px" }}
           onOverNode={e => console.log("Mouse over node: " + e.data.node.label)}
           settings={{drawEdges: true, clone: false}}>
-            <RelativeSize  initialSize={15}/>
-            <RandomizeNodePositions/>        
+            <RelativeSize  initialSize={550}/>
+            <RandomizeNodePositions x1={200} y1={1000} x2={600} y2={900}/>        
           </Sigma>
         </div>
 
