@@ -73,7 +73,7 @@ class Dashboard extends React.Component{
                     </Route>
                     
                     <Route path="/viewProjects">
-                    <Graph />
+                    {/* <Graph /> */}
                     {/* should call api for the projects and be able to display as per list  */}
                     <ViewGraph /> 
 
