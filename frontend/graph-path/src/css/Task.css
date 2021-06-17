@@ -21,8 +21,11 @@
 .TaskScreen select{
     background-color: grey;
     width: 100%;
+    appearance: none;
+    overflow: hidden;
+    outline: 0;
 }
 
 .TaskScreen select:hover{
-    background-color: white;s
+    background-color: darkgrey;
 }
