@@ -16,13 +16,17 @@ mongoDBInstance.connect((error)=>{
     }
     //app goes online
     //require statements
-    const ProjectRoute = require('./api/routes/Project')
+    const ProjectRoute = require('./api/routes/Project');
     const UserRoute= require('./API/routes/User');
+    const NodeRoute= require('./API/routes/Node');
+    const TaskRoute = require('./API/routes/Task');
     const Home = require('./API/routes/Home') ;
 
     //routes
     app.use('/project' , ProjectRoute);
     app.use('/user', UserRoute);
+    app.use('/node',NodeRoute);
+    app.use('/task',TaskRoute);
 
     //default /GET
     app.use('/',Home) ;
