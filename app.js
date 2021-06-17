@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors') ;
 const path = require('path') ;
 const mongoDBInstance = require('./Controllers/DBController')
-
+const testDB = require('./Controllers/DBtestController')
 //console.log(process.env.TEST_MONGO_URL)
 //middleware
 app.use(cors()) ;
@@ -19,7 +19,7 @@ mongoDBInstance.connect((error)=>{
     const ProjectRoute = require('./api/routes/Project');
     const UserRoute= require('./API/routes/User');
     const NodeRoute= require('./API/routes/Node');
-    const TaskRoute = require('./API/routes/Task');
+    const TaskRoute = require('./API/routes/Tasks2');
     const Home = require('./API/routes/Home') ;
 
     //routes
@@ -27,6 +27,7 @@ mongoDBInstance.connect((error)=>{
     app.use('/user', UserRoute);
     app.use('/node',NodeRoute);
     app.use('/task',TaskRoute);
+
 
     //default /GET
     app.use('/',Home) ;
