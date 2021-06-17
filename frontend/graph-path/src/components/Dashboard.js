@@ -1,6 +1,7 @@
 import React from 'react' ; 
 import Graph from './Graph';
 import NewProject from './NewProject' ;
+import Task from './Task';
 import '../css/App.css' ;
 import '../css/Dashboard.css'
 import Login from './Login'
@@ -117,6 +118,9 @@ class Dashboard extends React.Component{
                     <div id="opt">
                         <Link to="/viewProjects">View Projects</Link>
                     </div>
+                    <div id="opt">
+                        <Link to="/newTask">Create Task</Link>
+                    </div>
 
                 </div>
                 <Switch>
@@ -127,6 +131,9 @@ class Dashboard extends React.Component{
                     <Route path="/viewProjects">
                     <Graph />
 
+                    </Route>
+                    <Route path="/newTask">
+                        <Task />
                     </Route>
 
 
