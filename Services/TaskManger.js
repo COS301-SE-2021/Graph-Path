@@ -10,5 +10,4 @@ MockTask = {
     Assignee: ['User1' , 'User2'],
     Assigner: "Kagiso 1",
     Parent_Node : "SomeID of the parent Node",
-
 }
