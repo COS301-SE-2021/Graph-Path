@@ -4,15 +4,34 @@ const ManageUser = require('../../Services/ManageUser')
 const mongoose = require('mongoose') ;
 var db = require('../../Controllers/DBController').getDB();
 
-router.get('/userList',(req, res, next)=> {
-
-    const back = ManageUser.getAllUsers(req.body);
-    res.send(back);
+router.get('/userList',async(req, res, next)=> {
+    const emailparam = req.body.email;
+    console.log(emailparam);
+   // const back = ManageUser.getAllUsers(req.body);
+   // const back =
+      await  db.collection('Users').findOne({
+          email: emailparam
+      })
+            .then((result)=>{
+               // for(var property in result) {
+                  //  console.log(property + "=" + result[property]);
+               // }
+                 console.log("This is result: "+result);
+                res.send(result);
+            })
+            .catch((err)=>{
+                console.log("Could not retrieve all users"+err);
+            });
+    //console.log("This is back in the userlist endpoint: "+back);
+   // res.send(back);
 });
 
 router.get('/userEmail',(req, res, next)=>{
-    const back = ManageUser.getUserByEmail(req.body);
-    res.send(back);
+    const back = ManageUser.getUserByUserNameOrEmail(req.body)
+        .then((err, data)=>{
+            res.send(data);
+        });
+
 })
 
 router.post('/insertUser',(req, res, next)=> {
