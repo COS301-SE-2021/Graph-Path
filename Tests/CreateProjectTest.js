@@ -5,7 +5,6 @@ const createNewProject  = require('../Services/CreateNewProject')
 
 describe("the create new Project function" , function(){
 
-
     it('it should create new project',function(){
         let project =
             {
