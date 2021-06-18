@@ -54,17 +54,23 @@ class Dashboard extends React.Component{
         })
     }
 
-    toogleDisplay = () =>{
+    toogleDisplayOpen = () =>{
         var elem = document.getElementById('modal1') ;
         console.log('clicked', elem.style.display)
-        if (elem.style.display.toString()==="block"){
-            elem.style.display='none' ;
+        if (elem !== null){
+            elem.style.display='block' ;
+            this.props.menuToogleClose() ; 
         }
-        else{
-            elem.style.display='block' 
-        }
-        this.props.menuToogle() ;
     }
+
+    toogleDisplayClose = () =>{
+        var elem = document.getElementById('modal1') ;
+        if (elem !== null){
+            elem.style.display='none' ;
+            this.props.menuToogleOpen()
+        }
+    }        
+    
 
     render(){
         return (
@@ -73,7 +79,7 @@ class Dashboard extends React.Component{
                 <div className="DashboardMenu" id="modal1" >
                     <div className="App-link-routes" >
                     
-                    <span onClick={this.toogleDisplay} 
+                    <span onClick={this.toogleDisplayClose} 
                     className="close" title="Close Modal">
                     &times;</span>
 
@@ -88,16 +94,16 @@ class Dashboard extends React.Component{
                 </div>
                 <Switch>
                     <div className="ContentArea">
-                    <Route path="/newProject">
-                        <NewProject  default={this.changeToDefault}/>
-                    </Route>
-                    
-                    <Route path="/viewProjects">
-                    {/* <Graph /> */}
-                    {/* should call api for the projects and be able to display as per list  */}
-                    <ViewGraph /> 
+                        <Route path="/newProject">
+                            <NewProject  default={this.changeToDefault}/>
+                        </Route>
+                        
+                        <Route path="/viewProjects">
+                        {/* <Graph /> */}
+                        {/* should call api for the projects and be able to display as per list  */}
+                        <ViewGraph /> 
 
-                    </Route>
+                        </Route>
                     </div>
                 </Switch>
             </div>
