@@ -7,6 +7,7 @@ var db = require('../../Controllers/DBController').getDB();
 
 //var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
+//GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.get('/getTaskByDescription',(req, res, next)=> {
     let desc = req.body.description;
     db.collection('Tasks').findOne({
@@ -53,25 +54,6 @@ router.get('/getTaskByTasknr',(req, res, next)=> {
 
 });
 
-router.post('/insertTask',(req, res, next)=>{
-    let data = req.body;
-    const id = new mongoose.mongo.ObjectID() ;
-    data["_id"] = id ;
-
-        db.collection('Tasks').insertOne(data)
-            .then((result)=>{
-                res.send({
-                    message:"saved",
-                    data: result
-                }) ;
-            })
-            .catch(err=>{
-                console.log("Could not create task: "+err);
-            });
-
-
-});
-
 router.get('/getAllTasks',(req, res, next)=> {
 
     //console.log("TaskByProjectBody: "+req.body);
@@ -97,6 +79,63 @@ router.get('/getAllTasks',(req, res, next)=> {
      */
 
 });
+
+router.get('/getAllTasksByProject',(req, res, next)=> {
+
+    //console.log("TasksByProjectBody: "+req.body);
+    // console.log("TasksByProjectBodyProject: "+req.body.project);
+    let proj = req.body.project;
+    db.collection('Tasks').find({project:proj}).toArray()
+        .then((result)=>{
+           // console.log("This is result in all tasks by project: "+result);
+            res.send(result); //returns an array of objects
+        })
+        .catch((err)=>{
+            console.log("Could not retrieve tasks by project: "+err);
+        });
+
+
+});
+
+//POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.post('/insertTask',(req, res, next)=>{
+    let data = req.body;
+    const id = new mongoose.mongo.ObjectID() ;
+    data["_id"] = id ;
+
+    db.collection('Tasks').insertOne(data)
+        .then((result)=>{
+            res.send({
+                message:"saved",
+                data: result
+            }) ;
+        })
+        .catch(err=>{
+            console.log("Could not create task: "+err);
+        });
+
+
+});
+
+//DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
+router.delete('/deleteTaskByTasknr',(req, res, next)=>{
+    let del = req.body.tasknr ;
+   //console.log("This is tasknr inside delete task by tasknr: "+del);
+    db.collection('Tasks').deleteOne({
+        tasknr:del
+    })
+        .then((data)=>{
+            res.send({
+                message:"Deleted",
+                data: data
+            });
+        })
+        .catch(err=>{
+            console.log("Could not delete task: "+err);
+        });
+
+});
+
 
 
 module.exports = router;
