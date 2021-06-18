@@ -33,7 +33,7 @@ class Header extends React.Component{
         var elem = document.getElementById('DashButton') ;
         console.log('Header clicked', elem.style.display)
         if (elem!==null){ 
-            elem.style.display='block' ;
+            elem.style.visibility='hidden' ;
         }
         else{
         }
@@ -41,7 +41,19 @@ class Header extends React.Component{
     renderOpen = () =>{
         var elem = document.getElementById('DashButton') ;
         if (elem!==null){ 
-            elem.style.display='none' ;
+            elem.style.visibility='visible' ;
+        }
+    }
+
+    toogleDashMenu = () =>{
+        var elem = document.getElementById('modal1') ;
+        console.log('clicked', elem.style.display)
+        if (elem !== null){
+            elem.style.display='block' ;
+        }
+        else{        
+            console.log('clicked but null', elem.style.display)
+
         }
     }
 
@@ -50,7 +62,7 @@ class Header extends React.Component{
         // var elem = document.getElementById('DashButton').style.display = "none" ;
             return (
                 <Router>
-                    <div>
+                    <div className="bigHeader">
                     <header className="App-header">
                     <div>Graph Path</div>    
                     <div className="App-link">
@@ -62,12 +74,13 @@ class Header extends React.Component{
                             </div>
                         </div>
                         </div>
-                        <button id="DashButton">Menu</button>
+                        <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>
                     </header>
 
-                    <Switch path="sinOut">
+                    <Switch path="signOut">
                         <Dashboard logOut={this.changeStatus} 
-                            menuToogle={this.toogleDisplay}
+                            menuToogleClose={this.renderClose}
+                            menuToogleOpen={this.renderOpen}
                         />
                     </Switch>
                     
