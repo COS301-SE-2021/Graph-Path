@@ -54,20 +54,40 @@ class Dashboard extends React.Component{
         })
     }
 
+    toogleDisplay = () =>{
+        var elem = document.getElementById('modal1') ;
+        console.log('clicked', elem.style.display)
+        if (elem.style.display.toString()==="block"){
+            elem.style.display='none' ;
+        }
+        else{
+            elem.style.display='block' 
+        }
+        this.props.menuToogle() ;
+    }
+
     render(){
         return (
             <Router>
             <div className="GraphDashboard">
-                <div className="App-link-routes" >
-                   <div id="opt">
-                       <Link  to="/newProject">Create Project</Link>
-                   </div>
-                    <div id="opt">
-                        <Link to="/viewProjects">View Projects</Link>
-                    </div>
+                <div className="DashboardMenu" id="modal1" >
+                    <div className="App-link-routes" >
+                    
+                    <span onClick={this.toogleDisplay} 
+                    className="close" title="Close Modal">
+                    &times;</span>
 
+                    <div id="opt">
+                        <Link  to="/newProject">Create Project</Link>
+                    </div>
+                        <div id="opt">
+                            <Link to="/viewProjects">View Projects</Link>
+                        </div>
+
+                    </div>
                 </div>
                 <Switch>
+                    <div className="ContentArea">
                     <Route path="/newProject">
                         <NewProject  default={this.changeToDefault}/>
                     </Route>
@@ -78,6 +98,7 @@ class Dashboard extends React.Component{
                     <ViewGraph /> 
 
                     </Route>
+                    </div>
                 </Switch>
             </div>
             </Router>
