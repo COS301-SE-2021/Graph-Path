@@ -29,20 +29,46 @@ class Header extends React.Component{
             }
         }) ; 
     }
+    renderClose =() =>{
+        var elem = document.getElementById('DashButton') ;
+        console.log('Header clicked', elem.style.display)
+        if (elem!==null){ 
+            elem.style.display='block' ;
+        }
+        else{
+        }
+    }
+    renderOpen = () =>{
+        var elem = document.getElementById('DashButton') ;
+        if (elem!==null){ 
+            elem.style.display='none' ;
+        }
+    }
 
     render(){
         if (this.state.log){
+        // var elem = document.getElementById('DashButton').style.display = "none" ;
             return (
                 <Router>
                     <div>
                     <header className="App-header">
                     <div>Graph Path</div>    
                     <div className="App-link">
-                        <Link to="/signOut" onClick={this.changeStatus}>signOut</Link>
+                        <label>&#9786; :</label> 
+                        <div className="drop"> 
+                            <button className="dropbtn">Options</button>
+                            <div className="dropdown-content">     SignOut
+                            <a href="#" onClick={this.changeStatus}> SignOut</a>
+                            </div>
                         </div>
+                        </div>
+                        <button id="DashButton">Menu</button>
                     </header>
+
                     <Switch path="sinOut">
-                        <Dashboard logOut={this.changeStatus} />
+                        <Dashboard logOut={this.changeStatus} 
+                            menuToogle={this.toogleDisplay}
+                        />
                     </Switch>
                     
 
