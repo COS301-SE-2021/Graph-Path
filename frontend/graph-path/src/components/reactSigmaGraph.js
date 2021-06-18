@@ -6,8 +6,8 @@ class GrapExample1 extends React.Component{
     
   render(){
     let graph = {
-      nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"}],
-      edges:[{id:"e1",source:"n1",target:"n2",label:"AB"}]
+      nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
+      edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
     }
     return (
       <div className="exampleProject">
