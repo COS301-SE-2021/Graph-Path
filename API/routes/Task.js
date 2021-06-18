@@ -79,8 +79,8 @@ router.get('/getAllTasks',(req, res, next)=> {
     let tsknr = req.body.tasknr;
     db.collection('Tasks').find().toArray()
         .then((result)=>{
-            console.log("This is result in all tasks: "+result);
-            res.send(result);
+            //console.log("This is result in all tasks: "+result);
+            res.send(result); //returns an array of objects
         })
         .catch((err)=>{
             console.log("Could not retrieve task by number in the project: "+err);
