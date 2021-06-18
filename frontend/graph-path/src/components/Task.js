@@ -1,6 +1,8 @@
 import  React from 'react' ;
 import '../css/Task.css';
 
+var jsgraphs = require('js-graph-algorithms');
+var graph = new jsgraphs.DiGraph(3);
 class Task extends React.Component{
     constructor(props) {
         super(props);
@@ -15,15 +17,29 @@ class Task extends React.Component{
         }
     }
 
+    handleSubmit = (event) => {
+        event.preventDefault();
+
+        const data = {
+
+        }
+    }
+
+    updateField = (event) => {
+        this.setState({
+            [event.target.name]:event.target.value
+        }, console.log(this.state));
+    }
+
     render() {
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data">
                     <h4>Add Task</h4>
                     <p>Task</p>
-                    <input type="text" required="true" placeholder="Task Name" />
+                    <input type="text" name="name" required="true" placeholder="Task Name" onChange={this.updateField} />
                     <p>Description</p>
-                    <input type="text" placeholder="Description"/>
+                    <input type="text" name="about" placeholder="Description" onChange={this.updateField}/>
                     <p>Start Date</p>
                     <input type="date" name="startDate"  />
                     <p>Due Date</p>
