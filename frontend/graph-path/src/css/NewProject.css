@@ -1,5 +1,5 @@
-.newProject .exampleProject {
-    position: relative;
+.newProject  {
+    position: absolute;
     width: 500px;
     height: auto;
     top: 320px;

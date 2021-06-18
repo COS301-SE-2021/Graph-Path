@@ -1,18 +1,22 @@
 .DashboardMenu{
     background-color: #001122;
     color: white;
-    left: auto;
-    /* text-align: center; */
-    /* align-items: center; */
-    width: 20%;
-    height: 88%;
-    position: absolute;
+    left: 0px;
+    width: 150px;
+    min-height: 80vh;
+
+    position: relative;
+
   }
+.DashboardMenu *{
+    margin: 2px 2px 2px 2px;
+    
+}
 .App-link-routes {
     background-color: transparent;
     height: auto;
-    position: absolute;
-    top: 30px;
+    position: relative;
+    top: 10px;
     width: 100%;
 }
 button{
@@ -41,4 +45,8 @@ button{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+}
+.GraphDashboard{
+    display: flex;
+    flex-wrap: wrap;   
 }
