@@ -1,4 +1,4 @@
-.GraphDashboard{
+.DashboardMenu{
     background-color: #001122;
     color: white;
     left: auto;
@@ -36,4 +36,9 @@ button{
 
 .App-link-routes #opt:hover {
     background-color: #0b714b;
+}
+.ContentArea{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }

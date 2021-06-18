@@ -6,3 +6,59 @@
 .header_ #opts {
 
 }
+
+.App-header {
+    background-color: #001122;
+    min-height: 10vh;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    position: relative;
+
+  }
+  
+#DashButton{
+    position: relative;
+    right: 53%;
+    top: -6px;
+}
+
+.dropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+  }
+
+  .drop {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  
+.dropdown-content a:hover {background-color: #ddd;}
+
+.drop:hover .dropdown-content {display: block;}
+
+
+.drop:hover .dropbtn {background-color: #3e8e41;}
