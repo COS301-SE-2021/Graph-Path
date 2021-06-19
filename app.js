@@ -19,7 +19,8 @@ mongoDBInstance.connect((error)=>{
     const ProjectRoute = require('./api/routes/Project');
     const UserRoute= require('./API/routes/User');
     const NodeRoute= require('./API/routes/Node');
-    const TaskRoute = require('./API/routes/Tasks2');
+    const Task2Route = require('./API/routes/Tasks2');
+    const TaskRoute = require('./API/routes/Task');
     const Home = require('./API/routes/Home') ;
 
     //routes
@@ -27,6 +28,7 @@ mongoDBInstance.connect((error)=>{
     app.use('/user', UserRoute);
     app.use('/node',NodeRoute);
     app.use('/task',TaskRoute);
+    app.use('/task2',Task2Route);
 
 
     //default /GET
