@@ -76,7 +76,7 @@ class Register extends React.Component{
                 break;
 
             case 'password':
-                formErrors.password = value.length < 9 ? 'Minimum for password should be 8 characters'
+                formErrors.password = value.length < 8 ? 'Minimum for password should be 8 characters'
                     : "";
                 break;
 
@@ -114,7 +114,6 @@ class Register extends React.Component{
 
             this.sendData(data);
 
-        }
             /*Clear inputs once you click on submit*/
             this.setState({
                 firstName:'',
@@ -125,7 +124,22 @@ class Register extends React.Component{
                 wait:false
             });
 
+        }else
+        {
+            this.setState({
+                firstName: this.state.firstName,
+                lastName:this.state.lastName,
+                userName:this.state.userName,
+                email:this.state.email,
+                password:this.state.password
+            });
+        }
 
+
+        /*trying to solve the error on render function*/
+        this.setState({
+            wait:false
+        }) ;
     };
 
 
@@ -201,7 +215,7 @@ class Register extends React.Component{
                         onChange={this.change}
                     />
                     {formErrors.lastName.length > 0 && (
-                        <span className='errorMessage'>{formErrors.lasttName}</span>
+                        <span className='errorMessage'>{formErrors.lastName}</span>
                     )}
                     <p>Username</p>
                     <input
