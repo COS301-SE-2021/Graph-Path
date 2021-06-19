@@ -55,17 +55,17 @@ class Register extends React.Component{
 
         switch(name){
             case 'firstName':
-                formErrors.firstName = value==null  ? 'FirstName is required'
+                formErrors.firstName = value==''  ? 'FirstName is required'
                     : "";
                 break;
 
             case 'lastName':
-                formErrors.lastName = value==null ? 'LastName is required'
+                formErrors.lastName = value=='' ? 'LastName is required'
                     : "";
                 break;
 
             case 'userName':
-                formErrors.userName = value==null ? 'userName is required'
+                formErrors.userName = value=='' ? 'userName is required'
                     : "";
                 break;
 
