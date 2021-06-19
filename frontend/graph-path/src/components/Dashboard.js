@@ -1,13 +1,11 @@
 import React from 'react' ; 
-import Graph from './Graph';
+import GraphManager from './Graph';
 import NewProject from './NewProject' ;
-import Task from './Task';
 import '../css/App.css' ;
 import '../css/Dashboard.css'
-import Login from './Login'
+import Sigma from './reactSigmaGraph' ; 
 // import axios from 'axios' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
-import ViewGraph from './reactSigmaGraph' ;
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -95,18 +93,21 @@ class Dashboard extends React.Component{
                     </div>
                 </div>
                 <Switch>
-                    <div className="ContentArea">
-                        <Route path="/newProject">
+                    <Route path="/newProject">
+                        <div className="ContentArea">
                             <NewProject  default={this.changeToDefault}/>
-                        </Route>
-                        
-                        <Route path="/viewProjects">
-                        {/* <Graph /> */}
-                        {/* should call api for the projects and be able to display as per list  */}
-                        <ViewGraph /> 
+                        </div>
+                    </Route>
+                    
+                    <Route path="/viewProjects">
+                    {/* <Graph /> */}
 
-                        </Route>
-                    </div>
+                    {/* should call api for the projects and be able to display as per list  */}
+                        <div className="ContentArea">
+                            <GraphManager /> 
+                        </div>
+
+                    </Route>
                 </Switch>
             </div>
             </Router>
