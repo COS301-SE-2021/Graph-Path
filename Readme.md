@@ -98,6 +98,12 @@ This provides a visual stimuli of how the project flows from node to node.
 ## Documentation and demo recordings
 <table>
 <tr>
+<td>Project management</td>
+<td>
+ <a href="###">GitHub Project Board</a> <br>    
+</td>                                                                                                              
+                                                                                             
+ </tr>
 <td>Demo 1 </td>
 <td>
 
@@ -106,7 +112,7 @@ This provides a visual stimuli of how the project flows from node to node.
     
 </td>                                                                                                              
                                                                                              
- </tr>
+ </tr>											     
                                                                           
 <tr>	
  <td>Demo 2 </td>
@@ -121,29 +127,3 @@ This provides a visual stimuli of how the project flows from node to node.
 
 </tr>
 </table>
-
-
-
-### Branching Strategy 
-<h2>
-    Monorepo strategy
-    <ul>
-        <li>
-            master
-        </li>
-        <ul>
-            <li>
-                develop
-            </li>
-            <ul>
-                <li>
-                    feature-front
-                </li>
-                <li>
-                    feature-back
-                </li>
-            </ul>
-        </ul>  
-    </ul>
-</h2>
-
