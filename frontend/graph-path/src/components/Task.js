@@ -1,8 +1,8 @@
 import  React from 'react' ;
 import '../css/Task.css';
 
-var jsgraphs = require('js-graph-algorithms');
-var graph = new jsgraphs.DiGraph(3);
+//var jsgraphs = require('js-graph-algorithms');
+//var graph = new jsgraphs.DiGraph(3);
 class Task extends React.Component{
     constructor(props) {
         super(props);
