@@ -1,6 +1,7 @@
 import React from 'react'
 import '../css/Login.css'
 import axios from 'axios' ;
+import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
 
 class Login extends React.Component{
     constructor(props){
@@ -105,6 +106,7 @@ class Login extends React.Component{
                     />
                     <br />
                     <input type="submit" className="btn1" value="Login" />
+                    Don't Have an Account? Register <Link to="/signUp"> Here</Link>
                 </form>
             </div>
 

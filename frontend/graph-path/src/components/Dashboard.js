@@ -1,8 +1,10 @@
 import React from 'react' ; 
 import Graph from './Graph';
 import NewProject from './NewProject' ;
+import Task from './Task';
 import '../css/App.css' ;
 import '../css/Dashboard.css'
+import Login from './Login'
 // import axios from 'axios' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import ViewGraph from './reactSigmaGraph' ;

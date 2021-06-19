@@ -2,10 +2,9 @@
     position: absolute;
     width: 500px;
     height: auto;
-    top: 320px;
-    left: 750px;
+    top: 25%;
+    left: 45%;
     background-color: #001122;
-    transform: translate(-50%,-50%);
     box-sizing: border-box;
     padding: 20px 40px;
     border-radius: 20px;
