@@ -36,7 +36,7 @@ class Header extends React.Component{
                 <Router>
                     <div>
                     <header className="App-header">
-                    <div>Graph Path</div>    
+                    <h4>Graph Path</h4>
                     <div className="App-link">
                         <Link to="/signOut" onClick={this.changeStatus}>signOut</Link>
                         </div>
@@ -56,7 +56,7 @@ class Header extends React.Component{
                 <Router>
                 <div className="header_">
                     <header className="App-header">
-                    Graph Path
+                    <h4>Graph Path</h4>
                     <p>{this.state.status}</p>
                     </header>
                         <Link className="App-link" to="/signIn" >LogIn</Link>
