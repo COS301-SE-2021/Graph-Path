@@ -2,6 +2,68 @@
     align-items: center;
 }
 
+.loginScreen {
+    background-color: #001122;
+    color: white;
+    max-width: 400px;
+    max-height: 350px;
+    position: relative;
+    left: 37%;
+    top: 45%;
+    box-sizing: border-box;
+    padding: 20px 40px;
+    border-radius: 20px;
+  /*  width: 400px;
+    height: 350px;
+    left: 750px;
+    top: 400px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 20px 40px;
+    border-radius: 20px;*/
+}
+
+.loginScreen p {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-weight: bold;
+}
+
+.loginScreen input{
+    width: 100%;
+    margin-bottom: 20px;
+
+}
+
+.loginScreen input[type="password"] {
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    height: 40px;
+    color: white;
+    padding-left: 3px;
+    font-size: 14px;
+    outline: none;
+}
+
+.loginScreen input[type="email"]{
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    height: 40px;
+    color: white;
+    padding-left: 3px;
+    font-size: 14px;
+    outline: none;
+}
+
+
+input[type="email"]:invalid{
+    border-bottom: 1px solid red;
+}
+
 .btn1{
     background-color: #04AA6D;
     color: white;
@@ -9,9 +71,17 @@
     margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 40%;
+    width: 100%;
+    font-weight: bold;
 }
 
-input {
-    position: relative;
+.btn1:hover {
+    background-color: #0b714b;
+}
+
+h4 {
+    margin: 0;
+    text-align: center;
+    padding: 0 0 10px;
+    font-size: 20px;
 }

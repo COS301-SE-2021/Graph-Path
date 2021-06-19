@@ -2,6 +2,7 @@ import React from 'react' ;
 import Dashboard from './Dashboard' ;
 import Register from './Register';
 import Login from './Login' ;
+import '../css/Header.css';
 import '../css/App.css';
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
@@ -53,7 +54,7 @@ class Header extends React.Component{
         else{
             return (
                 <Router>
-                <div>
+                <div className="header_">
                     <header className="App-header">
                     Graph Path
                     <p>{this.state.status}</p>

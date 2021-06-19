@@ -1,8 +1,10 @@
 import React from 'react' ; 
 import Graph from './Graph';
 import NewProject from './NewProject' ;
+import Task from './Task';
 import '../css/App.css' ;
 import '../css/Dashboard.css'
+import Login from './Login'
 // import axios from 'axios' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
@@ -110,9 +112,16 @@ class Dashboard extends React.Component{
             <Router>
             <div className="GraphDashboard">
                 <div className="App-link-routes" >
-                    <Link  to="/newProject">Create Project</Link>
-                
-                    <Link to="/viewProjects">View Projects</Link>
+                   <div id="opt">
+                       <Link  to="/newProject">Create Project</Link>
+                   </div>
+                    <div id="opt">
+                        <Link to="/viewProjects">View Projects</Link>
+                    </div>
+                    <div id="opt">
+                        <Link to="/newTask">Create Task</Link>
+                    </div>
+
                 </div>
                 <Switch>
                     <Route path="/newProject">
@@ -123,6 +132,11 @@ class Dashboard extends React.Component{
                     <Graph />
 
                     </Route>
+                    <Route path="/newTask">
+                        <Task />
+                    </Route>
+
+
                 </Switch>
             </div>
             </Router>

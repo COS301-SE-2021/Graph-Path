@@ -1,6 +1,7 @@
 import React from 'react'
 import '../css/Login.css'
 import axios from 'axios' ;
+import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
 
 class Login extends React.Component{
     constructor(props){
@@ -60,7 +61,7 @@ class Login extends React.Component{
             },()=>{
                 alert('res:'+this.state.answer)
                 console.log(this.state)//Heavey checks
-                if (this.state.responseData === undefined ){
+                if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
                     alert('try again') ;
                 }
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
@@ -87,26 +88,28 @@ class Login extends React.Component{
 
         return (
 
-            <form className="logForm" id="inForm" onSubmit= {this.onSubmit}>
-                <br />
-                <br />
-                Email<br />
-                <input name = 'email'
-                       type='email'
-                       placeholder='Email' value={this.state.email}
-                       onChange={e=>this.change(e)}
-                />
-                <br />
+            <div className="loginScreen">
+                <form className="logForm" id="inForm" onSubmit= {this.onSubmit}>
+                    <h4>Sign In</h4>
+                    <p>Email</p>
+                    <input name = 'email'
+                           type='email'
+                           placeholder='Email' value={this.state.email}
+                           onChange={e=>this.change(e)}
+                    />
 
-                Password<br />
-                <input name='password'
-                       type='password'
-                       placeholder='Password' value={this.state.password}
-                       onChange={e=>this.change(e)}
-                />
-                <br />
-                <input type="submit" className="btn1" value="Submit"  /> 
-            </form>
+                    <p>Password</p>
+                    <input name='password'
+                           type='password'
+                           placeholder='Password' value={this.state.password}
+                           onChange={e=>this.change(e)}
+                    />
+                    <br />
+                    <input type="submit" className="btn1" value="Login" />
+                    Don't Have an Account? Register <Link to="/signUp"> Here</Link>
+                </form>
+            </div>
+
 
         );
     }
