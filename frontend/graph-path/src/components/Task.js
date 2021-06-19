@@ -17,6 +17,38 @@ class Task extends React.Component{
         }
     }
 
+    addMember(){
+        this.setState(
+            {
+                members: [...this.state.members,""]
+            }
+        )
+    }
+
+    handleChange(e, index){
+        this.state.members[index] = e.target.value;
+       // console.log(this.members[index])
+        this.setState(
+            {
+                members: this.state.members
+            }
+        )
+    }
+
+ /*
+
+    handleRemove(index){
+        this.state.members.splice(index,1)
+
+        this.setState({
+            members: this.state.members
+        })
+    }
+
+  */
+
+
+
     handleSubmit = (event) => {
         event.preventDefault();
 
@@ -41,18 +73,29 @@ class Task extends React.Component{
                     <p>Description</p>
                     <input type="text" name="about" placeholder="Description" onChange={this.updateField}/>
                     <p>Start Date</p>
-                    <input type="date" name="startDate"  />
+                    <input required="true" type="date" name="startDate"  />
                     <p>Due Date</p>
-                    <input type="date" name="dueDate" />
+                    <input required="true" type="date" name="dueDate" />
                     <p>Assign Task</p>
-                    <input type="text" placeholder="Email" />
+                    <input name="members" type="text" placeholder="Email" onChange={this.updateField} />
+                    {
+                        this.state.members.map((member,index)=>{
+                            return (
+                                    <input  key={index}
+                                           onChange={(e)=>this.handleChange(e,index)}
+                                           type="text" placeholder="Email" />
+                            )
+                        })
+                    }
+                    {/* <button onClick={(e)=>this.handleRemove(index)}>-</button>*/}
+                    <button onClick={(e)=>this.addMember(e)}>+</button>
                     <label>
                         <p>Priority</p>
-                        <select value={''} onChange={''}>
-                            <option>Urgent</option>
-                            <option>High</option>
-                            <option>Normal</option>
-                            <option>Low</option>
+                        <select value={} onChange={''}>
+                            <option value="1">Urgent</option>
+                            <option value="2">High</option>
+                            <option value="3">Normal</option>
+                            <option value="4">Low</option>
                         </select>
                     </label>
                     <input type="submit" value="Add Task" className="btn1"/>
