@@ -100,7 +100,7 @@ This provides a visual stimuli of how the project flows from node to node.
 <tr>
 <td>Project management</td>
 <td>
- <a href="###">GitHub Project Board</a> <br>    
+ <a href="https://github.com/COS301-SE-2021/Graph-Path/projects">GitHub Project Board</a> <br>    
 </td>                                                                                                              
                                                                                              
  </tr>
