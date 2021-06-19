@@ -106,7 +106,7 @@ class NewProject extends React.Component{
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit} className="logForm">
                     <h4>Create New Project</h4>
                     <p>Project Name</p>
-                    <input type="text" required="true" name="name" placeholder="Project Name" onChange={this.updateField} />
+                    <input type="text" required={true} name="name" placeholder="Project Name" onChange={this.updateField} />
                     <p>Start Date</p>
                     <input type="date" name="startDate" onChange={this.updateField} />
                     <p>Due Date</p>
