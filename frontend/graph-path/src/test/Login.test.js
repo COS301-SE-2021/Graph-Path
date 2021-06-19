@@ -7,7 +7,7 @@ describe("Login Test", () =>{
     let wrapper;
     beforeEach(()=>{
         wrapper = shallow(<Login />);
-        console.log(wrapper.debug());
+        //console.log(wrapper.debug());
     });
 
     test("wraps the login form with a div",()=>{
