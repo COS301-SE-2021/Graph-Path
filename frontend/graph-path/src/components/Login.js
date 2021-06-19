@@ -94,6 +94,7 @@ class Login extends React.Component{
                     <h4>Sign In</h4>
                     <p>Email</p>
                     <input name = 'email'
+                           id='email'
                            type='email'
                            placeholder='Email' value={this.state.email}
                            onChange={e=>this.change(e)}
@@ -101,6 +102,7 @@ class Login extends React.Component{
 
                     <p>Password</p>
                     <input name='password'
+                           id='email'
                            type='password'
                            placeholder='Password' value={this.state.password}
                            onChange={e=>this.change(e)}

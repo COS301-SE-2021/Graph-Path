@@ -41,7 +41,7 @@ class Register extends React.Component{
             email:"",
             password:""
         }
-    }
+    };
 
     change =(e) => {
         //this.setState({
@@ -85,7 +85,7 @@ class Register extends React.Component{
 
         this.setState({ formErrors, [name]: value });
 
-    }
+    };
 
     onSubmit =e=>{
         e.preventDefault(); /*So the values entered don't show on URL and NOT to submit by itself*/
@@ -126,7 +126,7 @@ class Register extends React.Component{
             });
 
 
-    }
+    };
 
 
     sendData (data){
