@@ -2,8 +2,6 @@ import  React from 'react' ;
 import '../css/Task.css';
 import axios from "axios";
 
-//var jsgraphs = require('js-graph-algorithms');
-//var graph = new jsgraphs.DiGraph(3);
 class Task extends React.Component{
     constructor(props) {
         super(props);
@@ -18,7 +16,7 @@ class Task extends React.Component{
             api:'http://localhost:9001',
         }
     }
-
+/*
     addMember(){
         this.setState(
             {
@@ -26,7 +24,7 @@ class Task extends React.Component{
             }
         )
     }
-
+*/
     handleChange = (e, index) =>{
         this.state.members[index] = e.target.value;
        // console.log(this.members[index])
@@ -95,7 +93,7 @@ class Task extends React.Component{
     render() {
         return(
             <div className="TaskScreen">
-                <form method="POST" encType="multipart/form-data">
+                <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
                     <h4>Add Task</h4>
                     <p>Task</p>
                     <input type="text" name="name" required="true" placeholder="Task Name" onChange={this.updateField} />
