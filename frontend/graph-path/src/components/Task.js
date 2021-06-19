@@ -25,6 +25,10 @@ class Task extends React.Component{
         )
     }
 */
+    changeToDefault = () =>{
+        this.props.default() ;
+    }
+
     handleChange = (e, index) =>{
         this.state.members[index] = e.target.value;
        // console.log(this.members[index])
