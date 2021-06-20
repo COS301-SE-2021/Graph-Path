@@ -30,7 +30,7 @@ function makeApp(defaultDB , InjectedDB)
             const DB =  mongoDBInstance.getDB();
 
             //------------- DB dependency injection setup------
-            //const makeUserRoute = require('./API/routes/User');
+            const makeUserRoute = require('./API/routes/User');
             const makeTaskRoute = require('./API/routes/Task');
             makeTaskRoute(DB);
             makeUserRoute(DB);
@@ -45,7 +45,7 @@ function makeApp(defaultDB , InjectedDB)
 
             //--------------route setup --------------------------------
             //const ProjectRoute = require('./api/routes/Project');
-            const UserRoute= require('./API/routes/User');
+            //const UserRoute= require('./API/routes/User');
             //const NodeRoute = require('./API/routes/Node');
             //const Task2Route = require('./API/routes/Tasks2');
             //const TaskRoute = require('./API/routes/Task');
@@ -53,11 +53,11 @@ function makeApp(defaultDB , InjectedDB)
             //---------------------------------------------------------------------
 
             // ----------------inject passed in DB into routes---------------
-            //const UserRoute = makeUserRoute(DB);
+            const UserRoute = makeUserRoute(DB);
             const TaskRoute = makeTaskRoute(DB);
             //routes
             // app.use('/project', ProjectRoute);
-            //app.use('/user', UserRoute);
+            app.use('/user', UserRoute);
             //app.use('/node', NodeRoute);
             app.use('/task', TaskRoute);
             //app.use('/task2', Task2Route);
@@ -96,12 +96,11 @@ function makeApp(defaultDB , InjectedDB)
     else {
 
         const DB = InjectedDB
-
         //------------- DB dependency injection setup------
-        const makeUserRoute = require('./API/routes/User');
+        //const makeUserRoute = require('./API/routes/User');
         const makeTaskRoute = require('./API/routes/Task');
         makeTaskRoute(DB);
-        makeUserRoute(DB);
+        //makeUserRoute(DB);
         //--------------------------------------------------
 
 
@@ -115,14 +114,14 @@ function makeApp(defaultDB , InjectedDB)
         //--------------route setup --------------------------------
        // const ProjectRoute = require('./api/routes/Project');
         //const UserRoute= require('./API/routes/User');
-        const NodeRoute = require('./API/routes/Node');
-        const Task2Route = require('./API/routes/Tasks2');
+        //const NodeRoute = require('./API/routes/Node');
+        //const Task2Route = require('./API/routes/Tasks2');
         //const TaskRoute = require('./API/routes/Task');
         const Home = require('./API/routes/Home');
 
         // ----------------inject passed in DB into routes---------------
-        const UserRoute = makeUserRoute(DB);
-        const TaskRoute = makeUserRoute(DB);
+        //const UserRoute = makeUserRoute(DB);
+        const TaskRoute = makeTaskRoute(DB);
         //routes
         // app.use('/project', ProjectRoute);
         //app.use('/user', UserRoute);
