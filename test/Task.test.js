@@ -22,7 +22,7 @@ afterAll(async () => {
 });
 /**** here we mock the database with the relevant collections and documents  documents ***/
 
-/*describe('/getTaskByTasknr', ()=>{
+describe('/getTaskByTasknr', ()=>{
     describe("when given a task number ", ()=>{
         it('should return status code 200', function () {});
         it('should return JSON body ', function () {});
@@ -30,7 +30,8 @@ afterAll(async () => {
         it('should return an empty json object when given a non exist number', function () {});
     })
 })
-*/
+
+
 
 /*describe('/getAllTasks',()=> {
 
