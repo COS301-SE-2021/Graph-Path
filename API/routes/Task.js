@@ -37,21 +37,12 @@ function  makeTaskRoute(db)
         })
             .then((result)=>{
                 //console.log("This is result.tasknr in Tasks by project: "+result.tasknr);
+                // console.log("This is result in Tasks by project: "+result);
                 res.send(result);
             })
             .catch((err)=>{
                 console.log("Could not retrieve task by number in the project: "+err);
             });
-        /*  mongo.connect(url,(err,db)=>{
-              var cursor = db.collection('Tasks').find();
-              cursor.forEach((tsk,err)=>{
-                  arr.push(tsk);
-              },()=>{
-                  db.close();
-              });
-          });
-
-         */
 
     });
 
@@ -68,16 +59,6 @@ function  makeTaskRoute(db)
             .catch((err)=>{
                 console.log("Could not retrieve task by number in the project: "+err);
             });
-        /*  mongo.connect(url,(err,db)=>{
-              var cursor = db.collection('Tasks').find();
-              cursor.forEach((tsk,err)=>{
-                  arr.push(tsk);
-              },()=>{
-                  db.close();
-              });
-          });
-
-         */
 
     });
 
