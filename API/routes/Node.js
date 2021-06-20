@@ -6,30 +6,33 @@ const assert = require('assert');
 var db = require('../../Controllers/DBController').getDB();
 //const ManageNode = require('../../Services/ManageNode')
 
-//GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-router.get('/getNodeByProjectTasknr',(req,res,next)=>{
-    let proj=req.body.task.project;
-    let tsknr = req.body.task.tasknr;
-    //console.log("This is proj: "+proj);
-    //console.log("This is tsknr: "+tsknr);
-         db.collection('Node').findOne({
 
-                 "task.project":proj,
-                 "task.tasknr":tsknr
+function makeNodeRoute(db)
+{
+    //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+    router.get('/getNodeByProjectTasknr',(req,res,next)=>{
+        let proj=req.body.task.project;
+        let tsknr = req.body.task.tasknr;
+        //console.log("This is proj: "+proj);
+        //console.log("This is tsknr: "+tsknr);
+        db.collection('Node').findOne({
 
-         })
-             .then((data)=>{
+            "task.project":proj,
+            "task.tasknr":tsknr
+
+        })
+            .then((data)=>{
                 // console.log("The task was used to retrieve the node: "+data);
-                 res.send(data);
-             })
-             .catch(err=>{
-                 console.log("Could not retrieve node by task project and nr: "+err);
-             });
+                res.send(data);
+            })
+            .catch(err=>{
+                console.log("Could not retrieve node by task project and nr: "+err);
+            });
 
-})
+    })
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
-router.post('/createNode',(req,res,next)=>{
+    router.post('/createNode',(req,res,next)=>{
 
         let data = req.body;
         const id = new mongoose.mongo.ObjectID() ;
@@ -47,24 +50,24 @@ router.post('/createNode',(req,res,next)=>{
                     message:"request has been denied please try again"
                 }) ;
             })
-         .catch(err=>{
-             console.log('from db req',err)
-         });
+            .catch(err=>{
+                console.log('from db req',err)
+            });
 
 
 
 
 
-})
+    })
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
-router.delete('/deleteNodeByProjectTasknr',(req,res,next)=>{
+    router.delete('/deleteNodeByProjectTasknr',(req,res,next)=>{
 
-    let proj = req.body.project;
-    let tsknr = req.body.tasknr;
+        let proj = req.body.project;
+        let tsknr = req.body.tasknr;
 
         //console.log("This is proj inside the delete node: "+proj);
-       // console.log("This is tsknr inside the delete node: "+tsknr);
+        // console.log("This is tsknr inside the delete node: "+tsknr);
         db.collection('Node').deleteOne({
             "task.project":proj,
             "task.tasknr":tsknr
@@ -80,9 +83,13 @@ router.delete('/deleteNodeByProjectTasknr',(req,res,next)=>{
             });
 
 
-})
+    })
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    return router;
+}
 
-module.exports = router;
+
+
+module.exports = makeNodeRoute;
