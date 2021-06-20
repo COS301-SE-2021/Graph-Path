@@ -1,5 +1,6 @@
 import React from 'react' ; 
 import SigmaGraph from './SigmaGraph';
+import '../css/common.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
 class Graph extends React.Component{
@@ -7,10 +8,10 @@ class Graph extends React.Component{
     constructor(props){
         super(props) ; 
         this.state=  {
-            NodeList: {
-                nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"}],
-                edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},]
-            },
+            NodeList: "",//{
+            //     nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"}],
+            //     edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},]
+            // },
             linkNumber : -1
         }
     }
@@ -30,21 +31,20 @@ class Graph extends React.Component{
         }
         let listArray = [graph1,graph2] ; 
         let keyNum = -1 ;
-        let projNum = -1 ;
         console.log('sending graph obj ',this.state.NodeList)
         return (
             <Router>
-                <div>
-                    MENU
-
-                    <ul>
+                <div className="drop">
+                   <span className="dropbtn">
+                        Projects
+                    </span>
+                    <ul >
                         {
-                            
-                            listArray.map( i => {
-                                
+                            listArray.map( i => {       
                                 keyNum = keyNum+1 ;
-                                return <li key={keyNum}> 
-                                    <Link data-projnum={keyNum} onClick={(e) =>{
+                                return <li key={keyNum} > 
+                                    <Link data-projnum={keyNum} className="dropdown-content" 
+                                    onClick={(e) =>{
                                     this.changeNodeList(i, e.target.getAttribute("data-projnum"))}}
                                     to={`/project/${keyNum}`}>{i.nodes[0].label}</Link>
                                 </li>
@@ -70,7 +70,8 @@ class Graph extends React.Component{
             NodeList:node,
             linkNumber:num
         }) ;
-    } 
+    }
+    position
 }
 
 export default Graph ; 
