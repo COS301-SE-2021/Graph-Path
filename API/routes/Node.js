@@ -28,7 +28,6 @@ router.get('/getNodeByProjectTasknr',(req,res,next)=>{
 
 })
 
-
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.post('/createNode',(req,res,next)=>{
     /*  if(  ManageNode.create(req.body) == 0){
