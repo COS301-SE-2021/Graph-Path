@@ -22,7 +22,7 @@ afterAll(async () => {
 });
 /**** here we mock the database with the relevant collections and documents  documents ***/
 
-describe('/getTaskByTasknr', ()=>{
+/*describe('/getTaskByTasknr', ()=>{
     describe("when given a task number ", ()=>{
         it('should return status code 200', function () {});
         it('should return JSON body ', function () {});
@@ -30,10 +30,10 @@ describe('/getTaskByTasknr', ()=>{
         it('should return an empty json object when given a non exist number', function () {});
     })
 })
+*/
 
 
-
-/*describe('/getAllTasks',()=> {
+describe('/getAllTasks',()=> {
 
     describe("when requested", ()=>{
 
@@ -115,7 +115,7 @@ describe('/getTaskByTasknr', ()=>{
                 })
         });
     })
-});*/
+});
 /*describe('/getAllTasksByProject',  ()=>{
         describe("when requested with a project name", ()=>{
 
