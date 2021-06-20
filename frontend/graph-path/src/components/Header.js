@@ -4,6 +4,7 @@ import Register from './Register';
 import Login from './Login' ;
 import '../css/Header.css';
 import '../css/App.css';
+import '../css/common.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
 
