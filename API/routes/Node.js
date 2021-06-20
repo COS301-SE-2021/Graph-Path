@@ -30,25 +30,7 @@ router.get('/getNodeByProjectTasknr',(req,res,next)=>{
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.post('/createNode',(req,res,next)=>{
-    /*  if(  ManageNode.create(req.body) == 0){
-          res.status(200).json({
 
-              status: true,
-              message: "The node was inserted successfully."
-
-          })
-      }else{
-          res.status(200).json({
-
-              status: false,
-              message: "The node was not inserted successfully."
-
-          })
-      }
-
-     */
-
-    try{
         let data = req.body;
         const id = new mongoose.mongo.ObjectID() ;
         data["_id"] = id ;
@@ -65,15 +47,13 @@ router.post('/createNode',(req,res,next)=>{
                     message:"request has been denied please try again"
                 }) ;
             })
-        /* .catch(err=>{
+         .catch(err=>{
              console.log('from db req',err)
-         })
+         });
 
-         */
 
-    }catch(err){
-        console.log("Could not create node: "+err);
-    }
+
+
 
 })
 
