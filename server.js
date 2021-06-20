@@ -1,6 +1,6 @@
 const http = require('http');
 const port = process.env.PORT || 9001 || 3000 ;
-const mongoDBInstance = require('./Controllers/DBController')
+//const mongoDBInstance = require('./Controllers/DBController')
 //const server = http.createServer(app);
 /*
 server.listen(port,()=>{
@@ -17,19 +17,28 @@ server.on("listening", () => {
 })
 */
 
-mongoDBInstance.connect( (error) => {
+/*mongoDBInstance.connect( (error) => {
 
     if(error){
         console.log('error message here', error);
     }
 
-    const app = require('./app');
+    const makeApp = require('./app');
+
+    const  DB = mongoDBInstance.getDB()
+    const app = makeApp()
     const server = http.createServer(app);
 
     server.listen(port,()=>{
         console.log(`server running on http://localhost:${port}`)
     }) ;
 
-})
+})*/
 
+const makeApp = require('./app');
+const app = makeApp(true,)
+const server = http.createServer(app);
+server.listen(port,()=>{
+    console.log(`server running on http://localhost:${port}`)
+}) ;
 
