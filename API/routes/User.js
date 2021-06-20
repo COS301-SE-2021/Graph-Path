@@ -9,21 +9,36 @@ router.get('/userList',async(req, res, next)=> {
     console.log(emailparam);
    // const back = ManageUser.getAllUsers(req.body);
    // const back =
-      await  db.collection('Users').findOne({
-          email: emailparam
-      })
+    if(!emailparam)
+    {
+        console.log("no email given")
+        res.status(400).send({
+
+            message: "no email given"
+        })
+    }
+    else
+    {
+        await  db.collection('Users').findOne({
+            email: emailparam
+        })
             .then((result)=>{
-               // for(var property in result) {
-                  //  console.log(property + "=" + result[property]);
-               // }
-                 console.log("This is result: "+result);
+                // for(var property in result) {
+                //  console.log(property + "=" + result[property]);
+                // }
+                console.log("This is result: "+result);
                 res.send(result);
             })
             .catch((err)=>{
                 console.log("Could not retrieve all users"+err);
             });
-    //console.log("This is back in the userlist endpoint: "+back);
-   // res.send(back);
+        //console.log("This is back in the userlist endpoint: "+back);
+        // res.send(back);
+    }
+
+
+
+
 });
 
 router.get('/userEmail',(req, res, next)=>{
@@ -90,7 +105,16 @@ router.post('/newUser',(req,res)=>{
 }) ;
 
 router.get('/login/:email',(req,res,next)=>{
+
     const emailParam = req.params.email ;
+    if(emailParam =='' || emailParam == undefined)
+    {
+        res.status(400).send({
+            message:"invalid email given"
+        })
+    }
+
+
     db.collection('Users').findOne({
         email:emailParam
     }) 
