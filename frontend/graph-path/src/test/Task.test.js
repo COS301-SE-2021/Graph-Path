@@ -14,4 +14,8 @@ describe("Task Test", () => {
         expect(wrapper.find("form")).toBeTruthy();
     });
 
+    test("render title", () => {
+        expect(wrapper.find("h4").text()).toBe("Add Task");
+    });
+
 });
