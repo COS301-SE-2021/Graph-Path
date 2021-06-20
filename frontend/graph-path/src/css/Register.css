@@ -58,6 +58,7 @@ h4 {
 
 .btn1:hover {
     background-color: #0b714b;
+    background-color: salmon;
 }
 
 input.error {
@@ -67,5 +68,5 @@ input.error {
 .errorMessage {
     color: red;
     font-size: 0.75em;
-    display: none;
+    display: relative;
 }
