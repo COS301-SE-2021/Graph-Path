@@ -108,7 +108,7 @@ function  makeTaskRoute(db)
             .then((result)=>{
                 res.send({
                     message:"saved",
-                    data: result
+                    data: result['ops']
                 }) ;
             })
             .catch(err=>{
