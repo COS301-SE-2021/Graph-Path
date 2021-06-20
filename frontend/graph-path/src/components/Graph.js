@@ -1,6 +1,8 @@
 import React from 'react' ; 
 import SigmaGraph from './SigmaGraph';
-import '../css/common.css'
+import Task from './Task' ;
+
+import '../css/common.css' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
 class Graph extends React.Component{
@@ -38,7 +40,7 @@ class Graph extends React.Component{
                    <span className="dropbtn">
                         Projects
                     </span>
-                    <ul >
+                    <ul className="projList">
                         {
                             listArray.map( i => {       
                                 keyNum = keyNum+1 ;
@@ -49,8 +51,15 @@ class Graph extends React.Component{
                                     to={`/project/${keyNum}`}>{i.nodes[0].label}</Link>
                                 </li>
                             })
+                            
                         }
                     </ul>
+                </div>
+                <div className="drop">
+                   <span className="dropbtn">
+                   <Link to="/addTask">Add Task
+                   </Link>
+                    </span>
                 </div>
                 
                 <Switch>
@@ -58,6 +67,9 @@ class Graph extends React.Component{
                         <SigmaGraph key={this.state.linkNumber}
                             graphToDisplay={this.state.NodeList}
                         />
+                    </Route>
+                    <Route path="/addTask">
+                        <Task />
                     </Route>
                 </Switch>
             </Router>
