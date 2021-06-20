@@ -1,6 +1,6 @@
 
 import React from 'react';
-// import '../css/NewProject.css' ;
+import '../css/Graph.css' ;
 import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,LoadGEXF,NodeShapes,ForceAtlas2,Filter} from 'react-sigma' ;
 class GrapExample2 extends React.Component{
   constructor(props){
@@ -9,6 +9,29 @@ class GrapExample2 extends React.Component{
       graphs : []
     }
   }
+
+  changeSize=()=>{
+    var canv = document.querySelectorAll('canvas') ; 
+    var parent = document.querySelector('.sigma-scene') ;
+
+    if (canv.length > 0 && parent !== undefined && parent!== null){
+      canv.forEach((item,key,parentList)=>{
+        console.log(item.className, item) ;
+
+        item.style.width='100%' ;
+        item.style.height='100%' ;
+        // item.width = parent[0].clientWidth ; 
+        item.width = parent.clientHeight ;
+        item.height = parent.clientWidth ; 
+        item.style.left = "253px" ;
+        item.style.bottom = "250px"
+        
+        console.log(item.className, item, 'parent',parent[1]) ;
+      })
+    }
+  }
+
+
     
   render(){
     console.log( this.props) ;
@@ -17,18 +40,20 @@ class GrapExample2 extends React.Component{
     return (
       <div className="exampleProject">
         
-        <div className="Graph1">
-          <Sigma graph={graph} style={{position:"relative", 
-          width:"200px" , height:"150px" }}
+        <div className="GraphBox">
+          <Sigma graph={graph} className="SigmaParent" 
+          style={{position:"relative", 
+          width:"500px" , height:"500px", border:"solid 3px black" }}
           onOverNode={e => console.log("Mouse over node: " + e.data.node.label)}
           settings={{drawEdges: true, clone: false}}>
             <EdgeShapes default="arrow" style={{width:"200"}}/>
             <NodeShapes default="star"/>
-            <RelativeSize  initialSize={550}/>
-            <RandomizeNodePositions x1={200} y1={1000} x2={600} y2={900}/>        
+            <RelativeSize  initialSize={20}/>
+            <RandomizeNodePositions x1={200} y1={100} x2={300} y2={300}/>        
           </Sigma>
-        </div>
+          {this.changeSize()}
 
+        </div>
       </div>
     );
   }
