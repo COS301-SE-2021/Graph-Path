@@ -93,6 +93,15 @@ class NewProject extends React.Component{
         // this.changeToDefault() ;
     }
 
+    handleChange = (e, index) =>{
+        this.state.members[index] = e.target.value;
+        // console.log(this.members[index])
+        this.setState(
+            {
+                members: this.state.members
+            }
+        )
+    }
 
     updateField = (event) =>{
         this.setState({
@@ -112,8 +121,17 @@ class NewProject extends React.Component{
                     <p>Due Date</p>
                     <input type="date" name="dueDate" onChange={this.updateField}/>
                     <p>Members</p>
-                    <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>
-                    <span className="newMember" onClick={this.addMember}><a>+</a></span>
+                    {/* <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>*/}
+                    <input type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,0)}/>
+                    {
+                        this.state.members.map((member,index)=>{
+                            return(
+                                <input key={index} type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,index+1)}/>
+                                )
+
+                        })
+                    }
+                    {/*<span className="newMember" onClick={this.addMember}><a>+</a></span>*/}
                     <br/>
                     <input type="text" name="graph" placeholder="Graph" />
                     <br/>

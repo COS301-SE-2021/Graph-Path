@@ -41,7 +41,7 @@ class Register extends React.Component{
             email:"",
             password:""
         }
-    }
+    };
 
     change =(e) => {
         //this.setState({
@@ -55,17 +55,17 @@ class Register extends React.Component{
 
         switch(name){
             case 'firstName':
-                formErrors.firstName = value==null  ? 'FirstName is required'
+                formErrors.firstName = value.length==0 ? 'FirstName is required'
                     : "";
                 break;
 
             case 'lastName':
-                formErrors.lastName = value==null ? 'LastName is required'
+                formErrors.lastName = value.length==0 ? 'LastName is required'
                     : "";
                 break;
 
             case 'userName':
-                formErrors.userName = value==null ? 'userName is required'
+                formErrors.userName = value.length==0 ? 'userName is required'
                     : "";
                 break;
 
@@ -76,7 +76,7 @@ class Register extends React.Component{
                 break;
 
             case 'password':
-                formErrors.password = value.length < 9 ? 'Minimum for password should be 8 characters'
+                formErrors.password = value.length < 8 ? 'Minimum for password should be 8 characters'
                     : "";
                 break;
 
@@ -85,7 +85,7 @@ class Register extends React.Component{
 
         this.setState({ formErrors, [name]: value });
 
-    }
+    };
 
     onSubmit =e=>{
         e.preventDefault(); /*So the values entered don't show on URL and NOT to submit by itself*/
@@ -114,7 +114,6 @@ class Register extends React.Component{
 
             this.sendData(data);
 
-        }
             /*Clear inputs once you click on submit*/
             this.setState({
                 firstName:'',
@@ -125,8 +124,23 @@ class Register extends React.Component{
                 wait:false
             });
 
+        }else
+        {
+            this.setState({
+                firstName: this.state.firstName,
+                lastName:this.state.lastName,
+                userName:this.state.userName,
+                email:this.state.email,
+                password:this.state.password
+            });
+        }
 
-    }
+
+        /*trying to solve the error on render function*/
+        this.setState({
+            wait:false
+        }) ;
+    };
 
 
     sendData (data){
@@ -201,7 +215,7 @@ class Register extends React.Component{
                         onChange={this.change}
                     />
                     {formErrors.lastName.length > 0 && (
-                        <span className='errorMessage'>{formErrors.lasttName}</span>
+                        <span className='errorMessage'>{formErrors.lastName}</span>
                     )}
                     <p>Username</p>
                     <input

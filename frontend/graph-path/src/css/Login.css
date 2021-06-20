@@ -85,3 +85,13 @@ h4 {
     padding: 0 0 10px;
     font-size: 20px;
 }
+
+input.error {
+    border: 1px solid red;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 0.75em;
+    display: relative;
+}
