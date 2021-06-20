@@ -3,16 +3,16 @@ const express = require('express');
 const projectManager = require('../../Services/ProjectService');
 const mongoose = require('mongoose') ;
 const router = express.Router();
-
-
-router.post('/newProject' ,  (req,res,next) =>{
+var db = require('../../Controllers/DBController').getDB();
+console.log("-----test2-----")
+router.post('/newProject' ,  async (req,res,next) =>{
     if (req == undefined || req.body == undefined ){
         res.json({
             message:"Req is null" 
         }) ;
     }
     if (req.body.projectName == undefined){
-        console.log('no projec name')
+        console.log('no project name')
         res.send({
             message:"Please specify a Project Name"
         }) 
@@ -23,7 +23,7 @@ router.post('/newProject' ,  (req,res,next) =>{
         var data = req.body ;
         const id = new mongoose.mongo.ObjectID() ;
         data["_id"] = id ;
-        db.collection('Projects').insertOne(data) 
+      await  db.collection('Projects').insertOne(data)
         .then((ans)=>{
             console.log('success',ans.ops) ;
             res.send({
@@ -43,7 +43,8 @@ router.post('/newProject' ,  (req,res,next) =>{
 }) ; 
 
 router.get('/find',(req,res,next)=>{
-    
+
+    console.log("-----test2-----")
     db.collection('Projects').findOne({})
     .then((ans)=>{
         console.log('success',ans) ;
@@ -59,6 +60,7 @@ router.get('/find',(req,res,next)=>{
     .catch(err=>{
         console.log('from db req',err)
     })
+
 }) ;
 
 router.get('/list',(req,res,next)=>{
