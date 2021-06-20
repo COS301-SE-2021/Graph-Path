@@ -3,25 +3,30 @@ const app = express();
 const cors = require('cors') ;
 const path = require('path') ;
 const mongoDBInstance = require('./Controllers/DBController')
-const testDB = require('./Controllers/DBtestController')
-//console.log(process.env.TEST_MONGO_URL)
+// const testDB = require('./Controllers/DBtestController')
+
+
+// mock database
+
+
 //middleware
 app.use(cors()) ;
 app.use(express.urlencoded({extended:true}));
 app.use(express.json()) ;
 app.use(express.static(path.join(__dirname, 'public')));
-mongoDBInstance.connect((error)=>{
-    if (error){
-        console.log('Error on start of mongodb',error) ;
-    }
+
+
     //app goes online
     //require statements
+
     const ProjectRoute = require('./api/routes/Project');
     const UserRoute= require('./API/routes/User');
     const NodeRoute= require('./API/routes/Node');
     const Task2Route = require('./API/routes/Tasks2');
     const TaskRoute = require('./API/routes/Task');
+
     const Home = require('./API/routes/Home') ;
+
 
     //routes
     app.use('/project' , ProjectRoute);
@@ -29,6 +34,8 @@ mongoDBInstance.connect((error)=>{
     app.use('/node',NodeRoute);
     app.use('/task',TaskRoute);
     app.use('/task2',Task2Route);
+
+
 
 
     //default /GET
@@ -55,6 +62,7 @@ mongoDBInstance.connect((error)=>{
 
         });
     }) ;
-});
+
+//module.exports = app
 
 module.exports = app
