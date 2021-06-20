@@ -242,7 +242,7 @@ describe('/getAllTasksByProject',  ()=>{
         })
 
 });
-/*describe('/insertTask',  ()=> {
+describe('/insertTask',  ()=> {
     describe('When request with a given JSON body ',  () =>{
         it('it should return status code 200', async ()=> {
 
@@ -314,5 +314,5 @@ describe('/getAllTasksByProject',  ()=>{
 
 
 
-});*/
+});
 /*describe('/deleteTaskByTasknr',  ()=> {});*/
