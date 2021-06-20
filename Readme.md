@@ -120,6 +120,8 @@ This provides a visual stimuli of how the project flows from node to node.
 			
 <a href="https://www.overleaf.com/read/kpkxfrszpzfn"> SRS documentation (version 2)</a><br>
 <a href="https://www.overleaf.com/read/tncfphgpgkcv"> Architecture Documentation</a><br>
+<a href="https://www.overleaf.com/read/ckxzjfyjhrhj">Coding standard documentation</a><br>
+<a href="###">User Manual</a><br>						    
 <a href="###"> Demo video 2</a><br>
 
 			
