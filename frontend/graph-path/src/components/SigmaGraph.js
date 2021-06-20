@@ -23,8 +23,6 @@ class GrapExample2 extends React.Component{
         // item.width = parent[0].clientWidth ; 
         item.width = parent.clientHeight ;
         item.height = parent.clientWidth ; 
-        item.style.left = "253px" ;
-        item.style.bottom = "250px"
         
         console.log(item.className, item, 'parent',parent[1]) ;
       })
