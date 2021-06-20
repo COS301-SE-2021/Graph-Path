@@ -140,16 +140,16 @@ class Register extends React.Component{
                 if(response.status===400){
                     throw Error(response.statusText) ;
                 }//else
-                console.log('from back end',response)
+                // console.log('from back end',response)
 
                 const res = response.data;
-                console.log(res) ;
+                // console.log(res) ;
                 this.setState({
                     answer:res.message,
                     responseData:res.data[0] //data
                 },()=>{
 
-                    console.log(this.state)
+                //    console.log(this.state)
                     if (this.state.answer!== undefined && this.state.responseData !== undefined){
                        alert(`Registered as: ${this.state.responseData.firstName} ${this.state.responseData.lastName}, \n with login email as:${this.state.responseData.email}`)
                     }
@@ -160,6 +160,7 @@ class Register extends React.Component{
 
             },(response)=>{
                 console.log('rejected',response) ;
+                alert('Server Error, Please try again later') ; 
             })
             .catch((error)=>{
                 console.log(error) ;
