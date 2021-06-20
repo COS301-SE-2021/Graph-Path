@@ -116,7 +116,7 @@ describe('/getAllTasks',()=> {
         });
     })
 });
-/*describe('/getAllTasksByProject',  ()=>{
+describe('/getAllTasksByProject',  ()=>{
         describe("when requested with a project name", ()=>{
 
             it('it should return status code 200', async ()=> {
@@ -241,7 +241,7 @@ describe('/getAllTasks',()=> {
 
         })
 
-});*/
+});
 /*describe('/insertTask',  ()=> {
     describe('When request with a given JSON body ',  () =>{
         it('it should return status code 200', async ()=> {
