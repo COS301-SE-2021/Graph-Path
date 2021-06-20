@@ -35,8 +35,6 @@ class Header extends React.Component{
         if (elem!==null){ 
             elem.style.visibility='hidden' ;
         }
-        else{
-        }
     }
     renderOpen = () =>{
         var elem = document.getElementById('DashButton') ;
@@ -50,10 +48,11 @@ class Header extends React.Component{
         console.log('clicked', elem.style.display)
         if (elem !== null){
             elem.style.display='block' ;
+            this.renderClose() ; 
         }
         else{        
             console.log('clicked but null', elem.style.display)
-
+            // this.renderOpen() ;
         }
     }
 
