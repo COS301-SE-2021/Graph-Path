@@ -23,7 +23,11 @@ button{
   margin:2px 2px 2px 2px ; 
 }
 
-.App-link-routes #opt {
+.close{
+    background-color: #9A0001;
+}
+
+.App-link-routes .opt {
     background-color: #04AA6D;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -33,18 +37,23 @@ button{
     left: 20px;
 }
 
-.App-link-routes #opt a {
+.App-link-routes .opt a {
     color: white;
     text-decoration: none;
 }
 
-.App-link-routes #opt:hover {
+.App-link-routes .opt:hover{
+    cursor: pointer;
+}
+
+.App-link-routes .opt:hover {
     background-color: #0b714b;
 }
 .ContentArea{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    max-width: 600px;
 }
 .GraphDashboard{
     display: flex;
