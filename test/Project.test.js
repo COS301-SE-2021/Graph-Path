@@ -2,6 +2,23 @@ const app = require('../app');
 const supertest = require('supertest');
 const http = require('http')
 const testApp = http.createServer(app)
+const {MongoClient} = require('mongodb');
+
+let connection;
+let db;
+beforeAll(async () => {
+    connection = await MongoClient.connect(global.__MONGO_URI__, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+    db = await connection.db(global.__MONGO_DB_NAME__);
+});
+
+afterAll(async () => {
+    await connection.close();
+    await db.close();
+});
+
 
 describe("POST/users", ()=> {
         describe("when given a username and password", () => {
@@ -37,7 +54,7 @@ describe("POST/users", ()=> {
             it("should return status code 404", async ()=>{
                 response = await supertest(app)
 
-                    .get('/user/login/hvkjvhjfjfvb')
+                    .get('/user/login/')
                     .expect(404)
                     .then(()=>{
                     })
@@ -49,10 +66,10 @@ describe("POST/users", ()=> {
 })
 
 
-describe("GET: /UserList", ()=>{
+describe("GET: user/UserList", ()=>{
     describe("when given an email address", ()=>{
         it('should return status 200', function () {
-            
+
         });
     } )
     describe("when the user field is missing", ()=>{
@@ -72,6 +89,21 @@ describe("GET: /UserList", ()=>{
 
         })
     })
+})
+
+describe('GET: /userEmail' , ()=>{
+
+
+    it('should insert a doc into collection', async () => {
+        const users = db.collection('users');
+
+        const mockUser = {_id: 'some-user-id', name: 'John'};
+        await users.insertOne(mockUser);
+
+        const insertedUser = await users.findOne({_id: 'some-user-id'});
+        expect(insertedUser).toEqual(mockUser);
+    })
+
 })
 
 
