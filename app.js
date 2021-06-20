@@ -6,8 +6,6 @@ const path = require('path') ;
 //const mongoDBInstance = require('./Controllers/DBController')
 // const testDB = require('./Controllers/DBtestController')
 
-
-
 /*
     function MakeApp() makes  an app with a passed in Database.
     this functions is to support dependency injection.
@@ -32,8 +30,9 @@ function makeApp(defaultDB , InjectedDB)
             //------------- DB dependency injection setup------
             const makeUserRoute = require('./API/routes/User');
             const makeTaskRoute = require('./API/routes/Task');
-            makeTaskRoute(DB);
-            makeUserRoute(DB);
+            const makeProjectRoute = require('./API/routes/Project');
+            const makeNodeRoute = require('./API/routes/Node')
+
             //--------------------------------------------------
 
             //----------------------middleware------------------------
@@ -55,12 +54,14 @@ function makeApp(defaultDB , InjectedDB)
             // ----------------inject passed in DB into routes---------------
             const UserRoute = makeUserRoute(DB);
             const TaskRoute = makeTaskRoute(DB);
+            const ProjectRoute = makeProjectRoute(DB);
+            const NodeRoute = makeNodeRoute(DB);
             //routes
-            // app.use('/project', ProjectRoute);
+            app.use('/project', ProjectRoute);
             app.use('/user', UserRoute);
-            //app.use('/node', NodeRoute);
+            app.use('/node', NodeRoute);
             app.use('/task', TaskRoute);
-            //app.use('/task2', Task2Route);
+
             //---------------------------------------------------------------------
 
             //default /GET
