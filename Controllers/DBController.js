@@ -19,7 +19,18 @@ const dbController = {
     },
 
     getDB : ()=>{
-        console.log('returned DB',db)
+
+        if(db == undefined)
+        {
+            console.log('returned DB', db)
+        }
+        else
+        {
+            console.log('returned DB: correct ')
+        }
+
+
+
         return db ;
     }
 }
