@@ -56,8 +56,8 @@ class Dashboard extends React.Component{
 
     toogleDisplayOpen = () =>{
         var elem = document.getElementById('modal1') ;
-        console.log('clicked', elem.style.display)
         if (elem !== null){
+        // console.log('clicked', elem.style.display)
             elem.style.display='block' ;
             this.props.menuToogleClose() ; 
         }
@@ -78,15 +78,15 @@ class Dashboard extends React.Component{
             <div className="GraphDashboard">
                 <div className="DashboardMenu" id="modal1" >
                     <div className="App-link-routes" >
-                    
-                    <span onClick={this.toogleDisplayClose} 
-                    className="close" title="Close Modal">
-                    &times;</span>
-
-                    <div id="opt">
+                        <div className="opt">
+                        <span onClick={this.toogleDisplayClose} 
+                        className="close" title="Close Modal">
+                        &times;</span>
+                    </div>
+                    <div className="opt">
                         <Link  to="/newProject">Create Project</Link>
                     </div>
-                        <div id="opt">
+                        <div className="opt">
                             <Link to="/viewProjects">View Projects</Link>
                         </div>
 
@@ -110,6 +110,8 @@ class Dashboard extends React.Component{
                     </Route>
                 </Switch>
             </div>
+            {this.toogleDisplayOpen()}
+
             </Router>
         )
     }
