@@ -152,6 +152,37 @@ function  makeTaskRoute(db)
        // })
     });
 
+    router.patch('/updateTaskStatus/:project/:tasknr/:status',(req,res,next)=>{
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newStat = req.params.status;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{status:newStat}
+        },(err,result)=>{
+
+            if(err){
+                console.log("Could not update the task status: "+err);
+                res.send({
+                    message: "Failed",
+                    data: err
+                });
+            }else{
+                //console.log("The update of the task status was a success: "+result);
+                res.send({
+                    message: "success",
+                    data: result['ops']
+                });
+            }
+
+        })
+        //.catch((err)=>{
+        //    console.log("Could not update the task description: "+err);
+        // })
+    });
 
 
 
