@@ -1,22 +1,39 @@
-
 .GraphDashboard{
-    display: flex;
-    flex-direction: column; 
-    background-color: #F00112;
+    background-color: #001122;
     color: white;
-    padding: 4px 4px 4px 4px;
+    left: auto;
     /* text-align: center; */
     /* align-items: center; */
+    width: 150px;
+    height: 88%;
+    position: absolute;
   }
-  .App-link-routes {
-  display: inline;
-  padding: 4px 4px 4px 3px  ;
+.App-link-routes {
+    background-color: transparent;
+    height: auto;
+    position: absolute;
+    top: 30px;
+    width: 100%;
 }
 button{
   margin:2px 2px 2px 2px ; 
 }
 
-.App-link-routes > a {
-  margin:2px 2px 2px 2px ; 
-  border: solid 2px;
+.App-link-routes #opt {
+    background-color: #04AA6D;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: auto;
+    width: 85%;
+    position: relative;
+    left: 20px;
+}
+
+.App-link-routes #opt a {
+    color: white;
+    text-decoration: none;
+}
+
+.App-link-routes #opt:hover {
+    background-color: #0b714b;
 }
