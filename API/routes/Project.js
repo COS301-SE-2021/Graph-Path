@@ -57,8 +57,42 @@ function makeProjectRoute(db) {
 
     })
 
+
+    router.get('/getAllProjectsByUserEmail/:email', (req, res, next) => {
+        console.log('received request ', req.body, 'servicing.....');
+        let usr=req.params.email;
+        db.collection('Projects').find({
+            "groupMembers.email":usr
+        }).toArray()
+            .then((projects) => {
+                console.log('success', projects);
+                if (projects.length > 0) {
+                    res.send({
+                        message: projects//.json()
+                    });
+                } else {
+                    res.send({
+                        message: "No Projects found"
+                    })
+                }
+            }, (ans) => {
+                console.log('rejected', ans);
+                res.send({
+                    data: ans
+                });
+            })
+            .catch(err => {
+                console.log('from db req', err)
+                res.send({
+                    message: "error",
+                    data: err
+                });
+            })
+
+    })
+
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
-    router.post('/newProject', async (req, res, next) => {
+    router.post('/newProject',  (req, res, next) => {
         if (req == undefined || req.body == undefined) {
             res.json({
                 message: "Req is null"
@@ -75,12 +109,12 @@ function makeProjectRoute(db) {
             var data = req.body;
             const id = new mongoose.mongo.ObjectID();
             data["_id"] = id;
-            await db.collection('Projects').insertOne(data)
+             db.collection('Projects').insertOne(data)
                 .then((ans) => {
                     console.log('success', ans.ops);
                     res.send({
                         message: "saved",
-                        data: ans.ops
+                        data: ans['ops']
                     });
                 }, (ans) => {
                     console.log('rejected', ans);
@@ -98,6 +132,35 @@ function makeProjectRoute(db) {
 
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
+    let nme = req.params.name;
+    let grph = req.params.graph;
+    db.collection('Projects').updateOne({
+        name:nme
+    },{
+        $set:{graph:grph}
+    },(err,result)=>{
+
+        if(err){
+            console.log("Could not update the project graph: "+err);
+            res.send({
+                message: "Failed",
+                data: err
+            });
+        }else{
+            //console.log("The update of the task description was a success: "+result);
+            res.send({
+                message: "success",
+                data: result['ops']
+            });
+        }
+
+    })
+    //.catch((err)=>{
+    //    console.log("Could not update the task description: "+err);
+    // })
+});
+
 
  return router;
 }
