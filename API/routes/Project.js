@@ -62,7 +62,7 @@ function makeProjectRoute(db) {
         console.log('received request ', req.body, 'servicing.....');
         let usr=req.params.email;
         db.collection('Projects').find({
-            "groupMembers.email":usr
+            "groupMembers":usr
         }).toArray()
             .then((projects) => {
                 console.log('success', projects);
@@ -160,6 +160,41 @@ router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
     //    console.log("Could not update the task description: "+err);
     // })
 });
+
+router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
+    let nme = req.params.name;
+    let eml = req.params.email;
+    db.collection('Projects').updateOne({
+        projectName:nme
+    },{
+
+            $push: {
+                groupMembers: eml
+            }
+
+    },(err,result)=>{
+
+        if(err){
+            console.log("Could not update the project graph: "+err);
+            res.send({
+                message: "Failed",
+                data: err
+            });
+        }else{
+            //console.log("The update of the task description was a success: "+result);
+            res.send({
+                message: "success",
+                data: result['ops']
+            });
+        }
+
+    })
+    //.catch((err)=>{
+    //    console.log("Could not update the task description: "+err);
+    // })
+});
+
+
 
 
  return router;
