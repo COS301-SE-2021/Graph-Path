@@ -81,38 +81,7 @@ var db = require('../../Controllers/DBController').getDB();
          }
      }) ;
 
-     router.post('/oldnewUser',(req,res)=>{
-         console.log(req.body) ;
-         if (req.body && req.body.firstName){
-             var data = req.body ;
-             var result = userManagement.create(data) ;
-             if (result > 0 ){
-                 res.json({
-                     message: 'User saved successfully. Please Log in'
-                 }) ;
-             }
-             else if (result == 0 ){
-                 res.json({
-                     message:"error in database"
-                 }) ;
-             }
-             else if (result == -1){
-                 res.status(201).json({
-                     message:"Api did not save"
-                 })
-             }
-             else{
-                 res.status(201).json({
-                     message:"Unhandled Case"
-                 })
-             }
-         }
-         else{
-             res.status(400).json({
-                 message:"req not complete"
-             }) ;
-         }
-     });
+
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
 
