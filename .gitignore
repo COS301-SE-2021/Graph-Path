@@ -73,7 +73,6 @@ captures/
 .cxx/
 
 # node object file
-package.json
 package-lock.json
 
 #idead object files
