@@ -133,8 +133,8 @@ class NewProject extends React.Component{
                     }
                     {/*<span className="newMember" onClick={this.addMember}><a>+</a></span>*/}
                     <br/>
-                    <input type="text" name="graph" placeholder="Graph" />
-                    <br/>
+                    {/* <input type="text" name="graph" placeholder="Graph" />
+                    <br/> */}
                     <input type="submit" value="Create Project" className="btn1"  />
 
 

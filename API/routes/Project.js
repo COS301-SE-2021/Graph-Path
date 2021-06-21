@@ -72,7 +72,8 @@ router.get('/list',(req,res,next)=>{
         console.log('success',projects) ;
         if (projects.length>0){
             res.send({
-                message:projects//.json()
+                message:"found",
+                data:projects//.json()
             }) ;
         }
         else{

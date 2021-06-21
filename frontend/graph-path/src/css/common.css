@@ -10,6 +10,7 @@
   .drop {
     position: relative;
     display: inline-block;
+    margin: 1px 1px 1px 1px;
   }
 
   .dropdown-content {
@@ -38,6 +39,10 @@
 
 .drop:hover .dropbtn {background-color: #3e8e41;}
 
-ul li{
-    list-style-image: none;
+.projList{
+    list-style-type: square;
+}
+
+.projList li::before{
+  color: white;
 }

@@ -72,7 +72,6 @@ class Task extends React.Component{
 
 
 
-
     handleSubmit = (event) => {
         event.preventDefault();
 
@@ -85,7 +84,9 @@ class Task extends React.Component{
             priority: this.state.priority
         }
         //communicate with the API
-        this.sendData(data) ;
+        // this.sendData(data) ;
+        this.props.addTask(data) ;
+    
     }
 
     updateField = (event) => {
@@ -100,9 +101,9 @@ class Task extends React.Component{
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
                     <h4>Add Task</h4>
                     <p>Task</p>
-                    <input type="text" name="name" required="true" placeholder="Task Name" onChange={this.updateField} />
+                    <input type="text" name="name" required={true} placeholder="Task Name" onChange={this.updateField} />
                     <p>Description</p>
-                    <input type="text" name="about" placeholder="Description" onChange={this.updateField}/>
+                    <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
                     <p>Start Date</p>
                     <input required="true" type="date" name="startDate" onChange={this.updateField} />
                     <p>Due Date</p>
