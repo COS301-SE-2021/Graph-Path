@@ -29,15 +29,15 @@ function  makeTaskRoute(db)
 
     router.get('/getTaskByTasknr',(req, res, next)=> {
 
-        //console.log("TaskByProjectBody: "+req.body);
-        // console.log("TaskByProjectBodyProject: "+req.body.project);
+       // console.log("TaskByProjectBody: "+req.body);
+         //console.log("TaskByProjectBodyProject: "+req.body.project);
         let tsknr = req.body.tasknr;
         db.collection('Tasks').findOne({
             tasknr:tsknr
         })
             .then((result)=>{
                 //console.log("This is result.tasknr in Tasks by project: "+result.tasknr);
-                // console.log("This is result in Tasks by project: "+result);
+                //console.log("This is result in Tasks by project: "+result);
                 res.send(result);
             })
             .catch((err)=>{
@@ -109,7 +109,7 @@ function  makeTaskRoute(db)
             .then((data)=>{
                 res.send({
                     message:"Deleted",
-                    data: data
+                    data: data['ops']
                 });
             })
             .catch(err=>{
@@ -118,10 +118,46 @@ function  makeTaskRoute(db)
 
     });
 
+
+//PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+    router.patch('/updateTaskDescription/:project/:tasknr/:description',(req,res,next)=>{
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newDesc = req.params.description;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{description:newDesc}
+        },(err,result)=>{
+
+            if(err){
+                console.log("Could not update the task description: "+err);
+                res.send({
+                    message: "Failed",
+                    data: err
+                });
+            }else{
+                //console.log("The update of the task description was a success: "+result);
+                res.send({
+                    message: "success",
+                    data: result['ops']
+                });
+            }
+
+        })
+        //.catch((err)=>{
+        //    console.log("Could not update the task description: "+err);
+       // })
+    });
+
+
+
+
     //module.exports = router;
     return router
 }
-
 module.exports = makeTaskRoute
 
 
