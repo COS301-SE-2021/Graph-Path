@@ -1,0 +1,34 @@
+.header_{
+    background-color: #0b714b;
+    width: 100%;
+}
+
+.App-header {
+    background-color: #001122;
+    min-height: 10vh;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    position: relative;
+
+  }
+  
+.bigHeader{
+  position: relative;
+  min-height: 80vh;
+  align-items: unset;
+  display: block;
+  flex-direction: row;
+  min-width: 300;
+}
+.bigHeader > div {
+  margin: 0px;
+}
+#DashButton{
+    position: relative;
+    right: 53%;
+    top: -6px;
+    visibility: hidden;
+}

@@ -1,38 +1,11 @@
 import React from 'react' ; 
-import Graph from './Graph';
+import GraphManager from './Graph';
 import NewProject from './NewProject' ;
 import '../css/App.css' ;
 import '../css/Dashboard.css'
+import Sigma from './reactSigmaGraph' ; 
 // import axios from 'axios' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
-
-
-const ProjectView = (props) =>{
-    var data = props.proj ; 
-    // console.log(data) ;
-    // function change (){
-    //     props.default() ; 
-    // }
-
-    if (data === undefined){
-        //if not defined
-        return <div className="error">
-        Error somewhere:  data in Project View is Undefined</div>
-    }
-
-    if (data==="newProject"){
-        return (
-            <div className="GraphDashboard">
-                <p>New Project </p>
-
-            </div> ) 
-    }
-    
-    return (
-        <div className="GraphDashboard">
-            Project Name : {data}
-        </div> )
-}
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -42,30 +15,6 @@ class Dashboard extends React.Component{
             projects: null ,
             view: this.views[0] 
         } ;
-    }
-
-    // componentDidMount(){
-    //     this.
-    // }
-
-    createProject = () => {
-        // console.log('works')
-        //send project deeds to backend for saving 
-        this.setState({
-            view: this.views[1] 
-        }) ;
-        // this.props.too
-        
-
-        //after receiving confirmation
-        //collet the data from backend, set state
-        // this.setState({
-        //     projects:{
-        //         name:"New Project Made",
-        //         start: new Date()}
-        // },()=>{
-        //     console.log("Name:",this.state.projects) ;
-        // }) ; 
     }
     
     viewProjectsFromAPI =()=>{
@@ -105,26 +54,64 @@ class Dashboard extends React.Component{
         })
     }
 
+    toogleDisplayOpen = () =>{
+        var elem = document.getElementById('modal1') ;
+        if (elem !== null){
+        // console.log('clicked', elem.style.display)
+            elem.style.display='block' ;
+            this.props.menuToogleClose() ; 
+        }
+    }
+
+    toogleDisplayClose = () =>{
+        var elem = document.getElementById('modal1') ;
+        if (elem !== null){
+            elem.style.display='none' ;
+            this.props.menuToogleOpen()
+        }
+    }        
+    
+
     render(){
         return (
             <Router>
             <div className="GraphDashboard">
-                <div className="App-link-routes" >
-                    <Link  to="/newProject">Create Project</Link>
-                
-                    <Link to="/viewProjects">View Projects</Link>
+                <div className="DashboardMenu" id="modal1" >
+                    <div className="App-link-routes" >
+                        <div className="opt">
+                        <span onClick={this.toogleDisplayClose} 
+                        className="close" title="Close Modal">
+                        &times;</span>
+                    </div>
+                    <div className="opt">
+                        <Link  to="/newProject">Create Project</Link>
+                    </div>
+                        <div className="opt">
+                            <Link to="/viewProjects">View Projects</Link>
+                        </div>
+
+                    </div>
                 </div>
                 <Switch>
                     <Route path="/newProject">
-                        <NewProject  default={this.changeToDefault}/>
+                        <div className="ContentArea">
+                            <NewProject  default={this.changeToDefault}/>
+                        </div>
                     </Route>
                     
                     <Route path="/viewProjects">
-                    <Graph />
+                    {/* <Graph /> */}
+
+                    {/* should call api for the projects and be able to display as per list  */}
+                        <div className="ContentArea">
+                            <GraphManager /> 
+                        </div>
 
                     </Route>
                 </Switch>
             </div>
+            {this.toogleDisplayOpen()}
+
             </Router>
         )
     }
