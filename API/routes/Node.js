@@ -13,7 +13,7 @@ function  makeNodeRoute(db) {
         let tsknr = req.body.task.tasknr;
         //console.log("This is proj: "+proj);
         //console.log("This is tsknr: "+tsknr);
-        db.collection('Node').findOne({
+        db.collection('Nodes').findOne({
 
             "task.project": proj,
             "task.tasknr": tsknr
@@ -35,7 +35,7 @@ function  makeNodeRoute(db) {
         let data = req.body;
         const id = new mongoose.mongo.ObjectID();
         data["_id"] = id;
-        db.collection('Node').insertOne(data)
+        db.collection('Nodes').insertOne(data)
             .then((ans) => {
                 console.log('success', ans.ops);
                 res.send({
@@ -63,7 +63,7 @@ function  makeNodeRoute(db) {
 
         //console.log("This is proj inside the delete node: "+proj);
         // console.log("This is tsknr inside the delete node: "+tsknr);
-        db.collection('Node').deleteOne({
+        db.collection('Nodes').deleteOne({
             "task.project": proj,
             "task.tasknr": tsknr
         })
@@ -81,11 +81,11 @@ function  makeNodeRoute(db) {
     })
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
-    router.patch('/updateNodeTaskDescription', (req, res, next) => {
-        let proj = req.body.project;
-        let tsknr = req.body.tasknr;
-        let newDesc = req.body.description;
-        db.collection('Node').updateOne({
+    router.patch('/updateNodeTaskDescription/:project/:tasknr/:description', (req, res, next) => {
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newDesc = req.params.description;
+        db.collection('Nodes').updateOne({
             "task.project": proj,
             "task.tasknr": tsknr
         }, {
@@ -103,8 +103,7 @@ function  makeNodeRoute(db) {
                 console.log("The update of the task description in the node was a success: " + result);
                 res.send({
                     message: "success",
-                    data: result,
-                    data2: result.ops
+                    data: result.ops
                 });
             }
 
