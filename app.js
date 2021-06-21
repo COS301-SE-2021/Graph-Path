@@ -42,12 +42,7 @@ function makeApp(defaultDB , InjectedDB)
             app.use(express.static(path.join(__dirname, 'public')));
             //------------------------------------------------------------
 
-            //--------------route setup --------------------------------
-            //const ProjectRoute = require('./api/routes/Project');
-            //const UserRoute= require('./API/routes/User');
-            //const NodeRoute = require('./API/routes/Node');
-            //const Task2Route = require('./API/routes/Tasks2');
-            //const TaskRoute = require('./API/routes/Task');
+
             const Home = require('./API/routes/Home');
             //---------------------------------------------------------------------
 
@@ -71,9 +66,7 @@ function makeApp(defaultDB , InjectedDB)
                 const newError = new Error(`Not found. ${req.url}`);
                 newError.status = 404;
                 next(newError);
-                // console.log('Created Error') ;
-                // console.log('req body:',JSON.stringify(req.body) ) ;
-                // console.log('req files?',JSON.stringify(req.files) ) ;
+
             });
             //Serve Error
             app.use((error, req, res, next) => {
@@ -88,8 +81,7 @@ function makeApp(defaultDB , InjectedDB)
                 });
             });
 
-            //module.exports = app
-            //return app
+
 
         })
        }
@@ -98,9 +90,9 @@ function makeApp(defaultDB , InjectedDB)
 
         const DB = InjectedDB
         //------------- DB dependency injection setup------
-        //const makeUserRoute = require('./API/routes/User');
+        const makeUserRoute = require('./API/routes/User');
         const makeTaskRoute = require('./API/routes/Task');
-        makeTaskRoute(DB);
+        //makeTaskRoute(DB);
         //makeUserRoute(DB);
         //--------------------------------------------------
 
@@ -121,11 +113,11 @@ function makeApp(defaultDB , InjectedDB)
         const Home = require('./API/routes/Home');
 
         // ----------------inject passed in DB into routes---------------
-        //const UserRoute = makeUserRoute(DB);
+        const UserRoute = makeUserRoute(DB);
         const TaskRoute = makeTaskRoute(DB);
         //routes
-        // app.use('/project', ProjectRoute);
-        //app.use('/user', UserRoute);
+        //app.use('/project', ProjectRoute);
+        app.use('/user', UserRoute);
         //app.use('/node', NodeRoute);
         app.use('/task', TaskRoute);
         //app.use('/task2', Task2Route);
