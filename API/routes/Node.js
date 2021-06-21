@@ -96,21 +96,18 @@ function  makeNodeRoute(db) {
                 console.log("Could not update the task description in this node: " + err);
                 res.send({
                     message: "Failed",
-                    data: result,
-                    data2: result.ops
+                    data: result['ops']
                 });
             } else {
                 console.log("The update of the task description in the node was a success: " + result);
                 res.send({
                     message: "success",
-                    data: result.ops
+                    data: result['ops']
                 });
             }
 
         })
-            .catch((err) => {
-                console.log("Could not update the task description in the node: " + err);
-            })
+
     });
 
     return router;
