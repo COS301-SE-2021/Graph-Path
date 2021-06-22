@@ -36,7 +36,7 @@ router.post('/insertTask',(req, res, next)=>{
     }
     mongo.connect(url,(err, db)=>{
         db.collection('Tasks').insertOne(task, (err,result)=>{
-            console.log("We inserted the task into the database: " + Task);
+            console.log("We inserted the task into the database: " + task);
             db.close();
         });
     });
