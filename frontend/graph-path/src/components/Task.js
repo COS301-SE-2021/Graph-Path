@@ -42,7 +42,7 @@ class Task extends React.Component{
 
     sendData (data){
         //path to make the post and wait for the response
-     /*   axios.post(`${this.state.api}/project/Task`,data)
+       axios.post(`${this.state.api}/insertTask`,data)
             .then((response) =>{
                 if(response.status===400){
                     throw Error(response.statusText) ;
@@ -55,7 +55,7 @@ class Task extends React.Component{
                     answer:res.message,
                     responseData:res.data //data
                 },()=>{
-                    alert('res:'+this.state.answer)
+                    // alert('res:'+this.state.answer)
                     console.log(this.state)
                     if (this.state.answer!== null && this.state.answer){
                         //    this.props.changeToDefault() ;
@@ -67,7 +67,7 @@ class Task extends React.Component{
             })
             .catch((error)=>{
                 console.log(error) ;
-            })*/
+            })
     }
 
 
