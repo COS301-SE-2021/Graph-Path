@@ -18,8 +18,10 @@ class Graph extends React.Component{
             linkNumber : -1,
             projList: [] ,
             grapRep: {
-                nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
-                edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
+                nodes : [],
+                edges : []
+                // nodes:[{id:"n1",label:"Task 1"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
+                // edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
             
             },
             api: "http://localhost:9001"
@@ -75,7 +77,7 @@ class Graph extends React.Component{
                     <Route path="/addTask">
                         <Task addTask={this.addNode} />
 
-                        <SigmaGraph key={this.state.grapRep}
+                        <SigmaGraph key={this.state.grapRep.nodes.length}
                             graphToDisplay={this.state.grapRep}
                         />
                     </Route>
@@ -137,7 +139,7 @@ class Graph extends React.Component{
         }
         this.setState({
             grapRep:curr
-        }) ;
+        },()=>{console.log(this.state.grapRep)}) ;
         
         obj["label"] = fromTask.taskName ;
         console.log('Trying to save',obj)
