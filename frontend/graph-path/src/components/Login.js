@@ -59,7 +59,7 @@ class Login extends React.Component{
                 answer:res.message,
                 responseData:res.data //data
             },()=>{
-                alert('res:'+this.state.answer)
+                // alert('res:'+this.state.answer)
                 console.log(this.state)//Heavey checks
                 if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
                     alert('try again') ;
