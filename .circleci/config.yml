@@ -12,3 +12,15 @@ workflows:
           # This is the node version to use for the `cimg/node` tag
           # Relevant tags can be found on the CircleCI Developer Hub
           # https://circleci.com/developer/images/image/cimg/node
+  test-deploy:
+    jobs: 
+      - build
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node:16.4.0
+    steps:
+      - checkout
+      - run: node --version
+      # - run: npm run build
