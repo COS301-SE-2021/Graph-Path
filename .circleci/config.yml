@@ -23,4 +23,10 @@ jobs:
     steps:
       - checkout
       - run: node --version
+      -run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Run Tests
+          command: npm run test
       # - run: npm run build
