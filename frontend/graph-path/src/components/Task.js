@@ -95,6 +95,11 @@ class Task extends React.Component{
         }, console.log(this.state));
     }
 
+    displayForm = () =>{
+
+    }
+    
+
     render() {
         return(
             <div className="TaskScreen">
@@ -105,9 +110,9 @@ class Task extends React.Component{
                     <p>Description</p>
                     <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
                     <p>Start Date</p>
-                    <input required="true" type="date" name="startDate" onChange={this.updateField} />
+                    <input type="date" name="startDate" onChange={this.updateField} />
                     <p>Due Date</p>
-                    <input required="true" type="date" name="dueDate" onChange={this.updateField} />
+                    <input  type="date" name="dueDate" onChange={this.updateField} />
                     <p>Assign Task</p>
                     <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e,0)} />
                     {
