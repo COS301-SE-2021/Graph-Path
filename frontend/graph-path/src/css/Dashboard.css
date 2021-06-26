@@ -4,7 +4,7 @@
     left: 0px;
     width: 150px;
     min-height: 80vh;
-
+    min-width: 15vw;
     position: relative;
 
   }
@@ -51,11 +51,20 @@ button{
 }
 .ContentArea{
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    max-width: 600px;
+    align-items: flex-start;
+    flex-direction: row;
+    max-width: 100vw;
+    min-width: 70vw;
+    padding: 2px 2px 2px 2px;
+    margin-top: 2px;
 }
+
+.ContentArea > div{
+    margin: 2px 2px 2px 2px;
+    padding: 20px;
+}
+
 .GraphDashboard{
-    display: flex;
-    flex-wrap: wrap;   
+    display: flex;   
+    flex-direction: row;
 }

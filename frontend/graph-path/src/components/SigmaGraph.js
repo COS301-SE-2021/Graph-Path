@@ -29,31 +29,46 @@ class GrapExample2 extends React.Component{
     }
   }
 
-
+  componentDidMount(){
+    this.setState({
+      len:this.state.graphs.push(this.props.graphToDisplay)
+    }, ()=>{
+      console.log('Graph updated, ',this.state.graphs) ;
+    }) ; 
+  }
     
   render(){
     console.log( this.props) ;
     const graph = this.props.graphToDisplay ; 
     console.log(graph) ;
+    if (graph !== undefined && graph.nodes !== undefined)
     return (
       <div className="exampleProject">
-        
+        <p>{this.props.projectName}</p>
         <div className="GraphBox">
           <Sigma graph={graph} className="SigmaParent" 
           style={{position:"relative", 
-          width:"500px" , height:"500px", border:"solid 3px black" }}
+          width:"250px" , height:"250px" ,  border:"solid 3px black" }}
           onOverNode={e => console.log("Mouse over node: " + e.data.node.label)}
           settings={{drawEdges: true, clone: false}}>
-            <EdgeShapes default="arrow" style={{width:"200"}}/>
+            <EdgeShapes default="arrow" style={{width:"200px"}}/>
             <NodeShapes default="star"/>
             <RelativeSize  initialSize={20}/>
             <RandomizeNodePositions x1={200} y1={100} x2={300} y2={300}/>        
           </Sigma>
-          {this.changeSize()}
+          <button title="Save Current Graph">Save</button>
 
         </div>
       </div>
     );
+    return (
+      <div className="exampleProject">
+        
+        <div className="GraphBox">
+          No Graph To Display, Please add Tasks
+        </div>
+      </div>
+      )
   }
 }
 

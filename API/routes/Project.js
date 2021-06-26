@@ -177,11 +177,11 @@ router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
         if(err){
             console.log("Could not update the project graph: "+err);
             res.send({
-                message: "Failed",
-                data: err
-            });
-        }else{
-            //console.log("The update of the task description was a success: "+result);
+                message:"found",
+                data:projects//.json()
+            }) ;
+        }
+        else{
             res.send({
                 message: "success",
                 data: result['ops']

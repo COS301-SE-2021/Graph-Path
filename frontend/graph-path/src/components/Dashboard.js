@@ -17,24 +17,6 @@ class Dashboard extends React.Component{
         } ;
     }
     
-    viewProjectsFromAPI =()=>{
-        // console.log('call to api') ;
-        // axios.get('http://graphpath.herokuapp.com/Project/Demo_project')
-        fetch('http://localhost:3000/Project/Demo_project1')
-        .then(res =>res.json()) 
-        .then(data => {
-            // console.log(data) ;
-            const proj = data ;
-                this.setState({
-                projects:proj
-            }) ; 
-        })        
-        .catch(err =>{
-            console.log('error getting from /project/*',err) ; 
-        }
-        )
-    }
-    
     defaultView = () =>{
         return ( 
             <div className="GraphDashboard">

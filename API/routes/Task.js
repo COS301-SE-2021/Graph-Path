@@ -115,8 +115,19 @@ function  makeTaskRoute(db)
             .catch(err=>{
                 console.log("Could not delete task: "+err);
             });
+    })
 
+router.post('/insertTask',(req, res, next)=>{
+    var task= {
+        Description: "Finish the getters and setters."
+    }
+    mongo.connect(url,(err, db)=>{
+        db.collection('Tasks').insertOne(task, (err,result)=>{
+            console.log("We inserted the task into the database: " + task);
+            db.close();
+        });
     });
+})
 
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
