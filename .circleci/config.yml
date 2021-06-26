@@ -36,10 +36,10 @@ jobs:
     docker:
      - image: cimg/node:16.4.0
     steps:
-     - checkout
-     - run: 
-        name: Install front Dependencies
-        command: npm install
-    - run:
-      name: Build front app
-      command: npm run build
+      - checkout
+      - run: 
+          name: Install front Dependencies
+          command: npm install
+      - run:
+          name: Build front app
+          command: npm run build
