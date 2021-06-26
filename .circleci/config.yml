@@ -36,6 +36,7 @@ jobs:
     docker:
      - image: cimg/node:16.4.0
     steps:
+<<<<<<< HEAD
      - checkout
      - run: cd frontend/graph-path
      - run: 
@@ -44,3 +45,12 @@ jobs:
      - run:
         name: Build front app
         command: npm run build
+=======
+      - checkout
+      - run: 
+          name: Install front Dependencies
+          command: npm install
+      - run:
+          name: Build front app
+          command: npm run build
+>>>>>>> 8e14aae483ba15d21c7a3fbae700b4f0031dfd7a
