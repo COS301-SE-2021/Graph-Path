@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const ProjectModel = require('../Models/ProjectModel');
 
 
-// DB_URI = "mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/GraphPath?retryWrites=true&w=majority";
-DB_URI='mongodb://127.0.0.1:27017/NoCap2021' ;
+DB_URI= process.env.TEST_DB_URI ||'mongodb://127.0.0.1:27017/NoCap2021' ;
 function createNewProject(MetaData)
 {
 

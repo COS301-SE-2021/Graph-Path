@@ -2,7 +2,7 @@ import React from 'react' ;
 import SigmaGraph from './SigmaGraph';
 import Task from './Task' ;
 import axios from 'axios';
-
+import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
@@ -11,18 +11,12 @@ class Graph extends React.Component{
     constructor(props){
         super(props) ; 
         this.state=  {
-            NodeList: "",//{
-            //     nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"}],
-            //     edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},]
-            // },
+            projNodeList: "",
             linkNumber : -1,
             projList: [] ,
             grapRep: {
                 nodes : [],
                 edges : []
-                // nodes:[{id:"n1",label:"Task 1"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
-                // edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
-            
             },
             api: "http://localhost:9001"
         }
@@ -33,39 +27,36 @@ class Graph extends React.Component{
     render(){
         console.log('Graph rerendering') ;
 
-        const graph1 = {
-            nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
-            edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
-        }
+        // const graph1 = {
+        //     nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
+        //     edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
+        // }
         let listArray =  []; // [graph1,graph2] ; 
         let keyNum = -1 ;
-        console.log('sending graph obj ',this.state.NodeList)
+        console.log('sending graph obj ',this.state.projNodeList)
         return (
             <Router>
-                <div className="drop">
+                <div className="projectView">
                    <span className="dropbtn">
                         Projects
                     </span>
                     <ul className="projList" >
                         {
+                            this.state.projList.length>0 ? 
                             this.state.projList.map( i => {       
                                 keyNum = keyNum+1 ;
                                 return <li key={keyNum} > 
-                                    <Link data-projnum={keyNum} className="dropdown-content" 
+                                    <Link data-projnum={keyNum} className="project-content" 
                                     onClick={(e) =>{
                                     this.changeNodeList(i, e.target.getAttribute("data-projnum"))}}
                                     to={`/project/${keyNum}`}>{i.projectName}</Link>
                                 </li>
                             })
+                            : <h1>Project List is empty,<br/>
+                            please create a new project.</h1>
                             
                         }
                     </ul>
-                </div>
-                <div className="drop">
-                   <span className="dropbtn">
-                   <Link to="/addTask">Add Task
-                   </Link>
-                    </span>
                 </div>
                 
                 <Switch>
@@ -73,13 +64,17 @@ class Graph extends React.Component{
                         <SigmaGraph key={this.state.linkNumber}
                             graphToDisplay={this.state.NodeList}
                         />
+                        <ProjectInfo projectToDisplay={this.state.projList[this.state.linkNumber]} />
                     </Route>
                     <Route path="/addTask">
-                        <Task addTask={this.addNode} />
-
+                        {console.log('When a task is added, state has, ',this.state)}
                         <SigmaGraph key={this.state.grapRep.nodes.length}
                             graphToDisplay={this.state.grapRep}
+                            projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
+                                this.state.projList[this.state.linkNumber].projectName: ""}
                         />
+                        <Task addTask={this.addNode} />
+
                     </Route>
                 </Switch>
             </Router>
@@ -87,15 +82,23 @@ class Graph extends React.Component{
         ) ; 
     }
     componentDidMount = ()=>{
-        if (this.state.projList.length<1){
+        if (this.state.projList.length<1){ // no projects to display
             this.viewProjectsFromAPI() ;
+        }
+        else{
+
         }
 
     }
 
+    saveCurrentGraph = ()=>{
+
+    }
+
     changeNodeList = (node,num) =>{
+        console.log(node.projectName) ;
         this.setState({
-            NodeList:node,
+            projNodeList:node,
             linkNumber:num
         }) ;
     }
@@ -143,6 +146,10 @@ class Graph extends React.Component{
         
         obj["label"] = fromTask.taskName ;
         console.log('Trying to save',obj)
+
+    }
+
+    addEdge=()=>{
 
     }
 

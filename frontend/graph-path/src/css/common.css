@@ -39,10 +39,6 @@
 
 .drop:hover .dropbtn {background-color: #3e8e41;}
 
-.projList{
-    list-style-type: square;
-}
-
-.projList li::before{
-  color: white;
+.project-alert-text{
+  color: #990001;
 }

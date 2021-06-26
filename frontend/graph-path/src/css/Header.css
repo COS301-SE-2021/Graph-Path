@@ -21,7 +21,6 @@
   align-items: unset;
   display: block;
   flex-direction: row;
-  min-width: 300;
 }
 .bigHeader > div {
   margin: 0px;
