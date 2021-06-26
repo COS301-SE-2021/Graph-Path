@@ -43,4 +43,4 @@ jobs:
         command: npm install
      - run:
         name: Build front app
-        command: npm run build
+        command: npm build
