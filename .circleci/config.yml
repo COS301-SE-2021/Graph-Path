@@ -37,9 +37,10 @@ jobs:
      - image: cimg/node:16.4.0
     steps:
      - checkout
+     - run: cd frontend/graph-path
      - run: 
         name: Install front Dependencies
         command: npm install
-    - run:
-      name: Build front app
-      command: npm run build
+     - run:
+        name: Build front app
+        command: npm run build
