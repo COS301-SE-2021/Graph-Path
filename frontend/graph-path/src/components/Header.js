@@ -14,7 +14,7 @@ class Header extends React.Component{
         this.state = {
             log:false,
             status:this.props.status||"Please log in",
-
+            loggedUser:""
         }
     } 
     changeStatus = () =>{
@@ -57,8 +57,14 @@ class Header extends React.Component{
         }
     }
 
+    updateEmail = (email) =>{
+        this.setState({
+            loggedUser:email
+        }) ;
+    }
+
     render(){
-        if (this.state.log){
+        if (this.state.log && this.loggedUser!== ""){
         // var elem = document.getElementById('DashButton').style.display = "none" ;
             return (
                 <Router>
@@ -81,6 +87,7 @@ class Header extends React.Component{
                         <Dashboard logOut={this.changeStatus} 
                             menuToogleClose={this.renderClose}
                             menuToogleOpen={this.renderOpen}
+                            loggedUser={this.state.loggedUser}
                         />
                     </Switch>
                     
@@ -103,7 +110,9 @@ class Header extends React.Component{
                         <Link className="App-link" to="signUp">SignUp</Link>
                         <Switch>
                         <Route path="/signIn">
-                            <Login logIn={this.changeStatus} />
+                            <Login logIn={this.changeStatus} 
+                                updateEmail = {this.updateEmail}
+                            />
                         </Route>
                         <Route path="/signUp">
                             <Register />
