@@ -77,7 +77,8 @@ class Dashboard extends React.Component{
                 <Switch>
                     <Route path="/newProject">
                         <div className="ContentArea">
-                            <NewProject  default={this.changeToDefault}/>
+                            <NewProject  default={this.changeToDefault}
+                            userEmail={this.props.loggedUser}/>
                         </div>
                     </Route>
                     
@@ -86,7 +87,7 @@ class Dashboard extends React.Component{
 
                     {/* should call api for the projects and be able to display as per list  */}
                         <div className="ContentArea">
-                            <GraphManager /> 
+                            <GraphManager userEmail={this.props.loggedUser} /> 
                         </div>
 
                     </Route>
