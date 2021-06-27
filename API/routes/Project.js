@@ -136,7 +136,7 @@ router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
     let nme = req.params.name;
     let grph = req.params.graph;
     db.collection('Projects').updateOne({
-        name:nme
+        projetName:nme
     },{
         $set:{graph:grph}
     },(err,result)=>{
@@ -148,10 +148,10 @@ router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
                 data: err
             });
         }else{
-            //console.log("The update of the task description was a success: "+result);
+            console.log("The update of the task description was a success: "+result);
             res.send({
                 message: "success",
-                data: result['ops']
+                data: result
             });
         }
 
