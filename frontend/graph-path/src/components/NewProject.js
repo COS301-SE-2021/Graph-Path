@@ -14,7 +14,7 @@ class NewProject extends React.Component{
             Members: [],
             numberMembers: 0 ,
             Owner:"Nani",
-            Graph:"No Projects Yet" ,
+            Graph:{} ,
             api:'http://localhost:9001',
             answer:null,
             responseData:null
@@ -81,9 +81,9 @@ class NewProject extends React.Component{
             projectName:this.state.name,
             startDate:this.state.startDate,
             dueDate:this.state.dueDate,
-            groupMembers:this.state.Members,//this.state.Members,
-            owner:this.state.Owner, //add ownwer from dashboard
-            Graph:this.state.Graph, //ES6
+            groupMembers:[this.props.userEmail],//this.state.Members,
+            owner:this.props.userEmail, //add ownwer from dashboard
+            graph:this.state.Graph, //ES6
             //userId:from dashboard
         }
         //communicate with the API
@@ -133,8 +133,6 @@ class NewProject extends React.Component{
                     }
                     {/*<span className="newMember" onClick={this.addMember}><a>+</a></span>*/}
                     <br/>
-                    {/* <input type="text" name="graph" placeholder="Graph" />
-                    <br/> */}
                     <input type="submit" value="Create Project" className="btn1"  />
 
 
