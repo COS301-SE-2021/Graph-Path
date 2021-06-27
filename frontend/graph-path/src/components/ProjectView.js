@@ -26,7 +26,7 @@ class ProjectView extends React.Component{
         )
         return (
             <div>
-                Project Name : und 
+                Create a Project
             </div>
         )
     }
