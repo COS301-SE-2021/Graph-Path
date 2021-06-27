@@ -99,6 +99,9 @@ class Task extends React.Component{
 
     }
     
+    componentDidMount(){
+        this.props.updateGraphView() ;
+    }
 
     render() {
         return(

@@ -41,7 +41,7 @@ class Graph extends React.Component{
                         Projects
                     </span>
                     <ul className="projList" >
-                        {
+                        {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
                             this.state.projList.length>0 ? 
                             this.state.projList.map( i => {       
                                 keyNum = keyNum+1 ;
@@ -62,9 +62,12 @@ class Graph extends React.Component{
                 <Switch>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
                         <SigmaGraph key={this.state.linkNumber}
-                            graphToDisplay={this.state.NodeList}
+                            graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 ? 
+                            {}
+                            :this.state.projList[this.state.linkNumber].graph}
                         />
-                        <ProjectInfo projectToDisplay={this.state.projList[this.state.linkNumber]} />
+                        <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
+                        :this.state.projList[this.state.linkNumber]} />
                     </Route>
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
@@ -73,13 +76,24 @@ class Graph extends React.Component{
                             projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
                                 this.state.projList[this.state.linkNumber].projectName: ""}
                         />
-                        <Task addTask={this.addNode} />
+                        <Task addTask={this.addNode} 
+                        updateGraphView={this.updateGraphView}
+                        />
 
                     </Route>
                 </Switch>
             </Router>
             
         ) ; 
+    }
+    updateGraphView = () =>{
+        //if there was a graph existing
+        if (this.state.projList[this.state.linkNumber] !== undefined && this.state.projList.length <= 0 && this.state.linkNumber < 0 ){
+            this.setState({
+                grapRep:this.state.projList[this.state.linkNumber]
+            }) ;
+        }
+        //else keep the default one
     }
     componentDidMount = ()=>{
         if (this.state.projList.length<1){ // no projects to display
@@ -105,14 +119,20 @@ class Graph extends React.Component{
     viewProjectsFromAPI =()=>{
         // console.log('call to api') ;
         // axios.get('http://graphpath.herokuapp.com/Project/Demo_project')
-        fetch(`${this.state.api}/project/list`)
+        // fetch(`${this.state.api}/project/list`)
+        fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
         .then(res=>res.json())
         .then(data => {
-            // console.log(data) ;
+            console.log('from api req',data) ;
             const proj = data ;
+            if (proj.message !== undefined && typeof proj.message !== String){
                 this.setState({
-                projList:proj.data
-            }) ; 
+                    projList:proj.message
+                }) ; 
+            }
+            else{
+                //no projects found from api
+            }
         })        
         .catch(err =>{
             console.log('error getting from /project/*',err) ; 
