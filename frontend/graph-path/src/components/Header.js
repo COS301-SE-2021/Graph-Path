@@ -14,7 +14,7 @@ class Header extends React.Component{
         this.state = {
             log:false,
             status:this.props.status||"Please log in",
-            loggedUser:""
+            loggedUser:{}
         }
     } 
     changeStatus = () =>{
@@ -57,14 +57,14 @@ class Header extends React.Component{
         }
     }
 
-    updateEmail = (email) =>{
+    updateLoggedUser = (userInfo) =>{
         this.setState({
-            loggedUser:email
+            loggedUser:userInfo
         }) ;
     }
 
     render(){
-        if (this.state.log && this.loggedUser!== ""){
+        if (this.state.log && this.state.loggedUser!== {}){
         // var elem = document.getElementById('DashButton').style.display = "none" ;
             return (
                 <Router>
@@ -75,7 +75,7 @@ class Header extends React.Component{
                         <label>&#9786; :</label> 
                         <div className="drop"> 
                             <button className="dropbtn">Options</button>
-                            <div className="dropdown-content">     SignOut
+                            <div className="dropdown-content">     
                             <a href="#" onClick={this.changeStatus}> SignOut</a>
                             </div>
                         </div>
@@ -87,7 +87,7 @@ class Header extends React.Component{
                         <Dashboard logOut={this.changeStatus} 
                             menuToogleClose={this.renderClose}
                             menuToogleOpen={this.renderOpen}
-                            loggedUser={this.state.loggedUser}
+                            loggedUser={this.state.loggedUser.email}
                         />
                     </Switch>
                     
@@ -111,7 +111,7 @@ class Header extends React.Component{
                         <Switch>
                         <Route path="/signIn">
                             <Login logIn={this.changeStatus} 
-                                updateEmail = {this.updateEmail}
+                                updateUser = {this.updateLoggedUser}
                             />
                         </Route>
                         <Route path="/signUp">

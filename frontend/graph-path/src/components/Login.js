@@ -67,7 +67,7 @@ class Login extends React.Component{
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
                     //access given
                     this.props.logIn() ; 
-                    this.props.updateEmail(this.state.responseData.email)  ;
+                    this.props.updateUser(this.state.responseData)  ;
                 }
               }) ;
             
