@@ -30,13 +30,16 @@ class Task extends React.Component{
     }
 
     handleChange = (e, index) =>{
-        this.state.members[index] = e.target.value;
+        var temp = this.state.members ;
+        temp[index] = e.target.value;
        // console.log(this.members[index])
         this.setState(
             {
-                members: this.state.members
+                members: temp
             }
-        )
+        ,()=>{
+            console.log('After handle, members',this.state.members)
+        })
     }
 
 

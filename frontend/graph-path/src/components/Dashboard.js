@@ -3,7 +3,7 @@ import GraphManager from './Graph';
 import NewProject from './NewProject' ;
 import '../css/App.css' ;
 import '../css/Dashboard.css'
-import Sigma from './reactSigmaGraph' ; 
+// import Sigma from './reactSigmaGraph' ; 
 // import axios from 'axios' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 

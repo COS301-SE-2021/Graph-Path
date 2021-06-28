@@ -5,7 +5,7 @@ import '../css/common.css'
 class ProjectView extends React.Component{
     render(){
         const project = this.props.projectToDisplay ; 
-        if (project != undefined)
+        if (project !== undefined)
         return (
             <div>
                 <p>Project Name : {project.projectName} </p>

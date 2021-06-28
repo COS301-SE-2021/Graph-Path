@@ -1,7 +1,7 @@
 import React from 'react' ; 
 import SigmaGraph from './SigmaGraph';
 import Task from './Task' ;
-import axios from 'axios';
+// import axios from 'axios';
 import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
@@ -81,10 +81,11 @@ class Graph extends React.Component{
     addNode = (fromTask) =>{
         var curr = this.state.grapRep ; 
         var obj = {};// fromTask ;
+        var edg ;
         if (curr.nodes.length>0){
             obj["id"]= `n${curr.nodes.length+1}` ;
             curr.nodes.push(obj) ;
-            var edg = {id:`e${curr.edges.length+1}`,
+            edg = {id:`e${curr.edges.length+1}`,
                 source:`n${curr.nodes.length-1}`, //because i pushed before here 
                 target:`n${curr.nodes.length}`, 
             }
@@ -94,7 +95,7 @@ class Graph extends React.Component{
             // add node with edge depending on self
             obj["id"]= `n1` ;
             curr.nodes.push(obj) ;
-            var edg = {id:"e1", source:"n1", target:"n1"} 
+            edg = {id:"e1", source:"n1", target:"n1"} 
             curr.edges.push(edg) ;
             console.log('curr',curr) ;
             
@@ -119,7 +120,7 @@ class Graph extends React.Component{
         //     nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
         //     edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
         // }
-        let listArray =  []; // [graph1,graph2] ; 
+        // let listArray =  []; // [graph1,graph2] ; 
         let keyNum = -1 ;
         console.log('sending graph obj ',this.state.projNodeList)
         return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
-import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
+import { Link} from 'react-router-dom'
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
@@ -57,17 +57,17 @@ class Register extends React.Component{
 
         switch(name){
             case 'firstName':
-                formErrors.firstName = value.length==0 ? 'FirstName is required'
+                formErrors.firstName = value.length===0 ? 'FirstName is required'
                     : "";
                 break;
 
             case 'lastName':
-                formErrors.lastName = value.length==0 ? 'LastName is required'
+                formErrors.lastName = value.length===0 ? 'LastName is required'
                     : "";
                 break;
 
             case 'userName':
-                formErrors.userName = value.length==0 ? 'userName is required'
+                formErrors.userName = value.length===0 ? 'userName is required'
                     : "";
                 break;
 

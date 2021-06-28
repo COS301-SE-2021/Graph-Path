@@ -94,7 +94,7 @@ class NewProject extends React.Component{
     }
 
     handleChange = (e, index) =>{
-        this.state.members[index] = e.target.value;
+        // this.state.members[index] = e.target.value;
         // console.log(this.members[index])
         this.setState(
             {

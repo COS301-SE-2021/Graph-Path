@@ -1,7 +1,7 @@
 import React from 'react'
 import '../css/Login.css'
 import axios from 'axios' ;
-import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 class Login extends React.Component{
     constructor(props){

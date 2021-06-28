@@ -1,7 +1,7 @@
 
 import React from 'react';
 import '../css/Graph.css' ;
-import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,LoadGEXF,NodeShapes,ForceAtlas2,Filter} from 'react-sigma' ;
+import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
 class GrapExample2 extends React.Component{
   constructor(props){
     super(props) ;

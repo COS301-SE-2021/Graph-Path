@@ -76,7 +76,7 @@ class Header extends React.Component{
                         <div className="drop"> 
                             <button className="dropbtn">Options</button>
                             <div className="dropdown-content">     
-                            <a href="#" onClick={this.changeStatus}> SignOut</a>
+                            <button  onClick={this.changeStatus}> SignOut</button>
                             </div>
                         </div>
                         </div>

@@ -1,9 +1,11 @@
 
 import React from 'react';
 import '../css/NewProject.css' ;
-import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,LoadGEXF,NodeShapes,ForceAtlas2,Filter} from 'react-sigma' ;
+
+import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
+
 class GrapExample1 extends React.Component{
-    
+  
   render(){
     let graph = {
       nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
