@@ -24,68 +24,7 @@ class Graph extends React.Component{
     //GET ALL Projects for User
     //Display List of Projects
     //Display  Graph on Click
-    render(){
-        console.log('Graph rerendering') ;
-
-        // const graph1 = {
-        //     nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
-        //     edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
-        // }
-        let listArray =  []; // [graph1,graph2] ; 
-        let keyNum = -1 ;
-        console.log('sending graph obj ',this.state.projNodeList)
-        return (
-            <Router>
-                <div className="projectView">
-                   <span className="dropbtn">
-                        Projects
-                    </span>
-                    <ul className="projList" >
-                        {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
-                            this.state.projList.length>0 ? 
-                            this.state.projList.map( i => {       
-                                keyNum = keyNum+1 ;
-                                return <li key={keyNum} > 
-                                    <Link data-projnum={keyNum} className="project-content" 
-                                    onClick={(e) =>{
-                                    this.changeNodeList(i, e.target.getAttribute("data-projnum"))}}
-                                    to={`/project/${keyNum}`}>{i.projectName}</Link>
-                                </li>
-                            })
-                            : <h1>Project List is empty,<br/>
-                            please create a new project.</h1>
-                            
-                        }
-                    </ul>
-                </div>
-                
-                <Switch>
-                    <Route path={`/project/:${this.state.linkNumber}`}> 
-                        <SigmaGraph key={this.state.linkNumber}
-                            graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 ? 
-                            {}
-                            :this.state.projList[this.state.linkNumber].graph}
-                        />
-                        <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
-                        :this.state.projList[this.state.linkNumber]} />
-                    </Route>
-                    <Route path="/addTask">
-                        {console.log('When a task is added, state has, ',this.state)}
-                        <SigmaGraph key={this.state.grapRep.nodes.length}
-                            graphToDisplay={this.state.grapRep}
-                            projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
-                                this.state.projList[this.state.linkNumber].projectName: ""}
-                        />
-                        <Task addTask={this.addNode} 
-                        updateGraphView={this.updateGraphView}
-                        />
-
-                    </Route>
-                </Switch>
-            </Router>
-            
-        ) ; 
-    }
+    
     updateGraphView = () =>{
         //if there was a graph existing
         if (this.state.projList[this.state.linkNumber] !== undefined && this.state.projList.length <= 0 && this.state.linkNumber < 0 ){
@@ -171,6 +110,69 @@ class Graph extends React.Component{
 
     addEdge=()=>{
 
+    }
+
+    render(){
+        console.log('Graph rerendering') ;
+
+        // const graph1 = {
+        //     nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
+        //     edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
+        // }
+        let listArray =  []; // [graph1,graph2] ; 
+        let keyNum = -1 ;
+        console.log('sending graph obj ',this.state.projNodeList)
+        return (
+            <Router>
+                <div className="projectView">
+                   <span className="dropbtn">
+                        Projects
+                    </span>
+                    <ul className="projList" >
+                        {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
+                            this.state.projList.length>0 ? 
+                            this.state.projList.map( i => {       
+                                keyNum = keyNum+1 ;
+                                return <li key={keyNum} > 
+                                    <Link data-projnum={keyNum} className="project-content" 
+                                    onClick={(e) =>{
+                                    this.changeNodeList(i, e.target.getAttribute("data-projnum"))}}
+                                    to={`/project/${keyNum}`}>{i.projectName}</Link>
+                                </li>
+                            })
+                            : <h1>Project List is empty,<br/>
+                            please create a new project.</h1>
+                            
+                        }
+                    </ul>
+                </div>
+                
+                <Switch>
+                    <Route path={`/project/:${this.state.linkNumber}`}> 
+                        <SigmaGraph key={this.state.linkNumber}
+                            graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 ? 
+                            {}
+                            :this.state.projList[this.state.linkNumber].graph}
+                        />
+                        <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
+                        :this.state.projList[this.state.linkNumber]} />
+                    </Route>
+                    <Route path="/addTask">
+                        {console.log('When a task is added, state has, ',this.state)}
+                        <SigmaGraph key={this.state.grapRep.nodes.length}
+                            graphToDisplay={this.state.grapRep}
+                            projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
+                                this.state.projList[this.state.linkNumber].projectName: ""}
+                        />
+                        <Task addTask={this.addNode} 
+                        updateGraphView={this.updateGraphView}
+                        />
+
+                    </Route>
+                </Switch>
+            </Router>
+            
+        ) ; 
     }
 
 }
