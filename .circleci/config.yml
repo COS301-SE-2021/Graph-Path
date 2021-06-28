@@ -14,7 +14,7 @@ workflows:
           # https://circleci.com/developer/images/image/cimg/node
   test-deploy:
     jobs: 
-      - build-project
+     # - build-project
       - build-front
 
 jobs:
@@ -38,6 +38,7 @@ jobs:
     steps:
      - checkout
      - run: cd frontend/graph-path
+     - run: ls 
      - run: 
         name: Install front Dependencies
         command: npm install
