@@ -28,7 +28,13 @@ class Login extends React.Component{
         this.state ={
             email:'',
             password:'',
-            answer: null
+            answer: null,
+
+            //Errors
+            formErrors:{
+                email:"",
+                password:""
+            }
         }
     }
 
