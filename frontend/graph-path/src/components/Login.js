@@ -8,7 +8,18 @@ const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\
 const formValid =({formErrors,...rest})=>{
     let valid =true;
 
-    
+    //Checks for individual null values
+    Object.values(formErrors).forEach(val=> {
+            val.length> 0 && (valid=false);
+        }
+    );
+
+    //Checks for when you submit form with all null values
+    Object.values(rest).forEach(val=> {
+        val==null && (valid=false);
+    });
+
+    return valid;
 
 }
 class Login extends React.Component{
