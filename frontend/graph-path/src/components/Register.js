@@ -13,11 +13,7 @@ class Register extends React.Component{
         api:'http://localhost:9001',
         answer:null
     }
-/* Not sure what this is
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes*/
 
     change =(e) => {
         this.setState({
@@ -46,22 +42,8 @@ class Register extends React.Component{
 
         console.log(data)
 
-        //talk to api
-        // fetch('http://localhost:9001/user/newUser',{
-        //     method:'POST',
-        //     body:data
-        // }) 
-        // .then(res => res.json())
-        // .then(res =>{
-        //     console.log(res) ;
-        //     alert('user register, please try login')
-        // })
-        // .catch(err =>{
-        //     if (err){
-        //         console.log(err) ;
-        //     }
-        // })
-        //
+
+
         this.setState({
             wait:true
         })
