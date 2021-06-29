@@ -2,6 +2,7 @@ import React from 'react'
 import '../css/Login.css'
 import axios from 'axios' ;
 
+const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 class Login extends React.Component{
     constructor(props){
         super(props) ; 
