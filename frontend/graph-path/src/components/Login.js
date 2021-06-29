@@ -3,6 +3,14 @@ import '../css/Login.css'
 import axios from 'axios' ;
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
 
+const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+
+const formValid =({formErrors,...rest})=>{
+    let valid =true;
+
+    
+
+}
 class Login extends React.Component{
     constructor(props){
         super(props) ; 
