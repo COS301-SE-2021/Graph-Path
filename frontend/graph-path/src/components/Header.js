@@ -6,6 +6,7 @@ import '../css/Header.css';
 import '../css/App.css';
 import '../css/common.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+import * as FaIcons from "react-icons/fa";
 
 
 class Header extends React.Component{
@@ -80,7 +81,8 @@ class Header extends React.Component{
                             </div>
                         </div>
                         </div>
-                        <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>
+                        {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}
+                        <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
                     </header>
 
                     <Switch path="signOut">

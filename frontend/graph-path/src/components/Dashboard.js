@@ -5,6 +5,7 @@ import '../css/App.css' ;
 import '../css/Dashboard.css'
 // import Sigma from './reactSigmaGraph' ; 
 // import axios from 'axios' ;
+import * as FaIcons from "react-icons/fa";
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
 class Dashboard extends React.Component{
