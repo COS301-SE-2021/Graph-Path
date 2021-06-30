@@ -39,9 +39,32 @@ class Login extends React.Component{
     }
 
     change =(e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
+       // this.setState({
+       //     [e.target.name]: e.target.value
+        //});
+
+        e.preventDefault(); /*So the values entered don't show on URL*/
+
+        const {name,value}=e.target;
+
+        let formErrors = {...this.state.formErrors};
+
+        switch(name){
+            case "email":
+                formErrors.email = emailRegex.test(value)
+                    ? ""
+                    : "Invalid email address";
+                break;
+
+            case 'password':
+                formErrors.password = value.length < 8 ? 'Minimum for password should be 8 characters'
+                    : "";
+                break;
+
+            default: break;
+        }
+
+        this.setState({ formErrors, [name]: value });
     }
 
     onSubmit =e=>{
@@ -110,26 +133,36 @@ class Login extends React.Component{
     }
 
     render(){
-
+        const {formErrors} = this.state;
         return (
 
             <div className="loginScreen">
                 <form className="logForm" id="inForm" onSubmit= {this.onSubmit}>
                     <h4>Sign In</h4>
                     <p>Email</p>
-                    <input name = 'email'
-                           type='email'
-                           placeholder='Email' value={this.state.email}
-                           onChange={e=>this.change(e)}
+                    <input
+                        className={formErrors.email.length > 0 ? 'error': null}
+                        name = 'email'
+                        type='email'
+                        placeholder='Email' value={this.state.email}
+                        onChange={this.change}
                     />
+                    {formErrors.email.length > 0 && (
+                        <span className='errorMessage'>{formErrors.email}</span>
+                    )}
+
 
                     <p>Password</p>
-                    <input name='password'
-                           type='password'
-                           placeholder='Password' value={this.state.password}
-                           onChange={e=>this.change(e)}
+                    <input
+                        className={formErrors.password.length > 0 ? 'error': null}
+                        name='password'
+                        type='password'
+                        placeholder='Password' value={this.state.password}
+                        onChange={e=>this.change(e)}
                     />
-                    <br />
+                    {formErrors.password.length > 0 && (
+                        <span className='errorMessage'>{formErrors.password}</span>
+                    )}
                     <input type="submit" className="btn1" value="Login" />
                     Don't Have an Account? Register <Link to="/signUp"> Here</Link>
                 </form>
