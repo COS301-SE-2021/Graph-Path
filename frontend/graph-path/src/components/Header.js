@@ -73,12 +73,15 @@ class Header extends React.Component{
                     <header className="App-header">
                     <h4>Graph Path</h4>
                     <div className="App-link">
-                        <label>&#9786; :</label> 
-                        <div className="drop"> 
+                        {/* <label>&#9786; :</label>*/}
+                        <span><FaIcons.FaSmile /> Hi, insert name</span>
+                        <div className="drop">
+                            <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
+                            {/*
                             <button className="dropbtn">Options</button>
-                            <div className="dropdown-content">     
+                            <div className="dropdown-content">
                             <button  onClick={this.changeStatus}> SignOut</button>
-                            </div>
+                            </div> */}
                         </div>
                         </div>
                         {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}

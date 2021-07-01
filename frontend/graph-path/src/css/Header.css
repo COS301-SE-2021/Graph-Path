@@ -27,7 +27,12 @@
 }
 #DashButton{
     position: relative;
-    right: 49%;
+    right: 51%;
     top: -6px;
     visibility: hidden;
+    font-size: 30px;
+}
+
+#DashButton:hover {
+    cursor: pointer;
 }

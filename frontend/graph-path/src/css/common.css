@@ -1,16 +1,25 @@
-
+/*
 .dropbtn {
     background-color: #04AA6D;
     color: white;
     padding: 3px;
-    /* font-size: 16px; */
+
     border: none;
   }
+*/
+  #powerBtn{
+    color: white;
+  }
 
+  #powerBtn:hover{
+    color: #990001;
+  }
   .drop {
     position: relative;
     display: inline-block;
     margin: 1px 1px 1px 1px;
+    float: right;
+    right: 2%;
   }
 
   .dropdown-content {
