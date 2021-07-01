@@ -80,7 +80,7 @@ class Login extends React.Component{
         const {name,value}=e.target;
 
         let formErrors = {...this.state.formErrors};
-        
+
         // send data to server 
         console.log(this.state)  ;
         // fetch(`http:`)
@@ -89,11 +89,11 @@ class Login extends React.Component{
             email: this.state.email,
             password:this.state.password
         } ;
-        if (data.password==='' || data.password === undefined){
+        if (data.password==='' && /*data.password === undefined*/ data.email===''){
             //alert('please enter password') ;
-            formErrors.password='Email and Password do not match'
+            formErrors.password='Fields cannot be left blank'
         }
-        else{            
+        else if (data.password !== '' && data.email!=='' && emailRegex.test(value) && data.password.length>= 8){
             console.log(data);
             this.sendData(data) ;
             console.log('answer from sendData',this.state.answer);
