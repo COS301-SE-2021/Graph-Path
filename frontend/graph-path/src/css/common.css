@@ -7,6 +7,17 @@
     border: none;
   }
 */
+
+  .userName{
+    color: white;
+
+
+    text-decoration: none;
+  }
+
+  #smileIcon{
+    font-size: 22px;
+  }
   #powerBtn{
     color: white;
   }

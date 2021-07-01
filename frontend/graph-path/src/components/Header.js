@@ -4,6 +4,7 @@ import Register from './Register';
 import Login from './Login' ;
 import '../css/Header.css';
 import '../css/App.css';
+import Username from './Username';
 import '../css/common.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
@@ -72,9 +73,9 @@ class Header extends React.Component{
                     <div className="bigHeader">
                     <header className="App-header">
                     <h4>Graph Path</h4>
+                        <Username userEmail={this.state.loggedUser} />
                     <div className="App-link">
                         {/* <label>&#9786; :</label>*/}
-                        <span><FaIcons.FaSmile /> Hi, insert name</span>
                         <div className="drop">
                             <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
                             {/*
