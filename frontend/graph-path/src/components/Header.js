@@ -73,16 +73,11 @@ class Header extends React.Component{
                     <div className="bigHeader">
                     <header className="App-header">
                     <h4>Graph Path</h4>
-                        <Username userEmail={this.state.loggedUser} />
+
                     <div className="App-link">
-                        {/* <label>&#9786; :</label>*/}
+                        <Username userEmail={this.state.loggedUser} />
                         <div className="drop">
                             <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
-                            {/*
-                            <button className="dropbtn">Options</button>
-                            <div className="dropdown-content">
-                            <button  onClick={this.changeStatus}> SignOut</button>
-                            </div> */}
                         </div>
                         </div>
                         {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}
