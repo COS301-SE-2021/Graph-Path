@@ -18,17 +18,6 @@ class Dashboard extends React.Component{
         } ;
     }
     
-    defaultView = () =>{
-        return ( 
-            <div className="GraphDashboard">
-                Dashboard
-                <div>
-                    <button onClick={this.createProject}>Create Project</button>
-                    <button onClick={this.viewProjectsFromAPI}>View Projects</button>
-                </div>
-            </div>
-        ) 
-    }
 
     changeToDefault = () =>{
         this.setState({
@@ -63,7 +52,7 @@ class Dashboard extends React.Component{
                     <div className="App-link-routes" >
                         <div className="opt">
                         <span onClick={this.toogleDisplayClose} 
-                        className="close" title="Close Modal">
+                        className="close" title="Close Menu">
                         &times;</span>
                     </div>
                     <div className="opt">
@@ -84,10 +73,10 @@ class Dashboard extends React.Component{
                     </Route>
                     
                     <Route path="/viewProjects">
-                    {/* <Graph /> */}
 
                     {/* should call api for the projects and be able to display as per list  */}
                         <div className="ContentArea">
+                            {/* Graph.js alias GraphManager */}
                             <GraphManager userEmail={this.props.loggedUser} /> 
                         </div>
 
@@ -100,41 +89,6 @@ class Dashboard extends React.Component{
         )
     }
 
-    // render(){
-    //     if (this.state.projects === null && this.state.view === this.views[0]){
-    //         //Default View,  When no project available and View is explicitly default
-    //         return <this.defaultView />
-    //     }
-    //     else if (this.state.projects !== null) {
-    //         //
-    //         console.log(this.state.projects) ;
-    //         //retrieve the projects and start working from there
-    //         return (
-    //             <div>
-    //                 <ProjectView default={this.changeToDefault} proj={this.state.projects.Name}/>
-    //                 <Graph project={this.state.projects}/>
-    //                 </div>
-    //             ) 
-    //     }
-    //     else if (this.state.view === "newProject"){
-    //         return (
-    //             <div className="NewProject">
-    //                 <ProjectView proj={this.views[1]} />
-    //                 <NewProject default={this.changeToDefault} />
-    //             </div>
-    //         )
-    //     }
-    //     else{
-    //         return ( 
-    //             <div className="GraphDashboard">
-    //                 Dashboard Default View
-    //                 <div>
-    //                     <button onClick={this.createProject}>Create Project</button>
-    //                 </div>
-    //             </div>
-    //         ) ;
-    //     }
-    // }
 } 
 
 
