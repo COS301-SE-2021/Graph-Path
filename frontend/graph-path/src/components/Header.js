@@ -74,14 +74,13 @@ class Header extends React.Component{
                     <header className="App-header">
                     <h4>Graph Path</h4>
 
-                    <div className="App-link">
+                    <div className="UsernameDiv">
                         <Username userEmail={this.state.loggedUser} />
-                        <div className="drop">
-                            <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
-                        </div>
-                        </div>
-                        {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}
+                        <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
                         <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
+                    </div>
+                        {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}
+
                     </header>
 
                     <Switch path="signOut">

@@ -27,8 +27,7 @@
 }
 #DashButton{
     position: relative;
-    right: 51%;
-    top: -6px;
+    right: 49%;
     visibility: hidden;
     font-size: 30px;
 }
