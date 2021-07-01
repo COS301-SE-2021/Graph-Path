@@ -98,6 +98,7 @@ class Login extends React.Component{
             this.sendData(data) ;
             console.log('answer from sendData',this.state.answer);
         }
+        else formErrors.password='Make sure all fields are filled in '
 
         //change status of login
 
