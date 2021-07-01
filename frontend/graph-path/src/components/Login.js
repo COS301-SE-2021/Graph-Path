@@ -51,14 +51,21 @@ class Login extends React.Component{
 
         switch(name){
             case "email":
-                formErrors.email = emailRegex.test(value)
-                    ? ""
-                    : "Invalid email address";
+                if(value.length==0)
+                    formErrors.email='Email field cannot be blank'
+                else if(emailRegex.test(value))
+                    formErrors.email=''
+                else
+                    formErrors.email="Invalid email address";
                 break;
 
             case 'password':
-                formErrors.password = value.length < 8 ? 'Minimum for password should be 8 characters'
-                    : "";
+                if(value.length==0)
+                    formErrors.password='Password field cannot be blank'
+                else if(value.length<8)
+                formErrors.password ='Your password is 8 characters or more'
+                else
+                formErrors.password = "";
                 break;
 
             default: break;
@@ -70,6 +77,10 @@ class Login extends React.Component{
     onSubmit =e=>{
         e.preventDefault(); /*So the values entered don't show on URL*/
 
+        const {name,value}=e.target;
+
+        let formErrors = {...this.state.formErrors};
+        
         // send data to server 
         console.log(this.state)  ;
         // fetch(`http:`)
@@ -79,7 +90,8 @@ class Login extends React.Component{
             password:this.state.password
         } ;
         if (data.password==='' || data.password === undefined){
-            alert('please enter password') ;
+            //alert('please enter password') ;
+            formErrors.password='Email and Password do not match'
         }
         else{            
             console.log(data);
@@ -88,6 +100,8 @@ class Login extends React.Component{
         }
 
         //change status of login
+
+        this.setState({ formErrors, [name]: value });
     }
     
     sendData(data){
