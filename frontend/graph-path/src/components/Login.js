@@ -34,7 +34,8 @@ class Login extends React.Component{
             formErrors:{
                 email:"",
                 password:""
-            }
+            },
+            check:null
         }
     }
 
@@ -62,8 +63,8 @@ class Login extends React.Component{
             case 'password':
                 if(value.length==0)
                     formErrors.password='Password field cannot be blank'
-                else if(value.length<8)
-                formErrors.password ='Your password is 8 characters or more'
+               else if(value.length<8)
+              formErrors.password ='Your password is 8 characters or more'
                 else
                 formErrors.password = "";
                 break;
@@ -97,8 +98,12 @@ class Login extends React.Component{
             console.log(data);
             this.sendData(data) ;
             console.log('answer from sendData',this.state.answer);
+            this.setState({
+                email:'',
+                password:''
+            });
         }
-        else formErrors.password='Make sure all fields are filled in '
+       else formErrors.password='Make sure all fields are filled in '
 
         //change status of login
 
@@ -106,6 +111,8 @@ class Login extends React.Component{
     }
     
     sendData(data){
+
+        let checkError = {...this.state.check};
         try{  
 
         // fetch(`http://localhost:90001/user/login/${data.email}`)
@@ -126,6 +133,7 @@ class Login extends React.Component{
                 console.log(this.state)//Heavey checks
                 if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
                     alert('try again') ;
+                  //  data.checkError.check: 'No match found, try again'
                 }
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
                     //access given
