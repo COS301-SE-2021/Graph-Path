@@ -4,8 +4,10 @@ import Register from './Register';
 import Login from './Login' ;
 import '../css/Header.css';
 import '../css/App.css';
+import Username from './Username';
 import '../css/common.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+import * as FaIcons from "react-icons/fa";
 
 
 class Header extends React.Component{
@@ -71,16 +73,14 @@ class Header extends React.Component{
                     <div className="bigHeader">
                     <header className="App-header">
                     <h4>Graph Path</h4>
-                    <div className="App-link">
-                        <label>&#9786; :</label> 
-                        <div className="drop"> 
-                            <button className="dropbtn">Options</button>
-                            <div className="dropdown-content">     
-                            <button  onClick={this.changeStatus}> SignOut</button>
-                            </div>
-                        </div>
-                        </div>
-                        <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>
+
+                    <div className="UsernameDiv">
+                        <Username userEmail={this.state.loggedUser} />
+                        <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
+                        <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
+                    </div>
+                        {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}
+
                     </header>
 
                     <Switch path="signOut">
