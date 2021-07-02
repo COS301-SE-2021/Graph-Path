@@ -111,9 +111,10 @@ class Graph extends React.Component{
         var curr = this.state.grapRep ; 
         var obj = {};// fromTask ;
         var edg ;
-        if (curr === {} || typeof curr === 'string'){
+        if (curr === {} || curr.nodes === undefined){ // there was no graph rep, attach epmpty one
             curr = this.emptyGraph() ; 
         }
+        // if there was already a node?
         if (curr.nodes.length>0){
             obj["id"]= `n${curr.nodes.length+1}` ;
             curr.nodes.push(obj) ;
