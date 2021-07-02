@@ -2,6 +2,7 @@
 import React from 'react';
 import '../css/Graph.css' ;
 import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
+import EdgeManager from './Edge';
 class GrapExample2 extends React.Component{
   constructor(props){
     super(props) ;
@@ -57,6 +58,7 @@ class GrapExample2 extends React.Component{
             <RandomizeNodePositions x1={200} y1={100} x2={300} y2={300}/>        
           </Sigma>
           <button title="Save Current Graph">Save</button>
+          <EdgeManager graphToDisplay={this.props.graphToDisplay}/>
 
         </div>
       </div>
