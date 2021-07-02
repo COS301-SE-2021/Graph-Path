@@ -65,7 +65,9 @@ class Graph extends React.Component{
     }
 
     saveCurrentGraph = ()=>{
-
+        if (this.state.linkNumber>0){
+            //send current graph to project
+        }
     }
 
     changeNodeList = (node,num) =>{
@@ -107,6 +109,18 @@ class Graph extends React.Component{
             console.log('error getting from /project/*',err) ; 
         }
         )
+    }
+    closeProjectList = () =>{
+        var elem = document.getElementById('userProjects') ; 
+        if (elem !== null){
+            elem.style.display = 'none' ; 
+        }
+    }
+    openProjectList = () =>{
+        var elem = document.getElementById('userProjects') ; 
+        if (elem !== null){
+            elem.style.display = 'block' ; 
+        }
     }
     addNode = (fromTask) =>{
         // add the node and give it an id
@@ -157,14 +171,14 @@ class Graph extends React.Component{
         return (
             <Router>
                 <div className="projectView">
-                   <span className="dropbtn">
+                   <span className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
                         Projects  
                     </span>
 
                     <FaIcons.FaRecycle onClick={this.viewProjectsFromAPI} title={'refresh'}
-                    className="icon"/>
+                    className="icon clickbtn"/>
                         
-                    <ul className="projList" >
+                    <ul className="projList" id="userProjects">
                         {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
                             this.state.projList.length>0 ? // validate if it is an array and not empty
                             this.state.projList.map( i => {       
@@ -178,8 +192,7 @@ class Graph extends React.Component{
                             })
                             : <span>
                                 <h1>Project List is empty,<br/>
-                                <p>Please refresh</p> or 
-                            create a new project.</h1>
+                                <p>Please refresh</p> or create a new project.</h1>
                             
                             </span>
                             
@@ -193,6 +206,8 @@ class Graph extends React.Component{
                             graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 || this.state.grapRep.nodes ===undefined ? 
                             this.emptyGraph()
                             :this.state.projList[this.state.linkNumber].graph}
+                            projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
+                            this.state.projList[this.state.linkNumber].projectName: ""}
                         />
                         <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
                         :this.state.projList[this.state.linkNumber]} />
@@ -208,8 +223,8 @@ class Graph extends React.Component{
                         />
                         <Task addTask={this.addNode} 
                         updateGraphView={this.updateGraphView}
+                        closeProjectListView={this.closeProjectList}
                         />
-
                     </Route>
                 </Switch>
             </Router>
