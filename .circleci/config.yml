@@ -14,11 +14,11 @@ workflows:
           # https://circleci.com/developer/images/image/cimg/node
   test-deploy:
     jobs: 
-     # - build-project
+      - build-project-server
       - build-front
 
 jobs:
-  build-project:
+  build-project-server:
     docker:
       - image: cimg/node:16.4.0
     steps:
