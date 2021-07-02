@@ -33,7 +33,7 @@ class GrapExample2 extends React.Component{
     this.setState({
       len:this.state.graphs.push(this.props.graphToDisplay)
     }, ()=>{
-      console.log('Graph updated, ',this.state.graphs) ;
+      console.log('Graph updated, ',this.props.graphToDisplay) ;
     }) ; 
   }
     
