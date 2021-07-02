@@ -24,18 +24,36 @@ class Graph extends React.Component{
     //GET ALL Projects for User
     //Display List of Projects
     //Display  Graph on Click
-    
+    emptyGraph = () =>{
+        var empty =  {
+            nodes : [],
+            edges : []
+        } ;
+        return empty ;
+    }
+
     updateGraphView = () =>{
-        //if there was a graph existing
-        if (this.state.projList[this.state.linkNumber] !== undefined && this.state.projList.length <= 0 && this.state.linkNumber < 0 ){
+        if (this.state.grapRep === {}){
+            // if graph rep from project was not undefined but empty
             this.setState({
-                grapRep:this.state.projList[this.state.linkNumber]
-            }) ;
+                grapRep: this.emptyGraph() 
+            }) ;  //make it empty with representation for graph viewing
+        console.log('updated from task: {}',this.state.grapRep) ;
+
         }
-        //else keep the default one
+        else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph.nodes !== undefined  ){
+        //if there was a graph existing
+            this.setState({
+                grapRep:this.state.projList[this.state.linkNumber].graph
+            }) ;
+        console.log('updated from task: not empty',this.state.grapRep) ;
+
+        }
+        console.log('updated from task',this.state.grapRep) ;
+        //else keep the default one, from mount
     }
     componentDidMount = ()=>{
-        if (this.state.projList.length<1){ // no projects to display
+        if (this.state.projList.length<1){ // no projects to display? 1 - call from api
             this.viewProjectsFromAPI() ;
         }
         else{
@@ -50,10 +68,20 @@ class Graph extends React.Component{
 
     changeNodeList = (node,num) =>{
         console.log(node.projectName) ;
-        this.setState({
-            projNodeList:node,
-            linkNumber:num
-        }) ;
+        if (node.graph === {} || node.graph.nodes === undefined || node.graph === undefined){
+            this.setState({
+                projNodeList:node,
+                grapRep:this.emptyGraph(),
+                linkNumber:num
+            }) ;
+        }
+        else{
+            this.setState({
+                projNodeList:node,
+                grapRep:node.graph,
+                linkNumber:num
+            }) ;
+        }
     }
     viewProjectsFromAPI =()=>{
         // console.log('call to api') ;
@@ -79,26 +107,22 @@ class Graph extends React.Component{
         )
     }
     addNode = (fromTask) =>{
+        // add the node and give it an id
         var curr = this.state.grapRep ; 
         var obj = {};// fromTask ;
         var edg ;
+        if (curr === {} || typeof curr === 'string'){
+            curr = this.emptyGraph() ; 
+        }
         if (curr.nodes.length>0){
             obj["id"]= `n${curr.nodes.length+1}` ;
             curr.nodes.push(obj) ;
-            edg = {id:`e${curr.edges.length+1}`,
-                source:`n${curr.nodes.length-1}`, //because i pushed before here 
-                target:`n${curr.nodes.length}`, 
-            }
-            curr.edges.push(edg) 
+           
         }
         else{
             // add node with edge depending on self
             obj["id"]= `n1` ;
             curr.nodes.push(obj) ;
-            edg = {id:"e1", source:"n1", target:"n1"} 
-            curr.edges.push(edg) ;
-            console.log('curr',curr) ;
-            
         }
         this.setState({
             grapRep:curr
@@ -110,7 +134,11 @@ class Graph extends React.Component{
     }
 
     addEdge=()=>{
-
+    //     edg = {id:`e${curr.edges.length+1}`,
+    //     source:`n${curr.nodes.length-1}`, //because i pushed before here 
+    //     target:`n${curr.nodes.length}`, 
+    // }
+    // curr.edges.push(edg) 
     }
 
     render(){
@@ -122,7 +150,7 @@ class Graph extends React.Component{
         // }
         // let listArray =  []; // [graph1,graph2] ; 
         let keyNum = -1 ;
-        console.log('sending graph obj ',this.state.projNodeList)
+        console.log('sending graph obj ',this.state)
         return (
             <Router>
                 <div className="projectView">
@@ -131,7 +159,7 @@ class Graph extends React.Component{
                     </span>
                     <ul className="projList" >
                         {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
-                            this.state.projList.length>0 ? 
+                            this.state.projList.length>0 ? // validate if it is an array and not empty
                             this.state.projList.map( i => {       
                                 keyNum = keyNum+1 ;
                                 return <li key={keyNum} > 
@@ -151,8 +179,8 @@ class Graph extends React.Component{
                 <Switch>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
                         <SigmaGraph key={this.state.linkNumber}
-                            graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 ? 
-                            {}
+                            graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 || this.state.grapRep.nodes ===undefined ? 
+                            this.emptyGraph()
                             :this.state.projList[this.state.linkNumber].graph}
                         />
                         <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
@@ -160,8 +188,10 @@ class Graph extends React.Component{
                     </Route>
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
-                        <SigmaGraph key={this.state.grapRep.nodes.length}
-                            graphToDisplay={this.state.grapRep}
+                        <SigmaGraph key={this.state.grapRep.nodes === undefined? 0 : this.state.grapRep.nodes.length}
+                            graphToDisplay={this.state.grapRep.nodes === undefined?
+                            this.emptyGraph()
+                            :this.state.grapRep}
                             projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
                                 this.state.projList[this.state.linkNumber].projectName: ""}
                         />
