@@ -1,11 +1,12 @@
 import React from 'react' ; 
 import SigmaGraph from './SigmaGraph';
 import Task from './Task' ;
-// import axios from 'axios';
+import axios from 'axios';
 import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
+// import _ from 'lodash' ;
 
 
 class Graph extends React.Component{
@@ -40,7 +41,7 @@ class Graph extends React.Component{
             this.setState({
                 grapRep: this.emptyGraph() 
             }) ;  //make it empty with representation for graph viewing
-        console.log('updated from task: {}',this.state.grapRep) ;
+        // console.log('updated from task: {}',this.state.grapRep) ;
 
         }
         else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph.nodes !== undefined  ){
@@ -48,31 +49,63 @@ class Graph extends React.Component{
             this.setState({
                 grapRep:this.state.projList[this.state.linkNumber].graph
             }) ;
-        console.log('updated from task: not empty',this.state.grapRep) ;
+        // console.log('updated from task: not empty',this.state.grapRep) ;
 
         }
-        console.log('updated from task',this.state.grapRep) ;
+        else{
+            this.setState({
+                grapRep: this.emptyGraph() 
+            })
+        }
+        // console.log('updated from task',this.state.grapRep) ;
         //else keep the default one, from mount
     }
     componentDidMount = ()=>{
         if (this.state.projList.length<1){ // no projects to display? 1 - call from api
             this.viewProjectsFromAPI() ;
         }
-        else{
-
-        }
 
     }
 
     saveCurrentGraph = ()=>{
-        if (this.state.linkNumber>0){
+        const projNode = this.state.projNodeList ; 
+        console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
+
+        if (this.state.linkNumber>=0 && projNode.projectName !== undefined ){
             //send current graph to project
+            var saveGraph =  window.confirm('Save Current Graph?') ;
+            if (saveGraph === true){ // if its not the same graph
+                console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
+                const data = {
+                    graph : this.state.grapRep
+                }
+                axios.put(`${this.state.api}/project/updateProjectGraph/${projNode.projectName}`,data)
+                .then((res)=>{
+                    if (res.data === undefined) {// didn't save
+                        alert(res.message) ; 
+                    }
+                    else{
+                        alert('sucess:',res.data) // wow
+                    }
+                })
+                .catch((err)=>{
+                    alert('saving failed',err)
+                    console.log(err)
+                })
+            }
+            else{//no difference
+                console.log('Node Project',projNode.graph, this.state.grapRep) ;
+                alert('no change in graph',projNode.graph, this.state.grapRep)
+            }
+        }
+        else{
+
         }
     }
 
     changeNodeList = (node,num) =>{
         console.log(node.projectName) ;
-        if (node.graph === {} || node.graph.nodes === undefined || node.graph === undefined){
+        if (node.graph === {} || node.graph === undefined || node.graph.nodes === undefined ){
             this.setState({
                 projNodeList:node,
                 grapRep:this.emptyGraph(),
@@ -80,6 +113,7 @@ class Graph extends React.Component{
             }) ;
         }
         else{
+            if (num >= 0) //valid link number
             this.setState({
                 projNodeList:node,
                 grapRep:node.graph,
@@ -142,7 +176,7 @@ class Graph extends React.Component{
         }
         this.setState({
             grapRep:curr
-        },()=>{console.log(this.state.grapRep)}) ;
+        },()=>{console.log('state after add fromm task',this.state.grapRep)}) ;
         
         obj["label"] = fromTask.taskName ;
         console.log('Trying to save',obj)
@@ -181,13 +215,13 @@ class Graph extends React.Component{
                     <ul className="projList" id="userProjects">
                         {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
                             this.state.projList.length>0 ? // validate if it is an array and not empty
-                            this.state.projList.map( i => {       
+                            this.state.projList.map( (node) => {       
                                 keyNum = keyNum+1 ;
                                 return <li key={keyNum} > 
-                                    <Link data-projnum={keyNum} className="project-content" 
+                                    <Link data-projnum={keyNum} data-project={node} className="project-content" 
                                     onClick={(e) =>{
-                                    this.changeNodeList(i, e.target.getAttribute("data-projnum"))}}
-                                    to={`/project/${keyNum}`}>{i.projectName}</Link>
+                                    this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                    to={`/project/${keyNum}`}>{node.projectName}</Link>
                                 </li>
                             })
                             : <span>
@@ -208,6 +242,8 @@ class Graph extends React.Component{
                             :this.state.projList[this.state.linkNumber].graph}
                             projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
                             this.state.projList[this.state.linkNumber].projectName: ""}
+                            sendGraphData={this.saveCurrentGraph}
+
                         />
                         <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
                         :this.state.projList[this.state.linkNumber]} />
@@ -220,6 +256,7 @@ class Graph extends React.Component{
                             :this.state.grapRep}
                             projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
                                 this.state.projList[this.state.linkNumber].projectName: ""}
+                            sendGraphData={this.saveCurrentGraph}
                         />
                         <Task addTask={this.addNode} 
                         updateGraphView={this.updateGraphView}

@@ -23,7 +23,7 @@ class Edge extends React.Component{
     }
     render(){
         
-        console.log('listing',this.props, 'state ',this.state) ; 
+        // console.log('listing',this.props, 'state ',this.state) ; 
         const graph = this.props.graphToDisplay ; 
         if (graph !== undefined && graph.nodes !== undefined){
             if (graph.nodes.length > 0){

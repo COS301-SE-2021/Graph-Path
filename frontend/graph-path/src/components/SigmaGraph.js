@@ -34,7 +34,7 @@ class GrapExample2 extends React.Component{
     this.setState({
       len:this.state.graphs.push(this.props.graphToDisplay)
     }, ()=>{
-      console.log('Graph updated, ',this.props.graphToDisplay) ;
+      console.log('Graph updated, ',this.state) ;
     }) ; 
   }
     
@@ -42,7 +42,7 @@ class GrapExample2 extends React.Component{
     console.log( this.props) ;
     const graph = this.props.graphToDisplay ; 
     console.log(graph) ;
-    if (graph !== undefined && graph.nodes !== undefined)
+    if (graph !== undefined && graph.nodes !== undefined )
     return (
       <div className="exampleProject">
         <p>{this.props.projectName}</p>
@@ -57,7 +57,9 @@ class GrapExample2 extends React.Component{
             <RelativeSize  initialSize={20}/>
             <RandomizeNodePositions x1={200} y1={100} x2={300} y2={300}/>        
           </Sigma>
-          <button title="Save Current Graph">Save</button>
+          <button className="clickbtn" title="Save Current Graph" onClick={typeof this.props.sendGraphData === 'function'
+        ?this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
+            Save</button>
           <EdgeManager graphToDisplay={this.props.graphToDisplay}/>
 
         </div>
