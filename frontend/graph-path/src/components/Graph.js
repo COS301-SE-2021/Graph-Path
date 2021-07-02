@@ -5,6 +5,8 @@ import Task from './Task' ;
 import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+import * as FaIcons from "react-icons/fa";
+
 
 class Graph extends React.Component{
 
@@ -110,7 +112,6 @@ class Graph extends React.Component{
         // add the node and give it an id
         var curr = this.state.grapRep ; 
         var obj = {};// fromTask ;
-        var edg ;
         if (curr === {} || curr.nodes === undefined){ // there was no graph rep, attach epmpty one
             curr = this.emptyGraph() ; 
         }
@@ -135,6 +136,7 @@ class Graph extends React.Component{
     }
 
     addEdge=()=>{
+        // var edg ;
     //     edg = {id:`e${curr.edges.length+1}`,
     //     source:`n${curr.nodes.length-1}`, //because i pushed before here 
     //     target:`n${curr.nodes.length}`, 
@@ -156,8 +158,12 @@ class Graph extends React.Component{
             <Router>
                 <div className="projectView">
                    <span className="dropbtn">
-                        Projects
+                        Projects  
                     </span>
+
+                    <FaIcons.FaRecycle onClick={this.viewProjectsFromAPI} title={'refresh'}
+                    className="icon"/>
+                        
                     <ul className="projList" >
                         {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
                             this.state.projList.length>0 ? // validate if it is an array and not empty
@@ -170,8 +176,12 @@ class Graph extends React.Component{
                                     to={`/project/${keyNum}`}>{i.projectName}</Link>
                                 </li>
                             })
-                            : <h1>Project List is empty,<br/>
-                            please create a new project.</h1>
+                            : <span>
+                                <h1>Project List is empty,<br/>
+                                <p>Please refresh</p> or 
+                            create a new project.</h1>
+                            
+                            </span>
                             
                         }
                     </ul>

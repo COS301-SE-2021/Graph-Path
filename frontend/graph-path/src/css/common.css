@@ -1,4 +1,4 @@
-/*
+
 .dropbtn {
     background-color: #04AA6D;
     color: white;
@@ -6,7 +6,7 @@
 
     border: none;
   }
-*/
+
   .UsernameDiv{
     position: relative;
   }
@@ -29,6 +29,10 @@
     margin: 1px 1px 1px 1px;
     float: right;
     right: 3%;
+  }
+
+  .icon {
+    margin: 2px 2px;
   }
 
   #powerBtn:hover{
