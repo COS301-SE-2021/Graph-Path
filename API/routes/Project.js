@@ -194,6 +194,44 @@ router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
     // })
 });
 
+router.put('/updateProjectGraph/:name',(req,res)=>{
+    const project = req.params.name ;
+    const graph = req.body.graph ;
+
+    console.log('PUT ../',project,'body: ',graph) ; 
+    if (graph === undefined || graph.nodes === undefined){
+        return res.status(400).send({
+            message:"Invalid Graph structure"
+        })
+    }
+
+    db.collection('Projects').updateOne({
+        projectName:project
+    },
+    {
+        $set:{graph:graph}
+    },(err,ans)=>{
+        if (err){
+            console.log('error',err)
+            return res.status(500).send({
+                message:err
+            }) ; 
+        }
+        console.log(ans.result.nModified + " document(s) updated");
+        if (ans.result.nModified > 0){
+            res.status(201).send({
+                message:"Update Successful",
+                data:graph
+            })
+        }
+        else{
+            res.send({
+                message:`Project ${project}, not found`
+            }) ;
+        }
+    }) ; 
+})
+
 
 
 
