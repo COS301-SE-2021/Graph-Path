@@ -103,8 +103,13 @@ class Task extends React.Component{
     }
     
     componentDidMount(){
-        if (this.props.updateGraphView !== undefined && typeof this.props.updateGraphView === 'function')
-        this.props.updateGraphView() ;
+        if (this.props.updateGraphView !== undefined && typeof this.props.updateGraphView === 'function'){
+            this.props.updateGraphView() ;
+        }
+        if ( typeof this.props.closeProjectListView === 'function'){
+            this.props.closeProjectListView() ;
+        }
+        
     }
 
     render() {

@@ -31,9 +31,6 @@
     right: 3%;
   }
 
-  .icon {
-    margin: 2px 2px;
-  }
 
   #powerBtn:hover{
     color: #990001;
@@ -75,4 +72,12 @@
 
 .project-alert-text{
   color: #990001;
+}
+
+.clickbtn:hover {
+  cursor: pointer;
+}
+
+.icon{
+  margin: 2px 5px;  
 }
