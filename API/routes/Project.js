@@ -135,10 +135,17 @@ function makeProjectRoute(db) {
 router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
     let nme = req.params.name;
     let grph = req.params.graph;
+    //let tst = req.body.graph;
+    let grph2 = JSON.parse(grph);
+    console.log("type of graph: "+ typeof grph);
+   // console.log("req.body: "+tst);
+    console.log("nme: "+nme);
+    console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
+    console.log("grph.edges[0].id: "+grph2.edges[0].id);
     db.collection('Projects').updateOne({
-        projetName:nme
+        projectName:nme
     },{
-        $set:{graph:grph}
+        $set:{graph:grph2}
     },(err,result)=>{
 
         if(err){
@@ -183,8 +190,8 @@ router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
         }
         else{
             res.send({
-                message: "success",
-                data: result['ops']
+                message: "success"
+               // data: result['ops']
             });
         }
 
