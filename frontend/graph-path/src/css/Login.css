@@ -5,7 +5,15 @@
 .loginScreen {
     background-color: #001122;
     color: white;
-    width: 400px;
+    max-width: 400px;
+    max-height: 350px;
+    position: relative;
+    left: 37%;
+    top: 45%;
+    box-sizing: border-box;
+    padding: 20px 40px;
+    border-radius: 20px;
+  /*  width: 400px;
     height: 350px;
     left: 750px;
     top: 400px;
@@ -13,7 +21,7 @@
     transform: translate(-50%,-50%);
     box-sizing: border-box;
     padding: 20px 40px;
-    border-radius: 20px;
+    border-radius: 20px;*/
 }
 
 .loginScreen p {
@@ -76,4 +84,14 @@ h4 {
     text-align: center;
     padding: 0 0 10px;
     font-size: 20px;
+}
+
+input.error {
+    border: 1px solid red;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 0.75em;
+    display: relative;
 }

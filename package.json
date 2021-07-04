@@ -1,0 +1,34 @@
+{
+  "name": "graph-path",
+  "version": "1.0.0",
+  "description": "Graph Path is a project management tool that represents task in a form of a \r directed acyclic graph. The representation is chosen because it is intuitive\r and the graph will clearly layout the paths that are critical paths. \r A graph can have alternate paths to another node from the start node. \r This would gives a visual stimuli of how the project flows from node to node.",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "db": "^3.3.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.9",
+    "mongoose": "^5.12.12",
+    "nodemon": "^2.0.7",
+    "notenv": "^2.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/COS301-SE-2021/Graph-Path.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "No Cap 2021",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/COS301-SE-2021/Graph-Path/issues"
+  },
+  "homepage": "https://github.com/COS301-SE-2021/Graph-Path#readme"
+}

@@ -14,7 +14,7 @@ class NewProject extends React.Component{
             Members: [],
             numberMembers: 0 ,
             Owner:"Nani",
-            Graph:"No Projects Yet" ,
+            Graph:{} ,
             api:'http://localhost:9001',
             answer:null,
             responseData:null
@@ -81,9 +81,9 @@ class NewProject extends React.Component{
             projectName:this.state.name,
             startDate:this.state.startDate,
             dueDate:this.state.dueDate,
-            groupMembers:this.state.Members,//this.state.Members,
-            owner:this.state.Owner, //add ownwer from dashboard
-            Graph:this.state.Graph, //ES6
+            groupMembers:[this.props.userEmail],//this.state.Members,
+            owner:this.props.userEmail, //add ownwer from dashboard
+            graph:this.state.Graph, //ES6
             //userId:from dashboard
         }
         //communicate with the API
@@ -93,6 +93,15 @@ class NewProject extends React.Component{
         // this.changeToDefault() ;
     }
 
+    handleChange = (e, index) =>{
+        // this.state.members[index] = e.target.value;
+        // console.log(this.members[index])
+        this.setState(
+            {
+                members: this.state.members
+            }
+        )
+    }
 
     updateField = (event) =>{
         this.setState({
@@ -106,16 +115,23 @@ class NewProject extends React.Component{
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit} className="logForm">
                     <h4>Create New Project</h4>
                     <p>Project Name</p>
-                    <input type="text" required="true" name="name" placeholder="Project Name" onChange={this.updateField} />
+                    <input type="text" required={true} name="name" placeholder="Project Name" onChange={this.updateField} />
                     <p>Start Date</p>
                     <input type="date" name="startDate" onChange={this.updateField} />
                     <p>Due Date</p>
                     <input type="date" name="dueDate" onChange={this.updateField}/>
                     <p>Members</p>
-                    <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>
-                    <span className="newMember" onClick={this.addMember}><a>+</a></span>
-                    <br/>
-                    <input type="text" name="graph" placeholder="Graph" />
+                    {/* <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>*/}
+                    <input type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,0)}/>
+                    {
+                        this.state.members.map((member,index)=>{
+                            return(
+                                <input key={index} type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,index+1)}/>
+                                )
+
+                        })
+                    }
+                    {/*<span className="newMember" onClick={this.addMember}><a>+</a></span>*/}
                     <br/>
                     <input type="submit" value="Create Project" className="btn1"  />
 

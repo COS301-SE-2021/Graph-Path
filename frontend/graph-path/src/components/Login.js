@@ -1,6 +1,7 @@
 import React from 'react'
 import '../css/Login.css'
 import axios from 'axios' ;
+import {Link} from 'react-router-dom'
 
 class Login extends React.Component{
     constructor(props){
@@ -58,7 +59,7 @@ class Login extends React.Component{
                 answer:res.message,
                 responseData:res.data //data
             },()=>{
-                alert('res:'+this.state.answer)
+                // alert('res:'+this.state.answer)
                 console.log(this.state)//Heavey checks
                 if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
                     alert('try again') ;
@@ -66,6 +67,7 @@ class Login extends React.Component{
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
                     //access given
                     this.props.logIn() ; 
+                    this.props.updateUser(this.state.responseData)  ;
                 }
               }) ;
             
@@ -105,6 +107,7 @@ class Login extends React.Component{
                     />
                     <br />
                     <input type="submit" className="btn1" value="Login" />
+                    Don't Have an Account? Register <Link to="/signUp"> Here</Link>
                 </form>
             </div>
 

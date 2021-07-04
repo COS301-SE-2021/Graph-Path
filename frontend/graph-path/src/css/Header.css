@@ -3,6 +3,35 @@
     width: 100%;
 }
 
-.header_ #opts {
+.App-header {
+    background-color: #001122;
+    min-height: 10vh;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    position: relative;
 
+  }
+  
+.bigHeader{
+  position: relative;
+  min-height: 80vh;
+  align-items: unset;
+  display: block;
+  flex-direction: row;
+}
+.bigHeader > div {
+  margin: 0px;
+}
+#DashButton{
+    position: relative;
+    right: 49%;
+    visibility: hidden;
+    font-size: 30px;
+}
+
+#DashButton:hover {
+    cursor: pointer;
 }
