@@ -73,7 +73,6 @@ captures/
 .cxx/
 
 # node object file
-package.json
 package-lock.json
 
 #idead object files
@@ -97,6 +96,8 @@ fastlane/readme.md
 
 # Version control
 vcs.xml
+
+frontend/graph-path/package-lock.json
 
 # lint
 lint/intermediates/

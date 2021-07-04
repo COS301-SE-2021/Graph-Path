@@ -4,14 +4,19 @@ import Register from './Register';
 import Login from './Login' ;
 import '../css/Header.css';
 import '../css/App.css';
+import Username from './Username';
+import '../css/common.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+import * as FaIcons from "react-icons/fa";
 
 
 class Header extends React.Component{
     constructor(props){
         super(props) ; 
         this.state = {
-            log:false
+            log:false,
+            status:this.props.status||"Please log in",
+            loggedUser:{}
         }
     } 
     changeStatus = () =>{
@@ -19,29 +24,71 @@ class Header extends React.Component{
             log:!this.state.log
         },()=> {
             if (this.state.log && typeof this.props.logInValid === 'function'){
+                //first time loggging valid
                 this.props.logInValid() ;
+            }
+            else if (!this.state.log){
+
             }
         }) ; 
     }
+    renderClose =() =>{
+        var elem = document.getElementById('DashButton') ;
+        console.log('Header clicked', elem.style.display)
+        if (elem!==null){ 
+            elem.style.visibility='hidden' ;
+        }
+    }
+    renderOpen = () =>{
+        var elem = document.getElementById('DashButton') ;
+        if (elem!==null){ 
+            elem.style.visibility='visible' ;
+        }
+    }
+
+    toogleDashMenu = () =>{
+        var elem = document.getElementById('modal1') ;
+        console.log('clicked', elem.style.display)
+        if (elem !== null){
+            elem.style.display='block' ;
+            this.renderClose() ; 
+        }
+        else{        
+            console.log('clicked but null', elem.style.display)
+            // this.renderOpen() ;
+        }
+    }
+
+    updateLoggedUser = (userInfo) =>{
+        this.setState({
+            loggedUser:userInfo
+        }) ;
+    }
 
     render(){
-        if (this.state.log){
+        if (this.state.log && this.state.loggedUser!== {}){
+        // var elem = document.getElementById('DashButton').style.display = "none" ;
             return (
                 <Router>
-                    <div>
+                    <div className="bigHeader">
                     <header className="App-header">
-                    <div>Graph Path</div>    
-                    <div className="App-link">
-                        {/* <form >
-                            <input className="App-link"
-                            type="submit" value="LogOff" 
-                            onClick={this.props.logOut} />  
-                        </form> */}
-                        <Link to="/signOut" onClick={this.changeStatus}>signOut</Link>
-                        </div>
+                    <h4>Graph Path</h4>
+
+                    <div className="UsernameDiv">
+                        <Username userEmail={this.state.loggedUser} />
+                        <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
+                        <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
+                    </div>
+                        {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}
+
                     </header>
-                    <Switch path="sinOut">
-                        <Dashboard logOut={this.changeStatus} />
+
+                    <Switch path="signOut">
+                        <Dashboard logOut={this.changeStatus} 
+                            menuToogleClose={this.renderClose}
+                            menuToogleOpen={this.renderOpen}
+                            loggedUser={this.state.loggedUser.email}
+                        />
                     </Switch>
                     
 
@@ -55,28 +102,17 @@ class Header extends React.Component{
                 <Router>
                 <div className="header_">
                     <header className="App-header">
-                    Graph Path
+                    <h4>Graph Path</h4>
+                    <p>{this.state.status}</p>
                     </header>
-                    {/* <form className="form-header"> */}
-                        <div id="opts">
-                            <Link className="App-link" to="/signIn" >Sign In</Link>
-                        </div>
-
-                        {/* <input className="App-link"
-                         type="submit" value="LogIn" 
-                         onClick={this.props.logOut} />  
-                         */}
-                    <div id="opts">
-                        <Link className="App-link" to="signUp">Sign Up</Link>
-                    </div>
-
-                        {/* <input className="App-link"
-                         type="submit" value="SignUp" 
-                         onClick={this.props.logOut} />  */}
-                    {/* </form> */}
-                    <Switch>
+                        <Link className="App-link" to="/signIn" >LogIn</Link>
+                        
+                        <Link className="App-link" to="signUp">SignUp</Link>
+                        <Switch>
                         <Route path="/signIn">
-                            <Login logIn={this.changeStatus} />
+                            <Login logIn={this.changeStatus} 
+                                updateUser = {this.updateLoggedUser}
+                            />
                         </Route>
                         <Route path="/signUp">
                             <Register />

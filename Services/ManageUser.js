@@ -1,28 +1,20 @@
 const mongoose = require('mongoose');
-const User= require('../Models/UserModel');
-const DB = require('../Controllers/DBController');
+const UserModel = require('../Models/UserModel');
+const db = require('../Controllers/DBController') ;
 
-//DB_URI = "mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/GraphPath?retryWrites=true&w=majority";
-const db = new DB();
+function getAllUsers(body){
 
-async function getAllUsers(body){
-       // .then((result) =>{
-    //const Users = new UserModel({});
-           await User.find(
-
-             )
-                .then((doc)=>{
-
-                        console.log("This is doc: "+doc);
-                        res.send(doc);
-
-
-                })
-                .catch((err)=>{
-                    console.error("There was an error in retrieving the users: "+err);
-                })
-
-       // })
+    const user = new UserModel({
+        _id: mongoose.Types.ObjectId(),
+        name: body.name,
+        Surname: body.Surname,
+        email:body.email,
+        password: body.password,
+        username: body.username,
+        type: body.type,
+        Notification: body.Notification
+    });
+    return 0;
 }
 
 async function getUserByEmail(body){
@@ -45,7 +37,7 @@ function insertUser(body) {
 
 
        // .then((result) =>{
-            const usr = new User({
+            const usr = new UserModel({
                 _id: mongoose.Types.ObjectId(),
                 name: body.name,
                 Surname: body.Surname,
@@ -80,8 +72,55 @@ function insertUser(body) {
 
 }
 
-const ManageUser = {};
-ManageUser.getAllUsers = getAllUsers;
-ManageUser.insertNewUser = insertUser;
-ManageUser.getUserByEmail = getUserByEmail;
-module.exports = ManageUser;
+getUserByUserNameOrEmail = (data) =>{
+    if (data.email !== null){
+        var ans = UserModel.find({email:data.email}) ;
+        return ans
+    }
+    else if (data.username){
+        var ans = UserModel.find({usernam:data.username})
+        return ans ;
+    }
+}
+
+createUser = (data) =>{
+    // Usermodel.watch().on('change',data =>console.log(new Date(),data)) ;
+    console.log('Trying to create user',data)
+    var status = -1 ; //untouched
+    const id = new mongoose.mongo.ObjectID() ; 
+    var newUSer = data ;
+    newUSer["_id"] = id ;
+    UserModel.create(newUSer)
+    .then((value)=>{
+        status = 1 //saved
+        console.log(value,'saved')
+        },
+        (value) =>{
+            status = 0 ;
+            console.log('rejected: ',value) ;
+        }
+    )
+    .catch(err =>{
+        console.log(data,err)
+        status = 0 ;  //not saved
+    }) ; 
+
+    return status ;
+
+    // db.Users.insert(data) 
+
+}
+
+// var userManagement = {};
+// userManagement.getAllUsers = getAllUsers;
+// userManagement.insertNewUser = manageUser;
+// module.exports = userManagement;
+
+const userManagement = {
+getAllUsers: (data) => getAllUsers(data),
+userManagement: (data) => manageUser(data), 
+create : (data) => createUser(data) ,
+
+    getUserByUserNameOrEmail : (data)=> getUserByUserNameOrEmail(data)
+}
+module.exports = userManagement;

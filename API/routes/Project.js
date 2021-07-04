@@ -1,133 +1,250 @@
 const express = require('express');
-const app = require('../../app');
-const createNewProject = require('../../Services/CreateNewProject');
-//const retriveProject = require('../../Services/RetrieveProjects');
-
+//swap out service
+const projectManager = require('../../Services/ProjectService');
+const mongoose = require('mongoose') ;
 const router = express.Router();
-const mongo = require('mongodb').MongoClient;
-const assert = require('assert');
-
-var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-//var url = 'mongodb+srv://Aliandro:Aliandro2000@cluster0.y5ggo.mongodb.net/Graph-Path?\n' +
-    //'retryWrites=true&w=majority';
+var db = require('../../Controllers/DBController').getDB();
+console.log("-----test2-----")
 
 
 
-router.post('/newProject' , (req,res,next) =>{
-    data  = req.body;
-    Status = createNewProject(data);
-    Status = 1;
-    if(Status ==1)
-    {
-        res.status(200).json({
+function makeProjectRoute(db) {
+//GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+    router.get('/find', (req, res, next) => {
 
-            statusCode : 1,
-            message : "new project creation successful",
+        console.log("-----test2-----")
+        db.collection('Projects').findOne({})
+            .then((ans) => {
+                console.log('success', ans);
+                res.send({
+                    data: ans
+                });
+            }, (ans) => {
+                console.log('rejected', ans);
+                res.send({
+                    data: ans
+                });
+            })
+            .catch(err => {
+                console.log('from db req', err)
+            })
 
+    });
 
-        })
-    }
+    router.get('/list', (req, res, next) => {
+        console.log('received request ', req.body, 'servicing.....');
+        db.collection('Projects').find({}).toArray()
+            .then((projects) => {
+                console.log('success', projects);
+                if (projects.length > 0) {
+                    res.send({
+                        message: projects//.json()
+                    });
+                } else {
+                    res.send({
+                        message: "No Projects found"
+                    })
+                }
+            }, (ans) => {
+                console.log('rejected', ans);
+                res.send({
+                    data: ans
+                });
+            })
+            .catch(err => {
+                console.log('from db req', err)
+            })
 
-    else
-    {
-        res.status(200).json({
-
-            statusCode : 0,
-            message : "Projection creation failed",
-            error : "",
-            body: ""
-        })
-
-    }
-
-
-
-})
-
-router.get('/retrieveByName/:projectName' , (req,res,next) =>{
-
-    console.log("get by ID");
-    ProjectJsonObj = retriveProject.getProjectByName(req.params.projectName);
-    console.log(ProjectJsonObj);
-    found =1 ;
-    if (found == 1)
-    {
-        res.status(200).json({
-
-            statusCode : 1,
-            message : ProjectJsonObj,
-            error : "",
-            body: ProjectJsonObj
-
-        })
-    }
-
-    else
-    {
-        res.status(200).json({
-            statusCode : 0,
-            message : "retrival for "+req.params.projectId +"failed",
-            error : "",
-            body: ""
-        })
-    }
-
-})
-
-
-router.get('/:projectId' , (req,res,next) =>{
-
-    res.status(200).json({
-
-        Name: "Demo project",
-        id: "000",
-        startDate: "2021-01-01",
-        dueDate:"2021-05-05",
-        Members:{
-            developer1 : "Person 1",
-            developer2 : "Person 2",
-            developer3 : "Person 3",
-        },
-        Owner: "Bob Vans",
-        Graph:" some object" ,
     })
 
-})
 
-router.post('/insertProject',(req, res, next)=>{
-    var project ={
-        Name: "graph-path",
-        id: "00",
-        startDate:"2021-02-23",
-        endDate:"2022-02-24",
-        owner:"5DT",
-        members:{
-            developer1 : "Person 1",
-            developer2 : "Person 2",
-            developer3 : "Person 3",
+    router.get('/getAllProjectsByUserEmail/:email', (req, res, next) => {
+        console.log('received request ', req.body, 'servicing.....');
+        let usr=req.params.email;
+        db.collection('Projects').find({
+            "groupMembers":usr
+        }).toArray()
+            .then((projects) => {
+                console.log('success', projects);
+                if (projects.length > 0) {
+                    res.send({
+                        message: projects//.json()
+                    });
+                } else {
+                    res.send({
+                        message: "No Projects found"
+                    })
+                }
+            }, (ans) => {
+                console.log('rejected', ans);
+                res.send({
+                    data: ans
+                });
+            })
+            .catch(err => {
+                console.log('from db req', err)
+                res.send({
+                    message: "error",
+                    data: err
+                });
+            })
+
+    })
+
+//POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
+    router.post('/newProject',  (req, res, next) => {
+        if (req == undefined || req.body == undefined) {
+            res.json({
+                message: "Req is null"
+            });
+        }
+        if (req.body.projectName == undefined) {
+            console.log('no project name')
+            res.send({
+                message: "Please specify a Project Name"
+            })
+
+        } else {
+            console.log('received request ', req.body, 'servicing.....');
+            var data = req.body;
+            const id = new mongoose.mongo.ObjectID();
+            data["_id"] = id;
+             db.collection('Projects').insertOne(data)
+                .then((ans) => {
+                    console.log('success', ans.ops);
+                    res.send({
+                        message: "saved",
+                        data: ans['ops']
+                    });
+                }, (ans) => {
+                    console.log('rejected', ans);
+                    res.send({
+                        message: "request has been denied please try again"
+                    });
+                })
+                .catch(err => {
+                    console.log('from db req', err)
+                })
+        }
+    });
+
+//DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
+    let nme = req.params.name;
+    let grph = req.params.graph;
+    //let tst = req.body.graph;
+    let grph2 = JSON.parse(grph);
+    console.log("type of graph: "+ typeof grph);
+   // console.log("req.body: "+tst);
+    console.log("nme: "+nme);
+    console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
+    console.log("grph.edges[0].id: "+grph2.edges[0].id);
+    db.collection('Projects').updateOne({
+        projectName:nme
+    },{
+        $set:{graph:grph2}
+    },(err,result)=>{
+
+        if(err){
+            console.log("Could not update the project graph: "+err);
+            res.send({
+                message: "Failed",
+                data: err
+            });
+        }else{
+            console.log("The update of the task description was a success: "+result);
+            res.send({
+                message: "success",
+                data: result
+            });
         }
 
+    })
+    //.catch((err)=>{
+    //    console.log("Could not update the task description: "+err);
+    // })
+});
+
+router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
+    let nme = req.params.name;
+    let eml = req.params.email;
+    db.collection('Projects').updateOne({
+        projectName:nme
+    },{
+
+            $push: {
+                groupMembers: eml
+            }
+
+    },(err,result)=>{
+
+        if(err){
+            console.log("Could not update the project graph: "+err);
+            res.send({
+                message:"found",
+                data:projects//.json()
+            }) ;
+        }
+        else{
+            res.send({
+                message: "success"
+               // data: result['ops']
+            });
+        }
+
+    })
+    //.catch((err)=>{
+    //    console.log("Could not update the task description: "+err);
+    // })
+});
+
+router.put('/updateProjectGraph/:name',(req,res)=>{
+    const project = req.params.name ;
+    const graph = req.body.graph ;
+
+    console.log('PUT ../',project,'body: ',graph) ; 
+    if (graph === undefined || graph.nodes === undefined){
+        return res.status(400).send({
+            message:"Invalid Graph structure"
+        })
     }
-    mongo.connect(url,(err, db)=>{
-        db.collection('Projects').insertOne(project, (err,result)=>{
-            console.log("We inserted the project into the database: " + project);
-            db.close();
-        });
-    });
-});
 
-router.get('/projectlist',(req, res, next)=> {
+    db.collection('Projects').updateOne({
+        projectName:project
+    },
+    {
+        $set:{graph:graph}
+    },(err,ans)=>{
+        if (err){
+            console.log('error',err)
+            return res.status(500).send({
+                message:err
+            }) ; 
+        }
+        console.log(ans.result.nModified + " document(s) updated");
+        if (ans.result.nModified > 0){
+            res.status(201).send({
+                message:"Update Successful",
+                data:graph
+            })
+        }
+        else{
+            res.send({
+                message:`Project ${project}, not found`
+            }) ;
+        }
+    }) ; 
+})
 
-    var arr =[];
-    mongo.connect(url,(err,db)=>{
-        var cursor = db.collection('Projects').find();
-        cursor.forEach((proj,err)=>{
-            arr.push(proj);
-        },()=>{
-            db.close();
-        });
-    });
 
-});
 
-module.exports = router;
+
+ return router;
+}
+
+
+
+module.exports = makeProjectRoute;
