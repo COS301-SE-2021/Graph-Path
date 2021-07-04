@@ -1,14 +1,5 @@
-.newProject {
-    background-color: #001122;
-    color: white;
-    position: relative;
-    left: 140%;
-    top: 10%;
-    box-sizing: border-box;
-    padding: 20px 40px;
-    border-radius: 20px;
-    width: 500px;
-   /* position: relative;
+.newProject  {
+    /* position: relative; */
     width: 500px;
     height: auto;
     top: 25%;
@@ -16,7 +7,8 @@
     background-color: #001122;
     box-sizing: border-box;
     padding: 20px 40px;
-    border-radius: 20px;*/
+    border-radius: 20px;
+    color:white ;
 }
 
 h4 {

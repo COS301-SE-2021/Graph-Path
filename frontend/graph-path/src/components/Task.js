@@ -30,19 +30,22 @@ class Task extends React.Component{
     }
 
     handleChange = (e, index) =>{
-        this.state.members[index] = e.target.value;
+        var temp = this.state.members ;
+        temp[index] = e.target.value;
        // console.log(this.members[index])
         this.setState(
             {
-                members: this.state.members
+                members: temp
             }
-        )
+        ,()=>{
+            console.log('After handle, members',this.state.members)
+        })
     }
 
 
     sendData (data){
         //path to make the post and wait for the response
-     /*   axios.post(`${this.state.api}/project/Task`,data)
+       axios.post(`${this.state.api}/insertTask`,data)
             .then((response) =>{
                 if(response.status===400){
                     throw Error(response.statusText) ;
@@ -55,7 +58,7 @@ class Task extends React.Component{
                     answer:res.message,
                     responseData:res.data //data
                 },()=>{
-                    alert('res:'+this.state.answer)
+                    // alert('res:'+this.state.answer)
                     console.log(this.state)
                     if (this.state.answer!== null && this.state.answer){
                         //    this.props.changeToDefault() ;
@@ -67,9 +70,8 @@ class Task extends React.Component{
             })
             .catch((error)=>{
                 console.log(error) ;
-            })*/
+            })
     }
-
 
 
 
@@ -85,7 +87,9 @@ class Task extends React.Component{
             priority: this.state.priority
         }
         //communicate with the API
-        this.sendData(data) ;
+        // this.sendData(data) ;
+        this.props.addTask(data) ;
+    
     }
 
     updateField = (event) => {
@@ -94,19 +98,33 @@ class Task extends React.Component{
         }, console.log(this.state));
     }
 
+    displayForm = () =>{
+
+    }
+    
+    componentDidMount(){
+        if (this.props.updateGraphView !== undefined && typeof this.props.updateGraphView === 'function'){
+            this.props.updateGraphView() ;
+        }
+        if ( typeof this.props.closeProjectListView === 'function'){
+            this.props.closeProjectListView() ;
+        }
+        
+    }
+
     render() {
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
                     <h4>Add Task</h4>
                     <p>Task</p>
-                    <input type="text" name="name" required="true" placeholder="Task Name" onChange={this.updateField} />
+                    <input type="text" name="name" required={true} placeholder="Task Name" onChange={this.updateField} />
                     <p>Description</p>
-                    <input type="text" name="about" placeholder="Description" onChange={this.updateField}/>
+                    <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
                     <p>Start Date</p>
-                    <input required="true" type="date" name="startDate" onChange={this.updateField} />
+                    <input type="date" name="startDate" onChange={this.updateField} />
                     <p>Due Date</p>
-                    <input required="true" type="date" name="dueDate" onChange={this.updateField} />
+                    <input  type="date" name="dueDate" onChange={this.updateField} />
                     <p>Assign Task</p>
                     <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e,0)} />
                     {

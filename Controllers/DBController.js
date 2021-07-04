@@ -1,10 +1,9 @@
 
 const mongClient = require('mongodb').MongoClient ;
-require('dotenv').config()
-const DB_URI = process.env.TEST_DB_URI   ;
-const MAIN_DB_URI = process.env.MAIN_DB_URI;
-
+require('dotenv').config() ;
+const DB_URI =process.env.TEST_DB_URI ; //|| 'mongodb://127.0.0.1:27017' ;
 var db ;
+
 const dbController = {
     connect: (callback)=>{
         mongClient.connect(DB_URI,
@@ -13,24 +12,10 @@ const dbController = {
             db = clientDB.db('test') ;
             console.log('+++++++++++++++++++++++++++connect to db, to serve request++++++++++') ;
             return callback(err) ;
-        })
-        ;
-
+        }) ;
     },
-
     getDB : ()=>{
-
-        if(db == undefined)
-        {
-            console.log('returned DB', db)
-        }
-        else
-        {
-            console.log('returned DB: correct ')
-        }
-
-
-
+        console.log('returned DB')
         return db ;
     }
 }

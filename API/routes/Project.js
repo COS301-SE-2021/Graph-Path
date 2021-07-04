@@ -155,10 +155,10 @@ router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
                 data: err
             });
         }else{
-            //console.log("The update of the task description was a success: "+result);
+            console.log("The update of the task description was a success: "+result);
             res.send({
                 message: "success",
-                data: result['ops']
+                data: result
             });
         }
 
@@ -184,11 +184,11 @@ router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
         if(err){
             console.log("Could not update the project graph: "+err);
             res.send({
-                message: "Failed",
-                data: err
-            });
-        }else{
-            //console.log("The update of the task description was a success: "+result);
+                message:"found",
+                data:projects//.json()
+            }) ;
+        }
+        else{
             res.send({
                 message: "success"
                // data: result['ops']
@@ -200,6 +200,44 @@ router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
     //    console.log("Could not update the task description: "+err);
     // })
 });
+
+router.put('/updateProjectGraph/:name',(req,res)=>{
+    const project = req.params.name ;
+    const graph = req.body.graph ;
+
+    console.log('PUT ../',project,'body: ',graph) ; 
+    if (graph === undefined || graph.nodes === undefined){
+        return res.status(400).send({
+            message:"Invalid Graph structure"
+        })
+    }
+
+    db.collection('Projects').updateOne({
+        projectName:project
+    },
+    {
+        $set:{graph:graph}
+    },(err,ans)=>{
+        if (err){
+            console.log('error',err)
+            return res.status(500).send({
+                message:err
+            }) ; 
+        }
+        console.log(ans.result.nModified + " document(s) updated");
+        if (ans.result.nModified > 0){
+            res.status(201).send({
+                message:"Update Successful",
+                data:graph
+            })
+        }
+        else{
+            res.send({
+                message:`Project ${project}, not found`
+            }) ;
+        }
+    }) ; 
+})
 
 
 

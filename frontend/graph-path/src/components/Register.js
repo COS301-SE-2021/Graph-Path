@@ -1,7 +1,7 @@
 import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
-import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom'
+import { Link} from 'react-router-dom'
 
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
@@ -12,12 +12,14 @@ const formValid = ({formErrors,...rest})=>{
     //Checks for individual null values
     Object.values(formErrors).forEach(val=> {
             val.length> 0 && (valid=false);
+            console.log(val, 'Valid',valid)
         }
     );
 
     //Checks for when you submit form with all null values
     Object.values(rest).forEach(val=> {
-        val==null && (valid=false);
+        val===null && (valid=false);
+        console.log(val, 'Valid',valid)
     });
 
     return valid;
@@ -31,7 +33,7 @@ class Register extends React.Component{
         password:'',
         wait:false,
         api:'http://localhost:9001',
-        answer:null,
+        answer:undefined,
 
         //Errors
         formErrors: {
@@ -55,17 +57,17 @@ class Register extends React.Component{
 
         switch(name){
             case 'firstName':
-                formErrors.firstName = value.length==0 ? 'FirstName is required'
+                formErrors.firstName = value.length===0 ? 'FirstName is required'
                     : "";
                 break;
 
             case 'lastName':
-                formErrors.lastName = value.length==0 ? 'LastName is required'
+                formErrors.lastName = value.length===0 ? 'LastName is required'
                     : "";
                 break;
 
             case 'userName':
-                formErrors.userName = value.length==0 ? 'userName is required'
+                formErrors.userName = value.length===0 ? 'userName is required'
                     : "";
                 break;
 
@@ -92,17 +94,11 @@ class Register extends React.Component{
         // this.props.onSubmit(this.state);
         //display loading screen
 
-
-
-            this.setState({
-                wait:true
-            }) ;
-
         if(formValid(this.state)) {
             console.log(this.state)
             const data = {
                 firstName: this.state.firstName,
-                surname: this.state.lastName,
+                lastName: this.state.lastName,
                 email: this.state.email,
                 username: this.state.userName,
                 password: this.state.password,
@@ -120,8 +116,7 @@ class Register extends React.Component{
                 lastName:'',
                 userName:'',
                 email:'',
-                password:'',
-                wait:false
+                password:''
             });
 
         }else
@@ -135,11 +130,6 @@ class Register extends React.Component{
             });
         }
 
-
-        /*trying to solve the error on render function*/
-        this.setState({
-            wait:false
-        }) ;
     };
 
 
@@ -150,23 +140,27 @@ class Register extends React.Component{
                 if(response.status===400){
                     throw Error(response.statusText) ;
                 }//else
-                console.log('from back end',response)
+                // console.log('from back end',response)
 
                 const res = response.data;
-                console.log(res) ;
+                // console.log(res) ;
                 this.setState({
                     answer:res.message,
-                    responseData:res.data //data
+                    responseData:res.data[0] //data
                 },()=>{
 
-                    console.log(this.state)
-                    if (this.state.answer!== null && this.state.answer){
-                        //    this.props.changeToDefault() ;
+                //    console.log(this.state)
+                    if (this.state.answer!== undefined && this.state.responseData !== undefined){
+                       alert(`Registered as: ${this.state.responseData.firstName} ${this.state.responseData.lastName}, \n with login email as:${this.state.responseData.email}`)
+                    }
+                    else{
+                        alert(`Something went wrong please register again `)
                     }
                 })
 
             },(response)=>{
                 console.log('rejected',response) ;
+                alert('Server Error, Please try again later') ; 
             })
             .catch((error)=>{
                 console.log(error) ;
@@ -180,17 +174,10 @@ class Register extends React.Component{
 
         const {formErrors} = this.state;
 
-        if (this.state.wait){
-            document.getElementById("registerscreen").className.push('wait')
-        }
-        else{
-            var scrn = document.getElementById('registerscreen') ;
-            if (scrn !== null) scrn.className ="" ;
-        }
-        var ans = this.state.answer ;
-        if (ans != null || ans != undefined){
-            alert(`message:${ans}`) ;
-        }
+        // var ans = this.state.answer ;
+        // if (ans !== null || ans !== undefined){
+        //     alert(`message:${ans}`) ;
+        // }
 
         return (
             <div id="registerscreen">
