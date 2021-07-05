@@ -94,25 +94,26 @@ class Login extends React.Component{
             //alert('please enter password') ;
             formErrors.password='Fields cannot be left blank'
         }
-        else if (data.password !== '' && data.email!=='' && emailRegex.test(value) && data.password.length>= 8){
+        else /*if (data.password !== '' && data.email!=='' && emailRegex.test(value) && data.password.length>= 8)*/{
+            //alert('before send');
             console.log(data);
             this.sendData(data) ;
             console.log('answer from sendData',this.state.answer);
-            this.setState({
+           /* this.setState({
                 email:'',
                 password:''
-            });
+            });*/
         }
-       else formErrors.password='Make sure all fields are filled in '
+     //  else formErrors.password='Make sure all fields are filled in '
 
         //change status of login
 
-        this.setState({ formErrors, [name]: value });
+        //this.setState({ formErrors, [name]: value });
     }
     
     sendData(data){
 
-        let checkError = {...this.state.check};
+      //  let checkError = {...this.state.check};
         try{  
 
         // fetch(`http://localhost:90001/user/login/${data.email}`)
@@ -137,10 +138,12 @@ class Login extends React.Component{
                 }
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
                     //access given
+                    alert('Am I getting access');
                     this.props.logIn() ; 
                     this.props.updateUser(this.state.responseData)  ;
                 }
-              }) ;
+               // else this.props.logIn() ;
+            }) ;
             
         },(response)=>{
                 console.log('rejected',response) ;
