@@ -74,7 +74,7 @@ captures/
 
 # node object file
 package.json
-1.Website/package-lock.json
+package-lock.json
 
 #idead object files
 ./idea
@@ -130,7 +130,7 @@ bower_components/
 # misc
 .sass-cache/
 connect.lock/
-1.Website/coverage/
+coverage/
 libpeerconnection.log/
 npm-debug.log
 testem.log
@@ -909,7 +909,7 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
-1.Website/coverage
+coverage
 *.lcov
 
 # nyc test coverage
@@ -960,7 +960,7 @@ jspm_packages/
 .yarn-integrity
 
 # dotenv environment variables file
-1.Website/.env
+.env
 .env.test
 .env*.local
 
