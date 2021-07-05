@@ -3,7 +3,7 @@ const { error } = require('console');
 const { response } = require('express');
 const fs = require('fs');
 const  mongoose  = require('mongoose');
-const addNewProject = require('../Controllers/DBcontroller');
+const addNewProject = require('../Controllers/DBController');
 const ProjectModel = require('../Models/ProjectModel');
 let retriveProject = {};
 
