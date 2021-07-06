@@ -27,7 +27,7 @@ jobs:
       - run: ls    
       - run:
           name: Install dependencies
-          command: npm install
+          command: cd 1.Website/backend/src && npm install
       # - run:
       #     name: Run Tests
       #     command: npm run test
@@ -37,7 +37,7 @@ jobs:
      - image: cimg/node:16.4.0
     steps:
      - checkout
-     - run: cd frontend/graph-path && npm install && npm test && npm run build && ls -la
+     - run: cd 1.Website/frontend && npm install && npm test && npm run build && ls -la
     #  - run: ls 
     #  - run: 
     #     name: Install front Dependencies
