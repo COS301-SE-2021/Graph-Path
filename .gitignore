@@ -15,3 +15,6 @@
 
 #environment files
 *.env
+
+#build folders
+1.Website/frontend/build
