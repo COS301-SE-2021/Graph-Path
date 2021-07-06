@@ -1,0 +1,22 @@
+.GraphBox{
+    display: flex;
+    flex-direction: column;    
+    max-width: 500px;
+    position: relative;
+    /* overflow: scroll; */
+    text-align: left;
+}
+
+.projectView{
+    min-width: min-content  ;
+    text-align: left;
+    
+}
+
+.projList{
+    list-style-type: decimal;
+}
+
+.projList li::before{
+  color: white;
+}
