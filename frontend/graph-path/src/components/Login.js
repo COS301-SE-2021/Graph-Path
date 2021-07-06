@@ -28,14 +28,14 @@ class Login extends React.Component{
         this.state ={
             email:'',
             password:'',
-            answer: null,
+            answer: 'Fields cannot be left blank',
 
             //Errors
             formErrors:{
-                email:"",
-                password:""
+                email:false,
+                password:false
             },
-            check:null
+            responseData:null
         }
     }
 
@@ -48,31 +48,7 @@ class Login extends React.Component{
 
         const {name,value}=e.target;
 
-        let formErrors = {...this.state.formErrors};
-
-        switch(name){
-            case "email":
-                if(value.length==0)
-                    formErrors.email='Email field cannot be blank'
-                else if(emailRegex.test(value))
-                    formErrors.email=''
-                else
-                    formErrors.email="Invalid email address";
-                break;
-
-            case 'password':
-                if(value.length==0)
-                    formErrors.password='Password field cannot be blank'
-               else if(value.length<8)
-              formErrors.password ='Your password is 8 characters or more'
-                else
-                formErrors.password = "";
-                break;
-
-            default: break;
-        }
-
-        this.setState({ formErrors, [name]: value });
+        this.setState({[name]:value });
     }
 
     onSubmit =e=>{
@@ -80,7 +56,7 @@ class Login extends React.Component{
 
         const {name,value}=e.target;
 
-        let formErrors = {...this.state.formErrors};
+       // let formErrors = {...this.state.formErrors};
 
         // send data to server 
         console.log(this.state)  ;
@@ -90,10 +66,45 @@ class Login extends React.Component{
             email: this.state.email,
             password:this.state.password
         } ;
-        if (data.password==='' && /*data.password === undefined*/ data.email===''){
+        if (data.password==='' || data.email===''){
             //alert('please enter password') ;
-            formErrors.password='Fields cannot be left blank'
-        }
+            data.password==='' ?
+                this.setState({
+                    formErrors:{
+                        password:false,
+                        email:this.state.formErrors.email
+
+                    },
+                    responseData:'',
+                    answer:'Cannot be left blank'
+                })
+                :     this.setState({
+                    formErrors: {
+                        password: true,
+                        email:this.state.formErrors.email
+                    },
+                    responseData:undefined,
+                })
+            ;
+
+            data.email==='' ?
+                this.setState({
+                    formErrors:{
+                        email:false,
+                        password:this.state.formErrors.password
+
+                    },
+                    responseData:undefined,
+                    answer:'Cannot be left blank'
+                })
+                :     this.setState({
+                    formErrors: {
+                        email: true,
+                        password:this.state.formErrors.password
+                    },
+                    responseData:'',
+                })
+         }
         else /*if (data.password !== '' && data.email!=='' && emailRegex.test(value) && data.password.length>= 8)*/{
             //alert('before send');
             console.log(data);
@@ -134,7 +145,13 @@ class Login extends React.Component{
                 console.log(this.state)//Heavey checks
                 if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
                     alert('try again') ;
-                  //  data.checkError.check: 'No match found, try again'
+
+                    this.setState({
+                        formErrors:{
+                            email:false,
+                            password:false
+                        }
+                    })
                 }
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
                     //access given
@@ -168,27 +185,27 @@ class Login extends React.Component{
                     <h4>Sign In</h4>
                     <p>Email</p>
                     <input
-                        className={formErrors.email.length > 0 ? 'error': null}
+                        className={formErrors.email===false ? 'error': null}
                         name = 'email'
                         type='email'
                         placeholder='Email' value={this.state.email}
                         onChange={this.change}
                     />
-                    {formErrors.email.length > 0 && (
-                        <span className='errorMessage'>{formErrors.email}</span>
+                    {formErrors.email === false && this.state.responseData ===undefined &&(
+                        <span className='errorMessage'>{this.state.answer}</span>
                     )}
 
 
                     <p>Password</p>
                     <input
-                        className={formErrors.password.length > 0 ? 'error': null}
+                        className={formErrors.password===false ? 'error': null}
                         name='password'
                         type='password'
                         placeholder='Password' value={this.state.password}
                         onChange={e=>this.change(e)}
                     />
-                    {formErrors.password.length > 0 && (
-                        <span className='errorMessage'>{formErrors.password}</span>
+                    {formErrors.password === false && this.state.responseData !==null &&(
+                        <span className='errorMessage'>Invalid Password</span>
                     )}
                     <input type="submit" className="btn1" value="Login" />
                     Don't Have an Account? Register <Link to="/signUp"> Here</Link>
