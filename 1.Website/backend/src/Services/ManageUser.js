@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const Usermodel = require('../Models/UserModel');
+const UserModel = require('../Models/UserModel');
 const db = require('../Controllers/DBController') ;
-const { stat } = require('fs/promises');
 
 function getAllUsers(body){
 
@@ -38,7 +37,7 @@ function insertUser(body) {
 
 
        // .then((result) =>{
-            const usr = new User({
+            const usr = new UserModel({
                 _id: mongoose.Types.ObjectId(),
                 name: body.name,
                 Surname: body.Surname,
@@ -75,11 +74,11 @@ function insertUser(body) {
 
 getUserByUserNameOrEmail = (data) =>{
     if (data.email !== null){
-        var ans = Usermodel.find({email:data.email}) ; 
+        var ans = UserModel.find({email:data.email}) ;
         return ans
     }
     else if (data.username){
-        var ans = Usermodel.find({usernam:data.username})
+        var ans = UserModel.find({usernam:data.username})
         return ans ;
     }
 }
@@ -91,7 +90,7 @@ createUser = (data) =>{
     const id = new mongoose.mongo.ObjectID() ; 
     var newUSer = data ;
     newUSer["_id"] = id ;
-    Usermodel.create(newUSer)
+    UserModel.create(newUSer)
     .then((value)=>{
         status = 1 //saved
         console.log(value,'saved')
@@ -120,6 +119,8 @@ createUser = (data) =>{
 const userManagement = {
 getAllUsers: (data) => getAllUsers(data),
 userManagement: (data) => manageUser(data), 
-create : (data) => createUser(data) 
+create : (data) => createUser(data) ,
+
+    getUserByUserNameOrEmail : (data)=> getUserByUserNameOrEmail(data)
 }
 module.exports = userManagement;

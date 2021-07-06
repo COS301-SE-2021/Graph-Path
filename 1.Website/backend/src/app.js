@@ -31,7 +31,7 @@ function makeApp(defaultDB , InjectedDB)
             const makeUserRoute = require('./API/routes/User');
             const makeTaskRoute = require('./API/routes/Task');
             const makeProjectRoute = require('./API/routes/Project');
-            const makeNodeRoute = require('./Website/backend/src/API/routes/Node')
+            const makeNodeRoute = require('./API/routes/Node')
 
             //--------------------------------------------------
 

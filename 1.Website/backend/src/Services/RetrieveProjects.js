@@ -3,11 +3,11 @@ const { error } = require('console');
 const { response } = require('express');
 const fs = require('fs');
 const  mongoose  = require('mongoose');
-const addNewProject = require('../Controllers/DBController');
+const addNewProject = require('../Controllers/DBcontroller');
 const ProjectModel = require('../Models/ProjectModel');
 let retriveProject = {};
 
-DB_URI = "mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/GraphPath?retryWrites=true&w=majority";
+DB_URI = process.env.TEST_DB_URI;
 mongoose.connect(DB_URI, {useNewUrlParser: true , useUnifiedTopology: true})
     .then((result) =>{
 
