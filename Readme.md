@@ -92,8 +92,28 @@ This provides a visual stimuli of how the project flows from node to node.
 </tr>
 </table>
      
-                                                                   
-                                                                   
+                                                            
+### Branching Strategy 
+<h2>
+    Monorepo strategy
+    <ul>
+        <li>
+            master
+        </li>
+        <ul>
+            <li>
+                feature-front
+            </li>
+            <li>
+                feature-back
+            </li>
+        </ul>
+        <li>
+            develop 
+        </li>
+    </ul>
+</h2>
+                                                               
                                                                    
 ## Documentation and demo recordings
 <table>
