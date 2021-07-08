@@ -124,7 +124,7 @@ class Login extends React.Component{
                 // alert('res:'+this.state.answer)
                 console.log(this.state)//Heavey checks
                 if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
-                    alert('try again') ;
+                    // alert('try again') ;
 
                     this.setState({
                         formErrors:{
@@ -135,7 +135,7 @@ class Login extends React.Component{
                 }
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
                     //access given
-                    alert('Am I getting access');
+                    // alert('Am I getting access');
                     this.props.logIn() ; 
                     this.props.updateUser(this.state.responseData)  ;
                 }

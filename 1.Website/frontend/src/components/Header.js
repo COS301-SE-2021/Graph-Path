@@ -8,6 +8,7 @@ import Username from './Username';
 import '../css/common.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
+import Profile from "./Profile";
 
 
 class Header extends React.Component{
@@ -75,19 +76,29 @@ class Header extends React.Component{
                     <h4>Graph Path</h4>
 
                     <div className="UsernameDiv">
-                        <Username userEmail={this.state.loggedUser} />
+                        <Link to="/profile">
+                            <Username userEmail={this.state.loggedUser} />
+                        </Link>
+
                         <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
                         <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
                     </div>
                         {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}
 
                     </header>
-
-                    <Switch path="signOut">
-                        <Dashboard logOut={this.changeStatus} 
+                    
+                    <Switch >
+                        <Route exact path="/profile" component={Profile}
+                        />
+                           <Route path="/" render={(props)=>(
+                            <Dashboard {...props} 
+                            logOut={this.changeStatus} 
                             menuToogleClose={this.renderClose}
                             menuToogleOpen={this.renderOpen}
                             loggedUser={this.state.loggedUser.email}
+                        />
+                        )}    
+                            
                         />
                     </Switch>
                     
