@@ -1,8 +1,8 @@
 import React from 'react' ;
 import * as FaIcons from "react-icons/fa";
 import '../css/common.css'
-import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
-import Profile from "./Profile";
+// import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+// import Profile from "./Profile";
 
 class Username extends React.Component{
     render(){
