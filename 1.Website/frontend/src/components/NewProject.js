@@ -48,7 +48,7 @@ class NewProject extends React.Component{
         axios.post(`${this.state.api}/project/newProject`,data) 
         .then((response) =>{
            if(response.status===400){
-               throw Error(response.statusText) ;
+               throw Error("Thrown Error \n"+response.statusText) ;
            }//else
            console.log('from back end',response)
 
@@ -66,10 +66,12 @@ class NewProject extends React.Component{
             }) 
         
         },(response)=>{
+            //There was problem with the network
             console.log('rejected',response) ;
+            alert(`Unfortunately there was an Error:\n${response}`)
         })
         .catch((error)=>{
-            console.log(error) ;
+            console.log('Overloked Error Bitting',error) ;
         })
     }
 
