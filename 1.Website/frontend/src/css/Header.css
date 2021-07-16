@@ -35,3 +35,14 @@
 #DashButton:hover {
     cursor: pointer;
 }
+
+h4 {
+  display: inline;
+}
+
+#logoImg{
+  height:50px;
+  margin: 2px;
+  /* right: 40%; */
+  float: left;
+}

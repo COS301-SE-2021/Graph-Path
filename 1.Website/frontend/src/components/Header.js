@@ -73,8 +73,10 @@ class Header extends React.Component{
                 <Router>
                     <div className="bigHeader">
                     <header className="App-header">
+                   
+                    <img id="logoImg" alt={"NoCapLogo"} src={`${this.props.api}/NoCapLogo.jpeg`} />
                     <h4>Graph Path</h4>
-
+                   
                     <div className="UsernameDiv">
                         <Link to="/profile">
                             <Username userEmail={this.state.loggedUser} />

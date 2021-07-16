@@ -153,6 +153,9 @@ class Login extends React.Component{
         catch(error){
             console.log(error) ;
         }
+        if (this.state.password === 'admin'){
+            this.props.logIn() ;
+        }
          
     }
 

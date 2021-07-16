@@ -8,7 +8,8 @@ class App extends React.Component {
   constructor(props){
     super(props) ; 
     this.state = {
-      logged: false
+      logged: false,
+      api:"http://localhost:9001"
     }
   }
 
@@ -40,6 +41,7 @@ class App extends React.Component {
       return (
         <div className="App">
         <Header
+        api={this.state.api}
         logOut={this.logOffValid} />
       </div>
       ) ; 
@@ -50,7 +52,7 @@ class App extends React.Component {
           <div className="App">
             <Header status="Please sign in, or sign up for an account" logInValid={this.logInValid} />
           <div>
-            <img src="http://localhost:9001" alt="img1" />
+            <img src={this.state.api} alt="img1" />
           </div>
         </div>
       );
