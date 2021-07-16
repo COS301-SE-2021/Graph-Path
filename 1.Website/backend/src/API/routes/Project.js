@@ -68,7 +68,8 @@ function makeProjectRoute(db) {
                 console.log('success', projects);
                 if (projects.length > 0) {
                     res.send({
-                        message: projects//.json()
+                        message:`Found ${projects.length}projects` , 
+                        data:projects
                     });
                 } else {
                     res.send({
