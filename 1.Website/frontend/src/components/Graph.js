@@ -6,7 +6,7 @@ import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
-// import _ from 'lodash' ;
+import Spinner from 'react-spinner-material';
 
 
 class Graph extends React.Component{
@@ -21,7 +21,8 @@ class Graph extends React.Component{
                 nodes : [],
                 edges : []
             },
-            api: "http://localhost:9001"
+            api: "http://localhost:9001",
+            loading:false
         }
     }
     //GET ALL Projects for User
@@ -125,25 +126,44 @@ class Graph extends React.Component{
         // console.log('call to api') ;
         // axios.get('http://graphpath.herokuapp.com/Project/Demo_project')
         // fetch(`${this.state.api}/project/list`)
+        
+        //Display Loading State
+        this.setState({
+            loading:true
+        }) ; 
+
         fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
         .then(res=>res.json())
         .then(data => {
             console.log('from api req',data) ;
             const proj = data ;
-            if (proj.message !== undefined && typeof proj.message !== String){
+            if (proj.data !== undefined ){
                 this.setState({
-                    projList:proj.message
+                    projList:proj.data,
+                    loading:false
                 }) ; 
             }
             else{
                 //no projects found from api
+                this.setState({
+                    loading:false
+                }) ; 
+                //If there was an error in location
+                data.message === undefined?
+                alert('Error:'+proj.error) 
+                :alert(data.message) ; 
             }
-        })        
+        })    
         .catch(err =>{
+            this.setState({
+                loading:false
+            }) ; 
+            alert('Error'+err)
             console.log('error getting from /project/*',err) ; 
-        }
-        )
-    }
+        }) ; 
+        
+        
+}
     closeProjectList = () =>{
         var elem = document.getElementById('userProjects') ; 
         if (elem !== null){
@@ -211,6 +231,8 @@ class Graph extends React.Component{
         return (
             <Router>
                 <div className="projectView">
+                <Spinner color={"#0000f2"} radius={400} visible={this.state.loading} />
+
                    <span className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
                         Projects  
                     </span>
