@@ -71,27 +71,39 @@ class Graph extends React.Component{
     saveCurrentGraph = ()=>{
         const projNode = this.state.projNodeList ; 
         console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
-
-        if (this.state.linkNumber>=0 && projNode.projectName !== undefined ){
+        let linkNumber = this.state.linkNumber ;
+        let pName =  projNode.projectName ;
+        // const oldGraph = this.state.projList ;
+        if (linkNumber>=0 && pName !== undefined ){
             //send current graph to project
             var saveGraph =  window.confirm('Save Current Graph?') ;
-            if (saveGraph === true){ // if its not the same graph
+            if (saveGraph === true ){ // if its not the same graph
                 console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
+                //set the loader while communicating with the server
+                this.setState({
+                    loading:true
+                }) ;
                 const data = {
                     graph : this.state.grapRep
                 }
                 axios.put(`${this.state.api}/project/updateProjectGraph/${projNode.projectName}`,data)
                 .then((res)=>{
-                    if (res.data === undefined) {// didn't save
+                    console.log('update graph response',res)
+                    if (res.data === undefined) {
+                        // didn't save
                         alert(res.message) ; 
                     }
-                    else{
-                        alert('sucess:',res.data) // wow
-                    }
+                    //communication happened successfully
+                    this.setState({
+                        loading:false
+                    }) ;
                 })
                 .catch((err)=>{
                     alert('saving failed',err)
-                    console.log(err)
+                    console.log(err) ;
+                    this.setState({
+                        loading:false
+                    }) ;
                 })
             }
             else{//no difference
@@ -233,13 +245,16 @@ class Graph extends React.Component{
                 <div className="projectView">
                 <Spinner color={"#0000f2"} radius={400} visible={this.state.loading} />
 
-                   <span className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
+                   <Link to={"/viewProjects"} className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
                         Projects  
-                    </span>
+                    </Link>
 
                     <FaIcons.FaRecycle onClick={this.viewProjectsFromAPI} title={'refresh'}
                     className="icon clickbtn"/>
-                        
+                </div>
+                <Switch>
+                    <Route path={"/viewProjects"} >    
+                    <div>
                     <ul className="projList" id="userProjects">
                         {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
                             this.state.projList.length>0 ? // validate if it is an array and not empty
@@ -261,10 +276,10 @@ class Graph extends React.Component{
                         }
                     </ul>
                 </div>
-                
-                <Switch>
+                </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
-                        <SigmaGraph key={this.state.linkNumber}
+                        <SigmaGraph key={this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined? "0" : 
+                        `${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`}
                             graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 || this.state.grapRep.nodes ===undefined ? 
                             this.emptyGraph()
                             :this.state.projList[this.state.linkNumber].graph}
