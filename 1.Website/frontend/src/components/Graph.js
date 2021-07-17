@@ -310,7 +310,6 @@ class Graph extends React.Component{
                         />
                         <Task addTask={this.addNode} 
                         updateGraphView={this.updateGraphView}
-                        closeProjectListView={this.closeProjectList}
                         />
                     </Route>
                 </Switch>
