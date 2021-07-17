@@ -165,12 +165,15 @@ class Graph extends React.Component{
                 alert('Error:'+proj.error) 
                 :alert(data.message) ; 
             }
+        },(rejected)=>{
+            console.log('from backend :rejected ',rejected)
+            alert('Server Error, please try again later') ;
         })    
         .catch(err =>{
             this.setState({
                 loading:false
             }) ; 
-            alert('Error'+err)
+            alert('Error:'+err)
             console.log('error getting from /project/*',err) ; 
         }) ; 
         
@@ -233,17 +236,14 @@ class Graph extends React.Component{
     render(){
         console.log('Graph rerendering') ;
 
-        // const graph1 = {
-        //     nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
-        //     edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
-        // }
-        // let listArray =  []; // [graph1,graph2] ; 
+        var SigmaGraphkey = ( this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined ) ? "0"  
+        :`${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`
         let keyNum = -1 ;
         console.log('sending graph obj ',this.state)
         return (
-            <Router>
+            <Router basename='viewProjects/graph'>
                 <div className="projectView">
-                <Spinner color={"#0000f2"} radius={400} visible={this.state.loading} />
+                <Spinner color={"#0000f2"} radius={350} visible={this.state.loading} />
 
                    <Link to={"/viewProjects"} className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
                         Projects  
@@ -278,8 +278,7 @@ class Graph extends React.Component{
                 </div>
                 </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
-                        <SigmaGraph key={this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined? "0" : 
-                        `${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`}
+                        <SigmaGraph key={SigmaGraphkey}
                             graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 || this.state.grapRep.nodes ===undefined ? 
                             this.emptyGraph()
                             :this.state.projList[this.state.linkNumber].graph}

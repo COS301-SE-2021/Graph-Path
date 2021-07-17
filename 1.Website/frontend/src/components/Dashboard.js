@@ -45,8 +45,12 @@ class Dashboard extends React.Component{
 
     render(){
         return (
-            <Router>
-            <div className="GraphDashboard">
+           <div className="GraphDashboard">
+
+            <Router >
+                <Switch>
+            <Route>
+            
                 <div className="DashboardMenu" id="modal1" >
                     <div className="App-link-routes" >
                         <div className="opt">
@@ -63,7 +67,8 @@ class Dashboard extends React.Component{
 
                     </div>
                 </div>
-                <Switch>
+            </Route>
+
                     <Route path="/newProject">
                         <div className="ContentArea">
                             <NewProject  default={this.changeToDefault}
@@ -81,10 +86,11 @@ class Dashboard extends React.Component{
 
                     </Route>
                 </Switch>
-            </div>
+            
             {this.toogleDisplayOpen()}
 
             </Router>
+            </div>
         )
     }
 
