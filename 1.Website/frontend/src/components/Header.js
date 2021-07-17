@@ -6,7 +6,7 @@ import '../css/Header.css';
 import '../css/App.css';
 import Username from './Username';
 import '../css/common.css'
-import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+import {BrowserRouter as Router, Switch,Route,Link, Redirect} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
 import Profile from "./Profile";
 
@@ -81,7 +81,7 @@ class Header extends React.Component{
                         <Link to="/profile">
                             <Username userEmail={this.state.loggedUser} />
                         </Link>
-
+                
                         <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
                         <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
                     </div>
@@ -92,16 +92,14 @@ class Header extends React.Component{
                     <Switch >
                         <Route exact path="/profile" component={Profile}
                         />
-                           <Route path="/" render={(props)=>(
-                            <Dashboard {...props} 
+                        <Route path="/" >
+                            <Redirect to="/dashboard" />
+                            <Dashboard
                             logOut={this.changeStatus} 
                             menuToogleClose={this.renderClose}
                             menuToogleOpen={this.renderOpen}
-                            loggedUser={this.state.loggedUser.email}
-                        />
-                        )}    
-                            
-                        />
+                            loggedUser={this.state.loggedUser.email} />
+                        </Route>
                     </Switch>
                     
 
@@ -115,6 +113,7 @@ class Header extends React.Component{
                 <Router>
                 <div className="header_">
                     <header className="App-header">
+                    <img id="logoImg" alt={"NoCapLogo"} src={`${this.props.api}/NoCapLogo.jpeg`} />
                     <h4>Graph Path</h4>
                     <p>{this.state.status}</p>
                     </header>

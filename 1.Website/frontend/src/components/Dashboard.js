@@ -47,10 +47,6 @@ class Dashboard extends React.Component{
         return (
            <div className="GraphDashboard">
 
-            <Router >
-                <Switch>
-            <Route>
-            
                 <div className="DashboardMenu" id="modal1" >
                     <div className="App-link-routes" >
                         <div className="opt">
@@ -67,16 +63,22 @@ class Dashboard extends React.Component{
 
                     </div>
                 </div>
-            </Route>
-
-                    <Route path="/newProject">
+                {/* Default route for logging in */}
+                
+                <Switch>
+                <Route path="/dashboard">
+                    <div>
+                        Images of what can be done with the graph path are displayed
+                    </div>
+                </Route>
+                    <Route path="/newProject" exact>
                         <div className="ContentArea">
                             <NewProject  default={this.changeToDefault}
                             userEmail={this.props.loggedUser}/>
                         </div>
                     </Route>
                     
-                    <Route path="/viewProjects">
+                    <Route path="/viewProjects" >
 
                     {/* should call api for the projects and be able to display as per list  */}
                         <div className="ContentArea">
@@ -89,7 +91,6 @@ class Dashboard extends React.Component{
             
             {this.toogleDisplayOpen()}
 
-            </Router>
             </div>
         )
     }

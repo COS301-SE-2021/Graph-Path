@@ -235,10 +235,18 @@ class Graph extends React.Component{
 
     render(){
         console.log('Graph rerendering') ;
-
+        /* sigmaKey is used for refreshing common Sigma graph representaion
+         if nodes || edges are undefined, put 0 , else make key 
+         the combination of node ^ egdes length */
         var SigmaGraphkey = ( this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined ) ? "0"  
         :`${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`
+
         let keyNum = -1 ;
+        
+        //project Name to display on the graph 
+        var selectedProjectName =  this.state.projList.length>0 && this.state.linkNumber >= 0 ?
+         this.state.projList[this.state.linkNumber].projectName: "No Data Found" ;
+
         console.log('sending graph obj ',this.state)
         return (
             <Router basename='viewProjects/graph'>
@@ -282,8 +290,7 @@ class Graph extends React.Component{
                             graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 || this.state.grapRep.nodes ===undefined ? 
                             this.emptyGraph()
                             :this.state.projList[this.state.linkNumber].graph}
-                            projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
-                            this.state.projList[this.state.linkNumber].projectName: "No Data Found"}
+                            projectName={ selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             addEdge={this.addEdge}
                         />
@@ -292,13 +299,11 @@ class Graph extends React.Component{
                     </Route>
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
-                        <SigmaGraph key={this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined? "0" : 
-                        `${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`}
+                        <SigmaGraph key={SigmaGraphkey}
                             graphToDisplay={this.state.grapRep.nodes === undefined?
                             this.emptyGraph()
                             :this.state.grapRep}
-                            projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
-                                this.state.projList[this.state.linkNumber].projectName: "No Data Found"}
+                            projectName={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             addEdge={this.addEdge}
 
