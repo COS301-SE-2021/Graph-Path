@@ -5,7 +5,7 @@ import '../css/App.css' ;
 import '../css/Dashboard.css'
 // import Sigma from './reactSigmaGraph' ; 
 // import axios from 'axios' ;
-import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+import { BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom' ;
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -46,7 +46,7 @@ class Dashboard extends React.Component{
     render(){
         return (
            <div className="GraphDashboard">
-
+            <Router>
                 <div className="DashboardMenu" id="modal1" >
                     <div className="App-link-routes" >
                         <div className="opt">
@@ -58,7 +58,7 @@ class Dashboard extends React.Component{
                         <Link  to="/newProject">Create Project</Link>
                     </div>
                         <div className="opt">
-                            <Link to="/viewProjects">View Projects</Link>
+                        <Link to="/viewProjects">View Projects</Link>
                         </div>
 
                     </div>
@@ -90,7 +90,7 @@ class Dashboard extends React.Component{
                 </Switch>
             
             {this.toogleDisplayOpen()}
-
+            </Router>
             </div>
         )
     }

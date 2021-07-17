@@ -20,9 +20,9 @@ class Header extends React.Component{
             loggedUser:{}
         }
     } 
-    changeStatus = () =>{
+    changeStatus = (val) =>{
         this.setState({
-            log:!this.state.log
+            log:val
         },()=> {
             if (this.state.log && typeof this.props.logInValid === 'function'){
                 //first time loggging valid
@@ -67,74 +67,68 @@ class Header extends React.Component{
     }
 
     render(){
-        if (this.state.log && this.state.loggedUser!== {}){
-        // var elem = document.getElementById('DashButton').style.display = "none" ;
-            return (
-                <Router>
-                    <div className="bigHeader">
-                    <header className="App-header">
-                   
+        return(
+            <Router>
+                <div className={this.state.log ? "bigHeader":"header_"}>
+                <header className="App-header">
                     <img id="logoImg" alt={"NoCapLogo"} src={`${this.props.api}/NoCapLogo.jpeg`} />
                     <h4>Graph Path</h4>
-                   
-                    <div className="UsernameDiv">
-                        <Link to="/profile">
-                            <Username userEmail={this.state.loggedUser} />
-                        </Link>
-                
-                        <FaIcons.FaPowerOff id="powerBtn" onClick={this.changeStatus} />
-                        <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
-                    </div>
-                        {/* <button id="DashButton" onClick={this.toogleDashMenu}>Menu</button>*/}
-
-                    </header>
+                   {/* If the user is logged in , display the relevant header info */}
+                   {
+                       this.state.log ? 
+                       
+                       <div className="UsernameDiv">
+                            <Link to="/profile">
+                                <Username userEmail={this.state.loggedUser} />
+                            </Link>
                     
-                    <Switch >
-                        <Route exact path="/profile" component={Profile}
-                        />
-                        <Route path="/" >
-                            <Redirect to="/dashboard" />
-                            <Dashboard
-                            logOut={this.changeStatus} 
-                            menuToogleClose={this.renderClose}
-                            menuToogleOpen={this.renderOpen}
-                            loggedUser={this.state.loggedUser.email} />
-                        </Route>
-                    </Switch>
-                    
-
-                    </div>
-                </Router>
-            )
-
-        }
-        else{
-            return (
-                <Router>
-                <div className="header_">
-                    <header className="App-header">
-                    <img id="logoImg" alt={"NoCapLogo"} src={`${this.props.api}/NoCapLogo.jpeg`} />
-                    <h4>Graph Path</h4>
-                    <p>{this.state.status}</p>
-                    </header>
+                            <FaIcons.FaPowerOff id="powerBtn" onClick={()=>this.changeStatus(false)} />
+                            <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
+                        </div>   
+                        : //else not logged in
+                        <span>
+                        <br/>
                         <Link className="App-link" to="/signIn" >LogIn</Link>
-                        
+                           
                         <Link className="App-link" to="signUp">SignUp</Link>
-                        <Switch>
-                        <Route path="/signIn">
+                        </span>   
+                   }
+                </header>
+                <Switch>
+                
+                    <Route path="/signIn">
+                        {this.state.log === true ? 
+                            <Redirect to="/dashboard" />:<span></span>}
                             <Login logIn={this.changeStatus} 
                                 updateUser = {this.updateLoggedUser}
                             />
-                        </Route>
-                        <Route path="/signUp">
-                            <Register />
-                        </Route>
-                    </Switch>
+                    </Route>
+                    <Route path="/signUp">
+                        <Register />
+                    </Route>
+                    <Route path="/profile" > 
+                        <Profile />
+                        {this.state.log === false ? 
+                        <Redirect to="/signIn" />:<span/>}
+                    </Route>
+                
+                    <Route path="/dashboard">
+                        <Dashboard
+                            menuToogleClose={this.renderClose}
+                            menuToogleOpen={this.renderOpen}
+                            loggedUser={this.state.loggedUser.email} />
+                            {this.state.log === false ? 
+                        <Redirect to="/signIn" />:<span/>}
+                        
+                    </Route>
+                </Switch>
                 </div>
-                </Router>
-            )
-        }
+
+            </Router>
+        )
     }
+
+    
 }
 
 export default Header ; 
