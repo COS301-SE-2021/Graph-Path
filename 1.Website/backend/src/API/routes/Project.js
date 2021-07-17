@@ -78,7 +78,7 @@ function makeProjectRoute(db) {
                 }
             }, (ans) => {
                 console.log('rejected', ans);
-                res.send({
+                res.status(500).send({
                     data: ans
                 });
             })
