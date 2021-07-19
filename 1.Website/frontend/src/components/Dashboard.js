@@ -67,8 +67,9 @@ class Dashboard extends React.Component{
                 
                 <Switch>
                 <Route path="/dashboard">
-                    <div>
-                        Images of what can be done with the graph path are displayed
+                    <div className="imgContainer">
+                       <p> Images of what can be done with the graph path are displayed </p>
+                        <img alt={"Graph Project Example"} src={`${this.props.api}/Dashboard1.png`}/>
                     </div>
                 </Route>
                     <Route path="/newProject" exact>

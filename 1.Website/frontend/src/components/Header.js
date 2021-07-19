@@ -113,7 +113,7 @@ class Header extends React.Component{
                     </Route>
                 
                     <Route path="/dashboard">
-                        <Dashboard
+                        <Dashboard api={this.props.api}
                             menuToogleClose={this.renderClose}
                             menuToogleOpen={this.renderOpen}
                             loggedUser={this.state.loggedUser.email} />

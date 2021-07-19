@@ -13,6 +13,7 @@ class Graph extends React.Component{
 
     constructor(props){
         super(props) ; 
+        this.originalProjectList = [];
         this.state=  {
             projNodeList: "",
             linkNumber : -1,
@@ -65,7 +66,42 @@ class Graph extends React.Component{
         if (this.state.projList.length<1){ // no projects to display? 1 - call from api
             this.viewProjectsFromAPI() ;
         }
+        //initialize the original project list
+        fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
+        .then(res=>res.json())
+        .then((res)=>{
+            if (res.data !== undefined )
+            this.originalProjectList =  res.data ; 
+            console.log('OG i:',this.originalProjectList) ;
+        })
+        .catch((err)=>{
+            console.log('error in initialization',err)
+        })
+    }
+    validateGraphDifference=(oldG,newG)=>{
+        let diff = false ; 
+        console.log('finding diff b/w',oldG,'and:',newG) ; 
 
+        if ( newG === undefined ||newG.nodes === undefined || newG.edges === undefined){
+            // new Graph should not be undefined .. dont save 
+            return diff ;
+        }
+
+        if (oldG.nodes === undefined || oldG.edges === undefined || oldG === undefined){
+            //old graph was null, then we save the new one
+            diff =  true ; 
+            return true ; 
+        }
+        else{
+            // the lengths must be different
+            let oldGSum = oldG.edges.length + oldG.nodes.length ;
+            let newGSSum = newG.edges.length + newG.nodes.length ;
+            if (oldGSum !== newGSSum){
+                diff = true ;
+                return diff ;
+            }
+            return diff ;
+        }
     }
 
     saveCurrentGraph = ()=>{
@@ -73,12 +109,14 @@ class Graph extends React.Component{
         console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
         let linkNumber = this.state.linkNumber ;
         let pName =  projNode.projectName ;
-        // const oldGraph = this.state.projList ;
         if (linkNumber>=0 && pName !== undefined ){
+            const oldGraph = this.originalProjectList[linkNumber].graph
+            
             //send current graph to project
-            var saveGraph =  window.confirm('Save Current Graph?') ;
-            if (saveGraph === true ){ // if its not the same graph
-                console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
+            // var saveGraph =  window.confirm('Save Current Graph?') ;
+            var saveGraph = this.validateGraphDifference(oldGraph,this.state.grapRep)
+            if ( saveGraph){ // if its not the same graph
+                console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
                 //set the loader while communicating with the server
                 this.setState({
                     loading:true
@@ -149,7 +187,7 @@ class Graph extends React.Component{
         .then(data => {
             console.log('from api req',data) ;
             const proj = data ;
-            if (proj.data !== undefined ){
+            if (proj.data !== undefined || !proj.data.name){
                 this.setState({
                     projList:proj.data,
                     loading:false
@@ -163,7 +201,7 @@ class Graph extends React.Component{
                 //If there was an error in location
                 data.message === undefined?
                 alert('Error:'+proj.error) 
-                :alert(data.message) ; 
+                :alert('Network Error'+data.message) ; console.log('Server Reason',data.name,'More:',data.reason) ; 
             }
         },(rejected)=>{
             console.log('from backend :rejected ',rejected)
