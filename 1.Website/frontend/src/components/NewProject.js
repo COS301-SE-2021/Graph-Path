@@ -2,6 +2,7 @@ import  React from 'react' ;
 import '../css/Login.css';
 import '../css/NewProject.css';
 import axios from 'axios' ;
+import Team from './Team';
 
 class NewProject extends React.Component{
     constructor(props){
@@ -11,10 +12,7 @@ class NewProject extends React.Component{
             members: [] ,
             startDate:null,
             dueDate:null,
-            Members: [],
             numberMembers: 0 ,
-            Owner:"Nani",
-            Graph:{} ,
             api:'http://localhost:9001',
             answer:null,
             responseData:null
@@ -22,18 +20,12 @@ class NewProject extends React.Component{
     }
 
 
-    addMember = () =>{
-        if (this.state.member !== "" ){
-            const memberName = this.state.member ;
+    addMember = (memberEmail) =>{
+        console.log('add member',memberEmail) ;
+        if (memberEmail !== undefined && Array.isArray(memberEmail)){
             this.setState({
-                members:this.state.members.push(memberName)  ,
-                numberMembers: this.state.numberMembers+1
-            }, () =>
-            document.getElementById('member').value = ""
-            ) ; 
-        }
-        else{
-            console.log('member name is empty') ;
+                members:memberEmail 
+            }, console.log('after update',this.state))
         }
     }
     
@@ -83,9 +75,9 @@ class NewProject extends React.Component{
             projectName:this.state.name,
             startDate:this.state.startDate,
             dueDate:this.state.dueDate,
-            groupMembers:[this.props.userEmail],//this.state.Members,
+            groupMembers:[this.props.userEmail,...this.state.members],
             owner:this.props.userEmail, //add ownwer from dashboard
-            graph:this.state.Graph, //ES6
+            graph:{}, //ES6
             //userId:from dashboard
         }
         //communicate with the API
@@ -124,15 +116,17 @@ class NewProject extends React.Component{
                     <input type="date" name="dueDate" onChange={this.updateField}/>
                     <p>Members</p>
                     {/* <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>*/}
-                    <input type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,0)}/>
-                    {
+                    {/* <input type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,0)}/> */}
+                    <Team chooseMember={this.addMember} />
+                    {/* {
                         this.state.members.map((member,index)=>{
                             return(
-                                <input key={index} type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,index+1)}/>
+                                <Team key={index} chooseMember={this.addMember} />
+                                // <input key={index} type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,index+1)}/>
                                 )
 
                         })
-                    }
+                    } */}
                     {/*<span className="newMember" onClick={this.addMember}><a>+</a></span>*/}
                     <br/>
                     <input type="submit" value="Create Project" className="btn1"  />
