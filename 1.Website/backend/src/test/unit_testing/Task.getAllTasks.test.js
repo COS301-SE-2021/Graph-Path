@@ -1,12 +1,11 @@
-const makeApp = require('../app');
+const makeApp = require('../../app');
 const supertest = require('supertest');
-const {MongoClient} = require('mongodb');
+const {MongoClient} = require('mongodb')
 
 
 describe('/getAllTasks',()=> {
 
     describe("when requested", ()=>{
-
 
         let connection;
         let MockDB;
@@ -49,11 +48,11 @@ describe('/getAllTasks',()=> {
                 DueDate: Date.now()+1 ,
                 TaskName: "Task 0 ",
                 Description: "This is a test task",
-                Label: "Green",
+                tasknr: "Green",
                 Status: 'In progress',
                 Assignee: ['User1' , 'User2'],
                 Assigner: "Kagiso 1",
-                Parent_Node : "SomeID of the parent Node",
+                ProjectName : "SomeID of the parent Node",
             }
             await Tasks.insertOne(MockTask);
             let app = makeApp(false,MockDB)
