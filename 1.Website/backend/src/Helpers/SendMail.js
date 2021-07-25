@@ -1,4 +1,5 @@
 const  nodemailer = require('nodemailer')
+const hbs = require('nodemailer-express-handlebars')
 
 /*
 * This function is used to send notifications
@@ -12,16 +13,22 @@ const  nodemailer = require('nodemailer')
 *       ->@bodyInfo: this information needed to compose the body
 *
 */
-function sendNotfication(type , recipients, bodyInfo)
+function sendNotification(type , recipients, bodyInfo)
 {
-    var body = "";
-    var subject = "";
+
+    let body = "";
+    let subject = "";
+    let htmlBody = ""
+    let viewPath = ""
+    let templateName = ""
     switch (type)
     {
         case "New project":
             subject=" New project assignment"
             body  = "You Have been added to new Project\n";
-            body += "project body will go here!"
+            viewPath = "./Notifications/views/"
+            templateName = 'newProjectNotification'
+
             break;
 
             case "New task":
@@ -39,20 +46,42 @@ function sendNotfication(type , recipients, bodyInfo)
 
     const username = "graphpathnocap@outlook.com";
     const password = "NoCaps@2K21";
-    const transporter = nodemailer.createTransport({
+
+    let transporter = nodemailer.createTransport({
         service: "hotmail",
         auth:{
             user: username,
             pass: password
-        }
+        },
+        template: templateName
     });
-
+    // here we add support for using html templates and handlebars
+    transporter.use('compile',hbs({
+        viewEngine:{
+            partialsDir:viewPath,
+            defaultLayout:""
+        },
+        viewPath: viewPath,
+        extName:".hbs"
+    }))
 
     const options = {
         from : username,
         to : recipients,
         subject : subject,
-        text: body
+        text: body,
+        attachments: [{
+           filename:'graphPathLogo.png',
+           path: './Notifications/views/images/graphPathLogo.png',
+            cid:'logo'
+        },
+            {
+                filename:'bee.png',
+                path: './Notifications/views/images/bee.png',
+                cid:'footer'
+            }
+        ],
+        template:'newProjectNotification'
     };
     transporter.sendMail(options, function (err, info){
         if( err)
@@ -69,5 +98,5 @@ function sendNotfication(type , recipients, bodyInfo)
 
 }
 
-sendNotfication("New project",['u17049106@tuks.co.za','kgmonareng@gmail.com'])
+sendNotification("New project",['u17049106@tuks.co.za','u17132330@tuks.co.za','u19016477@tuks.co.za','u17262578@tuks.co.za','u16103948@tuks.co.za'])
 
