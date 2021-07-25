@@ -10,7 +10,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.12",
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.12",
     "notenv": "^2.0.3"
   },
   "devDependencies": {},

@@ -15,7 +15,7 @@ class Profile extends React.Component{
     render() {
     console.log(' prop objects',this.props) ; 
     const {match} = this.props  ;
-    console.log('match objects',match) ; 
+    console.log('match objects',match) ;
 
         return(
             <div className="profileContainer">
@@ -29,7 +29,31 @@ class Profile extends React.Component{
                 {/*
                 * Change Email
                 * Change Username
-                * Change Password*/}
+                * Change Password
+                * Invite link
+                */}
+                <div className="infor">
+                    <h2>First name</h2>
+                    <p>here</p>
+                    <hr/>
+
+                    <h2>Last name</h2>
+                    <p>here</p>
+                    <hr/>
+                    <h2>Username</h2>
+                    <p>here</p>
+                    <hr/>
+                    <h2>Email</h2>
+                    <p>here</p>
+                    <hr/>
+
+                </div>
+
+                <h3>Invite Link</h3>
+
+
+
+
 
                 <div>
                     <Switch>

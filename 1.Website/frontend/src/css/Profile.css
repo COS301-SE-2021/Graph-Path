@@ -1,6 +1,35 @@
 .profileContainer{
-    background-color: red;
+
     position: relative;
+    width: 100%;
+}
+*{
+   /* outline: 1px solid red;*/
+}
+
+.infor {
+    width: 100%;
+
     float: right;
+    position: relative;
+
+}
+
+.infor h2 {
+
+    text-align: left;
+    padding-left: 20%;
+}
+
+.infor p {
+
+    text-align: left;
+    padding-left: 20%;
+}
+
+.infor hr {
     width: 50%;
+    border: 1px solid black;
+    margin-left: 20%;
+
 }
