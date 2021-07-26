@@ -7,7 +7,7 @@
    /* outline: 1px solid red;*/
 }
 
-.infor {
+.info {
     width: 100%;
 
     float: right;
@@ -15,19 +15,19 @@
 
 }
 
-.infor h2 {
+.info h2 {
 
     text-align: left;
     padding-left: 20%;
 }
 
-.infor p {
+.info p {
 
     text-align: left;
     padding-left: 20%;
 }
 
-.infor hr {
+.info hr {
     width: 50%;
     border: 1px solid black;
     margin-left: 20%;

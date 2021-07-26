@@ -16,7 +16,7 @@ class Profile extends React.Component{
     console.log(' prop objects',this.props) ; 
     const {match} = this.props  ;
     console.log('match objects',match) ;
-
+    const userInfo = this.props.userEmail;
         return(
             <div className="profileContainer">
                 <div className="App-Link">
@@ -32,19 +32,20 @@ class Profile extends React.Component{
                 * Change Password
                 * Invite link
                 */}
-                <div className="infor">
+
+                <div className="info">
                     <h2>First name</h2>
-                    <p>here</p>
+                    <p>{userInfo.firstName}</p>
                     <hr/>
 
                     <h2>Last name</h2>
-                    <p>here</p>
+                    <p>{userInfo.lastName}</p>
                     <hr/>
                     <h2>Username</h2>
-                    <p>here</p>
+                    <p>{userInfo.username}</p>
                     <hr/>
                     <h2>Email</h2>
-                    <p>here</p>
+                    <p>{userInfo.email}</p>
                     <hr/>
 
                 </div>
