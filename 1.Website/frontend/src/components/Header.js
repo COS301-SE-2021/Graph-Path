@@ -25,7 +25,7 @@ class Header extends React.Component{
             log:val
         },()=> {
             if (this.state.log && typeof this.props.logInValid === 'function'){
-                //first time loggging valid
+                //first time logging valid
                 this.props.logInValid() ;
             }
             else if (!this.state.log){
@@ -34,21 +34,21 @@ class Header extends React.Component{
         }) ; 
     }
     renderClose =() =>{
-        var elem = document.getElementById('DashButton') ;
+        const elem = document.getElementById('DashButton') ;
         console.log('Header clicked', elem.style.display)
         if (elem!==null){ 
             elem.style.visibility='hidden' ;
         }
     }
     renderOpen = () =>{
-        var elem = document.getElementById('DashButton') ;
+        const elem = document.getElementById('DashButton') ;
         if (elem!==null){ 
             elem.style.visibility='visible' ;
         }
     }
 
-    toogleDashMenu = () =>{
-        var elem = document.getElementById('modal1') ;
+    toggleDashMenu = () =>{
+        const elem = document.getElementById('modal1') ;
         console.log('clicked', elem.style.display)
         if (elem !== null){
             elem.style.display='block' ;
@@ -83,7 +83,7 @@ class Header extends React.Component{
                             </Link>
                     
                             <FaIcons.FaPowerOff id="powerBtn" onClick={()=>this.changeStatus(false)} />
-                            <FaIcons.FaBars id="DashButton" onClick={this.toogleDashMenu} />
+                            <FaIcons.FaBars id="DashButton" onClick={this.toggleDashMenu} />
                         </div>   
                         : //else not logged in
                         <span>
@@ -107,7 +107,7 @@ class Header extends React.Component{
                         <Register />
                     </Route>
                     <Route path="/profile" > 
-                        <Profile />
+                        <Profile userEmail={this.state.loggedUser} />
                         {this.state.log === false ? 
                         <Redirect to="/signIn" />:<span/>}
                     </Route>
