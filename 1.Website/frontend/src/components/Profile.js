@@ -13,9 +13,8 @@ function EditView (){
 
 class Profile extends React.Component{
     render() {
-    console.log(' prop objects',this.props) ; 
+    // console.log(' prop objects',this.props) ; 
     const {match} = this.props  ;
-    console.log('match objects',match) ;
     const userInfo = this.props.userEmail;
         return(
             <div className="profileContainer">
