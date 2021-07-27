@@ -46,7 +46,7 @@ class Graph extends React.Component{
         // console.log('updated from task: {}',this.state.grapRep) ;
 
         }
-        else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph.nodes !== undefined  ){
+        else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph !== undefined  ){
         //if there was a graph existing
             this.setState({
                 grapRep:this.state.projList[this.state.linkNumber].graph
@@ -84,6 +84,11 @@ class Graph extends React.Component{
 
         if ( newG === undefined ||newG.nodes === undefined || newG.edges === undefined){
             // new Graph should not be undefined .. dont save 
+            return diff ;
+        }
+        if (oldG === undefined){
+            //no olg graph? save 
+            diff = true
             return diff ;
         }
 
