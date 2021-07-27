@@ -18,3 +18,5 @@
 
 #build folders
 1.Website/frontend/build
+node_modules
+node_modules

@@ -4,18 +4,24 @@
   "description": "Graph Path is a project management tool that represents task in a form of a \r directed acyclic graph. The representation is chosen because it is intuitive\r and the graph will clearly layout the paths that are critical paths. \r A graph can have alternate paths to another node from the start node. \r This would gives a visual stimuli of how the project flows from node to node.",
   "main": "server.js",
   "dependencies": {
+    "@shelf/jest-mongodb": "^2.0.1",
     "cors": "^2.8.5",
     "db": "^3.3.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "handlebars": "^4.7.7",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.12",
-    "nodemon": "^2.0.12",
+    "nodemailer-express-handlebars": "^4.0.0",
+    "nodemon": "^2.0.7",
     "notenv": "^2.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "supertest": "^6.1.4"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node server.js"
   },
   "repository": {

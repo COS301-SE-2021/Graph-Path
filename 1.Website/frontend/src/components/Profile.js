@@ -13,9 +13,8 @@ function EditView (){
 
 class Profile extends React.Component{
     render() {
-    console.log(' prop objects',this.props) ; 
+    // console.log(' prop objects',this.props) ; 
     const {match} = this.props  ;
-    console.log('match objects',match) ;
     const userInfo = this.props.userEmail;
         return(
             <div className="profileContainer">
@@ -40,7 +39,7 @@ class Profile extends React.Component{
                     <hr/>
 
                     <h2>Last name</h2>
-                    <p>{userInfo.lastName}</p>
+                    <p>{userInfo.surname}</p>
                     <hr/>
                     <h2>Username</h2>
                     <p>{userInfo.username}</p>

@@ -143,6 +143,7 @@ class Login extends React.Component{
             }) ;
             
         },(response)=>{
+                alert('Server Error, please try again later.\n'+response) ;
                 console.log('rejected',response) ;
     
         })
