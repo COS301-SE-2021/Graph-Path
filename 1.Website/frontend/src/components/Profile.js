@@ -12,6 +12,18 @@ function EditView (){
 }
 
 class Profile extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state ={
+            disabled : true
+        }
+    }
+
+    enableEdit = () => {
+        this.setState({
+            disabled: false
+        })
+    }
     render() {
     // console.log(' prop objects',this.props) ; 
     const {match} = this.props  ;
@@ -19,9 +31,10 @@ class Profile extends React.Component{
         return(
             <div className="profileContainer">
                 <div className="App-Link">
-                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to="/dashboard" className="btn1" id="dashBtn">Dashboard</Link>
                     <span>   .   </span>
-                    <Link to={`${match.url}/editProfile`} >Edit Profile</Link>
+                    {/* <Link to={`${match.url}/editProfile`}  >Edit Profile</Link> */}
+                    <input className="btn1" type="button" value="Edit Profile" onClick={this.enableEdit} disabled = {(this.state.disabled) ? "" : "disabled"} />
                 </div>
 
                 <h1>Profile</h1>
@@ -35,21 +48,38 @@ class Profile extends React.Component{
                 <div className="info">
                     <form className="profileForm"  >
                         <label>First Name</label>
-                        <input placeholder="Enter First Name" defaultValue={userInfo.firstName} />
+                        <input type="text"
+                               placeholder="Enter First Name"
+                               defaultValue={userInfo.firstName}
+                               disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         <label>Last Name</label>
-                        <input placeholder="Enter Last Name" defaultValue={userInfo.lastName}/>
+                        <input type="text"
+                               placeholder="Enter Last Name"
+                               defaultValue={userInfo.lastName}
+                               disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         <label>Username</label>
-                        <input placeholder="Enter Username" defaultValue={userInfo.username}  />
+                        <input type="text"
+                               placeholder="Enter Username"
+                               defaultValue={userInfo.username}
+                               disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         <label>Email</label>
-                        <input placeholder="Enter Email" defaultValue={userInfo.email}/>
+                        <input type="text"
+                               placeholder="Enter Email"
+                               defaultValue={userInfo.email}
+                               disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         <label>New Password</label>
-                        <input placeholder="Enter New Password" type="password"/>
+                        <input placeholder="Enter New Password"
+                               type="password"
+                               disabled = {(this.state.disabled) ? "disabled" : ""} />
 
-                        <input type="submit" className="btn1" value="Update" />
+                        <input type="submit"
+                               className="btn1"
+                               value="Update"
+                               disabled = {(this.state.disabled) ? "disabled" : ""} />
                     </form>
 
                 </div>
