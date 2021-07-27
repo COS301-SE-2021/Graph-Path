@@ -34,8 +34,9 @@ class Profile extends React.Component{
                 */}
 
                 <div className="info">
-                    <h2>First name</h2>
+                    {/* <h2>First name</h2>
                     <p>{userInfo.firstName}</p>
+                    <input placeholder={userInfo.firstName} value="livhu" />
                     <hr/>
 
                     <h2>Last name</h2>
@@ -47,14 +48,22 @@ class Profile extends React.Component{
                     <h2>Email</h2>
                     <p>{userInfo.email}</p>
                     <hr/>
+                    */}
+                    <form className="profileForm"  >
+                        <p>First Name</p>
+                        <input type="text" value={userInfo.firstName} />
+
+                        <p>Last Name</p>
+                        <input type="text" value={userInfo.lastName}/>
+
+                        <p>Username</p>
+                        <input value={userInfo.username} />
+
+                        <p>Email</p>
+                        <input type="text" placeholder="Enter email" value={userInfo.email}/>
+                    </form>
 
                 </div>
-
-                <h3>Invite Link</h3>
-
-
-
-
 
                 <div>
                     <Switch>
