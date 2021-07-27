@@ -210,7 +210,7 @@ class Graph extends React.Component{
             }
         },(rejected)=>{
             console.log('from backend :rejected ',rejected)
-            alert('Server Error, please try again later') ;
+            alert('Server Error, please try again later.'+rejected) ;
         })    
         .catch(err =>{
             this.setState({
