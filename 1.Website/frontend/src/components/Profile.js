@@ -19,7 +19,7 @@ class Profile extends React.Component{
         return(
             <div className="profileContainer">
                 <div className="App-Link">
-                    <Link to="/dashboard">Dashboard</Link> 
+                    <Link to="/dashboard">Dashboard</Link>
                     <span>   .   </span>
                     <Link to={`${match.url}/editProfile`} >Edit Profile</Link>
                 </div>
@@ -33,33 +33,23 @@ class Profile extends React.Component{
                 */}
 
                 <div className="info">
-                    {/* <h2>First name</h2>
-                    <p>{userInfo.firstName}</p>
-                    <input placeholder={userInfo.firstName} value="livhu" />
-                    <hr/>
-
-                    <h2>Last name</h2>
-                    <p>{userInfo.surname}</p>
-                    <hr/>
-                    <h2>Username</h2>
-                    <p>{userInfo.username}</p>
-                    <hr/>
-                    <h2>Email</h2>
-                    <p>{userInfo.email}</p>
-                    <hr/>
-                    */}
                     <form className="profileForm"  >
-                        <p>First Name</p>
-                        <input type="text" value={userInfo.firstName} />
+                        <label>First Name</label>
+                        <input placeholder="Enter First Name" defaultValue={userInfo.firstName} />
 
-                        <p>Last Name</p>
-                        <input type="text" value={userInfo.lastName}/>
+                        <label>Last Name</label>
+                        <input placeholder="Enter Last Name" defaultValue={userInfo.lastName}/>
 
-                        <p>Username</p>
-                        <input value={userInfo.username} />
+                        <label>Username</label>
+                        <input placeholder="Enter Username" defaultValue={userInfo.username}  />
 
-                        <p>Email</p>
-                        <input type="text" placeholder="Enter email" value={userInfo.email}/>
+                        <label>Email</label>
+                        <input placeholder="Enter Email" defaultValue={userInfo.email}/>
+
+                        <label>New Password</label>
+                        <input placeholder="Enter New Password" type="password"/>
+
+                        <input type="submit" className="btn1" value="Update" />
                     </form>
 
                 </div>

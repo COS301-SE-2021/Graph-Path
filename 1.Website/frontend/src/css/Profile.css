@@ -1,5 +1,4 @@
 .profileContainer{
-
     position: relative;
     width: 100%;
 }
@@ -15,35 +14,48 @@
 
 }
 
-input{
-    background-color: blue;
+.profileForm input{
+    width: 100%;
+
+    border: none;
+    border-bottom: 1px solid grey;
+    height: 40px;
+    padding-left: 3px;
+    color: grey;
+    font-size: 14px;
+    outline: none;
 }
 
-.info h2 {
-
-    text-align: left;
-    padding-left: 20%;
-    padding-bottom: 0;
-    margin-bottom: 0;
-}
-
-.info p {
-    /*color: grey;
-    text-align: left;
-    padding-left: 22%;
-    padding-top: 0;
-    margin-top: 0;*/
-
-}
-
-.info p::first-letter{
-   /* text-transform: uppercase; */
-}
-
-.info hr {
+.profileForm {
+    background-color: white;
+    margin-left: 25%;
     width: 50%;
-    border-bottom: 2px solid grey;
-    margin-left: 20%;
-    padding-top: 0;
-    margin-top: 0;
+    box-sizing: border-box;
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
 }
+
+.profileForm label{
+    float: left;
+    font-weight: bold;
+}
+
+.btn1{
+    background-color: #04AA6D;
+    color: black;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
+
+.btn1:hover {
+    background-color: #0b714b;
+}
+
+
+
+
