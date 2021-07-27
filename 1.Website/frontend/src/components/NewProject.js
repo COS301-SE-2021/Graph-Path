@@ -8,10 +8,10 @@ class NewProject extends React.Component{
     constructor(props){
         super(props) ;
         this.state = {
-            name: null , 
+            name: '' , 
             members: [] ,
-            startDate:null,
-            dueDate:null,
+            startDate:new Date().toJSON().slice(0,10),
+            dueDate:new Date().toJSON().slice(0,10),
             numberMembers: 0 ,
             api:'http://localhost:9001',
             answer:null,
@@ -50,21 +50,33 @@ class NewProject extends React.Component{
                answer:res.message,
                responseData:res.data //data
             },()=>{
-               alert('res:'+this.state.answer)
                console.log(this.state)
-               if (this.state.answer!== null && this.state.answer){
-                //    this.props.changeToDefault() ;
+               if (this.state.answer!== null && this.state.responseData !== undefined){
+                   this.cleanUp() ;
+               }
+               else{
+                    alert('response:'+this.state.answer)
                }
             }) 
         
         },(response)=>{
             //There was problem with the network
             console.log('rejected',response) ;
-            alert(`Unfortunately there was an Error:\n${response}`)
+            alert(`Unfortunately there was an Error:\n${response.message}`)
         })
         .catch((error)=>{
             console.log('Overloked Error Bitting',error) ;
         })
+    }
+
+    cleanUp = () =>{
+        console.log('cleaning up') ;
+        this.setState({
+            name: '' , 
+            members: [] ,
+            startDate:new Date().toJSON().slice(0,10),
+            dueDate:new Date().toJSON().slice(0,10)
+        }) ;
     }
 
     
@@ -109,25 +121,13 @@ class NewProject extends React.Component{
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit} className="logForm">
                     <h4>Create New Project</h4>
                     <p>Project Name</p>
-                    <input type="text" required={true} name="name" placeholder="Project Name" onChange={this.updateField} />
+                    <input type="text" required={true} name="name" placeholder="Project Name" value={this.state.name} onChange={this.updateField} />
                     <p>Start Date</p>
-                    <input type="date" name="startDate" onChange={this.updateField} />
+                    <input type="date" name="startDate" onChange={this.updateField} value={this.state.startDate}/>
                     <p>Due Date</p>
-                    <input type="date" name="dueDate" onChange={this.updateField}/>
+                    <input type="date" name="dueDate" onChange={this.updateField} value={this.state.dueDate}/>
                     <p>Members</p>
-                    {/* <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>*/}
-                    {/* <input type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,0)}/> */}
                     <Team chooseMember={this.addMember} />
-                    {/* {
-                        this.state.members.map((member,index)=>{
-                            return(
-                                <Team key={index} chooseMember={this.addMember} />
-                                // <input key={index} type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,index+1)}/>
-                                )
-
-                        })
-                    } */}
-                    {/*<span className="newMember" onClick={this.addMember}><a>+</a></span>*/}
                     <br/>
                     <input type="submit" value="Create Project" className="btn1"  />
 
