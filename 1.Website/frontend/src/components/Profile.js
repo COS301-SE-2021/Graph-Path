@@ -39,7 +39,7 @@ class Profile extends React.Component{
                     <hr/>
 
                     <h2>Last name</h2>
-                    <p>{userInfo.lastName}</p>
+                    <p>{userInfo.surname}</p>
                     <hr/>
                     <h2>Username</h2>
                     <p>{userInfo.username}</p>
