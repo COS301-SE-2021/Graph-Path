@@ -11,6 +11,8 @@ function EditView (){
     </h1>)
 }
 
+
+
 class Profile extends React.Component{
     constructor(props) {
         super(props);
@@ -19,11 +21,19 @@ class Profile extends React.Component{
         }
     }
 
+    /* Change the form to be editable*/
     enableEdit = () => {
         this.setState({
             disabled: false
         })
     }
+
+    change =(e) => {
+        e.preventDefault();
+
+
+    }
+
     render() {
     // console.log(' prop objects',this.props) ; 
     const {match} = this.props  ;
@@ -50,29 +60,34 @@ class Profile extends React.Component{
                         <label>First Name</label>
                         <input type="text"
                                placeholder="Enter First Name"
+                               name="firstName"
                                defaultValue={userInfo.firstName}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         <label>Last Name</label>
                         <input type="text"
                                placeholder="Enter Last Name"
+                               name="lastName"
                                defaultValue={userInfo.lastName}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         <label>Username</label>
                         <input type="text"
+                               name="username"
                                placeholder="Enter Username"
                                defaultValue={userInfo.username}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         <label>Email</label>
                         <input type="text"
+                               name="email"
                                placeholder="Enter Email"
                                defaultValue={userInfo.email}
                                disabled/>
 
                         <label>New Password</label>
                         <input placeholder="Enter New Password"
+                               name="password"
                                type="password"
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
