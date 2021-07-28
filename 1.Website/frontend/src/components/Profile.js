@@ -69,7 +69,7 @@ class Profile extends React.Component{
                         <input type="text"
                                placeholder="Enter Email"
                                defaultValue={userInfo.email}
-                               disabled = {(this.state.disabled) ? "disabled" : ""} />
+                               disabled/>
 
                         <label>New Password</label>
                         <input placeholder="Enter New Password"
