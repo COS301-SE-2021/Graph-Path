@@ -6,13 +6,14 @@ import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
-// import _ from 'lodash' ;
+import Spinner from 'react-spinner-material';
 
 
 class Graph extends React.Component{
 
     constructor(props){
         super(props) ; 
+        this.originalProjectList = [];
         this.state=  {
             projNodeList: "",
             linkNumber : -1,
@@ -21,7 +22,8 @@ class Graph extends React.Component{
                 nodes : [],
                 edges : []
             },
-            api: "http://localhost:9001"
+            api: "http://localhost:9001",
+            loading:false
         }
     }
     //GET ALL Projects for User
@@ -44,7 +46,7 @@ class Graph extends React.Component{
         // console.log('updated from task: {}',this.state.grapRep) ;
 
         }
-        else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph.nodes !== undefined  ){
+        else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph !== undefined  ){
         //if there was a graph existing
             this.setState({
                 grapRep:this.state.projList[this.state.linkNumber].graph
@@ -64,33 +66,87 @@ class Graph extends React.Component{
         if (this.state.projList.length<1){ // no projects to display? 1 - call from api
             this.viewProjectsFromAPI() ;
         }
+        //initialize the original project list
+        fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
+        .then(res=>res.json())
+        .then((res)=>{
+            if (res.data !== undefined )
+            this.originalProjectList =  res.data ; 
+            console.log('OG i:',this.originalProjectList) ;
+        })
+        .catch((err)=>{
+            console.log('error in initialization',err)
+        })
+    }
+    validateGraphDifference=(oldG,newG)=>{
+        let diff = false ; 
+        console.log('finding diff b/w',oldG,'and:',newG) ; 
 
+        if ( newG === undefined ||newG.nodes === undefined || newG.edges === undefined){
+            // new Graph should not be undefined .. dont save 
+            return diff ;
+        }
+        if (oldG === undefined){
+            //no olg graph? save 
+            diff = true
+            return diff ;
+        }
+
+        if (oldG.nodes === undefined || oldG.edges === undefined || oldG === undefined){
+            //old graph was null, then we save the new one
+            diff =  true ; 
+            return true ; 
+        }
+        else{
+            // the lengths must be different
+            let oldGSum = oldG.edges.length + oldG.nodes.length ;
+            let newGSSum = newG.edges.length + newG.nodes.length ;
+            if (oldGSum !== newGSSum){
+                diff = true ;
+                return diff ;
+            }
+            return diff ;
+        }
     }
 
     saveCurrentGraph = ()=>{
         const projNode = this.state.projNodeList ; 
         console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
-
-        if (this.state.linkNumber>=0 && projNode.projectName !== undefined ){
+        let linkNumber = this.state.linkNumber ;
+        let pName =  projNode.projectName ;
+        if (linkNumber>=0 && pName !== undefined ){
+            const oldGraph = this.originalProjectList[linkNumber].graph
+            
             //send current graph to project
-            var saveGraph =  window.confirm('Save Current Graph?') ;
-            if (saveGraph === true){ // if its not the same graph
-                console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
+            // var saveGraph =  window.confirm('Save Current Graph?') ;
+            var saveGraph = this.validateGraphDifference(oldGraph,this.state.grapRep)
+            if ( saveGraph){ // if its not the same graph
+                console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
+                //set the loader while communicating with the server
+                this.setState({
+                    loading:true
+                }) ;
                 const data = {
                     graph : this.state.grapRep
                 }
                 axios.put(`${this.state.api}/project/updateProjectGraph/${projNode.projectName}`,data)
                 .then((res)=>{
-                    if (res.data === undefined) {// didn't save
+                    console.log('update graph response',res)
+                    if (res.data === undefined) {
+                        // didn't save
                         alert(res.message) ; 
                     }
-                    else{
-                        alert('sucess:',res.data) // wow
-                    }
+                    //communication happened successfully
+                    this.setState({
+                        loading:false
+                    }) ;
                 })
                 .catch((err)=>{
                     alert('saving failed',err)
-                    console.log(err)
+                    console.log(err) ;
+                    this.setState({
+                        loading:false
+                    }) ;
                 })
             }
             else{//no difference
@@ -125,25 +181,47 @@ class Graph extends React.Component{
         // console.log('call to api') ;
         // axios.get('http://graphpath.herokuapp.com/Project/Demo_project')
         // fetch(`${this.state.api}/project/list`)
+        
+        //Display Loading State
+        this.setState({
+            loading:true
+        }) ; 
+
         fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
         .then(res=>res.json())
         .then(data => {
             console.log('from api req',data) ;
             const proj = data ;
-            if (proj.message !== undefined && typeof proj.message !== String){
+            if (proj.data !== undefined || !proj.data.name){
                 this.setState({
-                    projList:proj.message
+                    projList:proj.data,
+                    loading:false
                 }) ; 
             }
             else{
                 //no projects found from api
+                this.setState({
+                    loading:false
+                }) ; 
+                //If there was an error in location
+                data.message === undefined?
+                alert('Error:'+proj.error) 
+                :alert('Network Error'+data.message) ; console.log('Server Reason',data.name,'More:',data.reason) ; 
             }
-        })        
+        },(rejected)=>{
+            console.log('from backend :rejected ',rejected)
+            alert('Server Error, please try again later.'+rejected) ;
+        })    
         .catch(err =>{
+            this.setState({
+                loading:false
+            }) ; 
+            alert('Error:'+err)
             console.log('error getting from /project/*',err) ; 
-        }
-        )
-    }
+        }) ; 
+        
+        
+}
     closeProjectList = () =>{
         var elem = document.getElementById('userProjects') ; 
         if (elem !== null){
@@ -200,24 +278,34 @@ class Graph extends React.Component{
 
     render(){
         console.log('Graph rerendering') ;
+        /* sigmaKey is used for refreshing common Sigma graph representaion
+         if nodes || edges are undefined, put 0 , else make key 
+         the combination of node ^ egdes length */
+        var SigmaGraphkey = ( this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined ) ? "0"  
+        :`${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`
 
-        // const graph1 = {
-        //     nodes:[{id:"n1",label:"Task A"},{id:"n2",label:"Task B"},{id:"n3",label:"Task C"}],
-        //     edges:[{id:"e1",source:"n1",target:"n2",label:"AB"},{id:"e2",source:"n2",target:"n3",label:"BC"}]
-        // }
-        // let listArray =  []; // [graph1,graph2] ; 
         let keyNum = -1 ;
+        
+        //project Name to display on the graph 
+        var selectedProjectName =  this.state.projList.length>0 && this.state.linkNumber >= 0 ?
+         this.state.projList[this.state.linkNumber].projectName: "No Data Found" ;
+
         console.log('sending graph obj ',this.state)
         return (
-            <Router>
+            <Router basename='viewProjects/graph'>
                 <div className="projectView">
-                   <span className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
+                <Spinner color={"#0000f2"} radius={350} visible={this.state.loading} />
+
+                   <Link to={"/viewProjects"} className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
                         Projects  
-                    </span>
+                    </Link>
 
                     <FaIcons.FaRecycle onClick={this.viewProjectsFromAPI} title={'refresh'}
                     className="icon clickbtn"/>
-                        
+                </div>
+                <Switch>
+                    <Route path={"/viewProjects"} >    
+                    <div>
                     <ul className="projList" id="userProjects">
                         {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
                             this.state.projList.length>0 ? // validate if it is an array and not empty
@@ -239,15 +327,13 @@ class Graph extends React.Component{
                         }
                     </ul>
                 </div>
-                
-                <Switch>
+                </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
-                        <SigmaGraph key={this.state.linkNumber}
+                        <SigmaGraph key={SigmaGraphkey}
                             graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 || this.state.grapRep.nodes ===undefined ? 
                             this.emptyGraph()
                             :this.state.projList[this.state.linkNumber].graph}
-                            projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
-                            this.state.projList[this.state.linkNumber].projectName: "No Data Found"}
+                            projectName={ selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             addEdge={this.addEdge}
                         />
@@ -256,20 +342,17 @@ class Graph extends React.Component{
                     </Route>
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
-                        <SigmaGraph key={this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined? "0" : 
-                        `${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`}
+                        <SigmaGraph key={SigmaGraphkey}
                             graphToDisplay={this.state.grapRep.nodes === undefined?
                             this.emptyGraph()
                             :this.state.grapRep}
-                            projectName={ this.state.projList.length>0 && this.state.linkNumber >= 0 ?
-                                this.state.projList[this.state.linkNumber].projectName: "No Data Found"}
+                            projectName={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             addEdge={this.addEdge}
 
                         />
                         <Task addTask={this.addNode} 
                         updateGraphView={this.updateGraphView}
-                        closeProjectListView={this.closeProjectList}
                         />
                     </Route>
                 </Switch>

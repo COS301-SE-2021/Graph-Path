@@ -5,7 +5,7 @@ import '../css/App.css' ;
 import '../css/Dashboard.css'
 // import Sigma from './reactSigmaGraph' ; 
 // import axios from 'axios' ;
-import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+import { BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom' ;
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -45,8 +45,8 @@ class Dashboard extends React.Component{
 
     render(){
         return (
+           <div className="GraphDashboard">
             <Router>
-            <div className="GraphDashboard">
                 <div className="DashboardMenu" id="modal1" >
                     <div className="App-link-routes" >
                         <div className="opt">
@@ -58,20 +58,28 @@ class Dashboard extends React.Component{
                         <Link  to="/newProject">Create Project</Link>
                     </div>
                         <div className="opt">
-                            <Link to="/viewProjects">View Projects</Link>
+                        <Link to="/viewProjects">View Projects</Link>
                         </div>
 
                     </div>
                 </div>
+                {/* Default route for logging in */}
+                
                 <Switch>
-                    <Route path="/newProject">
+                <Route path="/dashboard">
+                    <div className="imgContainer">
+                       <p> Images of what can be done with the graph path are displayed </p>
+                        <img alt={"Graph Project Example"} src={`${this.props.api}/Dashboard1.png`}/>
+                    </div>
+                </Route>
+                    <Route path="/newProject" exact>
                         <div className="ContentArea">
                             <NewProject  default={this.changeToDefault}
                             userEmail={this.props.loggedUser}/>
                         </div>
                     </Route>
                     
-                    <Route path="/viewProjects">
+                    <Route path="/viewProjects" >
 
                     {/* should call api for the projects and be able to display as per list  */}
                         <div className="ContentArea">
@@ -81,10 +89,10 @@ class Dashboard extends React.Component{
 
                     </Route>
                 </Switch>
-            </div>
+            
             {this.toogleDisplayOpen()}
-
             </Router>
+            </div>
         )
     }
 

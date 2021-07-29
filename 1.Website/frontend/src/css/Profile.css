@@ -1,6 +1,86 @@
 .profileContainer{
-    background-color: red;
     position: relative;
-    float: right;
-    width: 50%;
+    width: 100%;
 }
+
+.profileContainer #dashBtn {
+    width: 8%;
+    padding: 6px;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.profileContainer input[type="button"]{
+    width: 6%;
+    padding: 6px;
+}
+
+.profileContainer input[type="button"][disabled] {
+    background-color: #a2eccc;
+    cursor: none;
+    color: white;
+}
+
+.profileContainer input[type="submit"][disabled] {
+    background-color: #a2eccc;
+    cursor: none;
+    color: white;
+}
+
+*{
+   /* outline: 1px solid red;*/
+}
+
+.info {
+    width: 100%;
+
+    float: right;
+    position: relative;
+
+}
+
+.profileForm input[type="text"], input[type="password"]{
+    width: 100%;
+    border: none;
+    background-color: white;
+    border-bottom: 1px solid #f3dfdf;
+    height: 40px;
+    padding-left: 4px;
+    color: grey;
+    font-size: 14px;
+    outline: none;
+}
+
+.profileForm {
+    background-color: white;
+    margin-left: 25%;
+    width: 50%;
+    box-sizing: border-box;
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+}
+
+.profileForm label{
+    float: left;
+    font-weight: bold;
+}
+
+.btn1{
+    background-color: #04AA6D;
+    color: black;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
+
+.btn1:hover {
+    background-color: #0b714b;
+}
+
+
+
+
