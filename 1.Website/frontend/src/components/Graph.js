@@ -1,6 +1,6 @@
 import React from 'react' ; 
 import SigmaGraph from './SigmaGraph';
-import Task from './Task' ;
+import Node from './Node';
 import axios from 'axios';
 import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
@@ -37,7 +37,7 @@ class Graph extends React.Component{
         return empty ;
     }
 
-    updateGraphView = () =>{
+    updateGraphView = (newGraph) =>{
         if (this.state.grapRep === {}){
             // if graph rep from project was not undefined but empty
             this.setState({
@@ -49,7 +49,7 @@ class Graph extends React.Component{
         else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph !== undefined  ){
         //if there was a graph existing
             this.setState({
-                grapRep:this.state.projList[this.state.linkNumber].graph
+                grapRep:newGraph
             }) ;
         // console.log('updated from task: not empty',this.state.grapRep) ;
 
@@ -72,11 +72,11 @@ class Graph extends React.Component{
         .then((res)=>{
             if (res.data !== undefined )
             this.originalProjectList =  res.data ; 
-            console.log('OG i:',this.originalProjectList) ;
         })
         .catch((err)=>{
             console.log('error in initialization',err)
         })
+
     }
     validateGraphDifference=(oldG,newG)=>{
         let diff = false ; 
@@ -160,7 +160,7 @@ class Graph extends React.Component{
     }
 
     changeNodeList = (node,num) =>{
-        console.log(node.projectName) ;
+        // console.log(node.projectName) ;
         if (node.graph === {} || node.graph === undefined || node.graph.nodes === undefined ){
             this.setState({
                 projNodeList:node,
@@ -177,6 +177,7 @@ class Graph extends React.Component{
             }) ;
         }
     }
+
     viewProjectsFromAPI =()=>{
         // console.log('call to api') ;
         // axios.get('http://graphpath.herokuapp.com/Project/Demo_project')
@@ -190,7 +191,7 @@ class Graph extends React.Component{
         fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
         .then(res=>res.json())
         .then(data => {
-            console.log('from api req',data) ;
+            // console.log('from api req',data) ;
             const proj = data ;
             if (proj.data !== undefined || !proj.data.name){
                 this.setState({
@@ -234,50 +235,10 @@ class Graph extends React.Component{
             elem.style.display = 'block' ; 
         }
     }
-    addNode = (fromTask) =>{
-        // add the node and give it an id
-        var curr = this.state.grapRep ; 
-        var obj = {};// fromTask ;
-        obj["label"] = fromTask.taskName ; // give it lable
-        if (curr === {} || curr.nodes === undefined){ // there was no graph rep, attach epmpty one
-            curr = this.emptyGraph() ; 
-        }
-        // if there was already a node?
-        if (curr.nodes.length>0){
-            obj["id"]= `n${curr.nodes.length+1}` ;
-            curr.nodes.push(obj) ;
-           
-        }
-        else{
-            // add node with edge depending on self
-            obj["id"]= `n1` ;
-            curr.nodes.push(obj) ;
-        }
-        this.setState({
-            grapRep:curr
-        },()=>{console.log('state after add fromm task',this.state.grapRep)}) ;
-        
-        console.log('Trying to save',obj)
 
-    }
-
-    addEdge=(src,tgt)=>{
-        var edg ;
-        var curr = this.state.grapRep ; 
-
-        edg = {id:`e${curr.edges.length+1}`, // give edge an id
-            source:src, 
-            target:tgt,
-            label:`${src} to ${tgt}` 
-        }
-        curr.edges.push(edg) ;
-        this.setState({
-            grapRep:curr
-        }) ; 
-    }
 
     render(){
-        console.log('Graph rerendering') ;
+        // console.log('Graph rerendering') ;
         /* sigmaKey is used for refreshing common Sigma graph representaion
          if nodes || edges are undefined, put 0 , else make key 
          the combination of node ^ egdes length */
@@ -290,7 +251,7 @@ class Graph extends React.Component{
         var selectedProjectName =  this.state.projList.length>0 && this.state.linkNumber >= 0 ?
          this.state.projList[this.state.linkNumber].projectName: "No Data Found" ;
 
-        console.log('sending graph obj ',this.state)
+        // console.log('sending graph obj ',this.state)
         return (
             <Router basename='viewProjects/graph'>
                 <div className="projectView">
@@ -351,9 +312,8 @@ class Graph extends React.Component{
                             addEdge={this.addEdge}
 
                         />
-                        <Task addTask={this.addNode} 
-                        updateGraphView={this.updateGraphView}
-                        />
+                        <Node graph={this.state.grapRep}
+                            updateGraph={this.updateGraphView}/>
                     </Route>
                 </Switch>
             </Router>
