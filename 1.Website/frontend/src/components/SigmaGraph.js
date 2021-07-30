@@ -2,14 +2,13 @@
 import React from 'react';
 import '../css/Graph.css' ;
 import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
-import EdgeManager from './Edge';
 class GrapExample2 extends React.Component{
-  constructor(props){
-    super(props) ;
-    this.state = {
-      graphs : []
-    }
-  }
+  // constructor(props){
+  //   super(props) ;
+  //   this.state = {
+  //     graphs : []
+  //   }
+  // }
 
   changeSize=()=>{
     var canv = document.querySelectorAll('canvas') ; 
@@ -29,17 +28,9 @@ class GrapExample2 extends React.Component{
       })
     }
   }
-
-  componentDidMount(){
-    this.setState({
-      len:this.state.graphs.push(this.props.graphToDisplay)
-    }, ()=>{
-      console.log('Graph updated, ',this.state) ;
-    }) ; 
-  }
     
   render(){
-    console.log('props on mount', this.props) ;
+    // console.log('props on mount', this.props) ;
     const graph = this.props.graphToDisplay ; 
     if (graph !== undefined && graph.nodes !== undefined )
     return (
@@ -62,9 +53,6 @@ class GrapExample2 extends React.Component{
             this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
             Save</button>:""
           }
-          <EdgeManager graphToDisplay={this.props.graphToDisplay}
-          addEdge={this.props.addEdge}
-          />
 
         </div>
       </div>
