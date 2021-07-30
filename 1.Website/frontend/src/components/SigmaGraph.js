@@ -1,8 +1,10 @@
 
 import React from 'react';
 import '../css/Graph.css' ;
-import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
-class GrapExample2 extends React.Component{
+import {Sigma, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
+import Dagre from 'react-sigma/lib/Dagre' ;
+import ReactSigmaLayoutPlugin from 'react-sigma/lib/ReactSigmaLayoutPlugin';
+class GrapExample2 extends React.Component{  
   // constructor(props){
   //   super(props) ;
   //   this.state = {
@@ -31,21 +33,33 @@ class GrapExample2 extends React.Component{
     
   render(){
     // console.log('props on mount', this.props) ;
+    
     const graph = this.props.graphToDisplay ; 
     if (graph !== undefined && graph.nodes !== undefined )
     return (
       <div className="exampleProject">
         <h6>{this.props.projectName}</h6>
         <div className="GraphBox">
-          <Sigma graph={graph} className="SigmaParent" 
+          <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
           style={{position:"relative", 
           width:"250px" , height:"250px" ,  border:"double 3px black" }}
           onOverNode={e => console.log("Mouse over node: " + e.data.node.label)}
-          settings={{drawEdges: true, clone: false}}>
+          settings={{drawEdges: true,
+          drawLabels:true,
+          // labelSizeRatio:1,
+          labelThreshold:1,
+          scalingMode:"inside",
+          sideMargin:100,
+          minNodeSize:3,
+          minEdgeSize:2,
+          maxNodeSize:10,
+          drawNodes:true,sideMargin:2 ,
+          clone: false}}>
             <EdgeShapes default="arrow" style={{width:"200px"}}/>
-            <NodeShapes default="star"/>
-            <RelativeSize  initialSize={20}/>
-            <RandomizeNodePositions x1={200} y1={100} x2={300} y2={300}/>        
+            <NodeShapes default="def"/>
+            <RelativeSize  initialSize={200}/>
+            <Dagre directed={true}/>
+            {/* <RandomizeNodePositions seed={2} />         */}
           </Sigma>
           {
             typeof this.props.sendGraphData === 'function'? //if there's a save option
