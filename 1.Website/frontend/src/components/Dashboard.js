@@ -1,5 +1,5 @@
 import React from 'react' ; 
-import GraphManager from './Graph';
+import Graph from './Graph';
 import NewProject from './NewProject' ;
 import '../css/App.css' ;
 import '../css/Dashboard.css'
@@ -83,8 +83,7 @@ class Dashboard extends React.Component{
 
                     {/* should call api for the projects and be able to display as per list  */}
                         <div className="ContentArea">
-                            {/* Graph.js alias GraphManager */}
-                            <GraphManager userEmail={this.props.loggedUser} /> 
+                            <Graph userEmail={this.props.loggedUser} /> 
                         </div>
 
                     </Route>
