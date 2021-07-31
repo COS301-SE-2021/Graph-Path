@@ -193,7 +193,7 @@ class Graph extends React.Component{
         .then(data => {
             // console.log('from api req',data) ;
             const proj = data ;
-            if (proj.data !== undefined || !proj.data.name){
+            if (proj.data !== undefined ){
                 this.setState({
                     projList:proj.data,
                     loading:false
@@ -207,7 +207,7 @@ class Graph extends React.Component{
                 //If there was an error in location
                 data.message === undefined?
                 alert('Error:'+proj.error) 
-                :alert('Network Error'+data.message) ; console.log('Server Reason',data.name,'More:',data.reason) ; 
+                :alert(data.message) ; console.log('Server Reason',data.name,'More:',data.reason) ; 
             }
         },(rejected)=>{
             console.log('from backend :rejected ',rejected)
