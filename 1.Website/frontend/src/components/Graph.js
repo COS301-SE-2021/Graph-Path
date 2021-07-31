@@ -222,13 +222,58 @@ class Graph extends React.Component{
         }) ; 
         
         
-}
+    }
+
+    deleteProject=(project)=>{
+        if(project === undefined){
+            alert('Can\'t delete Project. Project Invalid') ;
+        }
+        else{
+            if (this.props.userEmail === undefined){
+                alert('Can\'t delete when not signed in')
+            }
+            else{
+                this.setState({
+                    loading:true
+                }) ;
+                axios.delete(`${this.state.api}/project/deleteProject`,{
+                    params:{
+                        projectName:project,
+                        owner:this.props.userEmail
+                    },
+                    
+                
+                })
+                .then((res)=>{
+                    console.log('Delete',res)
+                    if(res.data.data === undefined){
+                        alert(res.data.message) ;
+                        this.setState({
+                            loading:false
+                        }) ;
+                    }
+                    else{
+                        this.viewProjectsFromAPI() ;
+                    }
+                })
+                .catch(err=>{
+                    console.log("error",err)
+                    this.setState({
+                        loading:false
+                    }) ;
+                }) ;
+                
+            }
+        }
+    }
+
     closeProjectList = () =>{
         var elem = document.getElementById('userProjects') ; 
         if (elem !== null){
             elem.style.display = 'none' ; 
         }
     }
+
     openProjectList = () =>{
         var elem = document.getElementById('userProjects') ; 
         if (elem !== null){
@@ -267,17 +312,25 @@ class Graph extends React.Component{
                 <Switch>
                     <Route path={"/viewProjects"} >    
                     <div>
-                    <ul className="projList" id="userProjects">
+                    <div className="projList" id="userProjects">
                         {   this.state.projList !== undefined && Array.isArray(this.state.projList) &&
                             this.state.projList.length>0 ? // validate if it is an array and not empty
                             this.state.projList.map( (node) => {       
                                 keyNum = keyNum+1 ;
-                                return <li key={keyNum} > 
-                                    <Link data-projnum={keyNum} data-project={node} className="project-content" 
+                                return <div key={keyNum}  data-project={node} className="project-content" > 
+                                    <Link data-projnum={keyNum}  
                                     onClick={(e) =>{
                                     this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
                                     to={`/project/${keyNum}`}>{node.projectName}</Link>
-                                </li>
+                                    {node.owner === this.props.userEmail ? 
+                                        <span title="Delete Project" id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)}>
+                                        X
+                                        </span>
+                                        :
+                                        <span/>
+                                    }
+                                    
+                                </div>
                             })
                             : <span>
                                 <h1>Project List is empty,<br/>
@@ -286,7 +339,7 @@ class Graph extends React.Component{
                             </span>
                             
                         }
-                    </ul>
+                    </div>
                 </div>
                 </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
@@ -304,9 +357,7 @@ class Graph extends React.Component{
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
                         <SigmaGraph key={SigmaGraphkey}
-                            graphToDisplay={this.state.grapRep.nodes === undefined?
-                            this.emptyGraph()
-                            :this.state.grapRep}
+                            graphToDisplay={this.state.grapRep}
                             projectName={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             addEdge={this.addEdge}
