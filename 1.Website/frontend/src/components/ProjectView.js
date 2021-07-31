@@ -8,6 +8,12 @@ class ProjectView extends React.Component{
         if (project !== undefined)
         return (
             <div>
+                 <div >
+                   <span className="dropbtn">
+                   <Link to="/addTask">Edit Project
+                   </Link>
+                    </span>
+                </div>
                 <p>Project Name : {project.projectName} </p>
 
                 <p>Project Start Date: </p>{project.startDate===null?
@@ -16,12 +22,7 @@ class ProjectView extends React.Component{
                 <p>Project Due Date:</p>{project.dueDate===null?
                 <h6 className="project-alert-text">Due date not set </h6>:project.dueDate}
 
-                <div className="drop">
-                   <span className="dropbtn">
-                   <Link to="/addTask">Add Task
-                   </Link>
-                    </span>
-                </div>
+               
             </div>
         )
         return (
