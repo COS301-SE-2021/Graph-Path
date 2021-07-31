@@ -1,8 +1,8 @@
 
 import React from 'react';
 import '../css/Graph.css' ;
-import {Sigma, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
-import Dagre from 'react-sigma/lib/Dagre' ;
+import {Sigma, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
+// import Dagre from 'react-sigma/lib/Dagre' ;
 import {DragNodes,} from 'react-sigma';
 class GrapExample2 extends React.Component{  
   // constructor(props){
