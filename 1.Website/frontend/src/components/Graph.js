@@ -202,7 +202,8 @@ class Graph extends React.Component{
             else{
                 //no projects found from api
                 this.setState({
-                    loading:false
+                    loading:false,
+                    projList:[]
                 }) ; 
                 //If there was an error in location
                 data.message === undefined?
