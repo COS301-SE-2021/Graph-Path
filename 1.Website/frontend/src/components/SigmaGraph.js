@@ -3,7 +3,7 @@ import React from 'react';
 import '../css/Graph.css' ;
 import {Sigma, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
 import Dagre from 'react-sigma/lib/Dagre' ;
-import ReactSigmaLayoutPlugin from 'react-sigma/lib/ReactSigmaLayoutPlugin';
+import {DragNodes,} from 'react-sigma';
 class GrapExample2 extends React.Component{  
   // constructor(props){
   //   super(props) ;
@@ -43,23 +43,24 @@ class GrapExample2 extends React.Component{
           <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
           style={{position:"relative", 
           width:"250px" , height:"250px" ,  border:"double 3px black" }}
-          onOverNode={e => console.log("Mouse over node: " + e.data.node.label)}
+          onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
           settings={{drawEdges: true,
           drawLabels:true,
           // labelSizeRatio:1,
-          labelThreshold:1,
+          labelThreshold:0.5,
           scalingMode:"inside",
           sideMargin:100,
           minNodeSize:3,
-          minEdgeSize:2,
+          minEdgeSize:20,
           maxNodeSize:10,
-          drawNodes:true,sideMargin:2 ,
+          drawNodes:true,
           clone: false}}>
             <EdgeShapes default="arrow" style={{width:"200px"}}/>
             <NodeShapes default="def"/>
-            <RelativeSize  initialSize={200}/>
-            <Dagre directed={true}/>
+            {/* <RelativeSize  initialSize={200}/> */}
+            {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
             {/* <RandomizeNodePositions seed={2} />         */}
+            <DragNodes />
           </Sigma>
           {
             typeof this.props.sendGraphData === 'function'? //if there's a save option
