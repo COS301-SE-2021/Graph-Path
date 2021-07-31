@@ -62,11 +62,13 @@ class Graph extends React.Component{
         // console.log('updated from task',this.state.grapRep) ;
         //else keep the default one, from mount
     }
-    componentDidMount = ()=>{
-        if (this.state.projList.length<1){ // no projects to display? 1 - call from api
+    componentDidMount = ()=>{ // no projects to display? 1 - call from api
             this.viewProjectsFromAPI() ;
-        }
-        //initialize the original project list
+            //initialize the original project list
+            this.updateOldGraph() ;
+       
+    }
+    updateOldGraph = ()=>{
         fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
         .then(res=>res.json())
         .then((res)=>{
@@ -282,6 +284,10 @@ class Graph extends React.Component{
         }
     }
 
+    refreshAll = ()=>{
+        this.viewProjectsFromAPI() ;
+        this.updateOldGraph() ;
+    }
 
     render(){
         // console.log('Graph rerendering') ;
@@ -307,7 +313,7 @@ class Graph extends React.Component{
                         Projects  
                     </Link>
 
-                    <FaIcons.FaRecycle onClick={this.viewProjectsFromAPI} title={'refresh'}
+                    <FaIcons.FaRecycle onClick={this.refreshAll} title={'refresh'}
                     className="icon clickbtn"/>
                 </div>
                 <Switch>
