@@ -17,7 +17,9 @@ class Profile extends React.Component{
     constructor(props) {
         super(props);
         this.state ={
-            disabled : true
+            disabled : true,
+            empty : false,
+            valid: false
         }
     }
 
@@ -30,7 +32,22 @@ class Profile extends React.Component{
 
     change =(e) => {
         e.preventDefault();
+        const {name,value}=e.target;
 
+        switch(name){
+            case 'username':
+                this.setState({
+                    empty : value.length === 0,
+                    valid : name.match(/^[a-zA-Z]+$/)
+                })
+                break;
+
+            case 'password':
+                this.setState({
+
+                })
+                break;
+        }
 
     }
 
@@ -58,38 +75,41 @@ class Profile extends React.Component{
                 <div className="info">
                     <form className="profileForm"  >
                         <label>First Name</label>
-                        <input type="text"
-                               placeholder="Enter First Name"
-                               name="firstName"
-                               defaultValue={userInfo.firstName}
-                               disabled = {(this.state.disabled) ? "disabled" : ""} />
+                        <input value={userInfo.firstName}
+                           disabled type='text'    />
+
 
                         <label>Last Name</label>
-                        <input type="text"
-                               placeholder="Enter Last Name"
-                               name="lastName"
-                               defaultValue={userInfo.lastName}
-                               disabled = {(this.state.disabled) ? "disabled" : ""} />
+                        <input value={userInfo.lastName}
+                           disabled
+                        type='text'/>
+
 
                         <label>Username</label>
                         <input type="text"
                                name="username"
                                placeholder="Enter Username"
                                defaultValue={userInfo.username}
+                               onChange={this.change}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
+                        {
+                            this.state.empty === true ? <span  >Field cannot be empty</span> : ""
+                        }
 
                         <label>Email</label>
-                        <input type="text"
-                               name="email"
-                               placeholder="Enter Email"
-                               defaultValue={userInfo.email}
+                        <input defaultValue={userInfo.email}
+                               type='text'
                                disabled/>
 
                         <label>New Password</label>
                         <input placeholder="Enter New Password"
                                name="password"
                                type="password"
+                               onChange={this.change}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
+                        {
+
+                        }
 
                         <input type="submit"
                                className="btn1"
