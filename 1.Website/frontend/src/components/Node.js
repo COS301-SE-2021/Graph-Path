@@ -58,15 +58,26 @@ class GraphManager{
             size:300,
         }; 
         // if there was already a node?
-        if (curr.nodes.length>0){
+        let len = curr.nodes.length ;
+        if (len>0){
             obj["id"]= `n${curr.nodes.length+1}` ;
             obj["color"] = '#0000ff' ;
+            if (len % 2 === 0){
+                obj["x"] = 15*len ; 
+                obj["y"] = 15*len ;
+            }
+            else{
+                obj["x"] = -15*len ; 
+                obj["y"] = -15*len ;
+            }
             curr.nodes.push(obj) ;
         }
         else{
             // add node with edge depending on self
             obj["id"]= `n1` ;
             obj["color"] = '#ff0000' ; //start is red
+            obj["x"] = 0 ; 
+            obj["y"] = 0 ;
             curr.nodes.push(obj) ;
         }
     }
