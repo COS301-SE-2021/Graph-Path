@@ -28,7 +28,7 @@
 }
 
 *{
-   /* outline: 1px solid red;*/
+    /*outline: 1px solid red;*/
 }
 
 .info {
@@ -81,6 +81,13 @@
     background-color: #0b714b;
 }
 
+.errorSpan {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: left;
+
+}
 
 
 
