@@ -93,7 +93,7 @@ class Profile extends React.Component{
                                onChange={this.change}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
                         {
-                            this.state.empty === true ? <span  >Field cannot be empty</span> : ""
+                            this.state.empty === true ? <div className="errorSpan" >Field cannot be empty</div> : ""
                         }
 
                         <label>Email</label>
