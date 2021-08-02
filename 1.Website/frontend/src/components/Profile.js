@@ -20,6 +20,8 @@ class Profile extends React.Component{
             disabled : true,
             empty : false,
             valid: false,
+            username: '',
+            password: '',
 
             formErrors: {
                 password:""
@@ -30,7 +32,7 @@ class Profile extends React.Component{
     /* Change the form to be editable*/
     enableEdit = () => {
         this.setState({
-            disabled: false
+            disabled: !this.state.disabled
         })
     }
 
@@ -47,7 +49,7 @@ class Profile extends React.Component{
                 break;
 
             case 'password':
-                formErrors.password = value.length < 8 ? 'Minimum for password should be 8 characters'
+                formErrors.password = value.length < 8 || value.length > 0 ? 'Minimum for password should be 8 characters'
                     : "";
                 break;
 
@@ -56,6 +58,24 @@ class Profile extends React.Component{
 
        this.setState({ formErrors, [name]: value });
 
+    }
+    /*
+    * check if there are new changes
+    * */
+    formValid = ()=>{
+
+    }
+
+    onSubmit = (e) =>{
+        e.preventDefault();
+        console.log(this.state)
+        //check if all field are updated
+
+        const data = {
+            username: this.state.username,
+            password: this.state.password
+        }
+        console.log("data",data)
     }
 
     render() {
@@ -81,7 +101,7 @@ class Profile extends React.Component{
                 */}
 
                 <div className="info">
-                    <form className="profileForm"  >
+                    <form className="profileForm" onSubmit={this.onSubmit} >
                         <label>First Name</label>
                         <input value={userInfo.firstName}
                            disabled type='text'    />
@@ -99,9 +119,10 @@ class Profile extends React.Component{
                                placeholder="Enter Username"
                                defaultValue={userInfo.username}
                                onChange={this.change}
+                               value={this.state.username}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
                         {
-                            this.state.empty === true ? <span  >Field cannot be empty</span> : ""
+                            this.state.empty === true ? <div  >Field cannot be empty</div> : ""
                         }
 
                         <label>Email</label>
@@ -114,6 +135,7 @@ class Profile extends React.Component{
                                name="password"
                                type="password"
                                onChange={this.change}
+                               value={this.state.password}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         {formErrors.password.length > 0 && (
@@ -123,6 +145,12 @@ class Profile extends React.Component{
                         <input type="submit"
                                className="btn1"
                                value="Update"
+                               disabled = {(this.state.disabled) ? "disabled" : ""} />
+
+                        <input type="button"
+                               className="btn1"
+                               value="Cancel"
+                               onClick={this.enableEdit}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
                     </form>
 
