@@ -1,12 +1,12 @@
 import React from 'react';
 import '../css/Team.css'; 
-import Search from 'react-search' ;
+import Select from 'react-select';
 class Team extends React.Component{
     constructor(props){
         super(props) ; 
         this.state = {
             chosen:[],
-            list: [{id:3,value:'nani@gmail.com'},{id:1,value:'my@gmail.com'},{id:2,value:'my2@gmail.com'}]
+            list: [{label:'Nani',value:'nani@gmail.com'},{label:'My 1',value:'my@gmail.com'},{label:'My 2',value:'my2@gmail.com'}]
         }
     }
 
@@ -54,16 +54,20 @@ class Team extends React.Component{
     }
     handleSelect = (item) =>{
         console.log('key change',item) ;
+        this.saveMemberList(item)
     }
     render(){
         // const {name} = this.props;
         console.log('Team state',this.state);
         return (
-        <Search items={this.state.list} 
-            placeholder='Search Member'
-            multiple={true}
+        <Select options={this.state.list} 
+            onChange={this.handleSearch}
+            placeholder={'Search Member'}
+            isSearchable={true}
+            isMulti={true}
+            // multiple={true}
             // maxSelected={1}
-            onItemsChanged = {this.handleSearch}
+            // onItemsChanged = {this.handleSearch}
             // onKeyChange={this.handleSelect}
             // NotFoundPlaceholder='User Not Found,'
             // onSelect={this.handleSelect} 
