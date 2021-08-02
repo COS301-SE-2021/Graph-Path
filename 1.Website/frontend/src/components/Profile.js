@@ -19,7 +19,11 @@ class Profile extends React.Component{
         this.state ={
             disabled : true,
             empty : false,
-            valid: false
+            valid: false,
+
+            formErrors: {
+                password:""
+            }
         }
     }
 
@@ -33,7 +37,7 @@ class Profile extends React.Component{
     change =(e) => {
         e.preventDefault();
         const {name,value}=e.target;
-
+        let formErrors = {...this.state.formErrors};
         switch(name){
             case 'username':
                 this.setState({
@@ -43,17 +47,21 @@ class Profile extends React.Component{
                 break;
 
             case 'password':
-                this.setState({
-
-                })
+                formErrors.password = value.length < 8 ? 'Minimum for password should be 8 characters'
+                    : "";
                 break;
+
+            default: break;
         }
+
+       this.setState({ formErrors, [name]: value });
 
     }
 
     render() {
     // console.log(' prop objects',this.props) ; 
     const {match} = this.props  ;
+        const {formErrors} = this.state;
     const userInfo = this.props.userEmail;
         return(
             <div className="profileContainer">
@@ -93,7 +101,7 @@ class Profile extends React.Component{
                                onChange={this.change}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
                         {
-                            this.state.empty === true ? <div className="errorSpan" >Field cannot be empty</div> : ""
+                            this.state.empty === true ? <span  >Field cannot be empty</span> : ""
                         }
 
                         <label>Email</label>
@@ -107,9 +115,10 @@ class Profile extends React.Component{
                                type="password"
                                onChange={this.change}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
-                        {
 
-                        }
+                        {formErrors.password.length > 0 && (
+                            <span className='errorMessage'>{formErrors.password}</span>
+                        )}
 
                         <input type="submit"
                                className="btn1"
