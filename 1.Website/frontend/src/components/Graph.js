@@ -129,9 +129,10 @@ class Graph extends React.Component{
                     loading:true
                 }) ;
                 const data = {
-                    graph : this.state.grapRep
+                    graph : this.state.grapRep,
+                    projectName: projNode.projectName
                 }
-                axios.put(`${this.state.api}/project/updateProjectGraph/${projNode.projectName}`,data)
+                axios.put(`${this.state.api}/project/updateProjectGraph`,data)
                 .then((res)=>{
                     console.log('update graph response',res)
                     if (res.data === undefined) {
@@ -237,7 +238,8 @@ class Graph extends React.Component{
             }
             else{
                 this.setState({
-                    loading:true
+                    loading:true,
+                    linkNumber:-1
                 }) ;
                 axios.delete(`${this.state.api}/project/deleteProject`,{
                     params:{
