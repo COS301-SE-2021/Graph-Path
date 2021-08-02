@@ -256,8 +256,8 @@ router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
     // })
 });
 
-router.put('/updateProjectGraph/:name',(req,res)=>{
-    const project = req.params.name ;
+router.put('/updateProjectGraph',(req,res)=>{
+    const project = req.body.projectName ;
     const graph = req.body.graph ;
 
     console.log('PUT ../',project,'body: ',graph) ; 
