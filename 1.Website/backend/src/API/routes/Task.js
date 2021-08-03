@@ -150,8 +150,6 @@ function  makeTaskRoute(db)
      */
     router.get('/getTaskByTasknr',(req, res, next)=> {
 
-       // console.log("TaskByProjectBody: "+req.body);
-         //console.log("TaskByProjectBodyProject: "+req.body.project);
         let tsknr = req.body.tasknr;
         let responseObj = {
             message:"",
@@ -162,7 +160,6 @@ function  makeTaskRoute(db)
         })
             .then((result)=>{
 
-                //console.log("This is result.tasknr in Tasks by project: "+result.tasknr);
                 //console.log("This is result in Tasks by project: "+result);
                 if(result != null)
                 {
@@ -187,6 +184,29 @@ function  makeTaskRoute(db)
 
     });
 
+    /**
+     *@swagger
+     * /task/getAllTasks:
+     *   get:
+     *     summary: Returns all existings tasks
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: Json body of the task
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       404:
+     *         description: the given task number does not match any task
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
     router.get('/getAllTasks',(req, res, next)=> {
         //console.log("TaskByProjectBody: "+req.body);
         // console.log("TaskByProjectBodyProject: "+req.body.project);
