@@ -6,9 +6,81 @@ const assert = require('assert');
 //var db = require('../../Controllers/DBController').getDB();
 //var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Task:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the task
+ *
+ *         status:
+ *           type: string
+ *           description: This is the current state of the task expected states are not started, in progress, completed
+ *
+ *
+ *         project:
+ *           type: string
+ *           description: This is the name of the project, no two projects can have the same name.
+ *         tasknr:
+ *           type: int
+ *           description: This is a task number to indicate the # of task.
+ *         asignee:
+ *           type: List[string]
+ *           description: These are email addresses of the members that have been assigned to a project
+ *         assigner:
+ *           type: string
+ *           description: The name of the person that iniaited and created the project
+ *         due:
+ *           type: date
+ *           description: The date of when the project should be completed
+ *         issued:
+ *           type: date
+ *           description: The date of when the project was created
+ *       example:
+ *         description: Help Mark with his work.
+ *         status: in-progress
+ *         project: Graph-Path
+ *         tasknr: 1
+ *         assignee: Joe
+ *         assigner: Alistair
+ *         due: 20/05/2021
+ *         issued: 20/05/2019
+ *
+ */
+
+/**@swagger
+ * tags:
+ *   name: Task
+ *   description: This is the task managing API
+ */
+
+
 function  makeTaskRoute(db)
 {
+
     //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     *@swagger
+     * /getTaskByDescription:
+     *   get:
+     *     summary: Returns information about a task given its description as parameter
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: JSon body of the task
+     *         contents:
+     *              application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *
+     */
     router.get('/getTaskByDescription',(req, res, next)=> {
         let desc = req.body.description;
         db.collection('Tasks').findOne({
