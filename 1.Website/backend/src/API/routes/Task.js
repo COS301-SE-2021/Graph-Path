@@ -161,6 +161,7 @@ function  makeTaskRoute(db)
             tasknr:tsknr
         })
             .then((result)=>{
+
                 //console.log("This is result.tasknr in Tasks by project: "+result.tasknr);
                 //console.log("This is result in Tasks by project: "+result);
                 if(result != null)
