@@ -1,6 +1,7 @@
 import React from 'react' ; 
 import Graph from './Graph';
 import NewProject from './NewProject' ;
+import taskList from './taskList';
 import '../css/App.css' ;
 import '../css/Dashboard.css'
 // import Sigma from './reactSigmaGraph' ; 
@@ -62,7 +63,7 @@ class Dashboard extends React.Component{
                         </div>
 
                         <div className="opt">
-                            <Link to="#">View Tasks</Link>
+                            <Link to="/taskList">View Tasks</Link>
                         </div>
                         <div className="opt">
                             <Link >Reports</Link>

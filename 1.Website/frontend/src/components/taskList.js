@@ -1,49 +1,51 @@
 import React from 'react' ;
-import { Link } from 'react-router-dom';
+import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
 class taskList extends React.Component{
     constructor(props){
         super(props);
-        this.state={
+        this.state= {
             tasks: [],
-            isloading: false
-        },
+            isloading: false,
+
             api: "http://localhost:9001"
+        }
     }
 
     componentDidMount = ()=>{
         this.viewTasksByProjects();
     }
 
-    viewTasksByProjects = ()=>{
+    viewTasksByProjects = ()=> {
 
         this.setState({
-           isloading:true
-        }) ;
+            isloading: true
+        });
 
-        fetch(`${this.state.api}/Task/getAllTasksByProjects/${}`)
-            .then(res=>res.json())
-            .then((result)=>{
-                const taskk = result ;
+        fetch(`${this.state.api}/Task/getAllTasksByProjects/`)
+            .then(res => res.json())
+            .then(result => {
+                const taskk = result;
                 //No tasks to view
-                if (taskk.data === undefined ){
+                if (taskk.data === undefined) {
                     this.setState({
-                        tasks:[],
-                        isloading:false
-                    }) ;
-                }
-                else{
+                        tasks: [],
+                        isloading: false
+                    });
+                } else {
                     //some task found
                     this.setState({
                         tasks: taskk.data,
-                        isloading:false
+                        isloading: false
 
-                    }) ;
-                })
+                    });
+                }
+            })
     }
+
     render(){
-    const {tasks}=this.state;
-    if(isLoading)
+    const {tasks,isloading}=this.state;
+    if(isloading===true)
     {
         return <div>LOADING...</div>
     }
