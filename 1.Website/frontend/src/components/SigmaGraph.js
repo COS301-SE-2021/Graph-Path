@@ -1,15 +1,16 @@
 
 import React from 'react';
 import '../css/Graph.css' ;
-import {Sigma, RandomizeNodePositions, RelativeSize, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
-import EdgeManager from './Edge';
-class GrapExample2 extends React.Component{
-  constructor(props){
-    super(props) ;
-    this.state = {
-      graphs : []
-    }
-  }
+import {Sigma, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
+// import Dagre from 'react-sigma/lib/Dagre' ;
+import {DragNodes,} from 'react-sigma';
+class GrapExample2 extends React.Component{  
+  // constructor(props){
+  //   super(props) ;
+  //   this.state = {
+  //     graphs : []
+  //   }
+  // }
 
   changeSize=()=>{
     var canv = document.querySelectorAll('canvas') ; 
@@ -29,32 +30,37 @@ class GrapExample2 extends React.Component{
       })
     }
   }
-
-  componentDidMount(){
-    this.setState({
-      len:this.state.graphs.push(this.props.graphToDisplay)
-    }, ()=>{
-      console.log('Graph updated, ',this.state) ;
-    }) ; 
-  }
     
   render(){
-    console.log('props on mount', this.props) ;
+    // console.log('props on mount', this.props) ;
+    
     const graph = this.props.graphToDisplay ; 
     if (graph !== undefined && graph.nodes !== undefined )
     return (
       <div className="exampleProject">
         <h6>{this.props.projectName}</h6>
         <div className="GraphBox">
-          <Sigma graph={graph} className="SigmaParent" 
+          <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
           style={{position:"relative", 
           width:"250px" , height:"250px" ,  border:"double 3px black" }}
-          onOverNode={e => console.log("Mouse over node: " + e.data.node.label)}
-          settings={{drawEdges: true, clone: false}}>
+          onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
+          settings={{drawEdges: true,
+          drawLabels:true,
+          // labelSizeRatio:1,
+          labelThreshold:0.5,
+          scalingMode:"inside",
+          sideMargin:100,
+          minNodeSize:3,
+          minEdgeSize:20,
+          maxNodeSize:10,
+          drawNodes:true,
+          clone: false}}>
             <EdgeShapes default="arrow" style={{width:"200px"}}/>
-            <NodeShapes default="star"/>
-            <RelativeSize  initialSize={20}/>
-            <RandomizeNodePositions x1={200} y1={100} x2={300} y2={300}/>        
+            <NodeShapes default="def"/>
+            {/* <RelativeSize  initialSize={200}/> */}
+            {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
+            {/* <RandomizeNodePositions seed={2} />         */}
+            <DragNodes />
           </Sigma>
           {
             typeof this.props.sendGraphData === 'function'? //if there's a save option
@@ -62,9 +68,6 @@ class GrapExample2 extends React.Component{
             this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
             Save</button>:""
           }
-          <EdgeManager graphToDisplay={this.props.graphToDisplay}
-          addEdge={this.props.addEdge}
-          />
 
         </div>
       </div>

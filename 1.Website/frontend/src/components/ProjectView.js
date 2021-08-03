@@ -8,25 +8,26 @@ class ProjectView extends React.Component{
         if (project !== undefined)
         return (
             <div>
-                <p>Project Name : {project.projectName} </p>
-
-                <p>Project Start Date: {project.startDate===null?
-                <h6 className="project-alert-text">Start date not set </h6>:project.startDate}</p>
-                
-                <p>Project Due Date:{project.dueDate===null?
-                <h6 className="project-alert-text">Due date not set </h6>:project.dueDate}</p>
-
-                <div className="drop">
+                 <div >
                    <span className="dropbtn">
-                   <Link to="/addTask">Add Task
+                   <Link to="/addTask">Edit Project
                    </Link>
                     </span>
                 </div>
+                <p>Project Name : {project.projectName} </p>
+
+                <p>Project Start Date: </p>{project.startDate===null?
+                <h6 className="project-alert-text">Start date not set </h6>:project.startDate}
+                
+                <p>Project Due Date:</p>{project.dueDate===null?
+                <h6 className="project-alert-text">Due date not set </h6>:project.dueDate}
+
+               
             </div>
         )
         return (
             <div>
-                Create a Project
+                Create a Project using the Create Project option on the Dashboard Menu 
             </div>
         )
     }

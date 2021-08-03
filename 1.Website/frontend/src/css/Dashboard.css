@@ -68,3 +68,7 @@ button{
     display: flex;   
     flex-direction: row;
 }
+
+.imgContainer > img{
+    max-width: 500px;
+}

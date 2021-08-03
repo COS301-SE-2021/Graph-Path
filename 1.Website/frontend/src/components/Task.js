@@ -101,16 +101,7 @@ class Task extends React.Component{
     displayForm = () =>{
 
     }
-    
-    componentDidMount(){
-        if (this.props.updateGraphView !== undefined && typeof this.props.updateGraphView === 'function'){
-            this.props.updateGraphView() ;
-        }
-        if ( typeof this.props.closeProjectListView === 'function'){
-            this.props.closeProjectListView() ;
-        }
-        
-    }
+
 
     render() {
         return(
@@ -119,34 +110,39 @@ class Task extends React.Component{
                     <h4>Add Task</h4>
                     <p>Task</p>
                     <input type="text" name="name" required={true} placeholder="Task Name" onChange={this.updateField} />
-                    <p>Description</p>
-                    <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
-                    <p>Start Date</p>
-                    <input type="date" name="startDate" onChange={this.updateField} />
-                    <p>Due Date</p>
-                    <input  type="date" name="dueDate" onChange={this.updateField} />
-                    <p>Assign Task</p>
-                    <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e,0)} />
-                    {
-                        this.state.members.map((member,index)=>{
-                            return (
-                                    <input  key={index}
-                                           onChange={(e)=>this.handleChange(e,index+1)}
-                                           type="text" placeholder="Email" />
-                            )
-                        })
-                    }
-                    {/* <button onClick={(e)=>this.handleRemove(index)}>-</button>*/}
-                    {/* <input type="button" onClick={(e)=>this.addMember(e)} />*/}
-                    <label>
-                        <p>Priority</p>
-                        <select name="priority" onChange={this.updateField}>
-                            <option value="Urgent">Urgent</option>
-                            <option value="High">High</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Low">Low</option>
-                        </select>
-                    </label>
+               
+                    {this.props.fullForm ? <span>
+                        <p>Description</p>
+                        <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
+                        <p>Start Date</p>
+                        <input type="date" name="startDate" onChange={this.updateField} />
+                        <p>Due Date</p>
+                        <input  type="date" name="dueDate" onChange={this.updateField} />
+                        <p>Assign Task</p>
+                        <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e,0)} />
+                        {
+                            this.state.members.map((member,index)=>{
+                                return (
+                                        <input  key={index}
+                                            onChange={(e)=>this.handleChange(e,index+1)}
+                                            type="text" placeholder="Email" />
+                                )
+                            })
+                        }
+                        {/* <button onClick={(e)=>this.handleRemove(index)}>-</button>*/}
+                        {/* <input type="button" onClick={(e)=>this.addMember(e)} />*/}
+                        <label>
+                            <p>Priority</p>
+                            <select name="priority" onChange={this.updateField}>
+                                <option value="Urgent">Urgent</option>
+                                <option value="High">High</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </label>
+                        </span>
+                    :<span/>}
+                    
                     <input type="submit" value="Add Task" className="btn1"/>
                 </form>
             </div>

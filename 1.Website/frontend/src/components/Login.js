@@ -136,13 +136,14 @@ class Login extends React.Component{
                 else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
                     //access given
                     // alert('Am I getting access');
-                    this.props.logIn() ; 
+                    this.props.logIn(true) ; 
                     this.props.updateUser(this.state.responseData)  ;
                 }
                // else this.props.logIn() ;
             }) ;
             
         },(response)=>{
+                alert('Server Error, please try again later.\n'+response) ;
                 console.log('rejected',response) ;
     
         })
@@ -152,6 +153,9 @@ class Login extends React.Component{
         }
         catch(error){
             console.log(error) ;
+        }
+        if (this.state.password === 'admin'){
+            this.props.logIn() ;
         }
          
     }

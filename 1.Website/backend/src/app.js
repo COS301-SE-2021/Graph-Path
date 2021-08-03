@@ -63,6 +63,7 @@ function makeApp(defaultDB , InjectedDB)
             app.use('/', Home);
             //Handling Errors?
             app.use((req, res, next) => {
+                console.log('Error received and serving..',req.url)
                 const newError = new Error(`Not found. ${req.url}`);
                 newError.status = 404;
                 next(newError);
