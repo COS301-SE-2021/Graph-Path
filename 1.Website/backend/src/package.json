@@ -20,11 +20,13 @@
   },
   "devDependencies": {
     "jest": "^27.0.6",
-    "supertest": "^6.1.4"
+    "supertest": "^6.1.4",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "scripts": {
     "test": "jest",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
