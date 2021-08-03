@@ -1,14 +1,12 @@
 import React from 'react';
 import '../css/popUpMessage.css'
 
-class popUpMessage extends React.Component{
-    render() {
-        const message = this.props.message;
-        return(
-            <span className="popUpContainer">
-                <p>{message}</p>
-            </span>
-        )
-    }
+function popUpMessage(props){
+        return(props.trigger) ? (
+
+            <div className="popUpContainer">
+                {props.children}
+            </div>
+        ) : "";
 }
 export default popUpMessage;
