@@ -82,18 +82,39 @@ function  makeTaskRoute(db)
      */
     router.get('/getTaskByDescription',(req, res, next)=> {
         let desc = req.body.description;
+        let responseObj = {
+            message:"",
+            body:null
+        }
+
         db.collection('Tasks').findOne({
             description:desc
         })
             .then((result)=>{
-                //console.log("This is result.description in Tasks by project: "+result.description);
-                res.send(result);
+                if (result != null)
+                {
+                    console.log("get task by description successful")
+                    responseObj.message="successful";
+                    responseObj.body = result;
+                    res.send(responseObj);
+                }
+
+                else
+                {
+                    console.log("get task by description failed: No task with such description")
+                    responseObj.message ="failed. No task with given description";
+                    responseObj.body = null;
+                    res.status(404).send(responseObj)
+
+                }
+
             })
             .catch((err)=>{
-                console.log("Could not retrieve task by description in the project: "+err);
+                console.log("DB error: "+err);
+                responseObj.message="failed. Error with DB:"+err;
+                res.status(500).send(responseObj)
+
             });
-
-
 
 
     });
