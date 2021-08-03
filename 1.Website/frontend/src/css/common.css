@@ -81,3 +81,9 @@
 .icon{
   margin: 2px 5px;  
 }
+
+.react-spinner-material{
+  position: absolute;
+  background-color:green;
+  z-index: 1000;
+}

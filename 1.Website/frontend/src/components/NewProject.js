@@ -2,19 +2,17 @@ import  React from 'react' ;
 import '../css/Login.css';
 import '../css/NewProject.css';
 import axios from 'axios' ;
+import Team from './Team';
 
 class NewProject extends React.Component{
     constructor(props){
         super(props) ;
         this.state = {
-            name: null , 
+            name: '' , 
             members: [] ,
-            startDate:null,
-            dueDate:null,
-            Members: [],
+            startDate:new Date().toJSON().slice(0,10),
+            dueDate:new Date().toJSON().slice(0,10),
             numberMembers: 0 ,
-            Owner:"Nani",
-            Graph:{} ,
             api:'http://localhost:9001',
             answer:null,
             responseData:null
@@ -22,18 +20,12 @@ class NewProject extends React.Component{
     }
 
 
-    addMember = () =>{
-        if (this.state.member !== "" ){
-            const memberName = this.state.member ;
+    addMember = (memberEmail) =>{
+        console.log('add member',memberEmail) ;
+        if (memberEmail !== undefined && Array.isArray(memberEmail)){
             this.setState({
-                members:this.state.members.push(memberName)  ,
-                numberMembers: this.state.numberMembers+1
-            }, () =>
-            document.getElementById('member').value = ""
-            ) ; 
-        }
-        else{
-            console.log('member name is empty') ;
+                members:memberEmail 
+            }, console.log('after update',this.state))
         }
     }
     
@@ -48,7 +40,7 @@ class NewProject extends React.Component{
         axios.post(`${this.state.api}/project/newProject`,data) 
         .then((response) =>{
            if(response.status===400){
-               throw Error(response.statusText) ;
+               throw Error("Thrown Error \n"+response.statusText) ;
            }//else
            console.log('from back end',response)
 
@@ -58,19 +50,33 @@ class NewProject extends React.Component{
                answer:res.message,
                responseData:res.data //data
             },()=>{
-               alert('res:'+this.state.answer)
                console.log(this.state)
-               if (this.state.answer!== null && this.state.answer){
-                //    this.props.changeToDefault() ;
+               if (this.state.answer!== null && this.state.responseData !== undefined){
+                   this.cleanUp() ;
+               }
+               else{
+                    alert('response:'+this.state.answer)
                }
             }) 
         
         },(response)=>{
+            //There was problem with the network
             console.log('rejected',response) ;
+            alert(`Unfortunately there was an Error:\n${response.message}`)
         })
         .catch((error)=>{
-            console.log(error) ;
+            console.log('Overloked Error Bitting',error) ;
         })
+    }
+
+    cleanUp = () =>{
+        console.log('cleaning up') ;
+        this.setState({
+            name: '' , 
+            members: [] ,
+            startDate:new Date().toJSON().slice(0,10),
+            dueDate:new Date().toJSON().slice(0,10)
+        }) ;
     }
 
     
@@ -81,9 +87,9 @@ class NewProject extends React.Component{
             projectName:this.state.name,
             startDate:this.state.startDate,
             dueDate:this.state.dueDate,
-            groupMembers:[this.props.userEmail],//this.state.Members,
+            groupMembers:[this.props.userEmail,...this.state.members],
             owner:this.props.userEmail, //add ownwer from dashboard
-            graph:this.state.Graph, //ES6
+            graph:{}, //ES6
             //userId:from dashboard
         }
         //communicate with the API
@@ -115,23 +121,13 @@ class NewProject extends React.Component{
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit} className="logForm">
                     <h4>Create New Project</h4>
                     <p>Project Name</p>
-                    <input type="text" required={true} name="name" placeholder="Project Name" onChange={this.updateField} />
+                    <input type="text" required={true} name="name" placeholder="Project Name" value={this.state.name} onChange={this.updateField} />
                     <p>Start Date</p>
-                    <input type="date" name="startDate" onChange={this.updateField} />
+                    <input type="date" name="startDate" onChange={this.updateField} value={this.state.startDate}/>
                     <p>Due Date</p>
-                    <input type="date" name="dueDate" onChange={this.updateField}/>
+                    <input type="date" name="dueDate" onChange={this.updateField} value={this.state.dueDate}/>
                     <p>Members</p>
-                    {/* <input type="text" id="member" name="Members" placeholder="Add Member" onChange={this.updateField}/>*/}
-                    <input type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,0)}/>
-                    {
-                        this.state.members.map((member,index)=>{
-                            return(
-                                <input key={index} type="text" id="member" name="Members" placeholder="Add Member" onChange={(e)=>this.handleChange(e,index+1)}/>
-                                )
-
-                        })
-                    }
-                    {/*<span className="newMember" onClick={this.addMember}><a>+</a></span>*/}
+                    <Team chooseMember={this.addMember} />
                     <br/>
                     <input type="submit" value="Create Project" className="btn1"  />
 

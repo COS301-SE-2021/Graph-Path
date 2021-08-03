@@ -14,7 +14,9 @@
     "mongoose": "^5.12.12",
     "nodemailer-express-handlebars": "^4.0.0",
     "nodemon": "^2.0.7",
-    "notenv": "^2.0.3"
+    "notenv": "^2.0.3",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "jest": "^27.0.6",
@@ -38,4 +40,3 @@
   },
   "homepage": "https://github.com/COS301-SE-2021/Graph-Path#readme"
 }
-

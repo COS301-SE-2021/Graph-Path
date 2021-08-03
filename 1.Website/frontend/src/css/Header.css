@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.header_ > div {
+  margin: 1px;
+}
+
 .App-header {
     background-color: #001122;
     min-height: 10vh;
@@ -22,7 +26,7 @@
   display: block;
   flex-direction: row;
 }
-.bigHeader > div {
+.bigHeader > * {
   margin: 0px;
 }
 #DashButton{
@@ -34,4 +38,15 @@
 
 #DashButton:hover {
     cursor: pointer;
+}
+
+h4 {
+  display: inline;
+}
+
+#logoImg{
+  height:50px;
+  margin: 2px;
+  /* right: 40%; */
+  float: left;
 }

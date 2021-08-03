@@ -59,16 +59,17 @@ function makeProjectRoute(db) {
 
 
     router.get('/getAllProjectsByUserEmail/:email', (req, res, next) => {
-        console.log('received request ', req.body, 'servicing.....');
+        // console.log('received request ', req.params, 'servicing.....');
         let usr=req.params.email;
         db.collection('Projects').find({
             "groupMembers":usr
         }).toArray()
             .then((projects) => {
-                console.log('success', projects);
+                // console.log('success', projects);
                 if (projects.length > 0) {
                     res.send({
-                        message: projects//.json()
+                        message:`Found ${projects.length}projects` , 
+                        data:projects
                     });
                 } else {
                     res.send({
@@ -77,7 +78,7 @@ function makeProjectRoute(db) {
                 }
             }, (ans) => {
                 console.log('rejected', ans);
-                res.send({
+                res.status(500).send({
                     data: ans
                 });
             })
@@ -130,6 +131,60 @@ function makeProjectRoute(db) {
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * 
+ * /deleteProject/:
+ *   delete:
+ *     summary: Deletes the project owner is deleting using the name
+ *     tags: [Books]
+ *     parameters:
+ *       projectName: The name of the project 
+ *       owner: The email address of the owner of project
+ *     responses:
+ *       200:
+ *         description: The list of the books
+ *         content:
+ *           application/json:
+ *      400:
+ *          description:The body is not complete.
+ */
+
+router.delete('/deleteProject',(req,res)=>{
+    console.log('DELETE ',req.query)
+    const {projectName,owner} = req.query ;
+    if (projectName !== undefined && owner !== undefined){
+        // console.log(projectName,owner); 
+        db.collection('Projects').deleteOne({
+            projectName:projectName ,
+            owner:owner
+        })
+        .then(del =>{
+            console.log('result from db ',del.result) ;
+            if (del.result.n > 0){
+                res.send({
+                    message:"Deleted.",
+                    data:0
+                }) ;
+            }
+            else{
+                res.send({
+                    message:"Project not found"
+                }) ;
+            }
+        })
+        .catch(err=>{
+            res.status(500).send({
+                message:"Server Error",
+                err:err
+            })
+        })
+    }
+    else{
+        res.send({
+            message:"Request not complete"
+        }) ;
+    }
+})
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
 router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
@@ -201,8 +256,8 @@ router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
     // })
 });
 
-router.put('/updateProjectGraph/:name',(req,res)=>{
-    const project = req.params.name ;
+router.put('/updateProjectGraph',(req,res)=>{
+    const project = req.body.projectName ;
     const graph = req.body.graph ;
 
     console.log('PUT ../',project,'body: ',graph) ; 
