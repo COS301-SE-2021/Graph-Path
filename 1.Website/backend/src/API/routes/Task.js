@@ -21,7 +21,9 @@ const assert = require('assert');
  *           type: string
  *           description: This is the current state of the task expected states are not started, in progress, completed
  *
- *
+ *         description:
+ *           type: string
+ *           description: this is description of the task.
  *         project:
  *           type: string
  *           description: This is the name of the project, no two projects can have the same name.
@@ -58,26 +60,30 @@ const assert = require('assert');
  *   description: This is the task managing API
  */
 
-
 function  makeTaskRoute(db)
 {
     //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      *@swagger
-     * /getTaskByDescription:
+     * /task/getTaskByDescription:
      *   get:
      *     summary: Returns information about a task given its description as parameter
      *     tags: [Task]
      *     responses:
      *       200:
-     *         description: JSon body of the task
+     *         description: Json body of the task
      *         contents:
-     *              application/json
+     *           application/json
      *         schema:
      *           type: array
      *           items:
      *             $ref: '#components/schemas/Task'
+     *       404:
+     *         description: the given description does not match any task
+     *         contents:
+     *           application/json
+     *
+     *
      *
      */
     router.get('/getTaskByDescription',(req, res, next)=> {
@@ -110,7 +116,7 @@ function  makeTaskRoute(db)
 
             })
             .catch((err)=>{
-                console.log("DB error: "+err);
+                console.log("Server error: "+err);
                 responseObj.message="failed. Error with DB:"+err;
                 res.status(500).send(responseObj)
 
@@ -119,21 +125,63 @@ function  makeTaskRoute(db)
 
     });
 
+    /**
+     *@swagger
+     * /task/getTaskByTasknr:
+     *   get:
+     *     summary: Returns information about a task given its unique number as parameter
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: Json body of the task
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       404:
+     *         description: the given task number does not match any task
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
     router.get('/getTaskByTasknr',(req, res, next)=> {
 
        // console.log("TaskByProjectBody: "+req.body);
          //console.log("TaskByProjectBodyProject: "+req.body.project);
         let tsknr = req.body.tasknr;
+        let responseObj = {
+            message:"",
+            body:null
+        }
         db.collection('Tasks').findOne({
             tasknr:tsknr
         })
             .then((result)=>{
                 //console.log("This is result.tasknr in Tasks by project: "+result.tasknr);
                 //console.log("This is result in Tasks by project: "+result);
-                res.send(result);
+                if(result != null)
+                {
+                    responseObj.message = "successful";
+                    responseObj.body = result;
+                    res.send(responseObj)
+                }
+
+                else
+                {
+                    responseObj.message = "failed.No task exists with given number";
+                    res.status(404).send(responseObj);
+                }
+
+
             })
             .catch((err)=>{
                 console.log("Could not retrieve task by number in the project: "+err);
+                responseObj.message="failed. Error with DB:"+err;
+                res.status(500).send(responseObj)
             });
 
     });
