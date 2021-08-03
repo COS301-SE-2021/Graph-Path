@@ -42,10 +42,21 @@ class taskList extends React.Component{
                 })
     }
     render(){
-
+    const {tasks}=this.state;
+    if(isLoading)
+    {
+        return <div>LOADING...</div>
+    }
+    else {
         return (
+            //List in a ordered manner
+        <ul>
+            <li>
 
+            </li>
+        </ul>
         )
+    }
     }
 }
 export default taskList ;
