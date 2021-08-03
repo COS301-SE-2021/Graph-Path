@@ -71,11 +71,34 @@ class Profile extends React.Component{
         console.log(this.state)
         //check if all field are updated
 
-        const data = {
-            username: this.state.username,
-            password: this.state.password
+        if(this.state.username !== '' && this.state.password !== ''){
+            const data = {
+                username: this.state.username,
+                password: this.state.password
+            }
+            console.log("data",data)
+            this.sendData(data)
+        }else if(this.state.username !== '' && this.state.password === ''){
+            const data = {
+                username: this.state.username
+            }
+            console.log("data",data)
+            this.sendData(data)
+        }else if(this.state.username === '' && this.state.password !== ''){
+            const data ={
+                password: this.state.password
+            }
+            console.log("data",data)
+            this.sendData(data)
+        }else{
+            //dont send any data
         }
-        console.log("data",data)
+
+
+    }
+
+    sendData(data){
+
     }
 
     render() {
@@ -145,10 +168,12 @@ class Profile extends React.Component{
                         <input type="submit"
                                className="btn1"
                                value="Update"
+
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         <input type="button"
                                className="btn1"
+                               id="cancelBtn"
                                value="Cancel"
                                onClick={this.enableEdit}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
