@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/Profile.css'
+import PopUpMessage from "./popUpMessage";
 
 import {Link} from 'react-router-dom' ;
 
@@ -18,6 +19,7 @@ class Profile extends React.Component{
             }
         }
     }
+
 
     /* Change the form to be editable*/
     enableEdit = () => {
@@ -161,15 +163,21 @@ class Profile extends React.Component{
 
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
+
                         <input type="button"
                                className="btn1"
                                id="cancelBtn"
                                value="Cancel"
                                onClick={this.enableEdit}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
+
                     </form>
 
+
                 </div>
+                <PopUpMessage trigger={true}>
+                    <p>This is a pop up</p>
+                </PopUpMessage>
 
             </div>
 
