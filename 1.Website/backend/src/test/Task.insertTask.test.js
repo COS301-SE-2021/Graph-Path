@@ -1,14 +1,10 @@
-const makeApp = require('../../app');
+const makeApp = require('../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb');
 
-/**** here we mock the database with the relevant collections and documents ***/
 
-/**** here we mock the database with the relevant collections and documents  documents ***/
-
-describe('/deleteTaskByTasknr',  ()=> {
-
-    describe('When requested with a Project number' , ()=>{
+describe('/insertTask',  ()=> {
+    describe('When request with a given JSON body ',  () =>{
         let connection;
         let MockDB;
         beforeAll(async () => {
@@ -37,10 +33,8 @@ describe('/deleteTaskByTasknr',  ()=> {
             await connection.close();
             await MockDB.close();
         });
-
         it('it should return status code 200', async ()=> {
 
-            const Tasks = MockDB.collection('Tasks');
             let MockTask = {
                 description: "Help Mark with his work",
                 status: "in-progress",
@@ -51,20 +45,15 @@ describe('/deleteTaskByTasknr',  ()=> {
                 due: Date.now(),
                 issued: Date.now()+48,
             }
-
-            await Tasks.insertOne(MockTask)
             let app = makeApp(false,MockDB)
             let response  = await supertest(app)
-                .delete('/task/deleteTaskByTasknr')
-                .send({
-                    tasknr: 1
-                })
+                .post('/task/insertTask')
+                .send(MockTask)
                 .expect(200)
                 .then((res)=>{})
         });
-        it('it should return a json body', async ()=> {
+        it('it should return a JSON object', async ()=> {
 
-            const Tasks = MockDB.collection('Tasks');
             let MockTask = {
                 description: "Help Mark with his work",
                 status: "in-progress",
@@ -75,21 +64,16 @@ describe('/deleteTaskByTasknr',  ()=> {
                 due: Date.now(),
                 issued: Date.now()+48,
             }
-
-            await Tasks.insertOne(MockTask)
             let app = makeApp(false,MockDB)
             let response  = await supertest(app)
-                .delete('/task/deleteTaskByTasknr')
-                .send({
-                    tasknr: 1
-                })
+                .post('/task/insertTask')
+                .send(MockTask)
                 .expect(200)
                 .then((res)=>{
                     expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
                 })
         });
-        it('it should return message \'Deleted on success\'', async ()=> {
-
+        it('it should return JSON object with save message', async ()=> {
             const Tasks = MockDB.collection('Tasks');
             let MockTask = {
                 description: "Help Mark with his work",
@@ -101,20 +85,22 @@ describe('/deleteTaskByTasknr',  ()=> {
                 due: Date.now(),
                 issued: Date.now()+48,
             }
-
-            await Tasks.insertOne(MockTask)
+            await Tasks.insertOne(MockTask);
             let app = makeApp(false,MockDB)
-            let response  = await supertest(app)
-                .delete('/task/deleteTaskByTasknr')
-                .send({
-                    tasknr: 1
-                })
+            const response = await supertest(app)
+                .post('/task/insertTask')
+                .send(MockTask)
                 .expect(200)
                 .then((res)=>{
-                    expect(res.body['message']).toBe('Deleted')
+                    res.body
+                    expect(res.body['message']).toBe('saved')
+
                 })
         });
+    });
 
-    })
+
+
+
 
 });

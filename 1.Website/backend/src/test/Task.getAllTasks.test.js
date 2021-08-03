@@ -1,4 +1,4 @@
-const makeApp = require('../../app');
+const makeApp = require('../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb')
 
