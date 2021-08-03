@@ -1,17 +1,7 @@
 import React from 'react';
 import '../css/Profile.css'
 
-import {Link, withRouter, Route, Switch} from 'react-router-dom' ;
-
-function EditView (){
-
-    // const {url} = match
-    return (<h1>
-        EditView
-    </h1>)
-}
-
-
+import {Link} from 'react-router-dom' ;
 
 class Profile extends React.Component{
     constructor(props) {
@@ -103,7 +93,7 @@ class Profile extends React.Component{
 
     render() {
     // console.log(' prop objects',this.props) ; 
-    const {match} = this.props  ;
+
         const {formErrors} = this.state;
     const userInfo = this.props.userEmail;
         return(
@@ -181,14 +171,9 @@ class Profile extends React.Component{
 
                 </div>
 
-                <div>
-                    <Switch>
-                        <Route path={`${match.url}/editProfile`} component={EditView}/>
-                    </Switch>
-                </div>
             </div>
 
         )
     }
 }
-export default withRouter(Profile);
+export default Profile;
