@@ -192,17 +192,13 @@ function  makeTaskRoute(db)
      *     tags: [Task]
      *     responses:
      *       200:
-     *         description: Json body of the task
+     *         description: A list of Json objects of tasks
      *         contents:
      *           application/json
      *         schema:
      *           type: array
      *           items:
      *             $ref: '#components/schemas/Task'
-     *       404:
-     *         description: the given task number does not match any task
-     *         contents:
-     *           application/json
      *
      *
      *
@@ -222,7 +218,29 @@ function  makeTaskRoute(db)
             });
 
     });
-
+    /**
+     *@swagger
+     * /task/getAllTasksByProject:
+     *   get:
+     *     summary: Returns all tasks that belong to the given Project name as a parameter
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: An array of Json objects each representing a task
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       404:
+     *         description: the given route does not exist
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
     router.get('/getAllTasksByProject',(req, res, next)=> {
 
         //console.log("TasksByProjectBody: "+req.body);
