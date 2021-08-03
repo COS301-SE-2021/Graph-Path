@@ -1,4 +1,4 @@
-const makeApp = require('../app');
+const makeApp = require('../../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb')
 
@@ -44,15 +44,14 @@ describe('/getAllTasks',()=> {
         it('it should return JSON object with all the task\'s fields', async ()=> {
             const Tasks = MockDB.collection('Tasks');
             let MockTask = {
-                CreationDate: Date.now() ,
-                DueDate: Date.now()+1 ,
-                TaskName: "Task 0 ",
-                Description: "This is a test task",
-                tasknr: "Green",
-                Status: 'In progress',
-                Assignee: ['User1' , 'User2'],
-                Assigner: "Kagiso 1",
-                ProjectName : "SomeID of the parent Node",
+                description: "Help Mark with his work",
+                status: "in-progress",
+                project: "Graph-Path",
+                tasknr: 1,
+                assignee: "Joe",
+                assigner: "Alistair",
+                due: Date.now(),
+                issued: Date.now()+48,
             }
             await Tasks.insertOne(MockTask);
             let app = makeApp(false,MockDB)
@@ -61,15 +60,15 @@ describe('/getAllTasks',()=> {
                 .expect(200)
                 .then((res)=>{
                     res.body
-                    expect(res.body[0]['CreationDate']).toBeDefined()
-                    expect(res.body[0]['DueDate']).toBeDefined()
-                    expect(res.body[0]['TaskName']).toBeDefined()
-                    expect(res.body[0]['Description']).toBeDefined()
-                    expect(res.body[0]['Label']).toBeDefined()
-                    expect(res.body[0]['Status']).toBeDefined()
-                    expect(res.body[0]['Assignee']).toBeDefined()
-                    expect(res.body[0]['Assigner']).toBeDefined()
-                    expect(res.body[0]['Parent_Node']).toBeDefined()
+                    expect(res.body[0]['description']).toBeDefined()
+                    expect(res.body[0]['status']).toBeDefined()
+                    expect(res.body[0]['project']).toBeDefined()
+                    expect(res.body[0]['tasknr']).toBeDefined()
+                    expect(res.body[0]['assignee']).toBeDefined()
+                    expect(res.body[0]['assigner']).toBeDefined()
+                    expect(res.body[0]['due']).toBeDefined()
+                    expect(res.body[0]['issued']).toBeDefined()
+
                 })
         });
         it('it should return empty JSON object when there are no projects', async ()=>{
