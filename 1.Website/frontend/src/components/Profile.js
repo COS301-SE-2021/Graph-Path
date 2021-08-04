@@ -17,6 +17,7 @@ class Profile extends React.Component{
             email: this.props.userEmail.email,
             api:'http://localhost:9001',
             answer:undefined,
+            responseData:null,
 
             formErrors: {
                 password:""
@@ -95,7 +96,7 @@ class Profile extends React.Component{
 
     sendData(data){
         try{
-            axios.post(`${this.state.api}/user/updateUserUsername/${this.state.email}/${data.username}`)
+            axios.patch(`${this.state.api}/user/updateUserUsername/${this.state.email}/${data.username}`)
                 .then((response)=>{
                     if(response.status===400){
                         throw Error(response.statusText);
@@ -105,13 +106,14 @@ class Profile extends React.Component{
 
                     this.setState({
                         answer: res.message,
-                        responseData:res.data[0]
+                        //responseData:res.data
                     },()=>{
-                        if (this.state.answer!== undefined && this.state.responseData !== undefined){
-                            alert(`Update user ${this.state.responseData.email} to new user name ${this.state.responseData.username}`)
+                        console.log("response",this.state)
+                        if (this.state.answer!== undefined){
+                            alert(`Username changed `)
                         }
                         else{
-                            alert(`Something went wrong please register again `)
+                            alert(`Something went wrong please update again `)
                         }
                     })
                 },(response)=>{
@@ -164,7 +166,6 @@ class Profile extends React.Component{
                                placeholder="Enter Username"
                                defaultValue={userInfo.username}
                                onChange={this.change}
-                               value={this.state.username}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
                         {
                             this.state.empty === true ? <div  >Field cannot be empty</div> : ""
