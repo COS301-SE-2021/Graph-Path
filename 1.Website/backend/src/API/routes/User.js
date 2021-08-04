@@ -90,13 +90,8 @@ var db = require('../../Controllers/DBController').getDB();
      router.patch('/updateUserUsername/:email/:username',(req, res, next)=>{
          let mail = req.params.email;
          let usrnme = req.params.username;
-                 //let tst = req.body.graph;
-                //let grph2 = JSON.parse(grph);
-         console.log("User email: "+ mail);
-         // console.log("req.body: "+tst);
-         console.log(" new user username: "+usrnme);
-                //console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
-                //console.log("grph.edges[0].id: "+grph2.edges[0].id);
+        // console.log("User email: "+ mail);
+        // console.log("New user username: "+usrnme);
          db.collection('Users').updateOne({
              email:mail
          },{
@@ -110,7 +105,7 @@ var db = require('../../Controllers/DBController').getDB();
                      data: err
                  });
              }else{
-                 console.log("The update of the user's username was a success: "+result);
+                 //console.log("The update of the user's username was a success: "+result);
                  res.send({
                      message: "success",
                      data: result
@@ -123,7 +118,77 @@ var db = require('../../Controllers/DBController').getDB();
          // })
      });
 
-    //module.exports = router;
+     router.patch('/updateUserPassword/:email/:password',(req, res, next)=>{
+         let mail = req.params.email;
+         let psw = req.params.password;
+         console.log("User email: "+ mail);
+         console.log("New user password: "+psw);
+         db.collection('Users').updateOne({
+             email:mail
+         },{
+             $set:{password:psw}
+         },(err,result)=>{
+
+             if(err){
+                 console.log("Could not update the user's password: "+err);
+                 res.send({
+                     message: "Failed",
+                     data: err
+                 });
+             }else{
+                 //console.log("The update of the user's password was a success: "+result);
+                 res.send({
+                     message: "success",
+                     data: result
+                 });
+             }
+
+         })
+         //.catch((err)=>{
+         //    console.log("Could not update the task description: "+err);
+         // })
+     });
+
+     router.patch('/updateUserUsernameAndPassword/:email/:username/:password',(req, res, next)=>{
+         let mail = req.params.email;
+         let usrnme = req.params.username;
+         let psw = req.params.password;
+         console.log("User email: "+ mail);
+         console.log("New user username: "+usrnme);
+         console.log("New user password: "+psw);
+         db.collection('Users').updateOne({
+             email:mail
+         },{
+             $set:{
+                 username:usrnme,
+                 password:psw
+             }
+
+         },(err,result)=>{
+
+             if(err){
+                 console.log("Could not update the user's username and password: "+err);
+                 res.send({
+                     message: "Failed",
+                     data: err
+                 });
+             }else{
+                 //console.log("The update of the user's username and password was a success: "+result);
+                 res.send({
+                     message: "success",
+                     data: result
+                 });
+             }
+
+         })
+         //.catch((err)=>{
+         //    console.log("Could not update the task description: "+err);
+         // })
+     });
+
+
+
+     //module.exports = router;
     return router;
 }
 
