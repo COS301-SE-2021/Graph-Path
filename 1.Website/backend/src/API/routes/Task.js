@@ -259,6 +259,29 @@ function  makeTaskRoute(db)
     });
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     *@swagger
+     * /task/insertTask:
+     *   post:
+     *     summary: Insert a new Task
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: Insert of new task successful
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       500:
+     *         description: could not insert task
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
     router.post('/insertTask',(req, res, next)=>{
         let data = req.body;
         const id = new mongoose.mongo.ObjectID() ;
@@ -273,12 +296,39 @@ function  makeTaskRoute(db)
             })
             .catch(err=>{
                 console.log("Could not create task: "+err);
+                res.status(500).send({
+                    message:"could not create task",
+                    body:null
+                })
             });
 
 
     });
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     *@swagger
+     * /task/deleteTaskByTasknr:
+     *   delete:
+     *     summary: deletes a task that has the passed in unique number as parameter
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: deletion of task successful
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       500:
+     *         description: could not insert task
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
     router.delete('/deleteTaskByTasknr',(req, res, next)=>{
         let del = req.body.tasknr ;
         //console.log("This is tasknr inside delete task by tasknr: "+del);
@@ -296,20 +346,31 @@ function  makeTaskRoute(db)
             });
     })
 
-router.post('/insertTask',(req, res, next)=>{
-    var task= {
-        Description: "Finish the getters and setters."
-    }
-    mongo.connect(url,(err, db)=>{
-        db.collection('Tasks').insertOne(task, (err,result)=>{
-            console.log("We inserted the task into the database: " + task);
-            db.close();
-        });
-    });
-})
-
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     *@swagger
+     * /task/updateTaskDescription/:project/:tasknr/:description:
+     *   patch:
+     *     summary: Updates the description of the task that matches the given projectName , task number and description
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: update of task description successful
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       500:
+     *         description: could not update task description
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
     router.patch('/updateTaskDescription/:project/:tasknr/:description',(req,res,next)=>{
 
         let proj = req.params.project;
@@ -323,13 +384,13 @@ router.post('/insertTask',(req, res, next)=>{
         },(err,result)=>{
 
             if(err){
-                console.log("Could not update the task description: "+err);
+
                 res.send({
-                    message: "Failed",
+                    message: "Failed.Could not update the task description",
                     data: err
                 });
             }else{
-                //console.log("The update of the task description was a success: "+result);
+
                 res.send({
                     message: "success",
                     data: result['ops']
@@ -337,11 +398,32 @@ router.post('/insertTask',(req, res, next)=>{
             }
 
         })
-        //.catch((err)=>{
-        //    console.log("Could not update the task description: "+err);
-       // })
+
     });
 
+    /**
+     *@swagger
+     * /task/updateTaskStatus/:project/:tasknr/:status:
+     *   patch:
+     *     summary: Updates the status of the task that matches the given projectName , task number and description
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: update of task status successful
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       500:
+     *         description: could not update task status
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
     router.patch('/updateTaskStatus/:project/:tasknr/:status',(req,res,next)=>{
 
         let proj = req.params.project;
