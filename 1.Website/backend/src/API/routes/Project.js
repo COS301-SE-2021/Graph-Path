@@ -210,7 +210,7 @@ router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
                 data: err
             });
         }else{
-            console.log("The update of the task description was a success: "+result);
+            console.log("The update of the project graph was a success: "+result);
             res.send({
                 message: "success",
                 data: result

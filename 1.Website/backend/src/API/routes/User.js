@@ -87,7 +87,41 @@ var db = require('../../Controllers/DBController').getDB();
 
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+     router.patch('/updateUserUsername/:email/:username',(req, res, next)=>{
+         let mail = req.params.email;
+         let usrnme = req.params.username;
+                 //let tst = req.body.graph;
+                //let grph2 = JSON.parse(grph);
+         console.log("User email: "+ mail);
+         // console.log("req.body: "+tst);
+         console.log(" new user username: "+usrnme);
+                //console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
+                //console.log("grph.edges[0].id: "+grph2.edges[0].id);
+         db.collection('Users').updateOne({
+             email:mail
+         },{
+             $set:{username:usrnme}
+         },(err,result)=>{
 
+             if(err){
+                 console.log("Could not update the user's username: "+err);
+                 res.send({
+                     message: "Failed",
+                     data: err
+                 });
+             }else{
+                 console.log("The update of the user's username was a success: "+result);
+                 res.send({
+                     message: "success",
+                     data: result
+                 });
+             }
+
+         })
+         //.catch((err)=>{
+         //    console.log("Could not update the task description: "+err);
+         // })
+     });
 
     //module.exports = router;
     return router;
