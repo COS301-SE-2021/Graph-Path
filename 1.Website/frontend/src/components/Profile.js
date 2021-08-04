@@ -3,6 +3,7 @@ import '../css/Profile.css'
 import PopUpMessage from "./popUpMessage";
 
 import {Link} from 'react-router-dom' ;
+import axios from "axios";
 
 class Profile extends React.Component{
     constructor(props) {
@@ -13,6 +14,9 @@ class Profile extends React.Component{
             valid: false,
             username: '',
             password: '',
+            email: this.props.userEmail.email,
+            api:'http://localhost:9001',
+            answer:undefined,
 
             formErrors: {
                 password:""
@@ -60,13 +64,13 @@ class Profile extends React.Component{
 
     onSubmit = (e) =>{
         e.preventDefault();
-        console.log(this.state)
+        console.log("submitted",this.state)
         //check if all field are updated
 
         if(this.state.username !== '' && this.state.password !== ''){
             const data = {
                 username: this.state.username,
-                password: this.state.password
+                password: this.state.password,
             }
             console.log("data",data)
             this.sendData(data)
@@ -90,7 +94,33 @@ class Profile extends React.Component{
     }
 
     sendData(data){
+        try{
+            axios.post(`${this.state.api}/user/updateUserUsername/${this.state.email}/${data.username}`)
+                .then((response)=>{
+                    if(response.status===400){
+                        throw Error(response.statusText);
+                    }
 
+                    const res = response.data;
+
+                    this.setState({
+                        answer: res.message,
+                        responseData:res.data[0]
+                    },()=>{
+                        if (this.state.answer!== undefined && this.state.responseData !== undefined){
+                            alert(`Update user ${this.state.responseData.email} to new user name ${this.state.responseData.username}`)
+                        }
+                        else{
+                            alert(`Something went wrong please register again `)
+                        }
+                    })
+                },(response)=>{
+                    console.log('rejected',response);
+                    alert('Server Error, Please try again later') ;
+                })
+        }catch (error){
+            console.log(error);
+        }
     }
 
     render() {
@@ -141,7 +171,7 @@ class Profile extends React.Component{
                         }
 
                         <label>Email</label>
-                        <input defaultValue={userInfo.email}
+                        <input value={userInfo.email}
                                type='text'
                                disabled/>
 
@@ -175,7 +205,7 @@ class Profile extends React.Component{
 
 
                 </div>
-                <PopUpMessage trigger={true}>
+                <PopUpMessage trigger={false}>
                     <p>This is a pop up</p>
                 </PopUpMessage>
 
