@@ -3,7 +3,7 @@ import '../css/Login.css';
 import '../css/NewProject.css';
 import axios from 'axios' ;
 import Team from './Team';
-
+import {Redirect} from 'react-router-dom';
 class NewProject extends React.Component{
     constructor(props){
         super(props) ;
@@ -15,7 +15,8 @@ class NewProject extends React.Component{
             numberMembers: 0 ,
             api:'http://localhost:9001',
             answer:null,
-            responseData:null
+            responseData:null,
+            redirect:false,
         }
     }
 
@@ -75,7 +76,8 @@ class NewProject extends React.Component{
             name: '' , 
             members: [] ,
             startDate:new Date().toJSON().slice(0,10),
-            dueDate:new Date().toJSON().slice(0,10)
+            dueDate:new Date().toJSON().slice(0,10),
+            redirect:true
         }) ;
     }
 
@@ -116,6 +118,9 @@ class NewProject extends React.Component{
     }
 
     render(){
+        if (this.state.redirect){
+            return <Redirect to="viewProjects" />
+        }
         return (
             <div className="newProject">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit} className="logForm">
