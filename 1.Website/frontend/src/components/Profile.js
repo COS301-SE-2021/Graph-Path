@@ -73,21 +73,18 @@ class Profile extends React.Component{
                 username: this.state.username,
                 password: this.state.password,
             }
-            console.log("data",data)
             this.sendData(data)
         }else if(this.state.username !== '' && this.state.password === ''){
             const data = {
                 username: this.state.username,
                 password: ''
             }
-            console.log("data",data)
             this.sendData(data)
         }else if(this.state.username === '' && this.state.password !== ''){
             const data ={
                 username: '',
                 password: this.state.password
             }
-            console.log("data",data)
             this.sendData(data)
         }else{
             //dont send any data
@@ -126,7 +123,7 @@ class Profile extends React.Component{
                     }, () => {
                         console.log("response", this.state)
                         if (this.state.answer !== undefined) {
-                            alert(`Username changed `)
+                            alert(`Username or Password changed `)
                         } else {
                             alert(`Something went wrong please update again `)
                         }
@@ -151,18 +148,11 @@ class Profile extends React.Component{
                 <div className="App-Link">
                     <Link to="/dashboard" className="btn1" id="dashBtn">Dashboard</Link>
                     <span>   .   </span>
-                    {/* <Link to={`${match.url}/editProfile`}  >Edit Profile</Link> */}
+
                     <input className="btn1" type="button" value="Edit Profile" onClick={this.enableEdit} disabled = {(this.state.disabled) ? "" : "disabled"} />
                 </div>
 
                 <h1>Profile</h1>
-                {/*
-                * Change Email
-                * Change Username
-                * Change Password
-                * Invite link
-                */}
-
                 <div className="info">
                     <form className="profileForm" onSubmit={this.onSubmit} >
                         <label>First Name</label>
