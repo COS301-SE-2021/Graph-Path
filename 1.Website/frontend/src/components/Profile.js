@@ -67,7 +67,7 @@ class Profile extends React.Component{
         e.preventDefault();
         console.log("submitted",this.state)
         //check if all field are updated
-
+        //update this to an easier way******
         if(this.state.username !== '' && this.state.password !== ''){
             const data = {
                 username: this.state.username,
@@ -77,12 +77,14 @@ class Profile extends React.Component{
             this.sendData(data)
         }else if(this.state.username !== '' && this.state.password === ''){
             const data = {
-                username: this.state.username
+                username: this.state.username,
+                password: ''
             }
             console.log("data",data)
             this.sendData(data)
         }else if(this.state.username === '' && this.state.password !== ''){
             const data ={
+                username: '',
                 password: this.state.password
             }
             console.log("data",data)
@@ -95,10 +97,24 @@ class Profile extends React.Component{
     }
 
     sendData(data){
-        try{
-            axios.patch(`${this.state.api}/user/updateUserUsername/${this.state.email}/${data.username}`)
-                .then((response)=>{
-                    if(response.status===400){
+        try {
+            /**
+             * Set url for value(s) being updated
+             */
+
+            let url = '';
+            if(data.username !== '' && data.password === ''){
+                url = this.state.api+"/user/updateUserUsername/"+this.state.email+"/"+data.username;
+            }else if(data.username === '' && data.password !== ''){
+                url = this.state.api+"/user/updateUserPassword/"+this.state.email+"/"+data.password;
+            }else if(data.username !== '' && data.password !== ''){
+                url = this.state.api+"/user/updateUserUsernameAndPassword/"+this.state.email+"/"+data.username+"/"+data.password;
+            }
+
+
+            axios.patch(`${url}`)
+                .then((response) => {
+                    if (response.status === 400) {
                         throw Error(response.statusText);
                     }
 
@@ -107,19 +123,19 @@ class Profile extends React.Component{
                     this.setState({
                         answer: res.message,
                         //responseData:res.data
-                    },()=>{
-                        console.log("response",this.state)
-                        if (this.state.answer!== undefined){
+                    }, () => {
+                        console.log("response", this.state)
+                        if (this.state.answer !== undefined) {
                             alert(`Username changed `)
-                        }
-                        else{
+                        } else {
                             alert(`Something went wrong please update again `)
                         }
                     })
-                },(response)=>{
-                    console.log('rejected',response);
-                    alert('Server Error, Please try again later') ;
+                }, (response) => {
+                    console.log('rejected', response);
+                    alert('Server Error, Please try again later');
                 })
+
         }catch (error){
             console.log(error);
         }
