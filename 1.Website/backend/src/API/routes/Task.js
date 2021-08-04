@@ -363,8 +363,8 @@ function  makeTaskRoute(db)
      *           type: array
      *           items:
      *             $ref: '#components/schemas/Task'
-     *       500:
-     *         description: could not update task description
+     *       400:
+     *         description:The given parameters do not match any existing task
      *         contents:
      *           application/json
      *
@@ -385,16 +385,32 @@ function  makeTaskRoute(db)
 
             if(err){
 
-                res.send({
+                res.status(500).send({
                     message: "Failed.Could not update the task description",
                     data: err
                 });
-            }else{
+            }
+            else{
 
-                res.send({
-                    message: "success",
-                    data: result['ops']
-                });
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
             }
 
         })
