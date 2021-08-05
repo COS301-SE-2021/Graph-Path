@@ -161,6 +161,7 @@ class Graph extends React.Component{
                 grapRep:this.emptyGraph(),
                 linkNumber:num
             }) ;
+            this.state.graphManager.setGraph(this.emptyGraph()) ; 
         }
         else{
             if (num >= 0){ //valid link number
