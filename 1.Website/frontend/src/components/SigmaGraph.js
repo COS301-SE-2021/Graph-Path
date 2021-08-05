@@ -126,12 +126,14 @@ class GrapExample2 extends React.Component{
               sideMargin:100,
               minNodeSize:3,
               maxNodeSize:10,
-              minEdgeSize:20,
+              minEdgeSize:200,
+              defaultEdgeHoverColor:'#000',
               maxEdgeSize:30,
               drawNodes:true, //draw node ?
               drawLabels:true, //node label
               drawEdges: true, //draw edge?
-              drawEdgeLabels:true,
+              drawEdgeLabels:false,
+              minArrowSize:10
             }}>
               <EdgeShapes default="arrow"/>
               <NodeShapes default="def"/>

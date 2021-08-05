@@ -40,7 +40,7 @@ class GraphManager{
             source:src, 
             target:tgt,
             label:`${src} to ${tgt}` ,
-            color:'#00ff00'
+            color:'#080'
         }
         curr.edges.push(edg) ;
     }
