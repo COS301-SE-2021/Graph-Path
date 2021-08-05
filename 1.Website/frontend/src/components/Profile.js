@@ -68,6 +68,7 @@ class Profile extends React.Component{
         console.log("submitted",this.state)
         //check if all field are updated
         //update this to an easier way******
+        this.enableEdit();
         if(this.state.username !== '' && this.state.password !== ''){
             const data = {
                 username: this.state.username,
@@ -119,11 +120,12 @@ class Profile extends React.Component{
 
                     this.setState({
                         answer: res.message,
-                        //responseData:res.data
+                       // responseData:res.data
                     }, () => {
-                        console.log("response", this.state)
+                       // console.log("response", this.state.responseData)
                         if (this.state.answer !== undefined) {
-                            alert(`Username or Password changed `)
+                            //alert(`Username or Password changed `)
+                            this.props.updateUser(data)
                         } else {
                             alert(`Something went wrong please update again `)
                         }
@@ -148,11 +150,18 @@ class Profile extends React.Component{
                 <div className="App-Link">
                     <Link to="/dashboard" className="btn1" id="dashBtn">Dashboard</Link>
                     <span>   .   </span>
-
+                    {/* <Link to={`${match.url}/editProfile`}  >Edit Profile</Link> */}
                     <input className="btn1" type="button" value="Edit Profile" onClick={this.enableEdit} disabled = {(this.state.disabled) ? "" : "disabled"} />
                 </div>
 
                 <h1>Profile</h1>
+                {/*
+                * Change Email
+                * Change Username
+                * Change Password
+                * Invite link
+                */}
+
                 <div className="info">
                     <form className="profileForm" onSubmit={this.onSubmit} >
                         <label>First Name</label>
