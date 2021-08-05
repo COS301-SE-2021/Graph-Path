@@ -6,7 +6,7 @@ class Task extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            name: null,
+            name: '',
             members: [],
             startDate:null,
             dueDate:null,
@@ -16,15 +16,11 @@ class Task extends React.Component{
             api:'http://localhost:9001',
         }
     }
-/*
-    addMember(){
-        this.setState(
-            {
-                members: [...this.state.members,""]
-            }
-        )
+    cleanUp=()=>{
+        this.setState({
+            name: '',
+        }) ;
     }
-*/
     changeToDefault = () =>{
         this.props.default() ;
     }
@@ -88,8 +84,8 @@ class Task extends React.Component{
         }
         //communicate with the API
         // this.sendData(data) ;
+        this.cleanUp();
         this.props.addTask(data) ;
-    
     }
 
     updateField = (event) => {
@@ -109,7 +105,7 @@ class Task extends React.Component{
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
                     <h4>Add Task</h4>
                     <p>Task</p>
-                    <input type="text" name="name" required={true} placeholder="Task Name" onChange={this.updateField} />
+                    <input type="text" name="name" required={true} placeholder="Task Name" value={this.state.name} onChange={this.updateField} />
                
                     {this.props.fullForm ? <span>
                         <p>Description</p>
