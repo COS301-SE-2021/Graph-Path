@@ -50,60 +50,68 @@ class GrapExample2 extends React.Component{
   rightClickNode = (event) =>{
     // alert('cliked'+event.data.node.label);
     console.log(event) ;
-    if (event.target){ }
+    if (event.data.captor.ctrlKey){
+      alert('control')
+     }
 
   }
   
   
   render(){
-    console.log(' on mount', this) ;
+    var mgr = this.props.graphManager;
+    console.log(' on mount', mgr) ;
+    if (mgr !== undefined){
     
-    const graph = this.props.graphToDisplay ; 
-    if (graph !== undefined && graph.nodes !== undefined )
-    return (
-      <div className="exampleProject">
-        <h6>{this.props.projectName}</h6>
-        <div className="GraphBox">
-          <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
-          style={{position:"relative", 
-          width:"250px" , height:"250px" ,  border:"double 3px black" }}
-          onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
-          onClickNode={e => this.rightClickNode(e)}
-          onClickEdge={ e => this.rightClickNode(e)}
-          settings={{
-            clone: false, // do not clone the nodes
-            immutable:true,// cannot updated id of node
-            // labelSizeRatio:1,
-            labelThreshold:0.5,
-            scalingMode:"inside",
-            sideMargin:100,
-            minNodeSize:3,
-            maxNodeSize:10,
-            minEdgeSize:20,
-            maxEdgeSize:30,
-            drawNodes:true, //draw node ?
-            drawLabels:true, //node label
-            drawEdges: true, //draw edge?
-            drawEdgeLabels:true,
-          }}>
-            <EdgeShapes default="arrow"/>
-            <NodeShapes default="def"/>
-            {/* <RelativeSize  initialSize={200}/> */}
-            {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
-            {/* <RandomizeNodePositions seed={2} />         */}
-            <DragNodes />
-            <GraphPathManager label={"C1"} />
-          </Sigma>
-          {
-            typeof this.props.sendGraphData === 'function'? //if there's a save option
-            <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
-            this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
-            Save</button>:""
-          }
 
+      const graph = mgr.getGraph() ; 
+      if (graph !== undefined && graph.nodes !== undefined )
+      var SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
+
+      return (
+        <div className="exampleProject">
+          <h6>{this.props.projectName}</h6>
+          <div key={SigmaGraphkey} className="GraphBox">
+            <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
+            style={{position:"relative", 
+            width:"250px" , height:"250px" ,  border:"double 3px black" }}
+            onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
+            onClickNode={e => this.rightClickNode(e)}
+            onClickEdge={ e => this.rightClickNode(e)}
+            settings={{
+              clone: false, // do not clone the nodes
+              immutable:true,// cannot updated id of node
+              // labelSizeRatio:1,
+              labelThreshold:0.5,
+              scalingMode:"inside",
+              sideMargin:100,
+              minNodeSize:3,
+              maxNodeSize:10,
+              minEdgeSize:20,
+              maxEdgeSize:30,
+              drawNodes:true, //draw node ?
+              drawLabels:true, //node label
+              drawEdges: true, //draw edge?
+              drawEdgeLabels:true,
+            }}>
+              <EdgeShapes default="arrow"/>
+              <NodeShapes default="def"/>
+              {/* <RelativeSize  initialSize={200}/> */}
+              {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
+              {/* <RandomizeNodePositions seed={2} />         */}
+              <DragNodes />
+              <GraphPathManager label={"C1"} />
+            </Sigma>
+            {
+              typeof this.props.sendGraphData === 'function'? //if there's a save option
+              <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
+              this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
+              Save</button>:""
+            }
+
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
     return (
       <div className="exampleProject">
         
