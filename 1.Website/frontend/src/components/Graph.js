@@ -43,7 +43,8 @@ class Graph extends React.Component{
         // console.log('updating from child',manager) ;
         if (manager instanceof GraphManager){
             this.setState({
-                graphManager:manager
+                graphManager:manager,
+                grapRep:manager.getGraph()
             }) ;
         }
         else{
