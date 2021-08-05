@@ -6,12 +6,9 @@ import {Sigma, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGE
 import {DragNodes,} from 'react-sigma';
 
 
-class GraphPathManager extends React.Component{
+class GraphMessage extends React.Component{
   // constructor(props){
   //   super(props) ;
-    // props.sigma.graph.addNode
-    // this.addNodeToGraph = this.addNodeToGraph.bind(this) ;
-    // this.props.sigma.bind("click",this.addNodeToGraph)
   // }
 
   addNodeToGraph=(event)=>{
@@ -30,9 +27,9 @@ class GraphPathManager extends React.Component{
     console.log(this.props.sigma.graph.nodes())
     return (
     <div>
-      <button onClick={e =>this.addNodeToGraph(e)}>
-      addNode
-    </button>
+      <div >
+      {this.props.label}
+    </div>
     </div>
     
     )
@@ -40,21 +37,64 @@ class GraphPathManager extends React.Component{
 }
 
 class GrapExample2 extends React.Component{  
-  // constructor(props){
-  //   super(props) ;
-  //   this.state = {
-  //     graphs : []
-  //   }
-  // }
+  constructor(props){
+    super(props) ;
+    this.state = {
+      source:'Source Node',
+      target:'Targert Node' 
+    }
+  }
+
+  cleanUp = ()=>{
+    this.setState({
+      source:'Source Node',
+      target:'Targert Node' 
+    }) ;
+  }
+
+  addNewEdge =(param1,param2)=>{
+    this.props.graphManager.addEdge(param1,param2) ;
+    this.updateParent() ;
+  }
+  updateParent=()=>{
+    if (typeof this.props.updateGraph === 'function'){
+        this.props.updateGraph(this.props.graphManager) ;
+    }else{
+        alert('Could not Parent graph') ;
+    }
+}
   
-  rightClickNode = (event) =>{
+  handleControlClick = (event) =>{
     // alert('cliked'+event.data.node.label);
     console.log(event) ;
     if (event.data.captor.ctrlKey){
       alert('control')
-     }
+      if (this.state.source === 'Source Node'){
+        this.setState({
+          source:event.data.node.id
+        }) ;
+      }
+      else{
+        this.setState({
+          target:event.data.node.id
+        }) ; 
+        //save the information
+        //send the information to make graph
+        //update Graph
+        //cleanup
+        this.addNewEdge(this.state.source,this.state.target)
+      }
+      console.log(this.state)
+
+    }
+    else{
+      this.cleanUp() ;
+    }
 
   }
+  /*When ctrl key is pressed and source node not set
+  Then the selected node is source - 
+  If source is set then the current node is target*/
   
   
   render(){
@@ -75,8 +115,8 @@ class GrapExample2 extends React.Component{
             style={{position:"relative", 
             width:"250px" , height:"250px" ,  border:"double 3px black" }}
             onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
-            onClickNode={e => this.rightClickNode(e)}
-            onClickEdge={ e => this.rightClickNode(e)}
+            onClickNode={e => this.handleControlClick(e)}
+            onClickEdge={ e => this.handleControlClick(e)}
             settings={{
               clone: false, // do not clone the nodes
               immutable:true,// cannot updated id of node
@@ -99,7 +139,9 @@ class GrapExample2 extends React.Component{
               {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
               {/* <RandomizeNodePositions seed={2} />         */}
               <DragNodes />
-              <GraphPathManager label={"C1"} />
+              <GraphMessage label={this.state.source === 'Source Node'
+              ?"Press and hold Ctrl , select source node":
+              "Keep Holding Ctrl and select target node"} />
             </Sigma>
             {
               typeof this.props.sendGraphData === 'function'? //if there's a save option

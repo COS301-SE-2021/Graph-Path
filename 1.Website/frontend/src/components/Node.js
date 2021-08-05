@@ -19,10 +19,7 @@ class Node extends React.Component{
         manager.addNode(name) ;
         this.updateParent()
     }
-    addNewEdge =(param1,param2)=>{
-        this.graphManager.addEdge(param1,param2) ;
-        this.updateParent(this.graphManager.getGraph()) ;
-    }
+    
     updateParent=()=>{
         if (typeof this.props.updateGraph === 'function'){
             console.log('Update:',this.props.graphManager)

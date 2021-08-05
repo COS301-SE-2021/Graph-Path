@@ -345,7 +345,7 @@ class Graph extends React.Component{
                 </div>
                 </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
-                        <SigmaGraph 
+                        <SigmaGraph  updateGraph={this.updateGraphView}
                            projectName={ selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             graphManager={this.state.graphManager}
@@ -355,7 +355,7 @@ class Graph extends React.Component{
                     </Route>
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
-                        <SigmaGraph
+                        <SigmaGraph updateGraph={this.updateGraphView}
                             graphToDisplay={this.state.grapRep}
                             projectName={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
