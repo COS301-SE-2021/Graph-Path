@@ -82,9 +82,10 @@ class GrapExample2 extends React.Component{
         //update Graph
         //cleanup
         this.addNewEdge(this.state.source,this.state.target)
+        this.cleanUp() ;
+
       }
       console.log(this.state)
-
     }
     else{
       this.cleanUp() ;
