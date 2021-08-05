@@ -107,7 +107,7 @@ class Header extends React.Component{
                         <Register />
                     </Route>
                     <Route path="/profile" > 
-                        <Profile userEmail={this.state.loggedUser} />
+                        <Profile userEmail={this.state.loggedUser} updateUser = {this.updateLoggedUser}/>
                         {this.state.log === false ? 
                         <Redirect to="/signIn" />:<span/>}
                     </Route>
