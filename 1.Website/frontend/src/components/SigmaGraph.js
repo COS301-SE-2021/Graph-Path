@@ -68,7 +68,6 @@ class GrapExample2 extends React.Component{
     // alert('cliked'+event.data.node.label);
     console.log(event) ;
     if (event.data.captor.ctrlKey){
-      alert('control')
       if (this.state.source === 'Source Node'){
         this.setState({
           source:event.data.node.id
