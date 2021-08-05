@@ -7,6 +7,7 @@ import '../css/common.css' ;
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
 import Spinner from 'react-spinner-material';
+import GraphManager from './GraphManager';
 
 
 class Graph extends React.Component{
@@ -23,7 +24,8 @@ class Graph extends React.Component{
                 edges : []
             },
             api: "http://localhost:9001",
-            loading:false
+            loading:false,
+            graphManager: undefined,
         }
     }
     //GET ALL Projects for User
@@ -37,36 +39,24 @@ class Graph extends React.Component{
         return empty ;
     }
 
-    updateGraphView = (newGraph) =>{
-        if (this.state.grapRep === {}){
-            // if graph rep from project was not undefined but empty
+    updateGraphView = (manager) =>{
+        // console.log('updating from child',manager) ;
+        if (manager instanceof GraphManager){
             this.setState({
-                grapRep: this.emptyGraph() 
-            }) ;  //make it empty with representation for graph viewing
-        // console.log('updated from task: {}',this.state.grapRep) ;
-
-        }
-        else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph !== undefined  ){
-        //if there was a graph existing
-            this.setState({
-                grapRep:newGraph
+                graphManager:manager
             }) ;
-        // console.log('updated from task: not empty',this.state.grapRep) ;
-
         }
         else{
-            this.setState({
-                grapRep: this.emptyGraph() 
-            })
+            alert('Could not update Graph');
         }
-        // console.log('updated from task',this.state.grapRep) ;
-        //else keep the default one, from mount
     }
     componentDidMount = ()=>{ // no projects to display? 1 - call from api
             this.viewProjectsFromAPI() ;
             //initialize the original project list
             this.updateOldGraph() ;
-       
+        this.setState({
+            graphManager:new GraphManager({}) 
+        })
     }
     updateOldGraph = ()=>{
         fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
@@ -111,9 +101,10 @@ class Graph extends React.Component{
         }
     }
 
+    //save the current representation of graph
     saveCurrentGraph = ()=>{
         const projNode = this.state.projNodeList ; 
-        console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
+        // console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
         let linkNumber = this.state.linkNumber ;
         let pName =  projNode.projectName ;
         if (linkNumber>=0 && pName !== undefined ){
@@ -123,7 +114,7 @@ class Graph extends React.Component{
             // var saveGraph =  window.confirm('Save Current Graph?') ;
             var saveGraph = this.validateGraphDifference(oldGraph,this.state.grapRep)
             if ( saveGraph){ // if its not the same graph
-                console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
+                // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
                 //set the loader while communicating with the server
                 this.setState({
                     loading:true
@@ -172,12 +163,14 @@ class Graph extends React.Component{
             }) ;
         }
         else{
-            if (num >= 0) //valid link number
-            this.setState({
-                projNodeList:node,
-                grapRep:node.graph,
-                linkNumber:num
-            }) ;
+            if (num >= 0){ //valid link number
+                this.setState({
+                    projNodeList:node,
+                    grapRep:node.graph,
+                    linkNumber:num,
+                })
+                this.state.graphManager.setGraph(node.graph) ; 
+            }
         }
     }
 
@@ -296,16 +289,16 @@ class Graph extends React.Component{
         /* sigmaKey is used for refreshing common Sigma graph representaion
          if nodes || edges are undefined, put 0 , else make key 
          the combination of node ^ egdes length */
-        var SigmaGraphkey = ( this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined ) ? "0"  
-        :`${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`
+        // var SigmaGraphkey = ( this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined ) ? "0"  
+        // :`${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`
 
+       
         let keyNum = -1 ;
         
         //project Name to display on the graph 
         var selectedProjectName =  this.state.projList.length>0 && this.state.linkNumber >= 0 ?
          this.state.projList[this.state.linkNumber].projectName: "No Data Found" ;
 
-        // console.log('sending graph obj ',this.state)
         return (
             <Router basename='viewProjects/graph'>
                 <div className="projectView">
@@ -352,29 +345,25 @@ class Graph extends React.Component{
                 </div>
                 </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
-                        <SigmaGraph key={SigmaGraphkey}
-                            graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 || this.state.grapRep.nodes ===undefined ? 
-                            this.emptyGraph()
-                            :this.state.projList[this.state.linkNumber].graph}
-                            projectName={ selectedProjectName}
+                        <SigmaGraph 
+                           projectName={ selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
-                            addEdge={this.addEdge}
+                            graphManager={this.state.graphManager}
                         />
                         <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
                         :this.state.projList[this.state.linkNumber]} />
                     </Route>
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
-                        <SigmaGraph key={SigmaGraphkey}
+                        <SigmaGraph
                             graphToDisplay={this.state.grapRep}
                             projectName={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             addEdge={this.addEdge}
-
+                            graphManager={this.state.graphManager}
                         />
-                        <Node graph={this.state.grapRep}
-                            updateGraph={this.updateGraphView}/>
-                    </Route>
+                        <Node updateGraph={this.updateGraphView} 
+                        graphManager={this.state.graphManager} />                    </Route>
                 </Switch>
             </Router>
             
