@@ -77,11 +77,16 @@ class GrapExample2 extends React.Component{
         this.setState({
           target:event.data.node.id
         }) ; 
+        if (this.state.source === this.state.target){
+          alert('Cannot make edge to self')
+        }
+        else{
+          this.addNewEdge(this.state.source,this.state.target)
+        }
         //save the information
         //send the information to make graph
         //update Graph
         //cleanup
-        this.addNewEdge(this.state.source,this.state.target)
         this.cleanUp() ;
 
       }
@@ -108,12 +113,22 @@ class GrapExample2 extends React.Component{
       var SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
 
       return (
-        <div className="exampleProject">
-          <h6>{this.props.projectName}</h6>
+        <div className="graphContainer">
+          <div>
+          <span className="projName">{this.props.projectName}</span>
+          {
+              typeof this.props.sendGraphData === 'function'? //if there's a save option
+              <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
+              this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
+              Save</button>:""
+            }
+          </div>
+          
           <div key={SigmaGraphkey} className="GraphBox">
+
             <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
             style={{position:"relative", 
-            width:"250px" , height:"250px" ,  border:"double 3px black" }}
+            width:"50vw" , height:"50vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
             onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
             onClickNode={e => this.handleControlClick(e)}
             onClickEdge={ e => this.handleControlClick(e)}
@@ -148,13 +163,6 @@ class GrapExample2 extends React.Component{
               ?"Press and hold Ctrl , select source node":
               "Keep Holding Ctrl and select target node"} />
             </Sigma>
-            {
-              typeof this.props.sendGraphData === 'function'? //if there's a save option
-              <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
-              this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
-              Save</button>:""
-            }
-
           </div>
         </div>
       );
@@ -163,7 +171,7 @@ class GrapExample2 extends React.Component{
       <div className="exampleProject">
         
         <div className="GraphBox">
-          No Graph To Display, Please add Tasks
+          No Graph To Display, Please add Nodes
         </div>
       </div>
       )
