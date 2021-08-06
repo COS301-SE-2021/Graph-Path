@@ -125,7 +125,8 @@ class Profile extends React.Component{
                        // console.log("response", this.state.responseData)
                         if (this.state.answer !== undefined) {
                             //alert(`Username or Password changed `)
-                            this.props.updateUser(data)
+                            //this.props.updateUser(data)
+
                         } else {
                             alert(`Something went wrong please update again `)
                         }
@@ -133,6 +134,23 @@ class Profile extends React.Component{
                 }, (response) => {
                     console.log('rejected', response);
                     alert('Server Error, Please try again later');
+                })
+                .then(()=>{
+                    axios.get(`http://localhost:9001/user/login/${this.state.email}`)
+                        .then((response)=>{
+                            if(response.status === 400){
+                                throw Error(response.statusText);
+                            }
+                            const res = response.data;
+                            this.setState({
+                                responseData: res.data
+                            },()=>{
+                                console.log("resp",this.state)
+                                if(this.state.responseData.username === data.username){
+                                    this.props.updateUser(this.state.responseData);
+                                }
+                            })
+                        })
                 })
 
         }catch (error){
