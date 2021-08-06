@@ -11,7 +11,7 @@ import { BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom' ;
 class Dashboard extends React.Component{
     constructor(props){
         super(props) ; 
-        this.views =  ["default", "newProject", "project"] ; 
+        this.views =  ["default", "newProject", "project"] ;
         this.state={
             projects: null ,
             view: this.views[0] 
@@ -93,6 +93,12 @@ class Dashboard extends React.Component{
                             <Graph userEmail={this.props.loggedUser} /> 
                         </div>
 
+                    </Route>
+
+                    <Route path="/taskList" >
+                        <div className="ContentArea">
+                            <taskList/>
+                        </div>
                     </Route>
                 </Switch>
             
