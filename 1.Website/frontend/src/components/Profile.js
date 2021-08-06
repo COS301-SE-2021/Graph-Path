@@ -46,7 +46,7 @@ class Profile extends React.Component{
                 break;
 
             case 'password':
-                formErrors.password = value.length < 8 || value.length > 0 ? 'Minimum for password should be 8 characters'
+                formErrors.password = value.length < 8 ? 'Minimum for password should be 8 characters'
                     : "";
                 break;
 
@@ -173,12 +173,6 @@ class Profile extends React.Component{
                 </div>
 
                 <h1>Profile</h1>
-                {/*
-                * Change Email
-                * Change Username
-                * Change Password
-                * Invite link
-                */}
 
                 <div className="info">
                     <form className="profileForm" onSubmit={this.onSubmit} >
@@ -201,7 +195,7 @@ class Profile extends React.Component{
                                onChange={this.change}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
                         {
-                            this.state.empty === true ? <div  >Field cannot be empty</div> : ""
+                            this.state.empty === true ? <span className="errorSpan" >Field cannot be empty</span> : ""
                         }
 
                         <label>Email</label>
@@ -218,7 +212,7 @@ class Profile extends React.Component{
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         {formErrors.password.length > 0 && (
-                            <span className='errorMessage'>{formErrors.password}</span>
+                            <span className='errorSpan'>{formErrors.password}</span>
                         )}
 
                         <input type="submit"
