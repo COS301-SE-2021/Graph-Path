@@ -99,7 +99,7 @@ class GrapExample2 extends React.Component{
   
   render(){
     var mgr = this.props.graphManager;
-    console.log(' on mount', mgr) ;
+    // console.log(' on mount', mgr) ;
     if (mgr !== undefined){
     
 
@@ -117,6 +117,7 @@ class GrapExample2 extends React.Component{
             onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
             onClickNode={e => this.handleControlClick(e)}
             onClickEdge={ e => this.handleControlClick(e)}
+            onOverEdge={(e)=>console.log('hover')}
             settings={{
               clone: false, // do not clone the nodes
               immutable:true,// cannot updated id of node
@@ -126,14 +127,16 @@ class GrapExample2 extends React.Component{
               sideMargin:100,
               minNodeSize:3,
               maxNodeSize:10,
-              minEdgeSize:200,
+              minEdgeSize:1,
               defaultEdgeHoverColor:'#000',
-              maxEdgeSize:30,
+              maxEdgeSize:4,
               drawNodes:true, //draw node ?
               drawLabels:true, //node label
               drawEdges: true, //draw edge?
               drawEdgeLabels:false,
-              minArrowSize:10
+              minArrowSize:10,
+              enableEdgeHovering:true,
+              edgeHoverPrecision:100
             }}>
               <EdgeShapes default="arrow"/>
               <NodeShapes default="def"/>

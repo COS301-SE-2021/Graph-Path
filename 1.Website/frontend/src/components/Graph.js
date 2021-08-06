@@ -105,7 +105,7 @@ class Graph extends React.Component{
     //save the current representation of graph
     saveCurrentGraph = ()=>{
         const projNode = this.state.projNodeList ; 
-        // console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
+        console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
         let linkNumber = this.state.linkNumber ;
         let pName =  projNode.projectName ;
         if (linkNumber>=0 && pName !== undefined ){
@@ -120,16 +120,41 @@ class Graph extends React.Component{
                 this.setState({
                     loading:true
                 }) ;
+                // const minimalGraph = 
+                const minimalNodes = this.state.grapRep.nodes.map((node)=>{
+                    return {
+                        id:node.id,
+                        label:node.label,
+                        x:node.x,
+                        y:node.y,
+                        size:node.size,
+                        color:node.color
+                    }
+                }) ;
+                const minimalEdges = this.state.grapRep.edges.map((edge)=>{
+                    return {
+                        id: edge.id,
+                        source: edge.source,
+                        target: edge.target,
+                        label: edge.label,
+                        color: edge.color,
+                        size: edge.size,
+                    }
+                })
+                const minimalGraph = {
+                    nodes:minimalNodes,
+                    edges:minimalEdges
+                }
                 const data = {
-                    graph : this.state.grapRep,
+                    graph : minimalGraph,
                     projectName: projNode.projectName
                 }
                 axios.put(`${this.state.api}/project/updateProjectGraph`,data)
                 .then((res)=>{
-                    console.log('update graph response',res)
-                    if (res.data === undefined) {
+                    console.log('update graph response',res.data)
+                    if (res.data.data === undefined) {
                         // didn't save
-                        alert(res.message) ; 
+                        alert(res.data.message) ; 
                     }
                     //communication happened successfully
                     this.setState({

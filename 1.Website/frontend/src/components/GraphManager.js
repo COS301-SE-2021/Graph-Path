@@ -39,14 +39,15 @@ class GraphManager{
         edg = {id:`e${curr.edges.length+1}`, // give edge an id
             source:src, 
             target:tgt,
-            label:`${src} to ${tgt}` ,
-            color:'#080'
+            label:`${ src} to ${tgt}` ,
+            color:'#080',
+            size:1
         }
         curr.edges.push(edg) ;
     }
     
     addNode = (fromTask) =>{
-      console.log('Manager:addNode') ; 
+      // console.log('Manager:addNode') ; 
         // add the node and give it an id
         var curr = this.graph ; 
         var obj = {
@@ -57,7 +58,7 @@ class GraphManager{
         let len = curr.nodes.length ;
         if (len>0){
             obj["id"]= `n${curr.nodes.length+1}` ;
-            obj["color"] = '#0000ff' ;
+            obj["color"] = '#0000ff' ; //following nodes are blue
             if (len % 2 === 0){
                 obj["x"] = 15*len ; 
                 obj["y"] = 15*len ;
