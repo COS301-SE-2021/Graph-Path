@@ -66,7 +66,7 @@ class Dashboard extends React.Component{
                             <Link to="/taskList">View Tasks</Link>
                         </div>
                         <div className="opt">
-                            <Link >Reports</Link>
+                            <Link to="">Reports</Link>
                         </div>
                     </div>
                 </div>
