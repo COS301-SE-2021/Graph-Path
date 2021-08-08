@@ -18,6 +18,7 @@ class Profile extends React.Component{
             api:'http://localhost:9001',
             answer:undefined,
             responseData:null,
+            popUp: false,
 
             formErrors: {
                 password:""
@@ -80,7 +81,9 @@ class Profile extends React.Component{
 
         if(data.username === '' && data.password === ''){
             //alert("nothing changed");
-            return <PopUpMessage />;
+            this.setState({
+                popUp: true
+            })
         }else{
             //checks if username is empty and password is less than 8
             if(this.state.empty === true || this.state.pass === false){
@@ -229,7 +232,7 @@ class Profile extends React.Component{
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                     </form>
-                    <PopUpMessage />
+                    {this.state.popUp && <PopUpMessage text={"Update failed (pop up under construction)"} />}
 
                 </div>
 
