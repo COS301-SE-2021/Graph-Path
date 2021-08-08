@@ -1,7 +1,6 @@
 import React from 'react';
 import '../css/Profile.css'
-import PopUpMessage from "./popUpMessage";
-
+import PopUpMessage from "./PopUpMessage";
 import {Link} from 'react-router-dom' ;
 import axios from "axios";
 
@@ -80,7 +79,8 @@ class Profile extends React.Component{
         console.log("data",data)
 
         if(data.username === '' && data.password === ''){
-            alert("nothing changed")
+            //alert("nothing changed");
+            return <PopUpMessage />;
         }else{
             //checks if username is empty and password is less than 8
             if(this.state.empty === true || this.state.pass === false){
@@ -229,12 +229,9 @@ class Profile extends React.Component{
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                     </form>
-
+                    <PopUpMessage />
 
                 </div>
-                <PopUpMessage trigger={false}>
-                    <p>This is a pop up</p>
-                </PopUpMessage>
 
             </div>
 
