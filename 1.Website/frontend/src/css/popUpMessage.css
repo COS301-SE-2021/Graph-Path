@@ -1,13 +1,10 @@
 .popUpContainer{
-    background-color: red;
-    width: 50%;
-    height: 20px;
-    top: 0;
-    left: 0;
     position: fixed;
-    border: 1px solid red;
-}
-
-*{
-
+    display: inline-block;
+    background-color: red;
+    right: 1%;
+    bottom: 2%;
+    max-width: 30%;
+    padding: 2px 10px 2px 10px;
+    z-index: 1000;
 }

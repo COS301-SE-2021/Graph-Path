@@ -1,12 +1,13 @@
 import React from 'react';
-import '../css/popUpMessage.css'
+import '../css/PopUpMessage.css'
 
-function popUpMessage(props){
-        return(props.trigger) ? (
-
+class PopUpMessage extends React.Component{
+    render() {
+        return(
             <div className="popUpContainer">
-                {props.children}
+                <p>pop up under construction</p>
             </div>
-        ) : "";
+        )
+    }
 }
-export default popUpMessage;
+export default PopUpMessage;
