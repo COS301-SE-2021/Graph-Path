@@ -1,7 +1,6 @@
 import React from 'react';
 import '../css/Profile.css'
-import PopUpMessage from "./popUpMessage";
-
+import PopUpMessage from "./PopUpMessage";
 import {Link} from 'react-router-dom' ;
 import axios from "axios";
 
@@ -12,6 +11,7 @@ class Profile extends React.Component{
             disabled : true,
             empty : false,
             valid: false,
+            pass: true,
             username: '',
             password: '',
             email: this.props.userEmail.email,
@@ -33,6 +33,7 @@ class Profile extends React.Component{
         })
     }
 
+
     change =(e) => {
         e.preventDefault();
         const {name,value}=e.target;
@@ -46,8 +47,17 @@ class Profile extends React.Component{
                 break;
 
             case 'password':
-                formErrors.password = value.length < 8 || value.length > 0 ? 'Minimum for password should be 8 characters'
+                formErrors.password = value.length < 8 ? 'Minimum for password should be 8 characters'
                     : "";
+                if(value.length < 8){
+                    this.setState({
+                        pass:false
+                    })
+                }else{
+                    this.setState({
+                        pass:true
+                    })
+                }
                 break;
 
             default: break;
@@ -56,42 +66,31 @@ class Profile extends React.Component{
        this.setState({ formErrors, [name]: value });
 
     }
-    /*
-    * check if there are new changes
-    * */
-    formValid = ()=>{
-
-    }
 
     onSubmit = (e) =>{
         e.preventDefault();
         console.log("submitted",this.state)
-        //check if all field are updated
-        //update this to an easier way******
-        this.enableEdit();
-        if(this.state.username !== '' && this.state.password !== ''){
-            const data = {
-                username: this.state.username,
-                password: this.state.password,
-            }
-            this.sendData(data)
-        }else if(this.state.username !== '' && this.state.password === ''){
-            const data = {
-                username: this.state.username,
-                password: ''
-            }
-            this.sendData(data)
-        }else if(this.state.username === '' && this.state.password !== ''){
-            const data ={
-                username: '',
-                password: this.state.password
-            }
-            this.sendData(data)
-        }else{
-            //dont send any data
+
+
+        const data = {
+            username: this.state.username,
+            password: this.state.password
         }
+        console.log("data",data)
 
-
+        if(data.username === '' && data.password === ''){
+            //alert("nothing changed");
+            return <PopUpMessage />;
+        }else{
+            //checks if username is empty and password is less than 8
+            if(this.state.empty === true || this.state.pass === false){
+                alert("cant submit");
+                //show the popup
+            }else{
+                this.sendData(data)
+                this.enableEdit();
+            }
+        }
     }
 
     sendData(data){
@@ -125,7 +124,8 @@ class Profile extends React.Component{
                        // console.log("response", this.state.responseData)
                         if (this.state.answer !== undefined) {
                             //alert(`Username or Password changed `)
-                            this.props.updateUser(data)
+                            //this.props.updateUser(data)
+
                         } else {
                             alert(`Something went wrong please update again `)
                         }
@@ -133,6 +133,23 @@ class Profile extends React.Component{
                 }, (response) => {
                     console.log('rejected', response);
                     alert('Server Error, Please try again later');
+                })
+                .then(()=>{
+                    axios.get(`http://localhost:9001/user/login/${this.state.email}`)
+                        .then((response)=>{
+                            if(response.status === 400){
+                                throw Error(response.statusText);
+                            }
+                            const res = response.data;
+                            this.setState({
+                                responseData: res.data
+                            },()=>{
+                                console.log("resp",this.state)
+                                if(this.state.responseData.username === data.username){
+                                    this.props.updateUser(this.state.responseData);
+                                }
+                            })
+                        })
                 })
 
         }catch (error){
@@ -155,12 +172,6 @@ class Profile extends React.Component{
                 </div>
 
                 <h1>Profile</h1>
-                {/*
-                * Change Email
-                * Change Username
-                * Change Password
-                * Invite link
-                */}
 
                 <div className="info">
                     <form className="profileForm" onSubmit={this.onSubmit} >
@@ -183,7 +194,7 @@ class Profile extends React.Component{
                                onChange={this.change}
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
                         {
-                            this.state.empty === true ? <div  >Field cannot be empty</div> : ""
+                            this.state.empty === true ? <span className="errorSpan" >Field cannot be empty</span> : ""
                         }
 
                         <label>Email</label>
@@ -200,7 +211,7 @@ class Profile extends React.Component{
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                         {formErrors.password.length > 0 && (
-                            <span className='errorMessage'>{formErrors.password}</span>
+                            <span className='errorSpan'>{formErrors.password}</span>
                         )}
 
                         <input type="submit"
@@ -218,12 +229,9 @@ class Profile extends React.Component{
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                     </form>
-
+                    <PopUpMessage />
 
                 </div>
-                <PopUpMessage trigger={false}>
-                    <p>This is a pop up</p>
-                </PopUpMessage>
 
             </div>
 

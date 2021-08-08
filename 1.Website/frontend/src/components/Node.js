@@ -22,10 +22,9 @@ class Node extends React.Component{
     
     updateParent=()=>{
         if (typeof this.props.updateGraph === 'function'){
-            console.log('Update:',this.props.graphManager)
             this.props.updateGraph(this.props.graphManager) ;
         }else{
-            alert('Could not Parent graph') ;
+            alert('Could not update Parent graph') ;
         }
     }
 
@@ -50,6 +49,13 @@ class Node extends React.Component{
                     <Route path={`${match.url}/addNode`} >
                         
                         <Task addTask={this.addNewNode} 
+                        />
+                    </Route>
+                    
+                    <Route path={`${match.url}/modal`} >
+                        
+                        <Task addTask={this.addNewNode} 
+                            fullForm={true}
                         />
                     </Route>
                 </Switch>

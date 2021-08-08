@@ -1,7 +1,7 @@
 import React from 'react' ;
 // import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
-class taskList extends React.Component{
+class TaskList extends React.Component{
     constructor(props){
         super(props);
         this.state= {
@@ -53,4 +53,4 @@ class taskList extends React.Component{
     }
   //  }
 }
-export default taskList ;
+export default TaskList ;

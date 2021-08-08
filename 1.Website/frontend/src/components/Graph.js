@@ -383,14 +383,13 @@ class Graph extends React.Component{
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
                         <SigmaGraph updateGraph={this.updateGraphView}
-                            graphToDisplay={this.state.grapRep}
                             projectName={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
-                            addEdge={this.addEdge}
                             graphManager={this.state.graphManager}
                         />
                         <Node updateGraph={this.updateGraphView} 
-                        graphManager={this.state.graphManager} />                    </Route>
+                        graphManager={this.state.graphManager} />                    
+                    </Route>
                 </Switch>
             </Router>
             

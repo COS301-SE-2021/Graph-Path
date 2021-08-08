@@ -1,7 +1,7 @@
 import React from 'react' ; 
 import Graph from './Graph';
 import NewProject from './NewProject' ;
-import taskList from './taskList';
+import TaskList from './TaskList';
 import '../css/App.css' ;
 import '../css/Dashboard.css'
 // import Sigma from './reactSigmaGraph' ; 
@@ -97,7 +97,7 @@ class Dashboard extends React.Component{
 
                     <Route path="/taskList" >
                         <div className="ContentArea">
-                            <taskList/>
+                            <TaskList/>
                         </div>
                     </Route>
                 </Switch>

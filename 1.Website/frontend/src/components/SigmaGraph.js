@@ -4,6 +4,7 @@ import '../css/Graph.css' ;
 import {Sigma, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGEXF,Filter
 // import Dagre from 'react-sigma/lib/Dagre' ;
 import {DragNodes,} from 'react-sigma';
+import {Redirect,withRouter} from 'react-router-dom' ;
 
 
 class GraphMessage extends React.Component{
@@ -41,7 +42,8 @@ class GrapExample2 extends React.Component{
     super(props) ;
     this.state = {
       source:'Source Node',
-      target:'Targert Node' 
+      target:'Targert Node',
+      pathSuffix:"/" 
     }
   }
 
@@ -94,6 +96,9 @@ class GrapExample2 extends React.Component{
     }
     else{
       this.cleanUp() ;
+      this.setState({
+        pathSuffix:"/modal"
+      }) ;
     }
 
   }
@@ -103,6 +108,7 @@ class GrapExample2 extends React.Component{
   
   
   render(){
+    const {match} = this.props ;
     var mgr = this.props.graphManager;
     // console.log(' on mount', mgr) ;
     if (mgr !== undefined){
@@ -128,7 +134,7 @@ class GrapExample2 extends React.Component{
 
             <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
             style={{position:"relative", 
-            width:"50vw" , height:"50vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
+            width:"50vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
             onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
             onClickNode={e => this.handleControlClick(e)}
             onClickEdge={ e => this.handleControlClick(e)}
@@ -163,6 +169,11 @@ class GrapExample2 extends React.Component{
               ?"Press and hold Ctrl , select source node":
               "Keep Holding Ctrl and select target node"} />
             </Sigma>
+            {
+              this.state.pathSuffix !== "/" 
+              ?<Redirect to={`${match.url}${this.state.pathSuffix}`} />
+              :""
+            }
           </div>
         </div>
       );
@@ -178,7 +189,7 @@ class GrapExample2 extends React.Component{
   }
 }
 
-export default GrapExample2 ;
+export default withRouter(GrapExample2) ;
 
 // var graph2 = {nodes:[
 //   {label: "Number 1", size: 400, id: "n1"},
