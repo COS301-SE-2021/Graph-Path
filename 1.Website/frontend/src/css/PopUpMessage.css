@@ -1,12 +1,13 @@
 .popUpContainer{
     position: fixed;
     display: inline-block;
-    background-color: red;
+    background-color: #001122;
     right: 1%;
     bottom: 2%;
     max-width: 30%;
-    padding: 2px 10px 2px 10px;
+    padding: 1px 10px 2px 10px;
     z-index: 1000;
+    color: white;
 }
 
 .popUpContainer {
@@ -22,4 +23,11 @@
 @keyframes fadeIn {
     from {opacity: 0;}
     to {opacity:1 ;}
+}
+
+.notificationIcon {
+    font-size: 21px;
+    padding: 2px;
+    position: relative;
+    left: 0;
 }
