@@ -63,7 +63,7 @@ class Dashboard extends React.Component{
                         </div>
 
                         <div className="opt">
-                            <Link to="/taskList">View Tasks</Link>
+                            <Link to="TaskList">View Tasks</Link>
                         </div>
                         <div className="opt">
                             <Link to="">Reports</Link>
@@ -95,7 +95,7 @@ class Dashboard extends React.Component{
 
                     </Route>
 
-                    <Route path="/taskList" >
+                    <Route path="/TaskList" >
                         <div className="ContentArea">
                             <TaskList/>
                         </div>
