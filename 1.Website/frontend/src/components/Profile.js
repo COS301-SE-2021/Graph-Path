@@ -19,6 +19,7 @@ class Profile extends React.Component{
             answer:undefined,
             responseData:null,
             popUp: false,
+            popUpText: "",
 
             formErrors: {
                 password:""
@@ -34,6 +35,18 @@ class Profile extends React.Component{
         })
     }
 
+    /* disable and enable the pop up*/
+    showPopUP = () =>{
+        this.setState({
+            popUp: true
+        })
+        setTimeout(
+            () =>
+                this.setState({
+                    popUp: false
+                }),5000
+        );
+    }
 
     change =(e) => {
         e.preventDefault();
@@ -82,16 +95,23 @@ class Profile extends React.Component{
         if(data.username === '' && data.password === ''){
             //alert("nothing changed");
             this.setState({
-                popUp: true
-            })
+                popUpText: "User Information Update Failed"
+            });
+            this.showPopUP();
         }else{
             //checks if username is empty and password is less than 8
             if(this.state.empty === true || this.state.pass === false){
-                alert("cant submit");
-                //show the popup
+                this.setState({
+                    popUpText: "User Information Update Failed"
+                })
+                this.showPopUP();
             }else{
                 this.sendData(data)
                 this.enableEdit();
+                this.setState({
+                    popUpText: "User Information Updated"
+                });
+                this.showPopUP()
             }
         }
     }
@@ -232,7 +252,7 @@ class Profile extends React.Component{
                                disabled = {(this.state.disabled) ? "disabled" : ""} />
 
                     </form>
-                    {this.state.popUp && <PopUpMessage text={"Update failed (pop up under construction)"} />}
+                    {this.state.popUp && <PopUpMessage text={this.state.popUpText} />}
 
                 </div>
 
