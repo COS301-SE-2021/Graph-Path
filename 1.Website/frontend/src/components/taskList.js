@@ -45,7 +45,7 @@ class TaskList extends React.Component{
 
     render(){
         const {tasks,isloading} = this.state;
-        if(isloading==false){
+        if(isloading===false){
             return <div>Check if something gets printed...</div>
         }
         else{
@@ -54,7 +54,7 @@ class TaskList extends React.Component{
 
                 <ul>
                     <li>
-                        
+
                     </li>
                 </ul>
             )
