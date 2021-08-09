@@ -388,7 +388,9 @@ class Graph extends React.Component{
                             graphManager={this.state.graphManager}
                         />
                         <Node updateGraph={this.updateGraphView} 
-                        graphManager={this.state.graphManager} />                    
+                        graphManager={this.state.graphManager} 
+                        project={this.state.linkNumber<0 ?''
+                        :this.state.projList[this.state.linkNumber]}/>                    
                     </Route>
                 </Switch>
             </Router>

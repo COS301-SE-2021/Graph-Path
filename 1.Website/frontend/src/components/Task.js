@@ -32,9 +32,6 @@ class Task extends React.Component{
         this.setState(
             {
                 members: temp
-            }
-        ,()=>{
-            console.log('After handle, members',this.state.members)
         })
     }
 
@@ -100,12 +97,18 @@ class Task extends React.Component{
 
 
     render() {
+        var custom = this.props.label ;
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
-                    <h4>Add Task</h4>
+                    <h4>{!this.props.fullForm?'Add Node':'Edit Task'}</h4>
                     <p>Task</p>
-                    <input type="text" name="name" required={true} placeholder="Task Name" value={this.state.name} onChange={this.updateField} />
+                    <input type="text" name="name" required={true}
+                     placeholder="Task Name" 
+                     value={custom === undefined ? this.state.name
+                        :this.props.label} 
+                     onChange={this.updateField} 
+                     onFocus={(e)=>{custom = undefined}}/>
                
                     {this.props.fullForm ? <span>
                         <p>Description</p>

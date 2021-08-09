@@ -15,9 +15,16 @@ class Node extends React.Component{
     
     }
     addNewNode = (name)=>{
-        var manager = this.props.graphManager ;
-        manager.addNode(name) ;
-        this.updateParent()
+      
+        if (name.toString().trim().length<=0) {
+            alert('Cannot Submit Empty Name')
+        }
+        else{
+            var manager = this.props.graphManager ;
+            manager.addNode(name) ;
+            this.updateParent()
+        
+        }
     }
     
     updateParent=()=>{
@@ -31,13 +38,16 @@ class Node extends React.Component{
     render(){
         const {match} = this.props ;
         var manager = this.props.graphManager ;
+        var {project} = this.props ;
+         
+        console.log(project) ;
 
         if (manager === undefined){
             return (<div>
                 No Graph Mounted
             </div>)
         }
-    
+        const query = new URLSearchParams(this.props.location.search );
         return (
             <div>
                 <div>
@@ -51,13 +61,16 @@ class Node extends React.Component{
                         <Task addTask={this.addNewNode} 
                         />
                     </Route>
-                    
-                    <Route path={`${match.url}/modal`} >
-                        
+                    <Route path={`${match.url}/task/`} render={()=>{
+                        return <>
                         <Task addTask={this.addNewNode} 
                             fullForm={true}
+                            label={query.get('label')}
                         />
-                    </Route>
+
+                        </>
+                    }} />
+                        
                 </Switch>
             
         </div>

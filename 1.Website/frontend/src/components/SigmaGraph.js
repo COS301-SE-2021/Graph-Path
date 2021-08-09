@@ -12,20 +12,9 @@ class GraphMessage extends React.Component{
   //   super(props) ;
   // }
 
-  addNodeToGraph=(event)=>{
-    console.log('clikcked',event)
-    var sig = this.props.sigma ;
-    if (sig !== undefined){
-      console.log('add')
-      sig.graph.addNode({id:`n${sig.graph.nodes.length+23}`, label:this.props.label})
-    }
-  }
-
   componentDidMount(){
-    
   }
   render(){
-    console.log(this.props.sigma.graph.nodes())
     return (
     <div>
       <div >
@@ -37,15 +26,23 @@ class GraphMessage extends React.Component{
   }
 }
 
-class GrapExample2 extends React.Component{  
+class SigmaGraph extends React.Component{  
   constructor(props){
     super(props) ;
     this.state = {
       source:'Source Node',
       target:'Targert Node',
-      pathSuffix:"/" 
+      nodeId:"",
+      nodeLabel:"" 
     }
   }
+
+  componentDidMount(){
+    this.setState({
+      redirect:false
+    })
+  }
+
 
   cleanUp = ()=>{
     this.setState({
@@ -66,9 +63,16 @@ class GrapExample2 extends React.Component{
     }
 }
   
+  
+  /*
+  When ctrl key is pressed and source node not set
+  Then the selected node is source - 
+  If source is set then the current node is target
+  If resulting edge is a loop - alert the user and discard changes
+  If resulting edge exists - alert the user and discard changes
+  */
   handleControlClick = (event) =>{
     // alert('cliked'+event.data.node.label);
-    console.log(event) ;
     if (event.data.captor.ctrlKey){
       if (this.state.source === 'Source Node'){
         this.setState({
@@ -76,13 +80,13 @@ class GrapExample2 extends React.Component{
         }) ;
       }
       else{
-        this.setState({
-          target:event.data.node.id
-        }) ; 
-        if (this.state.source === this.state.target){
+        if (this.state.source === event.data.node.id){
           alert('Cannot make edge to self')
         }
-        else{
+        else{  
+          this.setState({
+            target:event.data.node.id
+          }) ; 
           this.addNewEdge(this.state.source,this.state.target)
         }
         //save the information
@@ -95,17 +99,20 @@ class GrapExample2 extends React.Component{
       console.log(this.state)
     }
     else{
-      this.cleanUp() ;
-      this.setState({
-        pathSuffix:"/modal"
-      }) ;
+
+      if (this.state.source !== "Source Node"){
+        this.cleanUp() ;
+      }
+      else{
+        this.setState({
+          nodeId:event.data.node.id ,
+          nodeLabel:event.data.node.label,
+          redirect:true
+        }) ;
+      }
     }
 
   }
-  /*When ctrl key is pressed and source node not set
-  Then the selected node is source - 
-  If source is set then the current node is target*/
-  
   
   render(){
     const {match} = this.props ;
@@ -118,6 +125,8 @@ class GrapExample2 extends React.Component{
       if (graph !== undefined && graph.nodes !== undefined )
       var SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
 
+      const nodeId = this.state.nodeId ; 
+      const nodeLabel = this.state.nodeLabel ;
       return (
         <div className="graphContainer">
           <div>
@@ -165,17 +174,17 @@ class GrapExample2 extends React.Component{
               {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
               {/* <RandomizeNodePositions seed={2} />         */}
               <DragNodes />
-              <GraphMessage label={this.state.source === 'Source Node'
+              <GraphMessage  ref={this.bridge} label={this.state.source === 'Source Node'
               ?"Press and hold Ctrl , select source node":
               "Keep Holding Ctrl and select target node"} />
             </Sigma>
             {
-              this.state.pathSuffix !== "/" 
-              ?<Redirect to={`${match.url}${this.state.pathSuffix}`} />
-              :""
+             this.state.redirect 
+              ?<Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} />  
+              :""            
             }
           </div>
-        </div>
+         </div>
       );
     }
     return (
@@ -189,7 +198,7 @@ class GrapExample2 extends React.Component{
   }
 }
 
-export default withRouter(GrapExample2) ;
+export default withRouter(SigmaGraph) ;
 
 // var graph2 = {nodes:[
 //   {label: "Number 1", size: 400, id: "n1"},
