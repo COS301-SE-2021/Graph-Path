@@ -15,7 +15,7 @@ describe("Task Test", () => {
     });
 
     test("render title", () => {
-        expect(wrapper.find("h4").text()).toBe("Add Task");
+        expect(wrapper.find("h4").text()).toBe("Add Node");
     });
 
 });
