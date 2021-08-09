@@ -108,7 +108,8 @@ var db = require('../../Controllers/DBController').getDB();
                  //console.log("The update of the user's username was a success: "+result);
                  res.send({
                      message: "success",
-                     data: result
+                     success: 1
+                     //data: result
                  });
              }
 
@@ -139,7 +140,8 @@ var db = require('../../Controllers/DBController').getDB();
                  //console.log("The update of the user's password was a success: "+result);
                  res.send({
                      message: "success",
-                     data: result
+                     success: 1
+                     //data: result
                  });
              }
 
@@ -176,7 +178,8 @@ var db = require('../../Controllers/DBController').getDB();
                  //console.log("The update of the user's username and password was a success: "+result);
                  res.send({
                      message: "success",
-                     data: result
+                     success: 1
+                    // data: result
                  });
              }
 
