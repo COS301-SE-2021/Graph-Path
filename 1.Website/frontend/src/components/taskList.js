@@ -1,5 +1,5 @@
 import React from 'react' ;
-import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
+// import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 
 class TaskList extends React.Component{
     constructor(props){
@@ -44,7 +44,7 @@ class TaskList extends React.Component{
     }
 
     render(){
-        const {tasks,isloading} = this.state;
+        const {isloading} = this.state;
         if(isloading===false){
             return <div>Check if something gets printed...</div>
         }

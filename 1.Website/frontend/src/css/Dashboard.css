@@ -2,10 +2,10 @@
     background-color: #001122;
     color: white;
     left: 0px;
-    width: 150px;
-    min-height: 80vh;
-    min-width: 15vw;
+    width: 10vw;
+    min-height: 90vh;
     position: relative;
+    font-size: small;
 
   }
 .DashboardMenu *{
