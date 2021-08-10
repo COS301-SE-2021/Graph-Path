@@ -447,7 +447,6 @@ function  makeTaskRoute(db)
      */
     router.patch('/updateTaskStatus/:project/:tasknr/:status',(req,res,next)=>{
 
-
         let proj = req.params.project;
         let tsknr = req.params.tasknr;
         let newStat = req.params.status;
@@ -506,9 +505,218 @@ function  makeTaskRoute(db)
             }
 
         })
-        //.catch((err)=>{
-        //    console.log("Could not update the task description: "+err);
-        // })
+
+    });
+
+    /**
+     *@swagger
+     * /task/updateTaskDueDate/:project/:tasknr/:dueDate:
+     *   patch:
+     *     summary: Updates the due date of the task that matches the given projectName , task number and new due date
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: update of task due date successful
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       400:
+     *         description: The given parameters do not match any existing task
+     *         contents:
+     *           application/json
+     *       500:
+     *         description: The task update failed due to a server error as listed in the response body
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
+    router.patch('/updateTaskDueDate/:project/:tasknr/:dueDate',(req,res,next)=>{
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newdate = req.params.dueDate;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{due:newdate}
+        },(err,result)=>{
+
+            if(err){
+
+                res.status(500).send({
+                    message: "Failed.Could not update the task date due to server error.",
+                    data: err
+                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
+            }
+
+        })
+
+    });
+    router.patch('/updateTaskIssueDate/:project/:tasknr/:IssueDate',(req,res,next)=>{
+
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newDesc = req.params.description;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{description:newDesc}
+        },(err,result)=>{
+
+            if(err){
+
+                res.status(500).send({
+                    message: "Failed.Could not update the task description",
+                    data: err
+                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
+            }
+
+        })
+
+    });
+    router.patch('/updateTaskAssignee/:project/:tasknr/:Assignee',(req,res,next)=>{
+
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newDesc = req.params.description;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{description:newDesc}
+        },(err,result)=>{
+
+            if(err){
+
+                res.status(500).send({
+                    message: "Failed.Could not update the task description",
+                    data: err
+                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
+            }
+
+        })
+
+    });
+    router.patch('/updateTaskAssigner/:project/:tasknr/:Assigner',(req,res,next)=>{
+
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newDesc = req.params.description;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{description:newDesc}
+        },(err,result)=>{
+
+            if(err){
+
+                res.status(500).send({
+                    message: "Failed.Could not update the task description",
+                    data: err
+                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
+            }
+
+        })
+
     });
 
 
