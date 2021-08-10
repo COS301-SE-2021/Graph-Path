@@ -582,6 +582,79 @@ function  makeTaskRoute(db)
     });
 
 
+    /**
+     *@swagger
+     * /task/updateTaskAssignee/:project/:tasknr/:Assignee:
+     *   patch:
+     *     summary: Updates the assignee of the task that matches the given projectName , task number and new due date
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: update of task assignee successful
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       400:
+     *         description: The given parameters do not match any existing task
+     *         contents:
+     *           application/json
+     *       500:
+     *         description: The task update failed due to a server error as listed in the response body
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
+    router.patch('/updateTaskAssignee/:project/:tasknr/:Assignee',(req,res,next)=>{
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newAssignee = req.params.Assignee;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{assignee:newAssignee}
+        },(err,result)=>{
+
+            if(err){
+
+                res.status(500).send({
+                    message: "Failed.Could not update the task assignee",
+                    data: err
+                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
+            }
+
+        })
+
+    });
+
 
     //module.exports = router;
     return router
