@@ -80,17 +80,27 @@ var db = require('../../Controllers/DBController').getDB();
      })
 
 
-     router.get('/listOfAllUsersExceptYourself', (req, res, next) => {
-         console.log('received request ', req.body, 'servicing.....');
+     router.get('/listOfAllUsersExceptYourself/:email', (req, res, next) => {
+         //console.log('received request ', req.body, 'servicing.....');
+         let mail= req.params.email;
          db.collection('Users').find({}).toArray()
              .then((usrs) => {
-                 console.log('success', usrs);
+                 //console.log('success', usrs);
                  if (usrs.length > 0) {
                      //remove current user first
-
+                    let newarray = usrs.filter((val)=>{
+                        //console.log("Val: ",val.email);
+                        if(val.email !=mail) {
+                            return true;
+                        }
+                         //return val!=mail;
+                    });
+                     //console.log("This is usrs: ",usrs);
+                     //console.log("This is the user who made the request: "+mail)
+                    //console.log("This is newarray: ",newarray);
                      //send response
                      res.send({
-                         message: usrs//.json()
+                         message: newarray//.json()
                      });
                  } else {
                      res.send({
