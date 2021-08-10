@@ -51,6 +51,64 @@ var db = require('../../Controllers/DBController').getDB();
              })
      }) ;
 
+     router.get('/listOfAllUsers', (req, res, next) => {
+         //console.log('received request ', req.body, 'servicing.....');
+         db.collection('Users').find({}).toArray()
+             .then((usrs) => {
+                 console.log('success', usrs);
+                 if (usrs.length > 0) {
+                     res.send({
+                         success: 1,
+                         message: usrs//.json()
+                     });
+                 } else {
+                     res.send({
+                         success: 0,
+                         message: "No Users found"
+                     })
+                 }
+             }, (ans) => {
+                 console.log('rejected', ans);
+                 res.send({
+                     data: ans
+                 });
+             })
+             .catch(err => {
+                 console.log('from db req', err)
+             })
+
+     })
+
+
+     router.get('/listOfAllUsersExceptYourself', (req, res, next) => {
+         console.log('received request ', req.body, 'servicing.....');
+         db.collection('Users').find({}).toArray()
+             .then((usrs) => {
+                 console.log('success', usrs);
+                 if (usrs.length > 0) {
+                     //remove current user first
+
+                     //send response
+                     res.send({
+                         message: usrs//.json()
+                     });
+                 } else {
+                     res.send({
+                         message: "No Users found"
+                     })
+                 }
+             }, (ans) => {
+                 console.log('rejected', ans);
+                 res.send({
+                     data: ans
+                 });
+             })
+             .catch(err => {
+                 console.log('from db req', err)
+             })
+
+     })
+
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
      router.post('/newUser',(req,res)=>{
          if (req == undefined || req.body == undefined || req === null ){
