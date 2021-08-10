@@ -364,7 +364,7 @@ function  makeTaskRoute(db)
      *           items:
      *             $ref: '#components/schemas/Task'
      *       400:
-     *         description:The given parameters do not match any existing task
+     *         description: The given parameters do not match any existing task
      *         contents:
      *           application/json
      *
@@ -372,6 +372,7 @@ function  makeTaskRoute(db)
      *
      */
     router.patch('/updateTaskDescription/:project/:tasknr/:description',(req,res,next)=>{
+
 
         let proj = req.params.project;
         let tsknr = req.params.tasknr;
@@ -433,7 +434,11 @@ function  makeTaskRoute(db)
      *           items:
      *             $ref: '#components/schemas/Task'
      *       500:
-     *         description: could not update task status
+     *         description: could not update task status due to server error
+     *         contents:
+     *           application/json
+     *       400:
+     *         description: could not update task  status . Invalid task information was given
      *         contents:
      *           application/json
      *
@@ -442,9 +447,27 @@ function  makeTaskRoute(db)
      */
     router.patch('/updateTaskStatus/:project/:tasknr/:status',(req,res,next)=>{
 
+
         let proj = req.params.project;
         let tsknr = req.params.tasknr;
         let newStat = req.params.status;
+
+        const AcceptedStatuses = ['In-progress','complete','not yet started','on hold']
+        for( var i = 0 ; i < AcceptedStatuses.length ; i++)
+        {
+
+            if(i == (AcceptedStatuses.length -1 ) && newStat != AcceptedStatuses[i])
+            {
+                res.status(400).send({
+                    message: "Failed. The provided status  '\ "+newStat+" '\ is not part of the currently accepted status: 'In-progress','complete','not yet started','on hold'",
+                    data: null
+                })
+                return;
+
+            }
+
+        }
+
         db.collection('Tasks').updateOne({
             project:proj,
             tasknr:tsknr
@@ -454,16 +477,32 @@ function  makeTaskRoute(db)
 
             if(err){
                 console.log("Could not update the task status: "+err);
-                res.send({
-                    message: "Failed",
+                res.status(500).send({
+                    message: "Failed.Could not update the task description",
                     data: err
                 });
-            }else{
-                //console.log("The update of the task status was a success: "+result);
-                res.send({
-                    message: "success",
-                    data: result['ops']
-                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
             }
 
         })
