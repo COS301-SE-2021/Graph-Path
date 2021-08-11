@@ -3,6 +3,7 @@ const router = express.Router();
 const ManageUser = require('../../Services/ManageUser')
 const mongoose = require('mongoose') ;
 var db = require('../../Controllers/DBController').getDB();
+var ObjectId = require('mongodb').ObjectID;
 
 
 
@@ -118,6 +119,49 @@ var db = require('../../Controllers/DBController').getDB();
              })
 
      })
+
+     router.get('/getUserByID/:id',(req,res,next)=>{
+
+         const ID = req.params.id ;
+         //let ID = req.body.id;
+         if(ID =='' || ID == undefined)
+         {
+             res.status(400).send({
+                 message:"invalid ID given"
+             })
+         }
+
+
+         db.collection('Users').findOne({
+             "_id": ObjectId(ID)
+         })
+             .then((ans)=>{
+                 if (ans === null){
+                     console.log(`GET ${ID} fail`,ans) ;
+
+                     res.send({
+                         message:"User not found"
+                     }) ;
+                 }
+                 else{
+                     console.log(`GET ${ID} success`,ans) ;
+                     res.send({
+                         message:`found ` ,
+                         data:ans
+                     }) ;
+                 }
+
+             },(ans)=>{
+                 console.log('GET rejected',ans) ;
+                 res.send({
+                     message:"request rejected",
+                     data:ans
+                 }) ;
+             })
+             .catch(err=>{
+                 console.log('from db req',err)
+             })
+     }) ;
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
      router.post('/newUser',(req,res)=>{
