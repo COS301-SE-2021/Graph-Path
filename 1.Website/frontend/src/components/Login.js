@@ -191,6 +191,7 @@ class Login extends React.Component{
                     {formErrors.password === false && this.state.responseData !==null &&(
                         <span className='errorMessage'>Invalid Password</span>
                     )}
+                    <a href="">Forgot your password?</a>
                     <input type="submit" className="btn1" value="Login" />
                     Don't Have an Account? Register <Link to="/signUp"> Here</Link>
                 </form>
