@@ -146,7 +146,7 @@ class SigmaGraph extends React.Component{
             width:"50vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
             onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
             onClickNode={e => this.handleControlClick(e)}
-            onClickEdge={ e => this.handleControlClick(e)}
+            onClickEdge={ e => console.log(e)}
             onOverEdge={(e)=>console.log('hover')}
             settings={{
               clone: false, // do not clone the nodes
