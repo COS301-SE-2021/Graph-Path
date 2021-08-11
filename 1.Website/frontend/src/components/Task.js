@@ -114,7 +114,7 @@ class Task extends React.Component{
                      onFocus={(e)=>{custom = undefined}}/>
                     {
                         this.state.fullForm?<></>
-                        :<div onClick={this.toogleForm}>+</div>
+                        :<div onClick={this.toogleForm}>Edit</div>
                     
                     }
                     {this.state.fullForm ? <span>
