@@ -1,7 +1,8 @@
 .DashboardMenu{
-    background-color: #001122;
+    /*background-color: #001122;*/
+    background-color: red;
     color: white;
-    left: 0px;
+    left: 0;
     width: 10vw;
     min-height: 90vh;
     position: relative;
@@ -69,4 +70,22 @@ button{
 
 .imgContainer > img{
     max-width: 500px;
+}
+
+.imgContainer {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.closeBtn {
+    position: absolute;
+    color: white;
+    top:30px;
+    left: 26px;
+    font-size: 32px;
+}
+
+.closeBtn:hover{
+    cursor: pointer;
 }
