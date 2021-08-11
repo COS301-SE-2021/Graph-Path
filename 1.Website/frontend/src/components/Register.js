@@ -1,8 +1,8 @@
 import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
-import { Link} from 'react-router-dom'
-
+import { Link} from 'react-router-dom';
+import {form} from "react-bootstrap";
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 /*Rest part checks for submitting null values for all inputs*/
@@ -183,9 +183,10 @@ class Register extends React.Component{
             <div id="registerscreen">
                 <h4>Sign Up</h4>
                 <form className="logForm" onSubmit={this.onSubmit} >
-                    <p>First Name</p>
+                    <p className="form-group">First Name</p>
                     <input
                         className={formErrors.firstName.length > 0 ? 'error': null}
+                        className="form-control"
                         name='firstName'
                         type='text'
                         placeholder='First Name' value={this.state.firstName}
@@ -194,10 +195,10 @@ class Register extends React.Component{
                     {formErrors.firstName.length > 0 && (
                         <span className='errorMessage'>{formErrors.firstName}</span>
                     )}
-                    <p>Last Name</p>
+                    <p className="form-group">Last Name</p>
                     <input
                         className={formErrors.lastName.length > 0 ? 'error': null}
-                        name='lastName' type='text'
+                        name='lastName' type='text'  className="form-control"
                         placeholder='Last Name' value={this.state.lastName}
                         onChange={this.change}
                     />
@@ -207,6 +208,7 @@ class Register extends React.Component{
                     <p>Username</p>
                     <input
                         className={formErrors.userName.length > 0 ? 'error': null}
+                        className="form-control"
                         name= 'userName' type='text'
                         placeholder='Username' value={this.state.userName}
                         onChange={this.change}
@@ -217,6 +219,7 @@ class Register extends React.Component{
                     <p>Email</p>
                     <input
                         className={formErrors.email.length > 0 ? 'error': null}
+                        className="form-control"
                         name = 'email'
                         type='email'
                         placeholder='Email' value={this.state.email}
@@ -229,6 +232,7 @@ class Register extends React.Component{
                     <p>Password</p>
                     <input
                         className={formErrors.password.length > 0 ? 'error': null}
+                        className="form-control"
                         name='password'
                         type='password'
                         placeholder='Password' value={this.state.password}
