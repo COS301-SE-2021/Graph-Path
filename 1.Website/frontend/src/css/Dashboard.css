@@ -1,9 +1,8 @@
 .DashboardMenu{
-    /*background-color: #001122;*/
-    background-color: red;
+    background-color: #001122;
     color: white;
     left: 0;
-    width: 10vw;
+    width: 16vw;
     min-height: 90vh;
     position: relative;
     font-size: small;
@@ -25,14 +24,15 @@ button{
   margin:2px 2px 2px 2px ; 
 }
 
-.close{
-    background-color: #9A0001;
-}
-
 .App-link-routes .opt {
     background-color: #04AA6D;
-    padding: 2px;
     height: auto;
+     padding: 10px;
+    width: 200px;
+    position: relative;
+    font-size: 15px;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 .App-link-routes .opt a {
@@ -75,7 +75,6 @@ button{
 .imgContainer {
     width: 100%;
     height: 100%;
-    background-color: white;
 }
 
 .closeBtn {
@@ -88,4 +87,9 @@ button{
 
 .closeBtn:hover{
     cursor: pointer;
+}
+
+.scrumBoard{
+    z-index: -1000;
+    margin-top: 100px;
 }
