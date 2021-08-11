@@ -2,11 +2,15 @@ import React from 'react' ;
 import Graph from './Graph';
 import NewProject from './NewProject' ;
 import TaskList from './TaskList';
+import Reports from "./Reports";
 import '../css/App.css' ;
 import '../css/Dashboard.css'
+import scrumBoard from '../images/scrum_board_l.svg'
+import * as AiIcons from "react-icons/ai";
 // import Sigma from './reactSigmaGraph' ; 
 // import axios from 'axios' ;
 import { BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom' ;
+
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -26,8 +30,8 @@ class Dashboard extends React.Component{
         })
     }
 
-    toogleDisplayOpen = () =>{
-        var elem = document.getElementById('modal1') ;
+    toggleDisplayOpen = () =>{
+        let elem = document.getElementById('modal1') ;
         if (elem !== null){
         // console.log('clicked', elem.style.display)
             elem.style.display='block' ;
@@ -35,10 +39,12 @@ class Dashboard extends React.Component{
         }
     }
 
-    toogleDisplayClose = () =>{
-        var elem = document.getElementById('modal1') ;
-        if (elem !== null){
+    toggleDisplayClose = () =>{
+        let elem = document.getElementById('modal1') ;
+        let navB = document.getElementById('modal2');
+        if (elem !== null && navB !== null){
             elem.style.display='none' ;
+            navB.style.display='none';
             this.props.menuToogleOpen()
         }
     }        
@@ -48,10 +54,10 @@ class Dashboard extends React.Component{
         return (
            <div className="GraphDashboard">
             <Router>
-                <div className="DashboardMenu" id="modal1" >
+                {/*  <div className="DashboardMenu" id="modal1" >
                     <div className="App-link-routes" >
                         <div className="opt">
-                        <span onClick={this.toogleDisplayClose} 
+                        <span onClick={this.toggleDisplayClose}
                         className="close" title="Close Menu">
                         &times;</span>
                     </div>
@@ -66,17 +72,28 @@ class Dashboard extends React.Component{
                             <Link to="TaskList">View Tasks</Link>
                         </div>
                         <div className="opt">
-                            <Link to="">Reports</Link>
+                            <Link to="/reports">Reports</Link>
                         </div>
                     </div>
+                </div>*/}
+
+                {/*New Nav Bar*/}
+                <span className="closeBtn" id="modal1">
+                        <AiIcons.AiOutlineClose onClick={this.toggleDisplayClose} />
+                </span>
+                <div className="DashboardMenu" id="modal2">
+
+
                 </div>
+
                 {/* Default route for logging in */}
                 
                 <Switch>
                 <Route path="/dashboard">
                     <div className="imgContainer">
-                       <p> Images of what can be done with the graph path are displayed </p>
-                        <img alt={"Graph Project Example"} src={`${this.props.api}/Dashboard1.png`}/>
+                        <img alt={"Scrum Board"} src={scrumBoard} className="scrumBoard" />
+
+                        {/*<img alt={"Graph Project Example"} src={`${this.props.api}/Dashboard1.png`}/>*/}
                     </div>
                 </Route>
                     <Route path="/newProject" exact>
@@ -100,9 +117,15 @@ class Dashboard extends React.Component{
                             <TaskList/>
                         </div>
                     </Route>
+
+                    <Route path="/reports">
+                        <div className="ContentArea">
+                            <Reports/>
+                        </div>
+                    </Route>
                 </Switch>
             
-            {this.toogleDisplayOpen()}
+            {this.toggleDisplayOpen()}
             </Router>
             </div>
         )
