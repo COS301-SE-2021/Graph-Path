@@ -12,6 +12,7 @@ import * as AiIcons from "react-icons/ai";
 import { BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom' ;
 
 
+
 class Dashboard extends React.Component{
     constructor(props){
         super(props) ; 
@@ -54,18 +55,16 @@ class Dashboard extends React.Component{
         return (
            <div className="GraphDashboard">
             <Router>
-                {/*  <div className="DashboardMenu" id="modal1" >
-                    <div className="App-link-routes" >
+                <span className="closeBtn" id="modal1">
+                        <AiIcons.AiOutlineClose onClick={this.toggleDisplayClose} />
+                </span>
+                <div className="DashboardMenu" id="modal2">
+                    <div className="App-link-routes">
                         <div className="opt">
-                        <span onClick={this.toggleDisplayClose}
-                        className="close" title="Close Menu">
-                        &times;</span>
-                    </div>
-                    <div className="opt">
-                        <Link  to="/newProject">Create Project</Link>
-                    </div>
+                            <Link  to="/newProject">Create Project</Link>
+                        </div>
                         <div className="opt">
-                        <Link to="/viewProjects">View Projects</Link>
+                            <Link to="/viewProjects">View Projects</Link>
                         </div>
 
                         <div className="opt">
@@ -75,13 +74,6 @@ class Dashboard extends React.Component{
                             <Link to="/reports">Reports</Link>
                         </div>
                     </div>
-                </div>*/}
-
-                {/*New Nav Bar*/}
-                <span className="closeBtn" id="modal1">
-                        <AiIcons.AiOutlineClose onClick={this.toggleDisplayClose} />
-                </span>
-                <div className="DashboardMenu" id="modal2">
 
 
                 </div>
@@ -92,7 +84,7 @@ class Dashboard extends React.Component{
                 <Route path="/dashboard">
                     <div className="imgContainer">
                         <img alt={"Scrum Board"} src={scrumBoard} className="scrumBoard" />
-
+                        {/* Show projects*/}
                         {/*<img alt={"Graph Project Example"} src={`${this.props.api}/Dashboard1.png`}/>*/}
                     </div>
                 </Route>
@@ -107,7 +99,8 @@ class Dashboard extends React.Component{
 
                     {/* should call api for the projects and be able to display as per list  */}
                         <div className="ContentArea">
-                            <Graph userEmail={this.props.loggedUser} /> 
+                            <Graph userEmail={this.props.loggedUser} />
+
                         </div>
 
                     </Route>
