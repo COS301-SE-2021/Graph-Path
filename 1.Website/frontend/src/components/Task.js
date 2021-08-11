@@ -14,6 +14,7 @@ class Task extends React.Component{
             status: null,
             about: null,
             api:'http://localhost:9001',
+            fullForm:false
         }
     }
     cleanUp=()=>{
@@ -91,8 +92,10 @@ class Task extends React.Component{
         }, console.log(this.state));
     }
 
-    displayForm = () =>{
-
+    toogleForm = () =>{
+        this.setState({
+            fullForm:!this.state.fullForm
+        }) ;
     }
 
 
@@ -109,8 +112,12 @@ class Task extends React.Component{
                         :this.props.label} 
                      onChange={this.updateField} 
                      onFocus={(e)=>{custom = undefined}}/>
-               
-                    {this.props.fullForm ? <span>
+                    {
+                        this.state.fullForm?<></>
+                        :<div onClick={this.toogleForm}>+</div>
+                    
+                    }
+                    {this.state.fullForm ? <span>
                         <p>Description</p>
                         <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
                         <p>Start Date</p>
