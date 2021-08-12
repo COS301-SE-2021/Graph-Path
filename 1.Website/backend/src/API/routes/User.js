@@ -158,7 +158,32 @@ var ObjectId = require('mongodb').ObjectID;
 
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
+    router.delete('/deleteUserByID/:id',(req,res, next)=>{
+       let id = req.params.id;
+        //let id = req.body.id;
+        db.removeUserByID(id)
+            .then((ans)=>{
+               if(ans != null){
+                   res.send({
+                       message: "The user was removed."
+                   })
+               } else{
+                   res.send({
+                       message: "Could not remove user."
+                   })
+               }
+            })
+            .catch(err=>{
+                res.send({
+                    message: "Could not remove user."
+                })
+            });
+    });
 
+     router.delete('deleteUserByEmail/:email',(req,res, next)=>{
+        let mail = req.params.email;
+
+     });
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
      router.patch('/updateUserUsername/:email/:username',(req, res, next)=>{
