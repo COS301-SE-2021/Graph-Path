@@ -58,7 +58,15 @@ const swaggerOptions = {
 const swaggerDocs =swaggerJsDoc(swaggerOptions);
 
 const makeApp = require('./app');
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const AliDB = require('./Controllers/AlisTestDBController');
+const app = makeApp(false,AliDB);
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 const app = makeApp(true,)
+ */
 app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(swaggerDocs));
 const server = http.createServer(app);
 
