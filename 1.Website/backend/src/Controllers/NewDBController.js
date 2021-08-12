@@ -5,6 +5,7 @@ var ObjectId = require('mongodb').ObjectID;
 const mongoose = require('mongoose') ;
 const bcrypt = require('bcrypt');
 const userService = require('../Services/UserManager');
+const Permissions = require('../Helpers/Permissions');
 
 
 let db ;
@@ -258,7 +259,13 @@ async function getAllProjectsByUserEmail(mail){
                         if(GroupMembers[x].email == mail)
                         {
                             console.log("Match found");
-                            MatchedProjects.push(Projects[i]);
+                            const obj = {
+                                role: GroupMembers[x].role,
+                                permissions: Permissions.getPermissions(GroupMembers[x].role),
+                                project:Projects[i],
+
+                            }
+                            MatchedProjects.push(obj);
                             break;
                         }
 
