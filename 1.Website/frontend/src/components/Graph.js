@@ -4,10 +4,14 @@ import Node from './Node';
 import axios from 'axios';
 import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
+import '../css/Login.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
+import * as ImIcons from "react-icons/im";
 import Spinner from 'react-spinner-material';
 import GraphManager from './GraphManager';
+import {Button, Card} from "react-bootstrap";
+import TaskPic from '../images/task.svg';
 
 
 class Graph extends React.Component{
@@ -329,7 +333,7 @@ class Graph extends React.Component{
 
         return (
             <Router basename='viewProjects/graph'>
-                <div className="projectView">
+                <div className="projectView" >
                 <Spinner color={"#0000f2"} radius={350} visible={this.state.loading} />
 
                    <Link to={"/viewProjects"} className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
@@ -347,8 +351,10 @@ class Graph extends React.Component{
                             this.state.projList.length>0 ? // validate if it is an array and not empty
                             this.state.projList.map( (node) => {       
                                 keyNum = keyNum+1 ;
-                                return <div key={keyNum}  data-project={node} className="project-content" > 
-                                    <Link data-projnum={keyNum}  
+                                return(
+
+                                    <>
+                                    {/* <Link data-projnum={keyNum}
                                     onClick={(e) =>{
                                     this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
                                     to={`/project/${keyNum}`}>{node.projectName}</Link>
@@ -359,8 +365,32 @@ class Graph extends React.Component{
                                         :
                                         <span/>
                                     }
-                                    
-                                </div>
+                                */}
+
+                                    <Card key={keyNum}  data-project={node} className="project-card">
+                                        <Card.Body>
+                                            <Card.Title id="pTitle">{node.projectName}</Card.Title>
+                                            <Card.Text id={"pText"}>Owner: {node.owner}</Card.Text>
+                                            <Card.Footer className="Footer">
+                                                <Link className="btn2"
+                                                      data-projnum={keyNum}
+                                                      onClick={(e) =>{
+                                                          this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                                      to={`/project/${keyNum}`}
+                                                      variant="primary">Open</Link>
+                                                {node.owner === this.props.userEmail ?
+                                                    <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
+                                                }
+                                            </Card.Footer>
+
+
+
+                                        </Card.Body>
+
+                                    </Card>
+                                    </>
+
+                                )
                             })
                             : <span>
                                 <h1>Project List is empty,<br/>
