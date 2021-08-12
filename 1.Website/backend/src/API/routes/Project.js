@@ -87,10 +87,17 @@ function makeProjectRoute(db) {
         }
         db.getProjectByID(ID)
             .then(ans=>{
-                res.send({
-                    message: "Project retrieved.",
-                    data: ans
-                })
+                if(ans != null){
+                    res.send({
+                        message: "Project retrieved.",
+                        data: ans
+                    })
+                }else{
+                    res.send({
+                        message: "Could not retrieve project."
+                    })
+                }
+
             })
             .catch(err=>{
                 res.status(500).send({
@@ -102,7 +109,6 @@ function makeProjectRoute(db) {
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
     router.post('/newProject',  (req, res, next) => {
-        console.log("metry poppins");
         if (req === undefined || req.body === undefined) {
             res.json({
                 message: "There was no information provided."
@@ -119,7 +125,6 @@ function makeProjectRoute(db) {
             let data = req.body;
             const id = new mongoose.mongo.ObjectID();
             data["_id"] = id;
-            console.log("This is data",data);
             db.insertProject(data)
                 .then(ans=>{
                     res.send({
@@ -157,41 +162,28 @@ function makeProjectRoute(db) {
  *          description:The body is not complete.
  */
 
-router.delete('/deleteProject',(req,res)=>{
-    console.log('DELETE ',req.query)
-    const {projectName,owner} = req.query ;
-    if (projectName !== undefined && owner !== undefined){
+router.delete('/deleteProject/:id',(req,res)=>{
+    let ID = req.params.id;
+
         // console.log(projectName,owner); 
-        db.collection('Projects').deleteOne({
-            projectName:projectName ,
-            owner:owner
-        })
-        .then(del =>{
-            console.log('result from db ',del.result) ;
-            if (del.result.n > 0){
+        db.removeProjectByID(ID)
+        .then(ans =>{
+            if(ans === null){
                 res.send({
-                    message:"Deleted.",
-                    data:0
-                }) ;
-            }
-            else{
+                    message: "Could not remove project."
+                });
+            }else{
                 res.send({
-                    message:"Project not found"
-                }) ;
+                    message: "Project was removed successfully."
+                });
             }
+
         })
         .catch(err=>{
             res.status(500).send({
-                message:"Server Error",
-                err:err
+                message:"Could not remove project."
             })
         })
-    }
-    else{
-        res.send({
-            message:"Request not complete"
-        }) ;
-    }
 })
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
