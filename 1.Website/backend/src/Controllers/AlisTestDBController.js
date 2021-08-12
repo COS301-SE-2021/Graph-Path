@@ -2,6 +2,7 @@ const mongClient = require('mongodb').MongoClient ;
 require('dotenv').config() ;
 const DB_URI =process.env.TEST_DB_URI ;
 var ObjectId = require('mongodb').ObjectID;
+const mongoose = require('mongoose') ;
 
 
 let db ;
@@ -104,9 +105,29 @@ async function getAllOtherUsers(email,id){
 
 //***************************************************-post-**************************************************************
 async function insertUser(userObject){
-
+    return await new Promise((resolve, reject)=>{
+        db.collection('Users').insertOne(userObject)
+            .then((ans)=>{
+                resolve(ans);
+            },(ans)=>{
+                console.log('rejected',ans) ;
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    });
+}
+//***************************************************-delete-**************************************************************
+async function removeUserByID(id){
 
 }
+
+async function removeUserByEmail(email){
+
+}
+//***************************************************-patch-**************************************************************
+
 /////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
@@ -121,5 +142,7 @@ module.exports={
     getUserByEmail,
     getAllUsers,
     getAllOtherUsers,
-    insertUser
+    insertUser,
+    removeUserByEmail,
+    removeUserByID
 };
