@@ -216,34 +216,23 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
 router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
     let ID = req.params.id;
     let mail = req.params.email;
-    db.collection('Projects').updateOne({
-        "_id": ObjectId(ID)
-    },{
-
-            $push: {
-                groupMembers: mail
+    db.addNewProjectMember(ID, mail)
+        .then(ans=>{
+            if(ans.modifiedCount >0){
+                res.send({
+                    message: "Member added successfully."
+                })
+            }else{
+                res.send({
+                    message: "Could not add member."
+                })
             }
-
-    },(err,ans)=>{
-
-        if(err){
-            console.log("Could not update the project graph: "+err);
-            res.send({
-                message:"found",
-                data:ans//.json()
-            }) ;
-        }
-        else{
-            res.send({
-                message: "success"
-
-            });
-        }
-
-    })
-    //.catch((err)=>{
-    //    console.log("Could not update the task description: "+err);
-    // })
+        })
+    .catch((err)=>{
+        res.status(500).send({
+            message: "An error has occured."
+        })
+     })
 });
 
 router.put('/updateProjectGraph',(req,res)=>{
