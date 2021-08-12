@@ -1,10 +1,12 @@
 const express = require('express');
 //swap out service
 const projectManager = require('../../Services/ProjectService');
+const Permissions = require('../../Helpers/Permissions');
 const mongoose = require('mongoose') ;
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 var db = require('../../Controllers/DBController').getDB();
+
 console.log("-----test2-----")
 
 
@@ -51,25 +53,32 @@ function makeProjectRoute(db) {
 
 
     router.get('/getAllProjectsByUserEmail/:email', (req, res, next) => {
+
         // console.log('received request ', req.params, 'servicing.....');
         let mail=req.params.email;
         db.getAllProjectsByUserEmail(mail)
             .then(ans=>{
-                if(ans == null || ans === 0){
-                    console.log(ans);
+
+                if (ans ==="No matched projects")
+                {
                     res.send({
-                        message: "Could not retrieve the projects"
+                        message: "unsuccessful. "+ans+" for user: "+mail,
+                        data: null
                     })
-                }else{
+                }
+
+                else{
+
                     res.send({
-                        message: "The list was retrieved successfully.",
+                        message: "successful",
                         data: ans
                     })
                 }
             })
             .catch(err => {
                 res.status(500).send({
-                    message: "could not retrieve projects.",
+                    message: "Server error. Could not retrieve projects.",
+                    data: null
 
                 });
             })
