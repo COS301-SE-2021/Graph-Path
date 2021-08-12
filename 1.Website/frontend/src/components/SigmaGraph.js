@@ -122,70 +122,74 @@ class SigmaGraph extends React.Component{
     
 
       const graph = mgr.getGraph() ; 
-      if (graph !== undefined && graph.nodes !== undefined )
-      var SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
+      if (graph !== undefined && graph.nodes !== undefined ){
+        var SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
 
-      const nodeId = this.state.nodeId ; 
-      const nodeLabel = this.state.nodeLabel ;
-      return (
-        <div className="graphContainer">
-          <div>
-          <span className="projName">{this.props.projectName}</span>
-          {
-              typeof this.props.sendGraphData === 'function'? //if there's a save option
-              <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
-              this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
-              Save</button>:""
-            }
-          </div>
-          
-          <div key={SigmaGraphkey} className="GraphBox">
-
-            <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
-            style={{position:"relative", 
-            width:"50vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
-            onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
-            onClickNode={e => this.handleControlClick(e)}
-            onClickEdge={ e => console.log(e)}
-            onOverEdge={(e)=>console.log('hover')}
-            settings={{
-              clone: false, // do not clone the nodes
-              immutable:true,// cannot updated id of node
-              // labelSizeRatio:1,
-              labelThreshold:0.5,
-              scalingMode:"inside",
-              sideMargin:100,
-              minNodeSize:3,
-              maxNodeSize:10,
-              minEdgeSize:1,
-              defaultEdgeHoverColor:'#000',
-              maxEdgeSize:4,
-              drawNodes:true, //draw node ?
-              drawLabels:true, //node label
-              drawEdges: true, //draw edge?
-              drawEdgeLabels:false,
-              minArrowSize:10,
-              enableEdgeHovering:true,
-              edgeHoverPrecision:100
-            }}>
-              <EdgeShapes default="arrow"/>
-              <NodeShapes default="def"/>
-              {/* <RelativeSize  initialSize={200}/> */}
-              {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
-              {/* <RandomizeNodePositions seed={2} />         */}
-              <DragNodes />
-              <GraphMessage  ref={this.bridge} label={this.state.source === 'Source Node'
-              ?"Press and hold Ctrl , select source node":
-              "Keep Holding Ctrl and select target node"} />
-            </Sigma>
+        const nodeId = this.state.nodeId ; 
+        const nodeLabel = this.state.nodeLabel ;
+        return (
+          <div className="graphContainer">
+            <div>
+            <span className="projName">{this.props.projectName}</span>
             {
-             this.state.redirect 
-              ?<Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} />  
-              :""            
-            }
+                typeof this.props.sendGraphData === 'function'? //if there's a save option
+                <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
+                this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
+                Save</button>:""
+              }
+            </div>
+            
+            <div key={SigmaGraphkey} className="GraphBox">
+
+              <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
+              style={{position:"relative", 
+              width:"50vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
+              onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
+              onClickNode={e => this.handleControlClick(e)}
+              onClickEdge={ e => console.log(e)}
+              onOverEdge={(e)=>console.log('hover')}
+              settings={{
+                clone: false, // do not clone the nodes
+                immutable:true,// cannot updated id of node
+                // labelSizeRatio:1,
+                labelThreshold:0.5,
+                scalingMode:"inside",
+                sideMargin:100,
+                minNodeSize:3,
+                maxNodeSize:10,
+                minEdgeSize:1,
+                defaultEdgeHoverColor:'#000',
+                maxEdgeSize:4,
+                drawNodes:true, //draw node ?
+                drawLabels:true, //node label
+                drawEdges: true, //draw edge?
+                drawEdgeLabels:false,
+                minArrowSize:10,
+                enableEdgeHovering:true,
+                edgeHoverPrecision:100
+              }}>
+                <EdgeShapes default="arrow"/>
+                <NodeShapes default="def"/>
+                {/* <RelativeSize  initialSize={200}/> */}
+                {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
+                {/* <RandomizeNodePositions seed={2} />         */}
+                <DragNodes />
+                <GraphMessage  ref={this.bridge} label={this.state.source === 'Source Node'
+                ?"Press and hold Ctrl , select source node":
+                "Keep Holding Ctrl and select target node"} />
+              </Sigma>
+              {
+              this.state.redirect 
+                ?<Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} />  
+                :""            
+              }
+            </div>
           </div>
-         </div>
-      );
+        );
+      }
+      // else{
+        
+      // }
     }
     return (
       <div className="exampleProject">

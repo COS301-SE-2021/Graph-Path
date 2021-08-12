@@ -1,5 +1,6 @@
 import React from 'react' ; 
 import Task from './Task' ;
+import axios from 'axios';
 import {Link,withRouter, Route, Switch} from 'react-router-dom' ;
 // import '../css/Dashboard.css' ;
 
@@ -7,6 +8,7 @@ class Node extends React.Component{
     constructor(props){
         super(props) ; 
         this.state ={
+            taskList:[]
         }
         this.graphManager = null  ; 
     }
@@ -25,6 +27,37 @@ class Node extends React.Component{
             this.updateParent()
         
         }
+    }
+    addNewTask = (data) =>{
+        axios.post(`${this.state.api}/insertTask`,data)
+        .then((response) =>{
+            if(response.status===400){
+                throw Error(response.statusText) ;
+            }//else
+            console.log('from back end',response)
+
+            const res = response.data;
+            console.log(res) ;
+            this.setState({
+                answer:res.message,
+                responseData:res.data //data
+            },()=>{
+                // alert('res:'+this.state.answer)
+                console.log(this.state)
+                if (this.state.answer!== null && this.state.answer){
+                    //    this.props.changeToDefault() ;
+                }
+            })
+
+        },(response)=>{
+            console.log('rejected',response) ;
+        })
+        .catch((error)=>{
+            console.log(error) ;
+        })
+    }
+    viewAllTasks =()=>{
+        
     }
     
     updateParent=()=>{
@@ -52,7 +85,7 @@ class Node extends React.Component{
             <div>
                 <div>
                     <Link to={`${match.url}/addNode`}>Add Nodes</Link><span> </span>
-                    <Link to={`${match.url}/edges`}>Add Edges</Link>
+                    {/* <Link to={`${match.url}/edges`}>Add Edges</Link> */}
                     <br/>
                 </div>
                 <Switch>

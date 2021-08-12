@@ -1,6 +1,9 @@
 import  React from 'react' ;
 import '../css/Task.css';
-import axios from "axios";
+
+/*
+   
+*/
 
 class Task extends React.Component{
     constructor(props) {
@@ -35,38 +38,6 @@ class Task extends React.Component{
                 members: temp
         })
     }
-
-
-    sendData (data){
-        //path to make the post and wait for the response
-       axios.post(`${this.state.api}/insertTask`,data)
-            .then((response) =>{
-                if(response.status===400){
-                    throw Error(response.statusText) ;
-                }//else
-                console.log('from back end',response)
-
-                const res = response.data;
-                console.log(res) ;
-                this.setState({
-                    answer:res.message,
-                    responseData:res.data //data
-                },()=>{
-                    // alert('res:'+this.state.answer)
-                    console.log(this.state)
-                    if (this.state.answer!== null && this.state.answer){
-                        //    this.props.changeToDefault() ;
-                    }
-                })
-
-            },(response)=>{
-                console.log('rejected',response) ;
-            })
-            .catch((error)=>{
-                console.log(error) ;
-            })
-    }
-
 
 
     handleSubmit = (event) => {

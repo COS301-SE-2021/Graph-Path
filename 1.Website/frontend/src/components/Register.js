@@ -1,8 +1,8 @@
 import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
-import { Link} from 'react-router-dom'
-
+import { Link} from 'react-router-dom';
+import {form} from "react-bootstrap";
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 /*Rest part checks for submitting null values for all inputs*/
@@ -180,71 +180,76 @@ class Register extends React.Component{
         // }
 
         return (
-            <div id="registerscreen">
-                <h4>Sign Up</h4>
-                <form className="logForm" onSubmit={this.onSubmit} >
-                    <p>First Name</p>
-                    <input
-                        className={formErrors.firstName.length > 0 ? 'error': null}
-                        name='firstName'
-                        type='text'
-                        placeholder='First Name' value={this.state.firstName}
-                        onChange={this.change}
-                    />
-                    {formErrors.firstName.length > 0 && (
-                        <span className='errorMessage'>{formErrors.firstName}</span>
-                    )}
-                    <p>Last Name</p>
-                    <input
-                        className={formErrors.lastName.length > 0 ? 'error': null}
-                        name='lastName' type='text'
-                        placeholder='Last Name' value={this.state.lastName}
-                        onChange={this.change}
-                    />
-                    {formErrors.lastName.length > 0 && (
-                        <span className='errorMessage'>{formErrors.lastName}</span>
-                    )}
-                    <p>Username</p>
-                    <input
-                        className={formErrors.userName.length > 0 ? 'error': null}
-                        name= 'userName' type='text'
-                        placeholder='Username' value={this.state.userName}
-                        onChange={this.change}
-                    />
-                    {formErrors.userName.length > 0 && (
-                        <span className='errorMessage'>{formErrors.userName}</span>
-                    )}
-                    <p>Email</p>
-                    <input
-                        className={formErrors.email.length > 0 ? 'error': null}
-                        name = 'email'
-                        type='email'
-                        placeholder='Email' value={this.state.email}
-                        onChange={this.change}
-                    />
-                       {formErrors.email.length > 0 && (
-                           <span className='errorMessage'>{formErrors.email}</span>
+            <div className="base-container" ref={this.props.containerRef}>
+                <div id="registerscreen">
+                    <h4>Sign Up</h4>
+                    <form className="logForm" onSubmit={this.onSubmit} >
+                        <p >First Name</p>
+                        <input
+                            className={['form-control', formErrors.firstName.length > 0 ? 'error': null]}
+                             name='firstName'
+                            type='text'
+                            placeholder='First Name' value={this.state.firstName}
+                            onChange={this.change}
+                        />
+                        {formErrors.firstName.length > 0 && (
+                            <span className='errorMessage'>{formErrors.firstName}</span>
+                        )}
+                        <p className="form-group">Last Name</p>
+                        <input
+                            className={['form-control', formErrors.lastName.length > 0 ? 'error': null]}
+                            name='lastName' type='text'
+                            placeholder='Last Name' value={this.state.lastName}
+                            onChange={this.change}
+                        />
+                        {formErrors.lastName.length > 0 && (
+                            <span className='errorMessage'>{formErrors.lastName}</span>
+                        )}
+                        <p>Username</p>
+                        <input
+                            className={['form-control', formErrors.userName.length > 0 ? 'error': null]}
+                            //className="form-control"
+                            name= 'userName' type='text'
+                            placeholder='Username' value={this.state.userName}
+                            onChange={this.change}
+                        />
+                        {formErrors.userName.length > 0 && (
+                            <span className='errorMessage'>{formErrors.userName}</span>
+                        )}
+                        <p>Email</p>
+                        <input
+                            className={['form-control',formErrors.email.length > 0 ? 'error': null]}
+                            name = 'email'
+                            type='email'
+                            placeholder='Email' value={this.state.email}
+                            onChange={this.change}
+                        />
+                        {formErrors.email.length > 0 && (
+                            <span className='errorMessage'>{formErrors.email}</span>
                         )}
 
-                    <p>Password</p>
-                    <input
-                        className={formErrors.password.length > 0 ? 'error': null}
-                        name='password'
-                        type='password'
-                        placeholder='Password' value={this.state.password}
-                        onChange={e=>this.change(e)}
-                    />
-                    {formErrors.password.length > 0 && (
-                        <span className='errorMessage'>{formErrors.password}</span>
-                    )}
-                    <br />
-                    <button  className="btn1" type="submit"> Submit </button>
-                    <small>Already Have an Account? Login
+                        <p>Password</p>
+                        <input
+                            className={['form-control',formErrors.password.length > 0 ? 'error': null]}
+                            name='password'
+                            type='password'
+                            placeholder='Password' value={this.state.password}
+                            onChange={e=>this.change(e)}
+                        />
 
-                                <Link to="/signIn"> Here</Link>
-                    </small>
-                </form>
+                        {formErrors.password.length > 0 && (
+                            <span className='errorMessage'>{formErrors.password}</span>
+                        )}
+                        <br />
+                        <button  className="btn1" type="submit"> Submit </button>
+                        <small>Already Have an Account? Login
+
+                            <Link to="/signIn"> Here</Link>
+                        </small>
+                    </form>
+                </div>
             </div>
+
         );
     }
 }

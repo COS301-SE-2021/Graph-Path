@@ -6,9 +6,12 @@ import '../css/Header.css';
 import '../css/App.css';
 import Username from './Username';
 import '../css/common.css'
+import '../css/Login.css'
 import {BrowserRouter as Router, Switch,Route,Link, Redirect} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
 import Profile from "./Profile";
+import process_pic from "../images/process.svg";
+import completeTask_pic from "../images/completed_task.svg";
 
 
 class Header extends React.Component{
@@ -49,9 +52,11 @@ class Header extends React.Component{
 
     toggleDashMenu = () =>{
         const elem = document.getElementById('modal1') ;
+        let navB = document.getElementById('modal2');
         console.log('clicked', elem.style.display)
-        if (elem !== null){
+        if (elem !== null && navB !== null){
             elem.style.display='block' ;
+            navB.style.display='block';
             this.renderClose() ; 
         }
         else{        
@@ -71,7 +76,7 @@ class Header extends React.Component{
             <Router>
                 <div className={this.state.log ? "bigHeader":"header_"}>
                 <header className="App-header">
-                    <img id="logoImg" alt={"NoCapLogo"} src={`${this.props.api}/NoCapLogo.jpeg`} />
+                    {/*<img id="logoImg" alt={"NoCapLogo"} src={`${this.props.api}/NoCapLogo.jpeg`} />*/}
                     <h4>Graph Path</h4>
                    {/* If the user is logged in , display the relevant header info */}
                    {
@@ -86,14 +91,33 @@ class Header extends React.Component{
                             <FaIcons.FaBars id="DashButton" onClick={this.toggleDashMenu} />
                         </div>   
                         : //else not logged in
-                        <span>
-                        <br/>
-                        <Link className="App-link" to="/signIn" >LogIn</Link>
-                           
-                        <Link className="App-link" to="signUp">SignUp</Link>
-                        </span>   
+                        ""
+
                    }
                 </header>
+                    {
+                        this.state.log === false ?
+                            <>
+
+                                <div className="log-container">
+                                    <div className="log">
+                                        <Link className="btn1" id="btn1-link" to="/signIn" >Sign In</Link>
+
+                                        <Link className="btn1" id="btn2-link" to="signUp">Sign Up</Link>
+
+                                    </div>
+
+                                </div>
+
+                                <img alt="Process Picture" src={process_pic} className="img1"/>
+                                <img alt="Complete Task Picture" src={completeTask_pic} className="img2" />
+
+                            </>
+                            :
+                            ""
+                    }
+
+
                 <Switch>
                 
                     <Route path="/signIn">

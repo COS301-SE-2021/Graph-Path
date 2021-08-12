@@ -3,6 +3,7 @@ const router = express.Router();
 const ManageUser = require('../../Services/ManageUser')
 const mongoose = require('mongoose') ;
 var db = require('../../Controllers/DBController').getDB();
+var ObjectId = require('mongodb').ObjectID;
 
 
 
@@ -33,6 +34,117 @@ var db = require('../../Controllers/DBController').getDB();
                  }
                  else{
                      console.log(`GET ${emailParam} success`,ans) ;
+                     res.send({
+                         message:`found ` ,
+                         data:ans
+                     }) ;
+                 }
+
+             },(ans)=>{
+                 console.log('GET rejected',ans) ;
+                 res.send({
+                     message:"request rejected",
+                     data:ans
+                 }) ;
+             })
+             .catch(err=>{
+                 console.log('from db req',err)
+             })
+     }) ;
+
+     router.get('/listOfAllUsers', (req, res, next) => {
+         //console.log('received request ', req.body, 'servicing.....');
+         db.collection('Users').find({}).toArray()
+             .then((usrs) => {
+                 console.log('success', usrs);
+                 if (usrs.length > 0) {
+                     res.send({
+                         success: 1,
+                         message: usrs//.json()
+                     });
+                 } else {
+                     res.send({
+                         success: 0,
+                         message: "No Users found"
+                     })
+                 }
+             }, (ans) => {
+                 console.log('rejected', ans);
+                 res.send({
+                     data: ans
+                 });
+             })
+             .catch(err => {
+                 console.log('from db req', err)
+             })
+
+     })
+
+
+     router.get('/listOfAllUsersExceptYourself/:email', (req, res, next) => {
+         //console.log('received request ', req.body, 'servicing.....');
+         let mail= req.params.email;
+         db.collection('Users').find({}).toArray()
+             .then((usrs) => {
+                 //console.log('success', usrs);
+                 if (usrs.length > 0) {
+                     //remove current user first
+                    let newarray = usrs.filter((val)=>{
+                        //console.log("Val: ",val.email);
+                        if(val.email !=mail) {
+                            return true;
+                        }
+                         //return val!=mail;
+                    });
+                     //console.log("This is usrs: ",usrs);
+                     //console.log("This is the user who made the request: "+mail)
+                    //console.log("This is newarray: ",newarray);
+                     //send response
+                     res.send({
+                         message: newarray//.json()
+                     });
+                 } else {
+                     res.send({
+                         message: "No Users found"
+                     })
+                 }
+             }, (ans) => {
+                 console.log('rejected', ans);
+                 res.send({
+                     data: ans
+                 });
+             })
+             .catch(err => {
+                 console.log('from db req', err)
+             })
+
+     })
+
+     router.get('/getUserByID/:id',(req,res,next)=>{
+
+         const ID = req.params.id ;
+         //let ID = req.body.id;
+         if(ID =='' || ID == undefined)
+         {
+             res.status(400).send({
+                 message:"invalid ID given"
+             })
+         }
+
+
+         db.collection('Users').findOne({
+             "_id": ObjectId(ID)
+         })
+             .then((ans)=>{
+                 if (ans === null){
+                     console.log(`GET ${ID} fail`,ans) ;
+
+                     res.send({
+                         message:"User not found"
+                     }) ;
+                 }
+                 else{
+                     console.log(`GET ${ID} success`,ans) ;
                      res.send({
                          message:`found ` ,
                          data:ans
@@ -108,7 +220,8 @@ var db = require('../../Controllers/DBController').getDB();
                  //console.log("The update of the user's username was a success: "+result);
                  res.send({
                      message: "success",
-                     data: result
+                     success: 1
+                     //data: result
                  });
              }
 
@@ -139,7 +252,8 @@ var db = require('../../Controllers/DBController').getDB();
                  //console.log("The update of the user's password was a success: "+result);
                  res.send({
                      message: "success",
-                     data: result
+                     success: 1
+                     //data: result
                  });
              }
 
@@ -176,7 +290,8 @@ var db = require('../../Controllers/DBController').getDB();
                  //console.log("The update of the user's username and password was a success: "+result);
                  res.send({
                      message: "success",
-                     data: result
+                     success: 1
+                    // data: result
                  });
              }
 

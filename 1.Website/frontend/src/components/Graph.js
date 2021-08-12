@@ -147,7 +147,8 @@ class Graph extends React.Component{
                 }
                 const data = {
                     graph : minimalGraph,
-                    projectName: projNode.projectName
+                    projectName: projNode.projectName,
+                    projId:projNode._id
                 }
                 axios.put(`${this.state.api}/project/updateProjectGraph`,data)
                 .then((res)=>{
@@ -377,7 +378,7 @@ class Graph extends React.Component{
                             sendGraphData={this.saveCurrentGraph}
                             graphManager={this.state.graphManager}
                         />
-                        <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
+                        <ProjectInfo userEmail={this.props.userEmail} projectToDisplay={this.state.linkNumber<0 ?''
                         :this.state.projList[this.state.linkNumber]} />
                     </Route>
                     <Route path="/addTask">

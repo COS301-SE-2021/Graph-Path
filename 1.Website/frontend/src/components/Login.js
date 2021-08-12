@@ -192,6 +192,9 @@ class Login extends React.Component{
                         <span className='errorMessage'>Invalid Password</span>
                     )}
                     <input type="submit" className="btn1" value="Login" />
+                    <Link to=""> Forgot your password?</Link>
+                    <br/>
+
                     Don't Have an Account? Register <Link to="/signUp"> Here</Link>
                 </form>
             </div>
