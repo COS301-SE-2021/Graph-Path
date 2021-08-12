@@ -170,7 +170,7 @@ router.delete('/deleteProject/:id',(req,res)=>{
         .then(ans =>{
             if(ans === null){
                 res.send({
-                    message: "Could not remove project."
+                    message: "Couldn't remove project."
                 });
             }else{
                 res.send({
@@ -187,66 +187,56 @@ router.delete('/deleteProject/:id',(req,res)=>{
 })
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
-router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
-    let nme = req.params.name;
+router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
+    let ID = req.params.id;
     let grph = req.params.graph;
-    //let tst = req.body.graph;
     let grph2 = JSON.parse(grph);
-    console.log("type of graph: "+ typeof grph);
-   // console.log("req.body: "+tst);
-    console.log("nme: "+nme);
-    console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
-    console.log("grph.edges[0].id: "+grph2.edges[0].id);
-    db.collection('Projects').updateOne({
-        projectName:nme
-    },{
-        $set:{graph:grph2}
-    },(err,result)=>{
-
-        if(err){
-            console.log("Could not update the project graph: "+err);
-            res.send({
-                message: "Failed",
-                data: err
-            });
-        }else{
-            console.log("The update of the project graph was a success: "+result);
-            res.send({
-                message: "success",
-                data: result
-            });
-        }
-
-    })
-    //.catch((err)=>{
-    //    console.log("Could not update the task description: "+err);
-    // })
+    //console.log("type of graph: "+ typeof grph);
+   // console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
+    //console.log("grph.edges[0].id: "+grph2.edges[0].id);
+    db.updateProjectGraph(ID,grph2 )
+    .then(ans=>{
+            if(ans.modifiedCount === 0){
+                res.send({
+                    message: "Could not update the graph."
+                })
+            }else{
+                res.send({
+                    message: "The graph was updated."
+                })
+            }
+        })
+    .catch((err)=>{
+       res.status(500).send({
+           message: "Could not update the project graph."
+       })
+     })
 });
 
-router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
-    let nme = req.params.name;
-    let eml = req.params.email;
+router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
+    let ID = req.params.id;
+    let mail = req.params.email;
     db.collection('Projects').updateOne({
-        projectName:nme
+        "_id": ObjectId(ID)
     },{
 
             $push: {
-                groupMembers: eml
+                groupMembers: mail
             }
 
-    },(err,result)=>{
+    },(err,ans)=>{
 
         if(err){
             console.log("Could not update the project graph: "+err);
             res.send({
                 message:"found",
-                data:projects//.json()
+                data:ans//.json()
             }) ;
         }
         else{
             res.send({
                 message: "success"
-               // data: result['ops']
+
             });
         }
 
