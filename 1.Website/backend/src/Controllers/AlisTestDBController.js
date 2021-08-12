@@ -82,23 +82,16 @@ async function getAllOtherUsers(email,id){
             .then((ans)=>{
                 if (ans.length > 0) {
                     //remove current user first
-                    let newarray = ans.filter((val)=>{
+                    let newArray = ans.filter((val)=>{
                         if(val.email !== email) {
                             return true;
                         }
-                        //return val!=mail;
                     });
-                    //console.log("This is usrs: ",usrs);
-                    //console.log("This is the user who made the request: "+mail)
-                    //console.log("This is newarray: ",newarray);
                     //send response
-                    res.send({
-                        message: newarray//.json()
-                    });
+                    resolve(newArray);
                 } else {
-                    res.send({
-                        message: "No Users found"
-                    })
+                    console.log("This is ans in getAllOtherUsers: ",ans);
+                    resolve(ans);
                 }
 
                 resolve(ans);
@@ -127,5 +120,6 @@ module.exports={
     getUserByID,
     getUserByEmail,
     getAllUsers,
+    getAllOtherUsers,
     insertUser
 };
