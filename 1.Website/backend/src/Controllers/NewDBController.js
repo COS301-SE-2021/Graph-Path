@@ -87,7 +87,7 @@ async function getAllOtherUsers(email,id){
                     //send response
                     resolve(newArray);
                 } else {
-                    console.log("This is ans in getAllOtherUsers: ",ans);
+
                     resolve(ans);
                 }
 
@@ -216,6 +216,18 @@ async function getProjectByID(id){
 
     })
 }
+
+async function getAllProjects(){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').find({}).toArray()
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
 //***************************************************-post-**************************************************************
 async function insertProject(projectObject){
     return await new Promise((resolve, reject)=>{
@@ -254,5 +266,6 @@ module.exports={
     updateUsernameAndPassword,
     //project
     insertProject,
-    getProjectByID
+    getProjectByID,
+    getAllProjects
 };
