@@ -319,8 +319,41 @@ async function insertProject(projectObject){
     });
 }
 //***************************************************-delete-**************************************************************
+async function removeProjectByID(ID){
+
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').deleteOne({
+            "_id": ObjectId(ID)
+        })
+            .then(ans =>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+
+}
+
 
 //***************************************************-patch-**************************************************************
+async function updateProjectGraph(id, graphObject){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{graph:graphObject}
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
+//***************************************************-put-**************************************************************
 
 
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
@@ -347,5 +380,7 @@ module.exports={
     insertProject,
     getProjectByID,
     getAllProjects,
-    getAllProjectsByUserEmail
+    getAllProjectsByUserEmail,
+    removeProjectByID,
+    updateProjectGraph
 };
