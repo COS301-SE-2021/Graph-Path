@@ -2,9 +2,8 @@ const express = require('express')
 const router = express.Router();
 const ManageUser = require('../../Services/ManageUser')
 const mongoose = require('mongoose') ;
-var db = require('../../Controllers/DBController').getDB();
 var ObjectId = require('mongodb').ObjectID;
-
+const bcrypt = require('bcrypt');
 
 
  function makeUserRoute (db)
@@ -12,7 +11,8 @@ var ObjectId = require('mongodb').ObjectID;
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
      router.get('/login/:email',async (req,res,next)=>{
 
-         const emailParam = req.params.email ;
+         const emailParam = req.params.email;
+
          if(emailParam ==='' || emailParam === undefined)
          {
              res.status(400).send({
@@ -21,12 +21,18 @@ var ObjectId = require('mongodb').ObjectID;
          }
 
 
-        db.getUserByEmail(emailParam).then((ans)=>{
+
+         let returnedUser = null;
+        await db.getUserByEmail(emailParam).then((ans)=>{
             if(ans != null){
-                res.send({
+
+
+                returnedUser = ans;
+
+                /*res.send({
                     message:`user found ` ,
                     data:ans
-                }) ;
+                }) ;*/
             }else{
                 res.send({
                     message:`no user found ` ,
@@ -39,6 +45,32 @@ var ObjectId = require('mongodb').ObjectID;
                 message:"User not found"
             }) ;
          });
+        if ( returnedUser !=null)
+        {
+            const GivenPassword = req.body.password;
+            const MatchedPassword = returnedUser.password;
+            const isPasswordValid  = await bcrypt.compare(GivenPassword,MatchedPassword);
+            if(isPasswordValid)
+            {
+                returnedUser.password= null;
+                res.send({
+                    message:"successful",
+                    data: returnedUser,
+                })
+            }
+
+            else
+            {
+                res.send({
+                    message: "invalid password given",
+                    data: null
+                })
+            }
+
+
+        }
+        console.log("returned User is null");
+
 
      }) ;
 
@@ -64,7 +96,6 @@ var ObjectId = require('mongodb').ObjectID;
          });
 
      })
-
 
      router.get('/listOfAllUsersExceptYourself/:email', (req, res, next) => {
 
@@ -95,6 +126,7 @@ var ObjectId = require('mongodb').ObjectID;
      router.get('/getUserByID/:id',(req,res,next)=>{
 
          const ID = req.params.id ;
+         console.log(ID);
          //let ID = req.body.id;
          if(ID ==='' || ID === undefined)
          {
@@ -110,6 +142,7 @@ var ObjectId = require('mongodb').ObjectID;
                      data: ans
                  })
              }else{
+                 console.log(ans);
                  res.send({
                     message: "User not found",
                      data: ans
@@ -139,7 +172,8 @@ var ObjectId = require('mongodb').ObjectID;
                  .then((ans)=>{
                     if(ans != null){
                         res.send({
-                            message:"The user was created successfully."
+                            message:"The user was created successfully.",
+                            data:ans
                         });
                     }else{
                         res.send({
