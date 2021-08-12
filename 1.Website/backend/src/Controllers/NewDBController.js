@@ -6,7 +6,7 @@ const mongoose = require('mongoose') ;
 
 
 let db ;
-
+//connect to db
 const dbController = {
     connect: (callback)=>{
         mongClient.connect(DB_URI,
@@ -22,7 +22,6 @@ const dbController = {
         return db ;
     }
 }
-
 dbController.connect();
 dbController.getDB();
 //console.log(db);
@@ -50,7 +49,7 @@ async function getUserByID(id){
 
 
     })
-   // return prom;
+
 }
 
 async function getUserByEmail(email){
@@ -203,6 +202,40 @@ async function updateUsernameAndPassword(mail, usrnme, psw){
 
 
 /////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
+//***************************************************-get-**************************************************************
+async function getProjectByID(id){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').findOne({
+            "_id": ObjectId(id)
+        })
+            .then((ans)=>{
+                console.log("This is ans: ",ans);
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+
+
+
+    })
+}
+//***************************************************-post-**************************************************************
+async function insertProject(projectObject){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').insertOne(projectObject)
+            .then((ans)=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    });
+}
+//***************************************************-delete-**************************************************************
+
+//***************************************************-patch-**************************************************************
+
 
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
@@ -212,6 +245,7 @@ async function updateUsernameAndPassword(mail, usrnme, psw){
 
 /////////////////////////////////////////////////////-exports-//////////////////////////////////////////////////////////////
 module.exports={
+    //user
     getUserByID,
     getUserByEmail,
     getAllUsers,
@@ -221,5 +255,8 @@ module.exports={
     removeUserByID,
     updateUserUsername,
     updateUserPassword,
-    updateUsernameAndPassword
+    updateUsernameAndPassword,
+    //project
+    insertProject,
+    getProjectByID
 };
