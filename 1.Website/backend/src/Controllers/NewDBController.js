@@ -346,6 +346,26 @@ async function updateProjectGraph(id, graphObject){
     })
 }
 
+async function addNewProjectMember(id, email){
+    return await new Promise((resolve,reject)=>{
+
+        db.collection('Projects').updateOne({
+            "_id":ObjectId(id)
+        },{
+            $push: {
+                groupMembers: email
+            }
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+
+}
+
 //***************************************************-put-**************************************************************
 
 
@@ -375,5 +395,6 @@ module.exports={
     getAllProjects,
     getAllProjectsByUserEmail,
     removeProjectByID,
-    updateProjectGraph
+    updateProjectGraph,
+    addNewProjectMember
 };
