@@ -1,12 +1,13 @@
 import React from 'react';
 import '../css/Team.css'; 
 import Select from 'react-select';
+import axios from 'axios';
 class Team extends React.Component{
     constructor(props){
         super(props) ; 
         this.state = {
             chosen:[],
-            list: [{label:'Nani',value:'nani@gmail.com'},{label:'My 1',value:'my@gmail.com'},{label:'My 2',value:'my2@gmail.com'}]
+            list:[]
         }
     }
 
@@ -16,6 +17,38 @@ class Team extends React.Component{
             this.props.chooseMember(result) ; 
         }
 
+    }
+    componentDidMount(){
+        this.getListOfUsers() ;
+    }
+    getListOfUsers = ()=>{
+        axios.get(`http://localhost:9001/user/listOfAllUsersExceptYourself/${this.props.userEmail}`)
+        .then((res)=>{
+            console.log(res)
+            if (res.data !== undefined){
+                const users = res.data.data
+                console.log('suers',users) ;
+                if (users !== undefined && Array.isArray(users)){
+                    this.setState({
+                        list:users
+                    }) ;
+                }
+                else{
+                    alert('Something wrong happened')
+                }
+
+            }
+            else{
+                console.log('suers') ;
+
+                this.setState({
+                    list:[]
+                })
+            }
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
     sortResults = (results)=>{
         var ch = [] ; 
@@ -57,34 +90,28 @@ class Team extends React.Component{
         this.saveMemberList(item)
     }
     render(){
-        // const {name} = this.props;
-        console.log('Team state',this.state);
+        if (Array.isArray(this.state.list)){
+            if (this.state.list.length > 0)
+                return (
+                    <>
+                <Select options={this.state.list} 
+                    onChange={this.handleSearch}
+                    placeholder={'Search Member'}
+                    isSearchable={true}
+                    isMulti={true}
+                    style={{color:'black'}}
+                />
+                </>)
+            else{
+            return (
+                <div>Loading...</div>
+            )
+            }
+        }
         return (
-        <Select options={this.state.list} 
-            onChange={this.handleSearch}
-            placeholder={'Search Member'}
-            isSearchable={true}
-            isMulti={true}
-            // multiple={true}
-            // maxSelected={1}
-            // onItemsChanged = {this.handleSearch}
-            // onKeyChange={this.handleSelect}
-            // NotFoundPlaceholder='User Not Found,'
-            // onSelect={this.handleSelect} 
-            // fuseOptions={{keys:["email"]}}
-            // resultStringKeyName="email"
-        />)
-        // if(name === null){
-        //     return (
-        //         <div className="Team">No members for this project</div>
-        //     );
-            
-        // }else{
-        //     return (
-        //         <div>{name.name}</div> 
-        //     );
-        // }
-       
+            <div></div> 
+        )
+    
     }
 }
 

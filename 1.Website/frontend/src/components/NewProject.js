@@ -90,6 +90,7 @@ class NewProject extends React.Component{
             startDate:this.state.startDate,
             dueDate:this.state.dueDate,
             groupMembers:[this.props.userEmail,...this.state.members],
+            groupManagers:[] ,
             owner:this.props.userEmail, //add ownwer from dashboard
             graph:{}, //ES6
             //userId:from dashboard
@@ -132,7 +133,7 @@ class NewProject extends React.Component{
                     <p>Due Date</p>
                     <input type="date" name="dueDate" onChange={this.updateField} value={this.state.dueDate}/>
                     <p>Members</p>
-                    <Team chooseMember={this.addMember} />
+                    <Team userEmail={this.props.userEmail} chooseMember={this.addMember} />
                     <br/>
                     <input type="submit" value="Create Project" className="btn1"  />
 
