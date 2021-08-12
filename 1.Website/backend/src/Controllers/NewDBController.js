@@ -206,7 +206,6 @@ async function getProjectByID(id){
             "_id": ObjectId(id)
         })
             .then((ans)=>{
-                console.log("This is ans: ",ans);
                 resolve(ans);
             })
             .catch(err=>{

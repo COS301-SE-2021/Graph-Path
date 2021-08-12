@@ -95,44 +95,24 @@ function makeProjectRoute(db) {
 
     router.get('/getProjectByID/:id',(req,res,next)=>{
 
-        const ID = req.params.id ;
-        //let ID = req.body.id;
-        if(ID =='' || ID == undefined)
+        let ID = req.params.id ;
+        if(ID ==='' || ID === undefined)
         {
             res.status(400).send({
-                message:"invalid ID given"
+                message:"Invalid ID provided."
             })
         }
-
-
-        db.collection('Projects').findOne({
-            "_id": ObjectId(ID)
-        })
-            .then((ans)=>{
-                if (ans === null){
-                    console.log(`GET ${ID} fail`,ans) ;
-
-                    res.send({
-                        message:"Project not found"
-                    }) ;
-                }
-                else{
-                    console.log(`GET ${ID} success`,ans) ;
-                    res.send({
-                        message:`found ` ,
-                        data:ans
-                    }) ;
-                }
-
-            },(ans)=>{
-                console.log('GET rejected',ans) ;
+        db.getProjectByID(ID)
+            .then(ans=>{
                 res.send({
-                    message:"request rejected",
-                    data:ans
-                }) ;
+                    message: "Project retrieved.",
+                    data: ans
+                })
             })
             .catch(err=>{
-                console.log('from db req',err)
+                res.status(500).send({
+                    message: "Could not retrieve the project"
+                })
             })
     }) ;
 
