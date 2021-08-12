@@ -49,9 +49,11 @@ class Header extends React.Component{
 
     toggleDashMenu = () =>{
         const elem = document.getElementById('modal1') ;
+        let navB = document.getElementById('modal2');
         console.log('clicked', elem.style.display)
-        if (elem !== null){
+        if (elem !== null && navB !== null){
             elem.style.display='block' ;
+            navB.style.display='block';
             this.renderClose() ; 
         }
         else{        
@@ -71,7 +73,7 @@ class Header extends React.Component{
             <Router>
                 <div className={this.state.log ? "bigHeader":"header_"}>
                 <header className="App-header">
-                    <img id="logoImg" alt={"NoCapLogo"} src={`${this.props.api}/NoCapLogo.jpeg`} />
+                    {/*<img id="logoImg" alt={"NoCapLogo"} src={`${this.props.api}/NoCapLogo.jpeg`} />*/}
                     <h4>Graph Path</h4>
                    {/* If the user is logged in , display the relevant header info */}
                    {
