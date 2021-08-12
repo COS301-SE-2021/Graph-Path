@@ -125,30 +125,32 @@ var ObjectId = require('mongodb').ObjectID;
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
      router.post('/newUser',(req,res)=>{
-         if (req == undefined || req.body == undefined || req === null ){
+         if (req == undefined || req.body == undefined || req == null ){
              res.json({
-                 message:"Req is null"
+                 message:"There is no user to insert."
              }) ;
          }else{
-             console.log('received request ',req.body,'servicing.....') ;
-             var data = req.body ;
+             //console.log('received request ',req.body,'servicing.....') ;
+
+             let data = req.body ;
              const id = new mongoose.mongo.ObjectID() ;
              data["_id"] = id ;
-             db.collection('Users').insertOne(data)
+             db.insertUser(data)
                  .then((ans)=>{
-                     console.log('success',ans.ops) ;
-                     res.send({
-                         message:"saved",
-                         data: ans.ops
-                     }) ;
-                 },(ans)=>{
-                     console.log('rejected',ans) ;
-                     res.send({
-                         message:"request has been denied please try again"
-                     }) ;
+                    if(ans != null){
+                        res.send({
+                            message:"The user was created successfully."
+                        });
+                    }else{
+                        res.send({
+                            message:"The user was not created successfully."
+                        })
+                    }
                  })
                  .catch(err=>{
-                     console.log('from db req',err)
+                     res.status(500).send({
+                         message: "Could not create the new user."
+                     })
                  })
          }
      }) ;
