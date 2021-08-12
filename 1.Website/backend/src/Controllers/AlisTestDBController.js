@@ -120,11 +120,23 @@ async function insertUser(userObject){
 }
 //***************************************************-delete-**************************************************************
 async function removeUserByID(id){
-
+    return await new Promise((resolve, reject) => {
+        db.collection('Users').deleteOne({
+            "_id": ObjectId(id)
+        })
+            .then((ans)=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+               reject(err);
+            });
+    });
 }
 
 async function removeUserByEmail(email){
+    return await new Promise((resolve, reject) => {
 
+    });
 }
 //***************************************************-patch-**************************************************************
 
