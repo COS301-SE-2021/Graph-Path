@@ -3,6 +3,7 @@ require('dotenv').config() ;
 const DB_URI =process.env.TEST_DB_URI ;
 var ObjectId = require('mongodb').ObjectID;
 const mongoose = require('mongoose') ;
+const bcrypt = require('bcrypt');
 
 
 let db ;
@@ -101,6 +102,9 @@ async function getAllOtherUsers(email,id){
 
 //***************************************************-post-**************************************************************
 async function insertUser(userObject){
+
+    const salt = await bcrypt.genSalt(10);
+    userObject.password = await  bcrypt.hash(userObject.password);
     return await new Promise((resolve, reject)=>{
         db.collection('Users').insertOne(userObject)
             .then((ans)=>{
@@ -161,6 +165,9 @@ async function updateUserUsername(mail, usrnme){
 }
 
 async function updateUserPassword(mail,psw){
+
+    const salt = await bcrypt.genSalt(10);
+    psw = await  bcrypt.hash(psw);
     return await  new Promise((resolve, reject) => {
         db.collection('Users').updateOne({
             email:mail
@@ -178,6 +185,8 @@ async function updateUserPassword(mail,psw){
 }
 
 async function updateUsernameAndPassword(mail, usrnme, psw){
+    const salt = await bcrypt.genSalt(10);
+    psw = await  bcrypt.hash(psw);
     return await  new Promise(((resolve, reject) => {
         db.collection('Users').updateOne({
             email:mail
