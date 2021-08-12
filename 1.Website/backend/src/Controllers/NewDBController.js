@@ -3,7 +3,7 @@ require('dotenv').config() ;
 const DB_URI =process.env.TEST_DB_URI ;
 var ObjectId = require('mongodb').ObjectID;
 const mongoose = require('mongoose') ;
-//const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 
 let db ;
