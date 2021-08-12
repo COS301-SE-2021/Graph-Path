@@ -167,7 +167,7 @@ async function updateUserUsername(mail, usrnme){
 async function updateUserPassword(mail,psw){
 
     const salt = await bcrypt.genSalt(10);
-    psw = await  bcrypt.hash(psw);
+    psw = await  bcrypt.hash(psw,salt);
     return await  new Promise((resolve, reject) => {
         db.collection('Users').updateOne({
             email:mail
@@ -186,7 +186,7 @@ async function updateUserPassword(mail,psw){
 
 async function updateUsernameAndPassword(mail, usrnme, psw){
     const salt = await bcrypt.genSalt(10);
-    psw = await  bcrypt.hash(psw);
+    psw = await  bcrypt.hash(psw,salt);
     return await  new Promise(((resolve, reject) => {
         db.collection('Users').updateOne({
             email:mail
