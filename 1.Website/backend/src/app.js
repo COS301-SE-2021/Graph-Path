@@ -3,8 +3,6 @@ const app = express();
 const cors = require('cors') ;
 const path = require('path') ;
 
-
-
 //const DefaultInjectDB = require('./Controllers/DBController').getDB()
 //const mongoDBInstance = require('./Controllers/DBController')
 // const testDB = require('./Controllers/DBtestController')
@@ -97,6 +95,10 @@ function makeApp(defaultDB , InjectedDB)
         //------------- DB dependency injection setup------
         const makeUserRoute = require('./API/routes/User');
         const makeTaskRoute = require('./API/routes/Task');
+        const makeProjectRoute = require('./API/routes/Project');
+        const makeNodeRoute = require('./API/routes/Node');
+        const makeGraphRoute = require('./API/routes/graph');
+
         //makeTaskRoute(DB);
         //makeUserRoute(DB);
         //--------------------------------------------------
@@ -120,11 +122,16 @@ function makeApp(defaultDB , InjectedDB)
         // ----------------inject passed in DB into routes---------------
         const UserRoute = makeUserRoute(DB);
         const TaskRoute = makeTaskRoute(DB);
+        const ProjectRoute = makeProjectRoute(DB);
+        const NodeRoute = makeNodeRoute(DB);
+        const GraphRoute = makeGraphRoute(DB);
+
         //routes
-        //app.use('/project', ProjectRoute);
+        app.use('/project', ProjectRoute);
         app.use('/user', UserRoute);
-        //app.use('/node', NodeRoute);
+        app.use('/node', NodeRoute);
         app.use('/task', TaskRoute);
+        app.use('/graph',GraphRoute);
         //app.use('/task2', Task2Route);
         //---------------------------------------------------------------------
 
