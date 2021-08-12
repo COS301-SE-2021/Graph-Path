@@ -4,6 +4,7 @@ const DB_URI =process.env.TEST_DB_URI ;
 var ObjectId = require('mongodb').ObjectID;
 const mongoose = require('mongoose') ;
 const bcrypt = require('bcrypt');
+const userService = require('../Services/UserManager');
 
 
 let db ;
@@ -26,7 +27,6 @@ const dbController = {
 dbController.connect();
 dbController.getDB();
 //console.log(db);
-
 
 /////////////////////////////////////////////////////-User-///////////////////////////////////////////////////////////////////
 //***************************************************-get-**************************************************************
@@ -74,7 +74,7 @@ async function getAllUsers(){
     })
 }
 
-async function getAllOtherUsers(email){
+async function getAllOtherUsers(email,id){
     return await  new Promise((resolve, reject)=>{
         db.collection('Users').find({}).toArray()
             .then((ans)=>{
@@ -240,7 +240,47 @@ async function getAllProjects(){
 
 async function getAllProjectsByUserEmail(mail){
     return await new Promise((resolve,reject)=>{
-        db.collection('Projects').find({
+
+        // get all projects.
+        // search projects for where mail is a member of
+        // return the projects if found else return error message
+        let Projects = null;
+        db.collection('Projects').find({}).toArray()
+            .then((ans)=>{
+
+                Projects = ans;
+                let MatchedProjects = [];
+                for(let i =0 ; i < Projects.length ; i++)
+                {
+                    let GroupMembers = Projects[i].groupMembers;
+                    for( let x = 0 ; x <GroupMembers.length ;x++)
+                    {
+                        if(GroupMembers[x].email == mail)
+                        {
+                            console.log("Match found");
+                            MatchedProjects.push(Projects[i]);
+                            break;
+                        }
+
+                    }
+
+
+                }
+
+                if( MatchedProjects.length === 0)
+                {
+                   resolve("No matched projects");
+                }
+                else
+                {
+                    resolve(MatchedProjects);
+                }
+
+
+            })
+
+
+       /* db.collection('Projects').find({
             "groupMembers":mail
         }).toArray()
             .then((ans) => {
@@ -255,7 +295,7 @@ async function getAllProjectsByUserEmail(mail){
             .catch(err => {
 
                 reject(err);
-            })
+            })*/
     })
 
 }
@@ -271,43 +311,9 @@ async function insertProject(projectObject){
             })
     });
 }
-
 //***************************************************-delete-**************************************************************
-async function removeProjectByID(ID){
-
-   return await new Promise((resolve, reject)=>{
-        db.collection('Projects').deleteOne({
-            "_id": ObjectId(ID)
-        })
-            .then(ans =>{
-               resolve(ans);
-            })
-            .catch(err=>{
-                reject(err);
-            })
-    })
-
-}
-
 
 //***************************************************-patch-**************************************************************
-async function updateProjectGraph(id, graphObject){
-    return await new Promise((resolve, reject)=>{
-        db.collection('Projects').updateOne({
-            "_id": ObjectId(id)
-        },{
-            $set:{graph:graphObject}
-        })
-             .then(ans=>{
-                resolve(ans);
-             })
-            .catch(err=>{
-                reject(err);
-            })
-    })
-}
-
-//***************************************************-put-**************************************************************
 
 
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
@@ -317,6 +323,7 @@ async function updateProjectGraph(id, graphObject){
 /////////////////////////////////////////////////////-Task-//////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////-exports-//////////////////////////////////////////////////////////////
+console.log(getUserByID);
 module.exports={
     //user
     getUserByID,
@@ -333,7 +340,5 @@ module.exports={
     insertProject,
     getProjectByID,
     getAllProjects,
-    getAllProjectsByUserEmail,
-    removeProjectByID,
-    updateProjectGraph
+    getAllProjectsByUserEmail
 };
