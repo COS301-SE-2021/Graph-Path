@@ -275,7 +275,7 @@ async function insertProject(projectObject){
 //***************************************************-delete-**************************************************************
 async function removeProjectByID(ID){
 
-    await new Promise((resolve, reject)=>{
+   return await new Promise((resolve, reject)=>{
         db.collection('Projects').deleteOne({
             "_id": ObjectId(ID)
         })
@@ -291,6 +291,22 @@ async function removeProjectByID(ID){
 
 
 //***************************************************-patch-**************************************************************
+async function updateProjectGraph(id, graphObject){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{graph:graphObject}
+        })
+             .then(ans=>{
+                resolve(ans);
+             })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
 //***************************************************-put-**************************************************************
 
 
@@ -318,5 +334,6 @@ module.exports={
     getProjectByID,
     getAllProjects,
     getAllProjectsByUserEmail,
-    removeProjectByID
+    removeProjectByID,
+    updateProjectGraph
 };
