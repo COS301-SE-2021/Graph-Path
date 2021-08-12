@@ -10,73 +10,58 @@ var ObjectId = require('mongodb').ObjectID;
  function makeUserRoute (db)
 {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-     router.get('/login/:email',(req,res,next)=>{
+     router.get('/login/:email',async (req,res,next)=>{
 
          const emailParam = req.params.email ;
-         if(emailParam =='' || emailParam == undefined)
+         if(emailParam ==='' || emailParam === undefined)
          {
              res.status(400).send({
-                 message:"invalid email given"
+                 message:"invalid email provided."
              })
          }
 
 
-         db.collection('Users').findOne({
-             email:emailParam
-         })
-             .then((ans)=>{
-                 if (ans === null){
-                     console.log(`GET ${emailParam} fail`,ans) ;
+        db.getUserByEmail(emailParam).then((ans)=>{
+            if(ans != null){
+                res.send({
+                    message:`user found ` ,
+                    data:ans
+                }) ;
+            }else{
+                res.send({
+                    message:`no user found ` ,
+                    data:ans
+                }) ;
+            }
 
-                     res.send({
-                         message:"User not found"
-                     }) ;
-                 }
-                 else{
-                     console.log(`GET ${emailParam} success`,ans) ;
-                     res.send({
-                         message:`found ` ,
-                         data:ans
-                     }) ;
-                 }
+         }).catch(err=>{
+            res.status(500).send({
+                message:"User not found"
+            }) ;
+         });
 
-             },(ans)=>{
-                 console.log('GET rejected',ans) ;
-                 res.send({
-                     message:"request rejected",
-                     data:ans
-                 }) ;
-             })
-             .catch(err=>{
-                 console.log('from db req',err)
-             })
      }) ;
 
      router.get('/listOfAllUsers', (req, res, next) => {
          //console.log('received request ', req.body, 'servicing.....');
-         db.collection('Users').find({}).toArray()
-             .then((usrs) => {
-                 console.log('success', usrs);
-                 if (usrs.length > 0) {
+         db.getAllUsers()
+         .then((ans)=>{
+                 if(ans != null){
                      res.send({
-                         success: 1,
-                         message: usrs//.json()
-                     });
-                 } else {
+                         message:"All users retrieved",
+                         data:ans
+                     })
+                 }else{
                      res.send({
-                         success: 0,
-                         message: "No Users found"
+                         message:"Could not retrieve the users.",
+                         data: ans
                      })
                  }
-             }, (ans) => {
-                 console.log('rejected', ans);
-                 res.send({
-                     data: ans
+         }).catch(err=>{
+                 res.status(500).send({
+                    message: "Could not retrieve all users."
                  });
-             })
-             .catch(err => {
-                 console.log('from db req', err)
-             })
+         });
 
      })
 
@@ -91,7 +76,7 @@ var ObjectId = require('mongodb').ObjectID;
                      //remove current user first
                     let newarray = usrs.filter((val)=>{
                         //console.log("Val: ",val.email);
-                        if(val.email !=mail) {
+                        if(val.email !== mail) {
                             return true;
                         }
                          //return val!=mail;
@@ -124,43 +109,31 @@ var ObjectId = require('mongodb').ObjectID;
 
          const ID = req.params.id ;
          //let ID = req.body.id;
-         if(ID =='' || ID == undefined)
+         if(ID ==='' || ID === undefined)
          {
              res.status(400).send({
-                 message:"invalid ID given"
+                 message:"invalid ID provided."
              })
          }
 
-
-         db.collection('Users').findOne({
-             "_id": ObjectId(ID)
-         })
-             .then((ans)=>{
-                 if (ans === null){
-                     console.log(`GET ${ID} fail`,ans) ;
-
-                     res.send({
-                         message:"User not found"
-                     }) ;
-                 }
-                 else{
-                     console.log(`GET ${ID} success`,ans) ;
-                     res.send({
-                         message:`found ` ,
-                         data:ans
-                     }) ;
-                 }
-
-             },(ans)=>{
-                 console.log('GET rejected',ans) ;
+         db.getUserByID(ID).then((ans)=>{
+             if(ans != null){
                  res.send({
-                     message:"request rejected",
-                     data:ans
-                 }) ;
-             })
-             .catch(err=>{
-                 console.log('from db req',err)
-             })
+                     message: "User found",
+                     data: ans
+                 })
+             }else{
+                 res.send({
+                    message: "User not found",
+                     data: ans
+                 })
+             }
+         }).catch((err)=>{
+             res.status(500).send({
+                 message:"User not found"
+             }) ;
+         });
+
      }) ;
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
