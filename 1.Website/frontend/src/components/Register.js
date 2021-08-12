@@ -186,9 +186,8 @@ class Register extends React.Component{
                     <form className="logForm" onSubmit={this.onSubmit} >
                         <p >First Name</p>
                         <input
-                            className={formErrors.firstName.length > 0 ? 'error': null}
-                            className="form-control"
-                            name='firstName'
+                            className={['form-control', formErrors.firstName.length > 0 ? 'error': null]}
+                             name='firstName'
                             type='text'
                             placeholder='First Name' value={this.state.firstName}
                             onChange={this.change}
@@ -198,8 +197,8 @@ class Register extends React.Component{
                         )}
                         <p className="form-group">Last Name</p>
                         <input
-                            className={formErrors.lastName.length > 0 ? 'error': null}
-                            name='lastName' type='text'  className="form-control"
+                            className={['form-control', formErrors.lastName.length > 0 ? 'error': null]}
+                            name='lastName' type='text'
                             placeholder='Last Name' value={this.state.lastName}
                             onChange={this.change}
                         />
@@ -208,8 +207,8 @@ class Register extends React.Component{
                         )}
                         <p>Username</p>
                         <input
-                            className={formErrors.userName.length > 0 ? 'error': null}
-                            className="form-control"
+                            className={['form-control', formErrors.userName.length > 0 ? 'error': null]}
+                            //className="form-control"
                             name= 'userName' type='text'
                             placeholder='Username' value={this.state.userName}
                             onChange={this.change}
@@ -219,8 +218,7 @@ class Register extends React.Component{
                         )}
                         <p>Email</p>
                         <input
-                            className={formErrors.email.length > 0 ? 'error': null}
-                            className="form-control"
+                            className={['form-control',formErrors.email.length > 0 ? 'error': null]}
                             name = 'email'
                             type='email'
                             placeholder='Email' value={this.state.email}
@@ -232,8 +230,7 @@ class Register extends React.Component{
 
                         <p>Password</p>
                         <input
-                            className={formErrors.password.length > 0 ? 'error': null}
-                            className="form-control"
+                            className={['form-control',formErrors.password.length > 0 ? 'error': null]}
                             name='password'
                             type='password'
                             placeholder='Password' value={this.state.password}
