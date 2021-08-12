@@ -3,7 +3,7 @@ require('dotenv').config() ;
 const DB_URI =process.env.TEST_DB_URI ;
 var ObjectId = require('mongodb').ObjectID;
 const mongoose = require('mongoose') ;
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 
 
 let db ;
@@ -237,6 +237,28 @@ async function getAllProjects(){
             })
     })
 }
+
+async function getAllProjectsByUserEmail(mail){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Projects').find({
+            "groupMembers":mail
+        }).toArray()
+            .then((ans) => {
+                if (ans.length > 0) {
+                    resolve(ans);
+                } else {
+                    resolve(0);
+                }
+
+
+            })
+            .catch(err => {
+
+                reject(err);
+            })
+    })
+
+}
 //***************************************************-post-**************************************************************
 async function insertProject(projectObject){
     return await new Promise((resolve, reject)=>{
@@ -276,5 +298,6 @@ module.exports={
     //project
     insertProject,
     getProjectByID,
-    getAllProjects
+    getAllProjects,
+    getAllProjectsByUserEmail
 };
