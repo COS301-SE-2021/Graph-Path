@@ -164,14 +164,39 @@ async function updateUserUsername(mail, usrnme){
     })
 }
 
-async function updateUserPassword(password){
-    return await  new Promise(((resolve, reject) => {
+async function updateUserPassword(mail,psw){
+    return await  new Promise((resolve, reject) => {
+        db.collection('Users').updateOne({
+            email:mail
+        },{
+            $set:{password:psw}
 
-    }))
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+    })
 }
 
-async function updateUsernameAndPassword(username, password){
+async function updateUsernameAndPassword(mail, usrnme, psw){
     return await  new Promise(((resolve, reject) => {
+        db.collection('Users').updateOne({
+            email:mail
+        },{
+            $set:{
+                username:usrnme,
+                password:psw
+            }})
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+
 
     }))
 }
