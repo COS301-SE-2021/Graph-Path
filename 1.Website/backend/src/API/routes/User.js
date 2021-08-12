@@ -253,38 +253,25 @@ var ObjectId = require('mongodb').ObjectID;
          let mail = req.params.email;
          let usrnme = req.params.username;
          let psw = req.params.password;
-         console.log("User email: "+ mail);
-         console.log("New user username: "+usrnme);
-         console.log("New user password: "+psw);
-         db.collection('Users').updateOne({
-             email:mail
-         },{
-             $set:{
-                 username:usrnme,
-                 password:psw
-             }
 
-         },(err,result)=>{
+         db.updateUsernameAndPassword(mail,usrnme, psw)
+             .then((ans)=>{
+                 if(ans != null){
+                     res.send({
+                         message:"The Password and username was updated."
+                     })
+                 }else{
+                     res.send({
+                         message: "The Password and username was not updated."
+                     })
+                 }
+             })
+             .catch((err)=>{
+                 res.status(500).send({
+                     message: "Nothing was updated."
+                 })
+             })
 
-             if(err){
-                 console.log("Could not update the user's username and password: "+err);
-                 res.send({
-                     message: "Failed",
-                     data: err
-                 });
-             }else{
-                 //console.log("The update of the user's username and password was a success: "+result);
-                 res.send({
-                     message: "success",
-                     success: 1
-                    // data: result
-                 });
-             }
-
-         })
-         //.catch((err)=>{
-         //    console.log("Could not update the task description: "+err);
-         // })
      });
 
 
