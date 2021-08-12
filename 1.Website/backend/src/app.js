@@ -20,7 +20,7 @@ const path = require('path') ;
 function makeApp(defaultDB , InjectedDB)
 {
 
-    if(defaultDB == true) {
+    if(defaultDB === true) {
         console.log('Using default DB');
         const mongoDBInstance = require('./Controllers/DBController')
         mongoDBInstance.connect( (error) => {
