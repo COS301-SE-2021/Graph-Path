@@ -74,7 +74,7 @@ async function getAllUsers(){
     })
 }
 
-async function getAllOtherUsers(email,id){
+async function getAllOtherUsers(email){
     return await  new Promise((resolve, reject)=>{
         db.collection('Users').find({}).toArray()
             .then((ans)=>{
@@ -271,9 +271,27 @@ async function insertProject(projectObject){
             })
     });
 }
+
 //***************************************************-delete-**************************************************************
+async function removeProjectByID(ID){
+
+    await new Promise((resolve, reject)=>{
+        db.collection('Projects').deleteOne({
+            "_id": ObjectId(ID)
+        })
+            .then(ans =>{
+               resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+
+}
+
 
 //***************************************************-patch-**************************************************************
+//***************************************************-put-**************************************************************
 
 
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
@@ -299,5 +317,6 @@ module.exports={
     insertProject,
     getProjectByID,
     getAllProjects,
-    getAllProjectsByUserEmail
+    getAllProjectsByUserEmail,
+    removeProjectByID
 };
