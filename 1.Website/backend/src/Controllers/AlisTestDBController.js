@@ -133,9 +133,17 @@ async function removeUserByID(id){
     });
 }
 
-async function removeUserByEmail(email){
+async function removeUserByEmail(mail){
     return await new Promise((resolve, reject) => {
-
+        db.collection('Users').deleteOne({
+            email: mail
+        })
+            .then((ans)=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
     });
 }
 //***************************************************-patch-**************************************************************
