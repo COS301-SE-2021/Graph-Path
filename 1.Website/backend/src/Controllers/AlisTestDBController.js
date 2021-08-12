@@ -147,6 +147,35 @@ async function removeUserByEmail(mail){
     });
 }
 //***************************************************-patch-**************************************************************
+async function updateUserUsername(mail, usrnme){
+    return await  new Promise((resolve, reject) => {
+        db.collection('Users').updateOne({
+            email:mail
+        },{
+            $set:{username:usrnme}
+
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+    })
+}
+
+async function updateUserPassword(password){
+    return await  new Promise(((resolve, reject) => {
+
+    }))
+}
+
+async function updateUsernameAndPassword(username, password){
+    return await  new Promise(((resolve, reject) => {
+
+    }))
+}
+
 
 /////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
 
@@ -164,5 +193,8 @@ module.exports={
     getAllOtherUsers,
     insertUser,
     removeUserByEmail,
-    removeUserByID
+    removeUserByID,
+    updateUserUsername,
+    updateUserPassword,
+    updateUsernameAndPassword
 };
