@@ -139,38 +139,38 @@ function makeProjectRoute(db) {
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
     router.post('/newProject',  (req, res, next) => {
-        if (req == undefined || req.body == undefined) {
+        console.log("metry poppins");
+        if (req === undefined || req.body === undefined) {
             res.json({
-                message: "Req is null"
+                message: "There was no information provided."
             });
         }
-        if (req.body.projectName == undefined) {
+        if (req.body.projectName === undefined) {
             console.log('no project name')
             res.send({
                 message: "Please specify a Project Name"
             })
 
+
         } else {
-            console.log('received request ', req.body, 'servicing.....');
-            var data = req.body;
+            let data = req.body;
             const id = new mongoose.mongo.ObjectID();
             data["_id"] = id;
-             db.collection('Projects').insertOne(data)
-                .then((ans) => {
-                    console.log('success', ans.ops);
+            console.log("This is data",data);
+            db.insertProject(data)
+                .then(ans=>{
                     res.send({
-                        message: "saved",
-                        data: ans['ops']
-                    });
-                }, (ans) => {
-                    console.log('rejected', ans);
-                    res.send({
-                        message: "request has been denied please try again"
-                    });
+                        message:"The Project has been created.",
+                        data: id
+                    })
                 })
-                .catch(err => {
-                    console.log('from db req', err)
+                .catch(err=>{
+                    res.status(500).send({
+                        message: "The project was not created."
+                    })
                 })
+
+
         }
     });
 
