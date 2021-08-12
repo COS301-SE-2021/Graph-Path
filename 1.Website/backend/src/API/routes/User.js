@@ -67,41 +67,28 @@ var ObjectId = require('mongodb').ObjectID;
 
 
      router.get('/listOfAllUsersExceptYourself/:email', (req, res, next) => {
-         //console.log('received request ', req.body, 'servicing.....');
+
          let mail= req.params.email;
-         db.collection('Users').find({}).toArray()
-             .then((usrs) => {
-                 //console.log('success', usrs);
-                 if (usrs.length > 0) {
-                     //remove current user first
-                    let newarray = usrs.filter((val)=>{
-                        //console.log("Val: ",val.email);
-                        if(val.email !== mail) {
-                            return true;
-                        }
-                         //return val!=mail;
-                    });
-                     //console.log("This is usrs: ",usrs);
-                     //console.log("This is the user who made the request: "+mail)
-                    //console.log("This is newarray: ",newarray);
-                     //send response
+         db.getAllOtherUsers(mail)
+             .then((ans)=>{
+                 if(ans != null) {
+                    res.send({
+                        message:"List of users retrieved.",
+                        data: ans
+                    })
+                 }else{
                      res.send({
-                         message: newarray//.json()
-                     });
-                 } else {
-                     res.send({
-                         message: "No Users found"
+                         message:"List of users not retrieved.",
+                         data: ans
                      })
                  }
-             }, (ans) => {
-                 console.log('rejected', ans);
-                 res.send({
-                     data: ans
+             })
+             .catch(err=>{
+                 res.status(500).send({
+                     message: "Could not retrieve all users."
                  });
-             })
-             .catch(err => {
-                 console.log('from db req', err)
-             })
+             });
+
 
      })
 
