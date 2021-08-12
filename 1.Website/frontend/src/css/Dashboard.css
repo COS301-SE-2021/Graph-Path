@@ -7,6 +7,9 @@
     position: relative;
     font-size: small;
 
+  /*  border-radius: 15px;*/
+    padding: 10px;
+
   }
 .DashboardMenu *{
     margin: 2px 2px 2px 2px;
