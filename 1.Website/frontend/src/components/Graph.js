@@ -403,11 +403,11 @@ class Graph extends React.Component{
                 </div>
                 </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
-                        <SigmaGraph  updateGraph={this.updateGraphView}
+                        {/* <SigmaGraph  updateGraph={this.updateGraphView}
                            projectName={ selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             graphManager={this.state.graphManager}
-                        />
+                        /> */}
                         <ProjectInfo userEmail={this.props.userEmail} projectToDisplay={this.state.linkNumber<0 ?''
                         :this.state.projList[this.state.linkNumber]} />
                     </Route>

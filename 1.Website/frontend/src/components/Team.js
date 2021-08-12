@@ -90,7 +90,22 @@ class Team extends React.Component{
         this.saveMemberList(item)
     }
     render(){
+        const colourStyles = {
+            control: styles => ({ ...styles, backgroundColor: 'white' }),
+            option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            //   const color = chroma(data.color);
+              return {
+                ...styles,
+                backgroundColor: isDisabled ? 'red' : 'blue',
+                color: '#FFF',
+                cursor: isDisabled ? 'not-allowed' : 'default',
+              };
+            }
+          };
         if (Array.isArray(this.state.list)){
+            if (this.props.currentUsers !== undefined){
+                return null
+            }
             if (this.state.list.length > 0)
                 return (
                     <>
@@ -99,7 +114,7 @@ class Team extends React.Component{
                     placeholder={'Search Member'}
                     isSearchable={true}
                     isMulti={true}
-                    style={{color:'black'}}
+                    styles={colourStyles}
                 />
                 </>)
             else{
