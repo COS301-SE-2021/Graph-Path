@@ -17,7 +17,7 @@ const dbController = {
         }) ;
     },
     getDB : ()=>{
-        console.log('returned DB')
+        console.log('returned DB 3')
         return db ;
     }
 }
