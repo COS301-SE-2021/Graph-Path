@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const router = express.Router();
 const mongo = require('mongodb').MongoClient;
 const assert = require('assert');
+const ObjectId = require('mongodb').ObjectID;
 //var db = require('../../Controllers/DBController').getDB();
 //var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
@@ -258,6 +259,53 @@ function  makeTaskRoute(db)
 
     });
 
+
+
+
+
+    router.get('/getTaskByID/:id',(req,res,next)=>{
+
+        const ID = req.params.id ;
+        //let ID = req.body.id;
+        if(ID =='' || ID == undefined)
+        {
+            res.status(400).send({
+                message:"invalid ID given"
+            })
+        }
+
+
+        db.collection('Tasks').findOne({
+            "_id": ObjectId(ID)
+        })
+            .then((ans)=>{
+                if (ans === null){
+                    console.log(`GET ${ID} fail`,ans) ;
+
+                    res.send({
+                        message:"Task not found"
+                    }) ;
+                }
+                else{
+                    console.log(`GET ${ID} success`,ans) ;
+                    res.send({
+                        message:`found ` ,
+                        data:ans
+                    }) ;
+                }
+
+            },(ans)=>{
+                console.log('GET rejected',ans) ;
+                res.send({
+                    message:"request rejected",
+                    data:ans
+                }) ;
+            })
+            .catch(err=>{
+                console.log('from db req',err)
+            })
+    }) ;
+
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      *@swagger
@@ -306,6 +354,7 @@ function  makeTaskRoute(db)
     });
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      *@swagger
      * /task/deleteTaskByTasknr:
@@ -364,7 +413,7 @@ function  makeTaskRoute(db)
      *           items:
      *             $ref: '#components/schemas/Task'
      *       400:
-     *         description:The given parameters do not match any existing task
+     *         description: The given parameters do not match any existing task
      *         contents:
      *           application/json
      *
@@ -372,6 +421,7 @@ function  makeTaskRoute(db)
      *
      */
     router.patch('/updateTaskDescription/:project/:tasknr/:description',(req,res,next)=>{
+
 
         let proj = req.params.project;
         let tsknr = req.params.tasknr;
@@ -433,7 +483,11 @@ function  makeTaskRoute(db)
      *           items:
      *             $ref: '#components/schemas/Task'
      *       500:
-     *         description: could not update task status
+     *         description: could not update task status due to server error
+     *         contents:
+     *           application/json
+     *       400:
+     *         description: could not update task  status . Invalid task information was given
      *         contents:
      *           application/json
      *
@@ -445,6 +499,23 @@ function  makeTaskRoute(db)
         let proj = req.params.project;
         let tsknr = req.params.tasknr;
         let newStat = req.params.status;
+
+        const AcceptedStatuses = ['In-progress','complete','not yet started','on hold']
+        for( var i = 0 ; i < AcceptedStatuses.length ; i++)
+        {
+
+            if(i == (AcceptedStatuses.length -1 ) && newStat != AcceptedStatuses[i])
+            {
+                res.status(400).send({
+                    message: "Failed. The provided status  '\ "+newStat+" '\ is not part of the currently accepted status: 'In-progress','complete','not yet started','on hold'",
+                    data: null
+                })
+                return;
+
+            }
+
+        }
+
         db.collection('Tasks').updateOne({
             project:proj,
             tasknr:tsknr
@@ -454,24 +525,184 @@ function  makeTaskRoute(db)
 
             if(err){
                 console.log("Could not update the task status: "+err);
-                res.send({
-                    message: "Failed",
+                res.status(500).send({
+                    message: "Failed.Could not update the task description",
                     data: err
                 });
-            }else{
-                //console.log("The update of the task status was a success: "+result);
-                res.send({
-                    message: "success",
-                    data: result['ops']
-                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
             }
 
         })
-        //.catch((err)=>{
-        //    console.log("Could not update the task description: "+err);
-        // })
+
     });
 
+    /**
+     *@swagger
+     * /task/updateTaskDueDate/:project/:tasknr/:dueDate:
+     *   patch:
+     *     summary: Updates the due date of the task that matches the given projectName , task number and new due date
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: update of task due date successful
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       400:
+     *         description: The given parameters do not match any existing task
+     *         contents:
+     *           application/json
+     *       500:
+     *         description: The task update failed due to a server error as listed in the response body
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
+    router.patch('/updateTaskDueDate/:project/:tasknr/:dueDate',(req,res,next)=>{
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newdate = req.params.dueDate;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{due:newdate}
+        },(err,result)=>{
+
+            if(err){
+
+                res.status(500).send({
+                    message: "Failed.Could not update the task date due to server error.",
+                    data: err
+                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
+            }
+
+        })
+
+    });
+
+
+    /**
+     *@swagger
+     * /task/updateTaskAssignee/:project/:tasknr/:Assignee:
+     *   patch:
+     *     summary: Updates the assignee of the task that matches the given projectName , task number and new due date
+     *     tags: [Task]
+     *     responses:
+     *       200:
+     *         description: update of task assignee successful
+     *         contents:
+     *           application/json
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#components/schemas/Task'
+     *       400:
+     *         description: The given parameters do not match any existing task
+     *         contents:
+     *           application/json
+     *       500:
+     *         description: The task update failed due to a server error as listed in the response body
+     *         contents:
+     *           application/json
+     *
+     *
+     *
+     */
+    router.patch('/updateTaskAssignee/:project/:tasknr/:Assignee',(req,res,next)=>{
+
+        let proj = req.params.project;
+        let tsknr = req.params.tasknr;
+        let newAssignee = req.params.Assignee;
+        db.collection('Tasks').updateOne({
+            project:proj,
+            tasknr:tsknr
+        },{
+            $set:{assignee:newAssignee}
+        },(err,result)=>{
+
+            if(err){
+
+                res.status(500).send({
+                    message: "Failed.Could not update the task assignee",
+                    data: err
+                });
+            }
+            else{
+
+                const {matchedCount,modifiedCount} = result;
+                if(matchedCount == 0)
+                {
+                    res.status(400).send({
+                        message: "Failed. No matched task with given parameters",
+                        data:null
+                    })
+
+                }
+                else
+                {
+
+                    res.send({
+                        message: "success",
+                        data: null
+                    });
+                }
+
+
+            }
+
+        })
+
+    });
 
 
     //module.exports = router;
