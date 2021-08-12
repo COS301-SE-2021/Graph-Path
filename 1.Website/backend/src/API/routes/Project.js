@@ -52,33 +52,25 @@ function makeProjectRoute(db) {
 
     router.get('/getAllProjectsByUserEmail/:email', (req, res, next) => {
         // console.log('received request ', req.params, 'servicing.....');
-        let usr=req.params.email;
-        db.collection('Projects').find({
-            "groupMembers":usr
-        }).toArray()
-            .then((projects) => {
-                // console.log('success', projects);
-                if (projects.length > 0) {
+        let mail=req.params.email;
+        db.getAllProjectsByUserEmail(mail)
+            .then(ans=>{
+                if(ans == null || ans === 0){
+                    console.log(ans);
                     res.send({
-                        message:`Found ${projects.length}projects` , 
-                        data:projects
-                    });
-                } else {
+                        message: "Could not retrieve the projects"
+                    })
+                }else{
                     res.send({
-                        message: "No Projects found"
+                        message: "The list was retrieved successfully.",
+                        data: ans
                     })
                 }
-            }, (ans) => {
-                console.log('rejected', ans);
-                res.status(500).send({
-                    data: ans
-                });
             })
             .catch(err => {
-                console.log('from db req', err)
-                res.send({
-                    message: "error",
-                    data: err
+                res.status(500).send({
+                    message: "could not retrieve projects.",
+
                 });
             })
 
