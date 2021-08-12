@@ -33,27 +33,18 @@ function makeProjectRoute(db) {
     });
 
     router.get('/list', (req, res, next) => {
-        console.log('received request ', req.body, 'servicing.....');
-        db.collection('Projects').find({}).toArray()
-            .then((projects) => {
-                console.log('success', projects);
-                if (projects.length > 0) {
-                    res.send({
-                        message: projects//.json()
-                    });
-                } else {
-                    res.send({
-                        message: "No Projects found"
-                    })
-                }
-            }, (ans) => {
-                console.log('rejected', ans);
-                res.send({
-                    data: ans
-                });
-            })
+
+        db.getAllProjects()
+            .then((ans) => {
+               res.send({
+                   message: "The retrieval of the projects was successful.",
+                   data: ans
+               })
+                })
             .catch(err => {
-                console.log('from db req', err)
+                res.status(500).send({
+                    message: "Could not retrieve the projects."
+                })
             })
 
     })
