@@ -6,7 +6,7 @@ const mongoose = require('mongoose') ;
 
 
 let db ;
-
+//connect to db
 const dbController = {
     connect: (callback)=>{
         mongClient.connect(DB_URI,
@@ -22,7 +22,6 @@ const dbController = {
         return db ;
     }
 }
-
 dbController.connect();
 dbController.getDB();
 //console.log(db);
@@ -36,21 +35,18 @@ async function getUserByID(id){
             "_id": ObjectId(id)
         })
             .then((ans)=>{
-                console.log("This is ans: ",ans);
-                //return ans;
                 resolve(ans);
 
 
             })
             .catch(err=>{
-                console.log('from Alisdb req', err)
                 reject(err);
             });
 
 
 
     })
-   // return prom;
+
 }
 
 async function getUserByEmail(email){
@@ -164,20 +160,79 @@ async function updateUserUsername(mail, usrnme){
     })
 }
 
-async function updateUserPassword(password){
-    return await  new Promise(((resolve, reject) => {
+async function updateUserPassword(mail,psw){
+    return await  new Promise((resolve, reject) => {
+        db.collection('Users').updateOne({
+            email:mail
+        },{
+            $set:{password:psw}
 
-    }))
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+    })
 }
 
-async function updateUsernameAndPassword(username, password){
+async function updateUsernameAndPassword(mail, usrnme, psw){
     return await  new Promise(((resolve, reject) => {
+        db.collection('Users').updateOne({
+            email:mail
+        },{
+            $set:{
+                username:usrnme,
+                password:psw
+            }})
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+
 
     }))
 }
 
 
 /////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
+//***************************************************-get-**************************************************************
+async function getProjectByID(id){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').findOne({
+            "_id": ObjectId(id)
+        })
+            .then((ans)=>{
+                console.log("This is ans: ",ans);
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+
+
+
+    })
+}
+//***************************************************-post-**************************************************************
+async function insertProject(projectObject){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').insertOne(projectObject)
+            .then((ans)=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    });
+}
+//***************************************************-delete-**************************************************************
+
+//***************************************************-patch-**************************************************************
+
 
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
@@ -187,6 +242,7 @@ async function updateUsernameAndPassword(username, password){
 
 /////////////////////////////////////////////////////-exports-//////////////////////////////////////////////////////////////
 module.exports={
+    //user
     getUserByID,
     getUserByEmail,
     getAllUsers,
@@ -196,5 +252,8 @@ module.exports={
     removeUserByID,
     updateUserUsername,
     updateUserPassword,
-    updateUsernameAndPassword
+    updateUsernameAndPassword,
+    //project
+    insertProject,
+    getProjectByID
 };

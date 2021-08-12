@@ -59,7 +59,7 @@ const swaggerDocs =swaggerJsDoc(swaggerOptions);
 
 const makeApp = require('./app');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const AliDB = require('./Controllers/AlisTestDBController');
+const AliDB = require('./Controllers/NewDBController');
 const app = makeApp(false,AliDB);
 
 
