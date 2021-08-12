@@ -48,8 +48,14 @@ class Dashboard extends React.Component{
             navB.style.display='none';
             this.props.menuToogleOpen()
         }
-    }        
-    
+    }
+
+    showProject = () =>{
+       /* let elem = document.getElementById('proj');
+        if(elem !== null){
+            elem.style.display = 'block'
+        }*/
+    }
 
     render(){
         return (
@@ -60,7 +66,7 @@ class Dashboard extends React.Component{
                 </span>
                 <div className="DashboardMenu" id="modal2">
                     <div className="App-link-routes">
-                        <div className="opt">
+                        <div className="opt" onClick={this.showProject}>
                             <Link  to="/newProject">Create Project</Link>
                         </div>
                         <div className="opt">
@@ -82,23 +88,24 @@ class Dashboard extends React.Component{
                 
                 <Switch>
                 <Route path="/dashboard">
-                    <div className="imgContainer">
+
                         <img alt={"Scrum Board"} src={scrumBoard} className="scrumBoard" />
                         {/* Show projects*/}
                         {/*<img alt={"Graph Project Example"} src={`${this.props.api}/Dashboard1.png`}/>*/}
+
+                    <div id="proj">
+
                     </div>
                 </Route>
                     <Route path="/newProject" exact>
-                        <div className="ContentArea">
-                            <NewProject  default={this.changeToDefault}
-                            userEmail={this.props.loggedUser}/>
-                        </div>
+                        <NewProject  default={this.changeToDefault}
+                                     userEmail={this.props.loggedUser}/>
                     </Route>
                     
                     <Route path="/viewProjects" >
 
                     {/* should call api for the projects and be able to display as per list  */}
-                        <div className="ContentArea">
+                        <div className="ContentAreaView">
                             <Graph userEmail={this.props.loggedUser} />
 
                         </div>
