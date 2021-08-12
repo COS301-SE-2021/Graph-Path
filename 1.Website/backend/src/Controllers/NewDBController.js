@@ -35,14 +35,11 @@ async function getUserByID(id){
             "_id": ObjectId(id)
         })
             .then((ans)=>{
-                console.log("This is ans: ",ans);
-                //return ans;
                 resolve(ans);
 
 
             })
             .catch(err=>{
-                console.log('from Alisdb req', err)
                 reject(err);
             });
 
