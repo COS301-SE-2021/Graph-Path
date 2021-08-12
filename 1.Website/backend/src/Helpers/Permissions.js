@@ -5,22 +5,44 @@ function getPermissions(role)
     switch(role)
     {
         case "developer":
-            let Permissions = [
+            var Permissions = [
                 'edit',
                 'view'
             ];
             return Permissions
             break;
         case "scrum-master":
+            var Permissions = [
+                'edit',
+                'view'
+            ];
+            return Permissions
             break;
-        case "Project manager":
+
+        case "Project Manager":
+            var Permissions = [
+                'edit',
+                'view'
+            ];
+            return Permissions
             break;
+
+        case "Business analyst":
+            var Permissions = [
+                'edit',
+                'view'
+            ];
+            return Permissions
+            break;
+
+
 
 
     }
 
 
 }
+
 
 module.exports = {
     getPermissions,
