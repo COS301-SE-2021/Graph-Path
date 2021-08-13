@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const UserModel = require('../Models/UserModel');
 const db = require('../Controllers/DBController') ;
+const {ObjectID: ObjectId} = require("mongodb");
 
 function getAllUsers(body){
 
