@@ -56,9 +56,19 @@ async function getUserByEmail(email){
         db.collection('Users').findOne({
             "email": email
         }).then((ans)=>{
-            resolve(ans);
+            if(ans == null)
+            {
+                resolve("user not found")
+            }
+            else
+            {
+                resolve(ans);
+            }
+
+
         }).catch(err=>{
-            reject(err);
+
+            reject("Server DB");
         });
     })
 
