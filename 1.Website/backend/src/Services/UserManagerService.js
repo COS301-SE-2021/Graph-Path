@@ -1,5 +1,18 @@
+const bcrypt = require("bcrypt");
 const ObjectId = require('mongodb').ObjectID;
 
+
+async function getAllUsers(dbController){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject)=>{
+        db.collection('Users').find({}).toArray()
+            .then((ans)=>{
+                resolve(ans);
+            }).catch(err=>{
+            reject(err);
+        })
+    })
+}
 
 async function getUserByID(dbController,id) {
 
@@ -49,22 +62,180 @@ async function getUserByEmail(dbController ,email){
 
 }
 
+async function getAllOtherUsers(dbController,email,id){
 
-async function getAllUsers(dbController){
     const db = dbController.getConnectionInstance();
-    return await new Promise((resolve, reject)=>{
+    return await  new Promise((resolve, reject)=>{
         db.collection('Users').find({}).toArray()
             .then((ans)=>{
+                if (ans.length > 0) {
+                    //remove current user first
+                    let newArray = ans.filter((val)=>{
+                        if(val.email !== email) {
+                            return true;
+                        }
+                    });
+                    //send response
+                    resolve(newArray);
+                } else {
+
+                    resolve(ans);
+                }
+
                 resolve(ans);
-            }).catch(err=>{
-            reject(err);
-        })
+            })
+            .catch(err=>{
+                reject(err);
+            });
     })
 }
 
+async function insertUser(dbController, userObject){
+
+    const db = dbController.getConnectionInstance();
+    //first check if user exists
+    let UserExist = null;
+    db.collection('Users').findOne({
+        "email":userObject.email,
+    }).then((result)=>{
+
+        if(result)
+        {
+            resolve("")
+        }
+
+        UserExist = true;
+        if(UserExist == true)
+        {
+            console.log(result);
+        }
+    }).catch((err)=>{
+        UserExist= false;
+        console.log('New user');
+    })
+
+
+
+    const salt = await bcrypt.genSalt(10);
+    userObject.password = await  bcrypt.hash(userObject.password,salt);
+    return await new Promise((resolve, reject)=>{
+        db.collection('Users').insertOne(userObject)
+            .then((ans)=>{
+                resolve(ans);
+            },(ans)=>{
+                console.log('rejected',ans) ;
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    });
+}
+//***************************************************-delete-**************************************************************
+async function removeUserByID(dbController, id){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject) => {
+        db.collection('Users').deleteOne({
+            "_id": ObjectId(id)
+        })
+            .then((ans)=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+    });
+}
+
+async function removeUserByEmail( dbController, mail){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject) => {
+        db.collection('Users').deleteOne({
+            email: mail
+        })
+            .then((ans)=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+    });
+}
+//***************************************************-patch-**************************************************************
+async function updateUserUsername(dbController, mail, usrnme){
+    const db = dbController.getConnectionInstance();
+    return await  new Promise((resolve, reject) => {
+        db.collection('Users').updateOne({
+            email:mail
+        },{
+            $set:{username:usrnme}
+
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+    })
+}
+
+async function updateUserPassword(dbController,mail,psw){
+
+    const db = dbController.getConnectionInstance();
+    const salt = await bcrypt.genSalt(10);
+    psw = await  bcrypt.hash(psw,salt);
+    return await  new Promise((resolve, reject) => {
+        db.collection('Users').updateOne({
+            email:mail
+        },{
+            $set:{password:psw}
+
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+    })
+}
+
+async function updateUsernameAndPassword(dbController, mail, usrnme, psw){
+    const db = dbController.getConnectionInstance();
+    const salt = await bcrypt.genSalt(10);
+    psw = await  bcrypt.hash(psw,salt);
+    return await  new Promise(((resolve, reject) => {
+        db.collection('Users').updateOne({
+            email:mail
+        },{
+            $set:{
+                username:usrnme,
+                password:psw
+            }})
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+
+
+    }))
+}
+
+
 module.exports = {
     getUserByID,
-
+    getAllUsers,
+    getUserByEmail,
+    getAllOtherUsers,
+    insertUser,
+    removeUserByID,
+    removeUserByEmail,
+    updateUserUsername,
+    updateUserPassword,
+    updateUsernameAndPassword,
 
 }
 

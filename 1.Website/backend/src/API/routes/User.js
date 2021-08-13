@@ -3,18 +3,18 @@ const router = express.Router();
 const mongoose = require('mongoose') ;
 var ObjectId = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
-const UserManagerService = require('../../Services/UserManager');
+const UserManagerService = require('../../Services/UserManagerService');
+
 
  function makeUserRoute (db)
 {
+
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
      router.get('/listOfAllUsers', (req, res, next) => {
          //console.log('received request ', req.body, 'servicing.....');
-         db.getAllUsers()
+         UserManagerService.getAllUsers(db)
          .then((ans)=>{
                  if(ans != null){
                      res.send({
@@ -37,8 +37,9 @@ const UserManagerService = require('../../Services/UserManager');
 
      router.get('/listOfAllUsersExceptYourself/:email', (req, res, next) => {
 
+
          let mail= req.params.email;
-         db.getAllOtherUsers(mail)
+         UserManagerService.getAllOtherUsers(db,mail)
              .then((ans)=>{
                  if(ans != null) {
                     res.send({
@@ -73,25 +74,29 @@ const UserManagerService = require('../../Services/UserManager');
              })
          }
 
+         UserManagerService.getUserByID(db,ID).then((ans)=>{
 
-         db.getUserByID(ID).then((ans)=>{
-             if(ans != null){
-                 res.send({
-                     message: "User found",
-                     data: ans
-                 })
-             }else{
-                 console.log(ans);
-                 res.send({
-                    message: "User not found",
-                     data: ans
-                 })
-             }
+                 if(ans != null){
+                     res.send({
+                         message: "User found",
+                         data: ans
+                     })
+                 }else{
+                     console.log(ans);
+                     res.send({
+                         message: "User not found",
+                         data: ans
+                     })
+                 }
+
          }).catch((err)=>{
+
              res.status(500).send({
                  message:err,
              }) ;
          });
+
+
 
      }) ;
 
@@ -111,7 +116,7 @@ const UserManagerService = require('../../Services/UserManager');
          }
 
          let returnedUser = null;
-         await db.getUserByEmail(emailParam).then((ans)=>{
+         await UserManagerService.getUserByEmail(db,emailParam).then((ans)=>{
              if(ans != null){
                  returnedUser = ans;
 
@@ -167,7 +172,7 @@ const UserManagerService = require('../../Services/UserManager');
              let data = req.body ;
              const id = new mongoose.mongo.ObjectID() ;
              data["_id"] = id ;
-             db.insertUser(data)
+             UserManagerService.insertUser(db,data)
                  .then((ans)=>{
                     if(ans != null){
                         res.send({
@@ -242,7 +247,7 @@ const UserManagerService = require('../../Services/UserManager');
          let mail = req.params.email;
          let usrnme = req.params.username;
 
-        db.updateUserUsername(mail, usrnme)
+        UserManagerService.updateUserUsername(db ,mail, usrnme)
             .then((ans)=>{
                 if(ans != null){
                     res.send({
@@ -265,7 +270,7 @@ const UserManagerService = require('../../Services/UserManager');
          let mail = req.params.email;
          let psw = req.params.password;
 
-         db.updateUserPassword(mail, psw)
+         UserManagerService.updateUserPassword(db,mail, psw)
              .then((ans)=>{
                  if(ans != null){
                      res.send({
@@ -289,7 +294,7 @@ const UserManagerService = require('../../Services/UserManager');
          let usrnme = req.params.username;
          let psw = req.params.password;
 
-         db.updateUsernameAndPassword(mail,usrnme, psw)
+         UserManagerService.updateUsernameAndPassword(db,mail,usrnme, psw)
              .then((ans)=>{
                  if(ans != null){
                      res.send({
