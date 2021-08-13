@@ -343,18 +343,23 @@ function  makeTaskRoute(db)
         const id = new mongoose.mongo.ObjectID() ;
         data["_id"] = id ;
 
-        db.collection('Tasks').insertOne(data)
-            .then((result)=>{
-                res.send({
-                    message:"saved",
-                    data: result['ops']
-                }) ;
+        db.insertTask(data)
+            .then((ans)=>{
+                if(ans.insertedCount > 0){
+                    res.send({
+                        message:"The task was saved successfully."
+                    }) ;
+                }else{
+                    res.send({
+                        message: "The task was not created."
+                    })
+                }
+
             })
             .catch(err=>{
-                console.log("Could not create task: "+err);
                 res.status(500).send({
-                    message:"could not create task",
-                    body:null
+                    message:"Server error: could not create task.",
+                    err:err
                 })
             });
 
