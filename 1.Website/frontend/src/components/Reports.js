@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/Reports.css';
-import {Button, Offcanvas} from "react-bootstrap";
+//import {Button, Offcanvas} from "react-bootstrap";
 
 class Reports extends React.Component{
     constructor(props){
@@ -27,7 +27,7 @@ class Reports extends React.Component{
             <>
                 <h1>Hello</h1>
 
-                <Button onClick={this.handleShow} className="close">Members</Button>
+                {/*  <Button onClick={this.handleShow} className="close">Members</Button>
                 <Offcanvas show={this.state.show} onHide={this.handleClose}>
                     <Offcanvas.Header closeButton >
                         <Offcanvas.Title>Members</Offcanvas.Title>
@@ -38,7 +38,7 @@ class Reports extends React.Component{
 
                     </Offcanvas.Body>
 
-                </Offcanvas>
+                </Offcanvas>*/}
             </>
         )
     }
