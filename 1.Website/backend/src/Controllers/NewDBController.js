@@ -105,7 +105,7 @@ async function getAllOtherUsers(email,id){
 async function insertUser(userObject){
 
     const salt = await bcrypt.genSalt(10);
-    userObject.password = await  bcrypt.hash(userObject.password);
+    userObject.password = await  bcrypt.hash(userObject.password,salt);
     return await new Promise((resolve, reject)=>{
         db.collection('Users').insertOne(userObject)
             .then((ans)=>{

@@ -16,7 +16,8 @@ const bcrypt = require('bcrypt');
          if(emailParam ==='' || emailParam === undefined)
          {
              res.status(400).send({
-                 message:"invalid email provided."
+                 message:"invalid email provided.",
+                 data:null
              })
          }
 
@@ -175,6 +176,7 @@ const bcrypt = require('bcrypt');
                             message:"The user was created successfully.",
                             data:ans
                         });
+
                     }else{
                         res.send({
                             message:"The user was not created successfully."
