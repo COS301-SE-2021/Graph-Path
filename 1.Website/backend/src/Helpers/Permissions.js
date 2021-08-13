@@ -2,17 +2,18 @@
 function getPermissions(role)
 {
 
+    let Permissions = null;
     switch(role)
     {
         case "developer":
-            var Permissions = [
+             Permissions = [
                 'edit',
                 'view'
             ];
             return Permissions
             break;
         case "scrum-master":
-            var Permissions = [
+            Permissions = [
                 'edit',
                 'view'
             ];
@@ -20,7 +21,7 @@ function getPermissions(role)
             break;
 
         case "Project Manager":
-            var Permissions = [
+             Permissions = [
                 'edit',
                 'view'
             ];
@@ -28,7 +29,7 @@ function getPermissions(role)
             break;
 
         case "Business analyst":
-            var Permissions = [
+             Permissions = [
                 'edit',
                 'view'
             ];
@@ -37,7 +38,7 @@ function getPermissions(role)
 
 
         case "owner":
-            var Permissions = [
+             Permissions = [
                 'Assign Manager',
                 'Change Manager',
                 'Assign user to task',
