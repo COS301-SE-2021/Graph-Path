@@ -8,8 +8,8 @@
     max-width: 400px;
     max-height: 350px;
     position: relative;
-    left: 37%;
-    top: 45%;
+    margin-right: 35%;
+    margin-top: 5%;
     box-sizing: border-box;
     padding: 20px 40px;
     border-radius: 20px;
@@ -93,7 +93,7 @@ input.error {
 .errorMessage {
     color: red;
     font-size: 0.75em;
-    display: relative;
+    position: relative;
 }
 
 .BoxContainer{
