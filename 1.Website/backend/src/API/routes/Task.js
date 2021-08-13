@@ -467,7 +467,7 @@ function  makeTaskRoute(db)
             })
             .catch(err=>{
                 res.status(500).send({
-                    message: "server error: could not update task."
+                    message: "server error: could not update task.",
                     err:err
                 })
             })
@@ -502,66 +502,49 @@ function  makeTaskRoute(db)
      *
      *
      */
-    router.patch('/updateTaskStatus/:project/:tasknr/:status',(req,res,next)=>{
+    router.patch('/updateTaskStatus/:id/:status',(req,res,next)=>{
 
-        let proj = req.params.project;
-        let tsknr = req.params.tasknr;
+        let ID = req.params.id;
         let newStat = req.params.status;
-
+        let fine = false;
         const AcceptedStatuses = ['In-progress','complete','not yet started','on hold']
-        for( var i = 0 ; i < AcceptedStatuses.length ; i++)
+        for( let i = 0 ; i < AcceptedStatuses.length ; i++)
         {
 
-            if(i === (AcceptedStatuses.length -1 ) && newStat !== AcceptedStatuses[i])
+            if(newStat === AcceptedStatuses[i])
             {
-                res.status(400).send({
-                    message: "Failed. The provided status  '\ "+newStat+" '\ is not part of the currently accepted status: 'In-progress','complete','not yet started','on hold'",
-                    data: null
-                })
-                return;
+                 fine = true;
 
             }
 
         }
+        if(fine === false){
+            res.status(400).send({
+                message: "Failed. The provided status  '\ "+newStat+" '\ is not part of the currently accepted statuses: 'In-progress','complete','not yet started','on hold'",
+                data: null
+            })
+            return;
+        }
 
-        db.collection('Tasks').updateOne({
-            project:proj,
-            tasknr:tsknr
-        },{
-            $set:{status:newStat}
-        },(err,result)=>{
+      db.updateTaskStatus(ID, newStat)
+          .then(ans=>{
+              if(ans === "Success"){
+                  res.send({
+                      message: "The task updated successfully"
+                  })
+              }else{
+                  res.send({
+                      message: "Could not update the task."
+                  })
+              }
+          })
+          .catch(err=>{
+              res.status(500).send({
+                  message: "Server error: could not update the task",
+                  err: err
+              })
+          })
 
-            if(err){
-                console.log("Could not update the task status: "+err);
-                res.status(500).send({
-                    message: "Failed.Could not update the task description",
-                    data: err
-                });
-            }
-            else{
-
-                const {matchedCount,modifiedCount} = result;
-                if(matchedCount === 0)
-                {
-                    res.status(400).send({
-                        message: "Failed. No matched task with given parameters",
-                        data:null
-                    })
-
-                }
-                else
-                {
-
-                    res.send({
-                        message: "success",
-                        data: null
-                    });
-                }
-
-
-            }
-
-        })
 
     });
 
