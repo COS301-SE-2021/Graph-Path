@@ -250,18 +250,27 @@ function  makeTaskRoute(db)
      *
      *
      */
-    router.get('/getAllTasksByProject',(req, res, next)=> {
+    router.get('/getAllTasksByProject/:id',(req, res, next)=> {
 
-        //console.log("TasksByProjectBody: "+req.body);
-        // console.log("TasksByProjectBodyProject: "+req.body.project);
-        let proj = req.body.project;
-        db.collection('Tasks').find({project:proj}).toArray()
-            .then((result)=>{
-                // console.log("This is result in all tasks by project: "+result);
-                res.send(result); //returns an array of objects
+        let ID = req.params.id;
+        db.getAllTasksByProject(ID)
+            .then((ans)=>{
+                if(ans === "No tasks found"){
+                    res.send({
+                        message: "There were no tasks found."
+                    })
+                }else{
+                    res.send({
+                        message: "Tasks found successfully.",
+                        data: ans
+                    })
+                }
             })
             .catch((err)=>{
-                console.log("Could not retrieve tasks by project: "+err);
+                res.status(500).send({
+                    message: "Server error: could not retrieve tasks.",
+                    err: err
+                })
             });
 
 
