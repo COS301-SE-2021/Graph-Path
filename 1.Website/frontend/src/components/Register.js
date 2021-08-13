@@ -146,15 +146,15 @@ class Register extends React.Component{
                 // console.log(res) ;
                 this.setState({
                     answer:res.message,
-                    responseData:res.data[0] //data
+                    responseData:res.data //data
                 },()=>{
 
-                //    console.log(this.state)
+                   console.log(this.state)
                     if (this.state.answer!== undefined && this.state.responseData !== undefined){
                        alert(`Registered as: ${this.state.responseData.firstName} ${this.state.responseData.lastName}, \n with login email as:${this.state.responseData.email}`)
                     }
                     else{
-                        alert(`Something went wrong please register again `)
+                        alert(`Something went wrong please register again. ${this.state.answer}`)
                     }
                 })
 
@@ -191,6 +191,7 @@ class Register extends React.Component{
                             type='text'
                             placeholder='First Name' value={this.state.firstName}
                             onChange={this.change}
+                            required={true}
                         />
                         {formErrors.firstName.length > 0 && (
                             <span className='errorMessage'>{formErrors.firstName}</span>
@@ -201,6 +202,7 @@ class Register extends React.Component{
                             name='lastName' type='text'
                             placeholder='Last Name' value={this.state.lastName}
                             onChange={this.change}
+                            required={true}
                         />
                         {formErrors.lastName.length > 0 && (
                             <span className='errorMessage'>{formErrors.lastName}</span>
@@ -212,6 +214,8 @@ class Register extends React.Component{
                             name= 'userName' type='text'
                             placeholder='Username' value={this.state.userName}
                             onChange={this.change}
+                            required={true}
+
                         />
                         {formErrors.userName.length > 0 && (
                             <span className='errorMessage'>{formErrors.userName}</span>
@@ -223,6 +227,8 @@ class Register extends React.Component{
                             type='email'
                             placeholder='Email' value={this.state.email}
                             onChange={this.change}
+                            required={true}
+
                         />
                         {formErrors.email.length > 0 && (
                             <span className='errorMessage'>{formErrors.email}</span>
@@ -235,6 +241,7 @@ class Register extends React.Component{
                             type='password'
                             placeholder='Password' value={this.state.password}
                             onChange={e=>this.change(e)}
+                            required={true}
                         />
 
                         {formErrors.password.length > 0 && (
