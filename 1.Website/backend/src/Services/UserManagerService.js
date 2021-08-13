@@ -105,7 +105,7 @@ async function insertUser(dbController, userObject){
         }
 
         UserExist = true;
-        if(UserExist == true)
+        if(UserExist === true)
         {
             console.log(result);
         }
