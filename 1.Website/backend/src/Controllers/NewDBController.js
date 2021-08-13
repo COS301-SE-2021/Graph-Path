@@ -116,21 +116,18 @@ async function insertUser(userObject){
 
 
     //first check if user exists
-    let UserExist = null;
-    db.collection('Users').findOne({
+    let UserExist = false;
+   await db.collection('Users').findOne({
         "email":userObject.email,
     }).then((result)=>{
 
-        if(result)
+        if(result !== null)
         {
-            resolve("")
+            UserExist = true;
+            resolve("Duplicate");
+
         }
 
-        UserExist = true;
-        if(UserExist === true)
-        {
-            console.log(result);
-        }
     }).catch((err)=>{
         UserExist= false;
     })
