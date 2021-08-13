@@ -220,7 +220,10 @@ function  makeTaskRoute(db)
                 }
             })
             .catch((err)=>{
-                console.log("There was an error: ",err);
+                res.status(500).send({
+                    message:"Server error: could not get tasks.",
+                    err:err
+                })
             });
 
     });
@@ -271,43 +274,34 @@ function  makeTaskRoute(db)
     router.get('/getTaskByID/:id',(req,res,next)=>{
 
         const ID = req.params.id ;
-        //let ID = req.body.id;
         if(ID ==='' || ID === undefined)
         {
             res.status(400).send({
-                message:"invalid ID given"
+                message:"invalid ID provided."
             })
         }
 
-
-        db.collection('Tasks').findOne({
-            "_id": ObjectId(ID)
-        })
+        db.getTaskByID(ID)
             .then((ans)=>{
-                if (ans === null){
-                    console.log(`GET ${ID} fail`,ans) ;
+                if (ans === "No available task"){
 
                     res.send({
-                        message:"Task not found"
+                        message:"Could not find the task."
                     }) ;
                 }
                 else{
-                    console.log(`GET ${ID} success`,ans) ;
                     res.send({
-                        message:`found ` ,
+                        message:`The task was retrieved.` ,
                         data:ans
                     }) ;
                 }
 
-            },(ans)=>{
-                console.log('GET rejected',ans) ;
-                res.send({
-                    message:"request rejected",
-                    data:ans
-                }) ;
             })
             .catch(err=>{
-                console.log('from db req',err)
+                res.status(500).send({
+                    message:"Server error: could not get task.",
+                    err: err
+                })
             })
     }) ;
 
