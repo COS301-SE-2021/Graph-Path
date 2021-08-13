@@ -109,8 +109,8 @@ class Header extends React.Component{
 
                                 </div>
 
-                                <img alt="Process Picture" src={process_pic} className="img1"/>
-                                <img alt="Complete Task Picture" src={completeTask_pic} className="img2" />
+                                <img alt="Process " src={process_pic} className="img1"/>
+                                <img alt="Complete Task " src={completeTask_pic} className="img2" />
 
                             </>
                             :

@@ -10,8 +10,8 @@ import * as FaIcons from "react-icons/fa";
 import * as ImIcons from "react-icons/im";
 import Spinner from 'react-spinner-material';
 import GraphManager from './GraphManager';
-import {Button, Card} from "react-bootstrap";
-import TaskPic from '../images/task.svg';
+import { Card} from "react-bootstrap";// Button
+// import TaskPic from '../images/task.svg';
 
 
 class Graph extends React.Component{
