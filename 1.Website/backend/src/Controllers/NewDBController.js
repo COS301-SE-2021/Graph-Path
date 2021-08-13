@@ -127,16 +127,13 @@ async function insertUser(userObject){
         }
 
         UserExist = true;
-        if(UserExist == true)
+        if(UserExist === true)
         {
             console.log(result);
         }
     }).catch((err)=>{
         UserExist= false;
-        console.log('New user');
     })
-
-
 
     const salt = await bcrypt.genSalt(10);
     userObject.password = await  bcrypt.hash(userObject.password,salt);
@@ -145,7 +142,6 @@ async function insertUser(userObject){
             .then((ans)=>{
                 resolve(ans);
             },(ans)=>{
-                console.log('rejected',ans) ;
                 resolve(ans);
             })
             .catch(err=>{
