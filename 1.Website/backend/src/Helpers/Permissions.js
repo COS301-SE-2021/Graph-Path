@@ -36,6 +36,16 @@ function getPermissions(role)
             break;
 
 
+        case "owner":
+            var Permissions = [
+                'edit',
+                'view',
+                'create-graph'
+            ];
+            return Permissions
+            break;
+
+
 
 
     }

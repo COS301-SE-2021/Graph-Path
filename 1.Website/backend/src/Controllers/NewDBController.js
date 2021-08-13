@@ -104,6 +104,30 @@ async function getAllOtherUsers(email,id){
 //***************************************************-post-**************************************************************
 async function insertUser(userObject){
 
+
+    //first check if user exists
+    let UserExist = null;
+    db.collection('Users').findOne({
+        "email":userObject.email,
+    }).then((result)=>{
+
+        if(result)
+        {
+            resolve("")
+        }
+
+        UserExist = true;
+        if(UserExist == true)
+        {
+            console.log(result);
+        }
+    }).catch((err)=>{
+        UserExist= false;
+        console.log('New user');
+    })
+
+
+
     const salt = await bcrypt.genSalt(10);
     userObject.password = await  bcrypt.hash(userObject.password,salt);
     return await new Promise((resolve, reject)=>{

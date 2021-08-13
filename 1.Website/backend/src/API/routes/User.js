@@ -185,7 +185,8 @@ const bcrypt = require('bcrypt');
                  })
                  .catch(err=>{
                      res.status(500).send({
-                         message: "Could not create the new user."
+                         message: "Could not create the new user.",
+                         data:err
                      })
                  })
          }
