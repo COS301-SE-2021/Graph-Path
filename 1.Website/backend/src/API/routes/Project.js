@@ -16,6 +16,8 @@ function makeProjectRoute(db) {
 
             .then((project)=>{
 
+                scratchPad.updateNodesID(db ,project).then(()=>{})
+
                 let projectNodes = scratchPad.getNodes(project);
                 if(projectNodes.length === 0)
                 {
@@ -25,9 +27,44 @@ function makeProjectRoute(db) {
                     })
                 }
 
-                else
-                {
-                    // sort Nodes by status
+                else {
+                    // pool all tasks of nodes
+                    //console.log(projectNodes);
+                    scratchPad.getTasks(db,projectNodes).then((AllTasks)=>{
+                        if(AllTasks === "Tasks collection empty")
+                        {
+                            res.send({
+                                message:AllTasks,
+                                data: []
+                            })
+                        }
+
+                        else if(AllTasks.length == 0)
+                        {
+                            res.send({
+                                message: "This project has no tasks",
+                                data: []
+                            })
+                        }
+
+                        else
+                        {
+                            res.send({
+                                message:"success",
+                                data: scratchPad.splitTasksByStatus(AllTasks),
+                            })
+                        }
+
+                   })
+                        .catch((err)=>{
+                            res.send({
+                                message:"error",
+                                data: err
+                            })
+                        });
+
+
+
                 }
 
 
@@ -255,6 +292,7 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
     //console.log("type of graph: "+ typeof grph);
    // console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
     //console.log("grph.edges[0].id: "+grph2.edges[0].id);
+
     ProjectManagerService.updateProjectGraph(db,ID,grph2 )
     .then(ans=>{
             if(ans.modifiedCount === 0){

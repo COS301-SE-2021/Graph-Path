@@ -275,10 +275,6 @@ function  makeTaskRoute(db)
 
     });
 
-
-
-
-
     router.get('/getTaskByID/:id',(req,res,next)=>{
 
         const ID = req.params.id ;
