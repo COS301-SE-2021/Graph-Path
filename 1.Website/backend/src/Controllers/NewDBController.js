@@ -579,7 +579,7 @@ async function updateTaskAssignee(id, assignee){
         db.collection('Tasks').updateOne({
             "_id": ObjectId(id)
         },{
-            $set:{status:assignee}
+            $set:{assignee:assignee}
         })
             .then(ans=>{
                 if(ans.modifiedCount > 0){
@@ -599,7 +599,7 @@ async function updateTaskAssigner(id, assigner){
         db.collection('Tasks').updateOne({
             "_id": ObjectId(id)
         },{
-            $set:{status:assigner}
+            $set:{assigner:assigner}
         })
             .then(ans=>{
                 if(ans.modifiedCount > 0){
