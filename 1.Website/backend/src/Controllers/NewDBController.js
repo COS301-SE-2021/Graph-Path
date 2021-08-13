@@ -551,7 +551,7 @@ async function updateTaskStatus(id, newStat){
             })
     })
 }
-
+/*
 async function updateTaskDueDate(id, ddate){
     return await new Promise((resolve,reject)=>{
         db.collection('Tasks').updateOne({
@@ -571,6 +571,8 @@ async function updateTaskDueDate(id, ddate){
             })
     })
 }
+
+ */
 
 async function updateTaskAssignee(id, assignee){
     return await new Promise((resolve,reject)=>{
@@ -649,7 +651,7 @@ module.exports={
     deleteTaskByID,
     updateTaskDescription,
     updateTaskStatus,
-    updateTaskDueDate,
+         //updateTaskDueDate,
     updateTaskAssigner,
     updateTaskAssignee
 
