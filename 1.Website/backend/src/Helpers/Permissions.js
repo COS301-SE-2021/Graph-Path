@@ -54,6 +54,7 @@ function getPermissions(role)
                 'Save Graph changes',
                 'Change task status',
                 'Edit Member permissions',
+                'Create statistic report'
             ];
             return Permissions
             break;
