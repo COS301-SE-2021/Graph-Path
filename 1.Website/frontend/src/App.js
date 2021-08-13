@@ -43,38 +43,6 @@ class App extends React.Component {
   //   }) ; 
   // }
 
-componentDidMount()
-{
-  $(document).ready(function(){
-    $('.login-info-box').fadeOut();
-    $('.login-show').addClass('show-log-panel');
-
-
-    $('input[type="radio"]').on('change',function() {
-
-      if($('#log-reg-show').is(':checked')) {
-        $('.register-info-box').fadeIn();
-        $('.login-info-box').fadeOut();
-
-        $('.white-panel').removeClass('right-log');
-
-        $('.login-show').addClass('show-log-panel');
-        $('.register-show').removeClass('show-log-panel');
-      }
-      if($('#log-login-show').is(':checked')) {
-        $('.register-info-box').fadeOut();
-        $('.login-info-box').fadeIn();
-
-        $('.white-panel').addClass('right-log');
-
-        $('.register-show').addClass('show-log-panel');
-        $('.login-show').removeClass('show-log-panel');
-
-      }
-    });
-  });
-
-}
 
   render(){
     const url = this.state.api ;
@@ -83,7 +51,7 @@ componentDidMount()
 
     return(
         <div className="App">
-          <Header api={url}/>
+          <Header api={url} logOut={this.logOffValid} logInValid={this.logInValid}/>
 
         </div>
     )

@@ -17,6 +17,8 @@ class NewProject extends React.Component{
             answer:null,
             responseData:null,
             redirect:false,
+            rbca:[],
+            role:"Client"
         }
     }
 
@@ -28,6 +30,23 @@ class NewProject extends React.Component{
                 members:memberEmail 
             }, console.log('after update',this.state))
         }
+    }
+
+    getAllRoles=()=>{
+        axios.get('http://localhost:9001/project/AllPermissions')
+        .then((res)=>{
+            const control = res.data ; 
+
+            if (control.data !== null){
+                this.setState({
+                    rbca:control.data
+                })
+            }
+            else{
+
+            }
+            // console.log(control.data.roles,'rbca')
+        })
     }
     
 
@@ -81,6 +100,10 @@ class NewProject extends React.Component{
         }) ;
     }
 
+    componentDidMount(){
+        this.getAllRoles() ;
+    }
+
     
     handleSubmit = (event) =>{
         event.preventDefault() ; 
@@ -90,7 +113,6 @@ class NewProject extends React.Component{
             startDate:this.state.startDate,
             dueDate:this.state.dueDate,
             groupMembers:[{email:this.props.userEmail, role:"owner"},...this.state.members],
-            groupManagers:[this.props.userEmail] ,
             owner:this.props.userEmail, //add ownwer from dashboard
             graph:{}, //ES6
             //userId:from dashboard
@@ -135,6 +157,20 @@ class NewProject extends React.Component{
                     <p>Members</p>
                     <Team userEmail={this.props.userEmail} chooseMember={this.addMember} />
                     <br/>
+                    <div>
+                        {this.state.members.length>0?
+                        this.state.members.map((value,ind)=>{
+                            return <>
+                                <span key={ind} data-num={ind}>{value.label}</span> &nbsp;<select name="role" value={this.state.role} onChange={(e)=>this.updateField(e)}>
+                                    {this.state.rbca.roles.map((value)=>{
+                                        return <option value={value}>{value}</option>
+                                    })}
+                                </select>
+                                <br/>
+                            </>
+                        })
+                        :<></>}
+                    </div>
                     <input type="submit" value="Create Project" className="btn1"  />
 
 

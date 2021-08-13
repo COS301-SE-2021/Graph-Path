@@ -155,7 +155,7 @@ class Graph extends React.Component{
                     projectName: projNode.projectName,
                     projId:projNode._id
                 }
-                axios.put(`${this.state.api}/project/updateProjectGraph`,data)
+                axios.put(`${this.state.api}/project/updateEverythingProject/${data.projId}`,data)
                 .then((res)=>{
                     console.log('update graph response',res.data)
                     if (res.data.data === undefined) {
