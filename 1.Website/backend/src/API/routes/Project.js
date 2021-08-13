@@ -116,6 +116,17 @@ function makeProjectRoute(db) {
             })
     }) ;
 
+    router.get("/AllPermissions",(req,res)=>{
+
+        res.send({
+            message:"successful",
+            data: {
+                Roles : Permissions.getAllRoles(),
+                RolePermissions: Permissions.getAllRolesAndPermissions(),
+            }
+        })
+    })
+
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
     router.post('/newProject',  (req, res, next) => {
@@ -278,7 +289,6 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
             })
         })
 });
-
 
 router.put('/updateProjectGraph',(req,res)=>{
     const project = req.body.projectName ;
