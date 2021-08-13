@@ -489,6 +489,9 @@ async function getAllTasksByProject(id){
 //***************************************************-post-**************************************************************
 async function insertTask(taskObject){
     return await new Promise((resolve, reject)=>{
+        if(taskObject==null){
+            resolve("Task object empty");
+        }
         db.collection('Tasks').insertOne(taskObject)
             .then((ans)=>{
                 resolve(ans);
@@ -499,7 +502,19 @@ async function insertTask(taskObject){
     })
 }
 //***************************************************-delete-**************************************************************
-
+async function deleteTaskByID(id){
+    return await  new Promise((resolve,reject)=>{
+        db.collection('Tasks').deleteOne({
+            "_id":ObjectId(id)
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
 //***************************************************-patch-**************************************************************
 
 
@@ -536,6 +551,8 @@ module.exports={
     getAllTasks,
     getTaskByID,
     getAllTasksByProject,
-    insertTask
+    insertTask,
+    deleteTaskByID
+
 
 };
