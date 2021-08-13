@@ -434,6 +434,8 @@ async function updateEverythingProject(id, pname, ddate, sdate, own, grph, membe
 }
 
 /////////////////////////////////////////////////////-Task-//////////////////////////////////////////////////////////////
+//***************************************************-get-**************************************************************
+
 async function getAllTasks(){
     return await new Promise((resolve,reject)=>{
         db.collection('Tasks').find({}).toArray()
@@ -467,6 +469,151 @@ async function getTaskByID(id){
             })
     })
 }
+
+async function getAllTasksByProject(id){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').find({project:id}).toArray()
+            .then((ans)=>{
+                if(ans == null){
+                    resolve("No tasks found");
+                }else{
+                    resolve(ans);
+                }
+            })
+            .catch((err)=>{
+                reject(err);
+            });
+    })
+}
+
+//***************************************************-post-**************************************************************
+async function insertTask(taskObject){
+    return await new Promise((resolve, reject)=>{
+        if(taskObject==null){
+            resolve("Task object empty");
+        }
+        db.collection('Tasks').insertOne(taskObject)
+            .then((ans)=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+//***************************************************-delete-**************************************************************
+async function deleteTaskByID(id){
+    return await  new Promise((resolve,reject)=>{
+        db.collection('Tasks').deleteOne({
+            "_id":ObjectId(id)
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+//***************************************************-patch-**************************************************************
+async function updateTaskDescription(id, newDesc){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{description:newDesc}
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
+async function updateTaskStatus(id, newStat){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{status:newStat}
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+/*
+async function updateTaskDueDate(id, ddate){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{status:ddate}
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
+ */
+
+async function updateTaskAssignee(id, assignee){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{assignee:assignee}
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
+async function updateTaskAssigner(id, assigner){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{assigner:assigner}
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////-Graph-//////////////////////////////////////////////////////////////
@@ -498,5 +645,15 @@ module.exports={
     updateEverythingProject,
     //Task
     getAllTasks,
-    getTaskByID
+    getTaskByID,
+    getAllTasksByProject,
+    insertTask,
+    deleteTaskByID,
+    updateTaskDescription,
+    updateTaskStatus,
+         //updateTaskDueDate,
+    updateTaskAssigner,
+    updateTaskAssignee
+
+
 };

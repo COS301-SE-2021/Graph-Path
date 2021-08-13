@@ -158,12 +158,11 @@ const UserManagerService = require('../../Services/UserManager');
      }) ;
 
      router.post('/newUser',(req,res)=>{
-         if (req == undefined || req.body == undefined || req == null ){
+         if (req === undefined || req.body === undefined || req === null ){
              res.json({
                  message:"There is no user to insert."
              }) ;
          }else{
-             //console.log('received request ',req.body,'servicing.....') ;
 
              let data = req.body ;
              const id = new mongoose.mongo.ObjectID() ;
