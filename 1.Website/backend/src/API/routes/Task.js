@@ -205,17 +205,22 @@ function  makeTaskRoute(db)
      *
      */
     router.get('/getAllTasks',(req, res, next)=> {
-        //console.log("TaskByProjectBody: "+req.body);
-        // console.log("TaskByProjectBodyProject: "+req.body.project);
-        let tsknr = req.body.tasknr;
-        db.collection('Tasks').find().toArray()
-            .then((result)=>{
-                //console.log("This is result in all tasks: "+result);
-                res.send(result); //returns an array of objects
 
+        db.getAllTasks()
+            .then((ans)=>{
+                if(ans === "No available tasks"){
+                    res.send({
+                        message:"There were no available tasks to retrieve."
+                    })
+                }else if(ans !== null){
+                    res.send({
+                        message: "The tasks were retrieved.",
+                        data: ans
+                    })
+                }
             })
             .catch((err)=>{
-                console.log("Could not retrieve task by number in the project: "+err);
+                console.log("There was an error: ",err);
             });
 
     });
@@ -267,7 +272,7 @@ function  makeTaskRoute(db)
 
         const ID = req.params.id ;
         //let ID = req.body.id;
-        if(ID =='' || ID == undefined)
+        if(ID ==='' || ID === undefined)
         {
             res.status(400).send({
                 message:"invalid ID given"
@@ -443,7 +448,7 @@ function  makeTaskRoute(db)
             else{
 
                 const {matchedCount,modifiedCount} = result;
-                if(matchedCount == 0)
+                if(matchedCount === 0)
                 {
                     res.status(400).send({
                         message: "Failed. No matched task with given parameters",
@@ -504,7 +509,7 @@ function  makeTaskRoute(db)
         for( var i = 0 ; i < AcceptedStatuses.length ; i++)
         {
 
-            if(i == (AcceptedStatuses.length -1 ) && newStat != AcceptedStatuses[i])
+            if(i === (AcceptedStatuses.length -1 ) && newStat !== AcceptedStatuses[i])
             {
                 res.status(400).send({
                     message: "Failed. The provided status  '\ "+newStat+" '\ is not part of the currently accepted status: 'In-progress','complete','not yet started','on hold'",
@@ -533,7 +538,7 @@ function  makeTaskRoute(db)
             else{
 
                 const {matchedCount,modifiedCount} = result;
-                if(matchedCount == 0)
+                if(matchedCount === 0)
                 {
                     res.status(400).send({
                         message: "Failed. No matched task with given parameters",
@@ -606,7 +611,7 @@ function  makeTaskRoute(db)
             else{
 
                 const {matchedCount,modifiedCount} = result;
-                if(matchedCount == 0)
+                if(matchedCount === 0)
                 {
                     res.status(400).send({
                         message: "Failed. No matched task with given parameters",
@@ -680,7 +685,7 @@ function  makeTaskRoute(db)
             else{
 
                 const {matchedCount,modifiedCount} = result;
-                if(matchedCount == 0)
+                if(matchedCount === 0)
                 {
                     res.status(400).send({
                         message: "Failed. No matched task with given parameters",
