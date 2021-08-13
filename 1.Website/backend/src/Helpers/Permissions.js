@@ -7,7 +7,8 @@ function getPermissions(role)
         case "developer":
             var Permissions = [
                 'edit',
-                'view'
+                'view',
+                'Save Graph changes'
             ];
             return Permissions
             break;
@@ -54,6 +55,7 @@ function getPermissions(role)
                 'Save Graph changes',
                 'Change task status',
                 'Edit Member permissions',
+                
             ];
             return Permissions
             break;

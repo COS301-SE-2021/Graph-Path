@@ -121,8 +121,8 @@ function makeProjectRoute(db) {
         res.send({
             message:"successful",
             data: {
-                Roles : Permissions.getAllRoles(),
-                RolePermissions: Permissions.getAllRolesAndPermissions(),
+                roles : Permissions.getAllRoles(),
+                rolePermissions: Permissions.getAllRolesAndPermissions(),
             }
         })
     })
