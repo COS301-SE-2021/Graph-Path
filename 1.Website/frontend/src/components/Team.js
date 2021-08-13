@@ -7,7 +7,8 @@ class Team extends React.Component{
         super(props) ; 
         this.state = {
             chosen:[],
-            list:[]
+            list:[], 
+            role:"client"
         }
     }
 
@@ -54,7 +55,11 @@ class Team extends React.Component{
         var ch = [] ; 
         results.forEach(element => {
             console.log('inside each ',element)
-            ch.push(element.value) ;
+            let mem = {
+                email:element.value,
+                role:this.state.role
+            }
+            ch.push(mem) ;
         }) ;
         return new Promise((resolve,reject)=>{
             ch.length>0 ? resolve(ch):reject(ch) 
@@ -64,25 +69,15 @@ class Team extends React.Component{
         // var newList = this.state.list ; 
         console.log('Search/Rm',results) ;
         if (results.length > 0){
-            this.sortResults(results)
-            .then(ans =>{
                 this.setState({
-                    chosen : ans
-                }) ;
-                return this.state.chosen
-            })
-            .then( ans =>{
-                this.saveMemberList(this.state.chosen)
-            })
-            .catch(err=>{
-                console.log('Error when updating team')
-            })
+                chosen : results
+            },()=> this.saveMemberList(this.state.chosen)) ;
         
         }
         else{
             this.setState({
                 chosen : []
-            }) ;
+            },()=> this.saveMemberList([])) ;
         }
     }
     handleSelect = (item) =>{

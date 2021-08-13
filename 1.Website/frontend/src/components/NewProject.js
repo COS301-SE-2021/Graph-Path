@@ -135,6 +135,16 @@ class NewProject extends React.Component{
                     <p>Members</p>
                     <Team userEmail={this.props.userEmail} chooseMember={this.addMember} />
                     <br/>
+                    <div>
+                        {this.state.members.length>0?
+                        this.state.members.map((value,ind)=>{
+                            return <>
+                                <span key={ind} data-num={ind}>{value.label}</span><select></select>
+                                <br/>
+                            </>
+                        })
+                        :<></>}
+                    </div>
                     <input type="submit" value="Create Project" className="btn1"  />
 
 
