@@ -532,6 +532,26 @@ async function updateTaskDescription(id, newDesc){
     })
 }
 
+async function updateTaskStatus(id, newStat){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{status:newStat}
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////-Graph-//////////////////////////////////////////////////////////////
@@ -567,7 +587,8 @@ module.exports={
     getAllTasksByProject,
     insertTask,
     deleteTaskByID,
-    updateTaskDescription
+    updateTaskDescription,
+    updateTaskStatus
 
 
 };
