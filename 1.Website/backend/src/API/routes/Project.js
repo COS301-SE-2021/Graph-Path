@@ -240,10 +240,45 @@ router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
         })
     .catch((err)=>{
         res.status(500).send({
-            message: "An error has occured."
+            message: "An error has occurred."
         })
      })
 });
+
+
+//PUT ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.put('/updateEverything/:id',(req,res)=>{
+    const ID = req.params.id;
+    let pname = req.body.projectName;
+    let ddate = req.body.dueDate;
+    let sdate = req.body.startDate;
+    let owner = req.body.owner;
+    let graph = req.body.graph;
+   // let graph2 = JSON.parse(graph);
+    let groupMembers = req.body.groupMembers;
+
+    db.updateEverythingProject(ID,pname,ddate,sdate,owner, graph, groupMembers)
+        .then(ans=>{
+            if(ans.modifiedCount > 0){
+                res.send({
+                    message: "The project was updated.",
+                    data: ans
+                })
+            }else{
+                res.send({
+                    message: "The project was not updated.",
+                    data: ans
+                })
+            }
+
+        })
+        .catch(err=>{
+            res.status(500).send({
+                message: "Server error: Could not update the project."
+            })
+        })
+});
+
 
 router.put('/updateProjectGraph',(req,res)=>{
     const project = req.body.projectName ;
