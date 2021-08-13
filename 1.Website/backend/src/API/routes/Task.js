@@ -4,8 +4,7 @@ const router = express.Router();
 const mongo = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectId = require('mongodb').ObjectID;
-//var db = require('../../Controllers/DBController').getDB();
-//var url = 'mongodb+srv://NoCap2021:NoCap2021@cluster0.n67tx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const TaskManagerService = require('../../Services/TaskManagerService');
 
 /**
  * @swagger
@@ -206,7 +205,7 @@ function  makeTaskRoute(db)
      */
     router.get('/getAllTasks',(req, res, next)=> {
 
-        db.getAllTasks()
+        TaskManagerService.getAllTasks(db)
             .then((ans)=>{
                 if(ans === "No available tasks"){
                     res.send({
@@ -253,7 +252,7 @@ function  makeTaskRoute(db)
     router.get('/getAllTasksByProject/:id',(req, res, next)=> {
 
         let ID = req.params.id;
-        db.getAllTasksByProject(ID)
+        TaskManagerService.getAllTasksByProject(db,ID)
             .then((ans)=>{
                 if(ans === "No tasks found"){
                     res.send({
@@ -290,7 +289,7 @@ function  makeTaskRoute(db)
             })
         }
 
-        db.getTaskByID(ID)
+        TaskManagerService.getTaskByID(db,ID)
             .then((ans)=>{
                 if (ans === "No available task"){
 
@@ -343,7 +342,7 @@ function  makeTaskRoute(db)
         const id = new mongoose.mongo.ObjectID() ;
         data["_id"] = id ;
 
-        db.insertTask(data)
+        TaskManagerService.insertTask(db,data)
             .then((ans)=>{
                 if(ans ==="Task object empty"){
                     res.send({
@@ -397,7 +396,7 @@ function  makeTaskRoute(db)
      */
     router.delete('/deleteTaskByID/:id',(req, res, next)=>{
         let ID = req.params.id ;
-        db.deleteTaskByID(ID)
+        TaskManagerService.deleteTaskByID(db,ID)
             .then((ans)=>{
                 if(ans.deletedCount >0){
                     res.send({
@@ -453,7 +452,7 @@ function  makeTaskRoute(db)
                 message:"The description can't be empty."
             })
         }
-        db.updateTaskDescription(id, newDesc)
+        TaskManagerService.updateTaskDescription(db,id, newDesc)
             .then(ans=>{
                 if(ans.modifiedCount >0){
                     res.send({
@@ -526,7 +525,7 @@ function  makeTaskRoute(db)
             return;
         }
 
-      db.updateTaskStatus(ID, newStat)
+        TaskManagerService.updateTaskStatus(db,ID, newStat)
           .then(ans=>{
               if(ans === "Success"){
                   res.send({
@@ -659,7 +658,7 @@ function  makeTaskRoute(db)
         }
 
 
-        db.updateTaskAssignee(ID, assignee)
+        TaskManagerService.updateTaskAssignee(db,ID, assignee)
             .then(ans=>{
                 if(ans === "Success"){
                     res.send({
@@ -691,7 +690,7 @@ function  makeTaskRoute(db)
         }
 
 
-        db.updateTaskAssigner(ID, assigner)
+        TaskManagerService.updateTaskAssigner(db,ID, assigner)
             .then(ans=>{
                 if(ans === "Success"){
                     res.send({
