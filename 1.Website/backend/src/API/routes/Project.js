@@ -64,7 +64,7 @@ function makeProjectRoute(db) {
                 {
                     res.send({
                         message: "unsuccessful. "+ans+" for user: "+mail,
-                        data: null
+                        data: []
                     })
                 }
 
