@@ -345,7 +345,11 @@ function  makeTaskRoute(db)
 
         db.insertTask(data)
             .then((ans)=>{
-                if(ans.insertedCount > 0){
+                if(ans ==="Task object empty"){
+                    res.send({
+                        message: "Not enough task information provided."
+                    })
+                }else if(ans.insertedCount > 0){
                     res.send({
                         message:"The task was saved successfully."
                     }) ;
@@ -391,20 +395,26 @@ function  makeTaskRoute(db)
      *
      *
      */
-    router.delete('/deleteTaskByTasknr',(req, res, next)=>{
-        let del = req.body.tasknr ;
-        //console.log("This is tasknr inside delete task by tasknr: "+del);
-        db.collection('Tasks').deleteOne({
-            tasknr:del
-        })
-            .then((data)=>{
-                res.send({
-                    message:"Deleted",
-                    data: data['ops']
-                });
+    router.delete('/deleteTaskByID/:id',(req, res, next)=>{
+        let ID = req.params.id ;
+        db.deleteTaskByID(ID)
+            .then((ans)=>{
+                if(ans.deletedCount >0){
+                    res.send({
+                        message:"The task was successfully removed."
+                    });
+                }else{
+                    res.send({
+                        message:"The task could not be removed."
+                    });
+                }
+
             })
             .catch(err=>{
-                console.log("Could not delete task: "+err);
+                res.status(500).send({
+                    message:"Server error: could not remove the task.",
+                    err:err
+                })
             });
     })
 
