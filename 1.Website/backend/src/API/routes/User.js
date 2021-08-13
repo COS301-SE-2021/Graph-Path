@@ -201,7 +201,7 @@ const UserManagerService = require('../../Services/UserManagerService');
     router.delete('/deleteUserByID/:id',(req,res, next)=>{
        let id = req.params.id;
         //let id = req.body.id;
-        db.removeUserByID(id)
+        UserManagerService.removeUserByID(db,id)
             .then((ans)=>{
                if(ans != null){
                    res.send({
@@ -223,7 +223,7 @@ const UserManagerService = require('../../Services/UserManagerService');
      router.delete('/deleteUserByEmail/:email',(req,res, next)=>{
          let mail = req.params.email;
          //let id = req.body.id;
-         db.removeUserByEmail(mail)
+         UserManagerService.removeUserByEmail(db,mail)
              .then((ans)=>{
                  if(ans != null){
                      res.send({
