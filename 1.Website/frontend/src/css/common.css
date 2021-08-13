@@ -91,7 +91,8 @@
   background-color: #04AA6D;
   color: white;
   padding: 10px 16px;
-  margin-left: 0;
+  margin-top: 30px;
+  margin-right: 90px;
   border: none;
   cursor: pointer;
   width: 100%;
@@ -103,9 +104,11 @@
   background-color: #0b714b;
 }
 
+
 #del-proj{
   color: red;
-  margin-left: 150px;
+ margin-left: 150px;
+  margin-bottom: 200px;
   position: absolute;
 }
 
@@ -115,12 +118,26 @@
   display: inline-block;
   margin-right: 2%;
   margin-bottom: 2%;
-  width: 300px;
-  height: 130px;
+  width: 350px;
+  height: 200px;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 5px 5px #01050c;
 }
+
+.card{
+  display: flex !important;
+  background-color: #fff !important;
+
+}
+
+.myCard{
+  display: inline-block;
+  background-color: #001122;
+  color: white;
+  width: 400px;
+}
+
 
 .Footer{
   margin-right: 150px;
@@ -135,6 +152,11 @@
 
 #pText{
   font-size: 14px;
+}
+
+#taskPic{
+  width: 900px;
+  z-index: 1;
 }
 .edit {
   position: fixed;

@@ -10,7 +10,8 @@ import * as FaIcons from "react-icons/fa";
 import * as ImIcons from "react-icons/im";
 import Spinner from 'react-spinner-material';
 import GraphManager from './GraphManager';
-import { Card} from "react-bootstrap";// Button
+import {Button, Card} from "react-bootstrap";
+// Button
 // import TaskPic from '../images/task.svg';
 
 
@@ -365,7 +366,7 @@ class Graph extends React.Component{
                                         :
                                         <span/>
                                     }
-                                */}
+
 
                                     <Card key={keyNum}  data-project={node} className="project-card">
                                         <Card.Body>
@@ -382,21 +383,59 @@ class Graph extends React.Component{
                                                     <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
                                                 }
                                             </Card.Footer>
-
-
-
                                         </Card.Body>
 
                                     </Card>
+                                    */}
+                                        <Card className="text-center" bsPrefix="project-card" key={keyNum}  data-project={node}>
+                                            <Card.Body>
+                                                <Card.Title>{node.projectName}</Card.Title>
+                                                <Card.Text>
+                                                    Owner: {node.owner}
+                                                </Card.Text>
+                                                <Card.Footer className="Footer">
+                                                    <Link className="btn2"
+                                                          data-projnum={keyNum}
+                                                          onClick={(e) =>{
+                                                              this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                                          to={`/project/${keyNum}`}>Open
+                                                          </Link>
+                                                          {node.owner === this.props.userEmail ?
+                                                              <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""}
+                                                              </Card.Footer>
+
+                                                              </Card.Body>
+                                                          </Card>
+
                                     </>
 
                                 )
                             })
-                            : <span>
+                            : <div>
                                 <h1>Project List is empty,<br/>
                                 <p>Please refresh</p> or create a new project.</h1>
+
+                                {/*    <Card className="text-center" bsPrefix="project-card" key={keyNum}  data-project={node}>
+                                    <Card.Body>
+                                        <Card.Title>{node.projectName}</Card.Title>
+                                        <Card.Text>
+                                            Owner: {node.owner}
+                                        </Card.Text>
+                                        <Card.Footer className="Footer">
+                                            <Link className="btn2"
+                                            data-projnum={keyNum}
+                                                      onClick={(e) =>{
+                                                          this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                                      to={`/project/${keyNum}`>Open</Link>
+                                                      {node.owner === this.props.userEmail ?
+                                            <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
+                                        </Card.Footer>
+
+                                    </Card.Body>
+
+                                </Card> */}
                             
-                            </span>
+                            </div>
                             
                         }
                     </div>
