@@ -98,7 +98,7 @@ class Header extends React.Component{
                     {
                         this.state.log === false ?
                             <>
-
+{/* 
                                 <div className="log-container">
                                     <div className="log">
                                         <Link className="btn1" id="btn1-link" to="/signIn" >Sign In</Link>
@@ -107,7 +107,24 @@ class Header extends React.Component{
 
                                     </div>
 
-                                </div>
+                                </div> */}
+
+                    <div className="login-reg-panel">
+                        <div className="login-info-box">
+                            <h2>Have an account</h2>
+                            <Link to="/signIn"> <label id="label-register" htmlFor="log-reg-show">Sign In</label>
+                            </Link>
+                            <input type="radio" name="active-log-panel" id="log-reg-show" value="log-reg-show" />
+                        </div>
+
+                        <div className="register-info-box">
+                        <h2>Don't have an account?</h2>
+                        <Link to="signUp" ><label id="label-login" htmlFor="log-login-show">Sign Up</label>
+                        </Link>
+                        <input type="radio" name="active-log-panel" value="log-login-show" id="log-login-show" />
+                        </div>
+                    </div>
+
 
                                 <img alt="Process " src={process_pic} className="img1"/>
                                 <img alt="Complete Task " src={completeTask_pic} className="img2" />
@@ -122,13 +139,18 @@ class Header extends React.Component{
                 
                     <Route path="/signIn">
                         {this.state.log === true ? 
-                            <Redirect to="/dashboard" />:<span></span>}
+                            <Redirect to="/dashboard" />:
+                            <span/>}
+
                             <Login logIn={this.changeStatus} 
                                 updateUser = {this.updateLoggedUser}
+
                             />
                     </Route>
                     <Route path="/signUp">
+                
                         <Register />
+
                     </Route>
                     <Route path="/profile" > 
                         <Profile userEmail={this.state.loggedUser} updateUser = {this.updateLoggedUser}/>

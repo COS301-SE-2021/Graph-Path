@@ -23,6 +23,7 @@ class Login extends React.Component{
 
     change =(e) => {
 
+        console.log(e.target.name);
         e.preventDefault(); /*So the values entered don't show on URL*/
 
         const {name,value}=e.target;
@@ -153,40 +154,46 @@ class Login extends React.Component{
         const {formErrors} = this.state;
         return (
 
-            <div className="loginScreen">
-                <form className="logForm" id="inForm" onSubmit= {this.onSubmit}>
-                    <h4>Sign In</h4>
-                    <p>Email</p>
-                    <input
-                        className={formErrors.email===false ? 'error': null}
-                        name = 'email'
-                        type='email'
-                        placeholder='Email' value={this.state.email}
-                        onChange={this.change}
-                    />
-                    {formErrors.email === false && this.state.responseData ===undefined &&(
-                        <span className='errorMessage'>{this.state.answer}</span>
-                    )}
+            <div className="BoxContainer">
+                <div className="loginScreen">
+
+                    <form className="logForm" id="inForm" onSubmit= {this.onSubmit}>
+                        <div className="FormContainer">
+                            <h4>Sign In</h4>
+                            <p>Email</p>
+                            <input
+                                className={formErrors.email===false ? 'error': null}
+                                name = 'email'
+                                type='email'
+                                placeholder='Email' value={this.state.email}
+                                onChange={e=>this.change(e)}
+                            />
+                            {formErrors.email === false && this.state.responseData ===undefined &&(
+                                <span className='errorMessage'>{this.state.answer}</span>
+                            )}
 
 
-                    <p>Password</p>
-                    <input
-                        className={formErrors.password===false ? 'error': null}
-                        name='password'
-                        type='password'
-                        placeholder='Password' value={this.state.password}
-                        onChange={e=>this.change(e)}
-                    />
-                    {formErrors.password === false && this.state.responseData !==null &&(
-                        <span className='errorMessage'>Invalid Password</span>
-                    )}
-                    <input type="submit" className="btn1" value="Login" />
-                    <Link to=""> Forgot your password?</Link>
-                    <br/>
+                            <p>Password</p>
+                            <input
+                                className={formErrors.password===false ? 'error': null}
+                                name='password'
+                                type='password'
+                                placeholder='Password' value={this.state.password}
+                                onChange={e=>this.change(e)}
+                            />
+                            {formErrors.password === false && this.state.responseData !==null &&(
+                                <span className='errorMessage'>Invalid Password</span>
+                            )}
+                        </div>
 
-                    Don't Have an Account? Register <Link to="/signUp"> Here</Link>
-                </form>
+                        <input type="submit" className="btn1" value="Login" />
+                        <Link to=""> Forgot your password?</Link>
+                        <br/>
+
+                    </form>
+                </div>
             </div>
+
 
 
         );

@@ -27,7 +27,7 @@ class ProjectView extends React.Component{
 
             <div>
                 {project.groupMembers.map((value,index)=>{
-                    return <div key={index}>{value}</div>
+                    return <div key={index}>{value.email}</div>
                 })}
             </div>
             </>
@@ -59,8 +59,8 @@ class ProjectView extends React.Component{
         if (project !== undefined)
         return (
             <div>
-                { //If project has groupManagers and u are one of them, you can edit, else just view
-                (project.groupManagers !== undefined && project.groupManagers.indexOf(email) > 0)||email === project.owner?
+                { //The role you have must allow you to have your permissions
+                project.role === "owner" ||email === project.owner?
                     <div >
                     <span>
                     <span onClick={this.toggleView}>{this.state.editView?'Project Details':'Edit Project'}
