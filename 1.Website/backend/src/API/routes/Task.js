@@ -443,50 +443,35 @@ function  makeTaskRoute(db)
      *
      *
      */
-    router.patch('/updateTaskDescription/:project/:tasknr/:description',(req,res,next)=>{
+    router.patch('/updateTaskDescription/:id/:description',(req,res,next)=>{
 
 
-        let proj = req.params.project;
-        let tsknr = req.params.tasknr;
+        let id = req.params.id;
         let newDesc = req.params.description;
-        db.collection('Tasks').updateOne({
-            project:proj,
-            tasknr:tsknr
-        },{
-            $set:{description:newDesc}
-        },(err,result)=>{
-
-            if(err){
-
-                res.status(500).send({
-                    message: "Failed.Could not update the task description",
-                    data: err
-                });
-            }
-            else{
-
-                const {matchedCount,modifiedCount} = result;
-                if(matchedCount === 0)
-                {
-                    res.status(400).send({
-                        message: "Failed. No matched task with given parameters",
-                        data:null
-                    })
-
-                }
-                else
-                {
-
+        if(newDesc === undefined || newDesc === ""){
+            res.send({
+                message:"The description can't be empty."
+            })
+        }
+        db.updateTaskDescription(id, newDesc)
+            .then(ans=>{
+                if(ans.modifiedCount >0){
                     res.send({
-                        message: "success",
-                        data: null
-                    });
+                        message: "The task was updated successfully."
+                    })
+                }else{
+                    res.send({
+                        message: "The task could not be updated."
+                    })
                 }
+            })
+            .catch(err=>{
+                res.status(500).send({
+                    message: "server error: could not update task."
+                    err:err
+                })
+            })
 
-
-            }
-
-        })
 
     });
 
