@@ -491,7 +491,6 @@ async function insertTask(taskObject){
     return await new Promise((resolve, reject)=>{
         db.collection('Tasks').insertOne(taskObject)
             .then((ans)=>{
-                console.log(ans);
                 resolve(ans);
             })
             .catch(err=>{
