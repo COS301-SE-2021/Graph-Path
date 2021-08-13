@@ -5,8 +5,8 @@ var ObjectId = require('mongodb').ObjectID;
 const mongoose = require('mongoose') ;
 const bcrypt = require('bcrypt');
 const userService = require('../Services/UserManagerService');
-const projectService = require('../Services/projectManagerService');
-const taskService = require('../Services/TaskMangerServices');
+const projectService = require('../Services/ProjectManagerService');
+const taskService = require('../Services/TaskManagerService');
 const Permissions = require('../Helpers/Permissions');
 
 let db ;

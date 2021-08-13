@@ -4,7 +4,7 @@ const mongoose = require('mongoose') ;
 const {route} = require("express/lib/router");
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
-const ProjectManagerService = require('../../Services/projectManagerService');
+const ProjectManagerService = require('../../Services/ProjectManagerService');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
