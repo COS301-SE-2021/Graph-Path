@@ -90,7 +90,7 @@ class NewProject extends React.Component{
             startDate:this.state.startDate,
             dueDate:this.state.dueDate,
             groupMembers:[this.props.userEmail,...this.state.members],
-            groupManagers:[] ,
+            groupManagers:[this.props.userEmail] ,
             owner:this.props.userEmail, //add ownwer from dashboard
             graph:{}, //ES6
             //userId:from dashboard
