@@ -366,7 +366,7 @@ class Graph extends React.Component{
                                         :
                                         <span/>
                                     }
-                                */}
+
 
                                     <Card key={keyNum}  data-project={node} className="project-card">
                                         <Card.Body>
@@ -386,7 +386,26 @@ class Graph extends React.Component{
                                         </Card.Body>
 
                                     </Card>
+                                    */}
+                                        <Card className="text-center" bsPrefix="project-card" key={keyNum}  data-project={node}>
+                                            <Card.Body>
+                                                <Card.Title>{node.projectName}</Card.Title>
+                                                <Card.Text>
+                                                    Owner: {node.owner}
+                                                </Card.Text>
+                                                <Card.Footer className="Footer">
+                                                    <Link className="btn2"
+                                                          data-projnum={keyNum}
+                                                          onClick={(e) =>{
+                                                              this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                                          to={`/project/${keyNum}`}>Open
+                                                          </Link>
+                                                          {node.owner === this.props.userEmail ?
+                                                              <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""}
+                                                              </Card.Footer>
 
+                                                              </Card.Body>
+                                                          </Card>
 
                                     </>
 
@@ -396,15 +415,20 @@ class Graph extends React.Component{
                                 <h1>Project List is empty,<br/>
                                 <p>Please refresh</p> or create a new project.</h1>
 
-                                {/*    <Card className="text-center" bsPrefix="project-card">
+                                {/*    <Card className="text-center" bsPrefix="project-card" key={keyNum}  data-project={node}>
                                     <Card.Body>
-                                        <Card.Title>Special title treatment</Card.Title>
+                                        <Card.Title>{node.projectName}</Card.Title>
                                         <Card.Text>
-                                            With supporting text below as a natural lead-in to additional content.
+                                            Owner: {node.owner}
                                         </Card.Text>
                                         <Card.Footer className="Footer">
-                                            <Link className="btn2">Open</Link>
-                                            <ImIcons.ImBin id="del-proj" />
+                                            <Link className="btn2"
+                                            data-projnum={keyNum}
+                                                      onClick={(e) =>{
+                                                          this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                                      to={`/project/${keyNum}`>Open</Link>
+                                                      {node.owner === this.props.userEmail ?
+                                            <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
                                         </Card.Footer>
 
                                     </Card.Body>
