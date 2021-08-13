@@ -181,7 +181,7 @@ class Register extends React.Component{
 
         return (
             <div className="base-container" ref={this.props.containerRef}>
-                <div id="registerscreen">
+                <div id="registerScreen">
                     <h4>Sign Up</h4>
                     <form className="logForm" onSubmit={this.onSubmit} >
                         <p >First Name</p>
@@ -249,10 +249,6 @@ class Register extends React.Component{
                         )}
                         <br />
                         <button  className="btn1" type="submit"> Submit </button>
-                        <small>Already Have an Account? Login
-
-                            <Link to="/signIn"> Here</Link>
-                        </small>
                     </form>
                 </div>
             </div>
