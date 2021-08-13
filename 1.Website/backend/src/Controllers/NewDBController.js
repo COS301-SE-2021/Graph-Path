@@ -449,6 +449,24 @@ async function getAllTasks(){
             })
     })
 }
+
+async function getTaskByID(id){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').findOne({
+            "_id": ObjectId(id)
+        })
+            .then(ans=>{
+                if(ans == null){
+                    resolve("No available task");
+                }else{
+                    resolve(ans);
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////-Graph-//////////////////////////////////////////////////////////////
@@ -479,5 +497,6 @@ module.exports={
     addNewProjectMember,
     updateEverythingProject,
     //Task
-    getAllTasks
+    getAllTasks,
+    getTaskByID
 };
