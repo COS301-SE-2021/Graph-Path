@@ -8,6 +8,35 @@ const ProjectManagerService = require('../../Services/ProjectManagerService');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+    router.get('/ConvertToKhanBoard/:id',(req,res)=>{
+
+        const ProjectId = req.params.id;
+        scratchPad.getProjectGraph(db,ProjectId)
+
+            .then((project)=>{
+
+                let projectNodes = scratchPad.getNodes(project);
+                if(projectNodes.length === 0)
+                {
+                    res.send({
+                        message:"this project graph has no nodes",
+                        data: []
+                    })
+                }
+
+                else
+                {
+                    // sort Nodes by status
+                }
+
+
+            })
+            .catch((err)=>{
+
+            })
+
+
+    })
     router.get('/find', (req, res, next) => {
 
 
