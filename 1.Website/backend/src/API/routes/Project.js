@@ -226,35 +226,59 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
 router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
     let ID = req.params.id;
     let mail = req.params.email;
-    db.collection('Projects').updateOne({
-        "_id": ObjectId(ID)
-    },{
+    db.addNewProjectMember(ID, mail)
+        .then(ans=>{
+            if(ans.modifiedCount >0){
+                res.send({
+                    message: "Member added successfully."
+                })
+            }else{
+                res.send({
+                    message: "Could not add member."
+                })
+            }
+        })
+    .catch((err)=>{
+        res.status(500).send({
+            message: "An error has occurred."
+        })
+     })
+});
 
-            $push: {
-                groupMembers: mail
+
+//PUT ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.put('/updateEverything/:id',(req,res)=>{
+    const ID = req.params.id;
+    let pname = req.body.projectName;
+    let ddate = req.body.dueDate;
+    let sdate = req.body.startDate;
+    let owner = req.body.owner;
+    let graph = req.body.graph;
+   // let graph2 = JSON.parse(graph);
+    let groupMembers = req.body.groupMembers;
+
+    db.updateEverythingProject(ID,pname,ddate,sdate,owner, graph, groupMembers)
+        .then(ans=>{
+            if(ans.modifiedCount > 0){
+                res.send({
+                    message: "The project was updated.",
+                    data: ans
+                })
+            }else{
+                res.send({
+                    message: "The project was not updated.",
+                    data: ans
+                })
             }
 
-    },(err,ans)=>{
-
-        if(err){
-            console.log("Could not update the project graph: "+err);
-            res.send({
-                message:"found",
-                data:ans//.json()
-            }) ;
-        }
-        else{
-            res.send({
-                message: "success"
-
-            });
-        }
-
-    })
-    //.catch((err)=>{
-    //    console.log("Could not update the task description: "+err);
-    // })
+        })
+        .catch(err=>{
+            res.status(500).send({
+                message: "Server error: Could not update the project."
+            })
+        })
 });
+
 
 router.put('/updateProjectGraph',(req,res)=>{
     const project = req.body.projectName ;
