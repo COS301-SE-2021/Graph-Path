@@ -3,45 +3,18 @@ const mongoose = require('mongoose') ;
 const TaskSchema = mongoose.Schema({
 
     _id: mongoose.Schema.Types.ObjectId,
-    CreationDate:{
-        type: Date,
-        required: true,
-    },
-    DueDate:{
-        type: Date,
-        required: true,
-    } ,
+    Assignee: String,
+    Description:String,
+    Issued: Date,
+    Project:String,
+    status:String,
+    Tasknr:String,
+    Assigner:String,
+    Due:Date,
+    NodeID: String,
 
-    TaskName: {
-        type: String,
-        required: true,
-    },
-    Description: {
-        type: String,
-        required: true,
-    },
-    Label: {
-        type: String,
-        required: true,
-    },
-    Status: {
-        type: String,
-        required: true,
-    },
-    Assignee:  {
-        type: Array,
-        required: true,
-    },
 
-    Assigner: {
-        type: String,
-        required: true,
-    },
 
-    Parent_Node: {
-        type: String,
-        required: true,
-    },
 
 
 });
