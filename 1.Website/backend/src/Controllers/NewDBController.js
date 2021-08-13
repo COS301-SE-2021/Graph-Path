@@ -250,7 +250,12 @@ async function getProjectByID(id){
             "_id": ObjectId(id)
         })
             .then((ans)=>{
-                resolve(ans);
+                if(ans ===null){
+                    resolve("No project");
+                }else{
+                    resolve(ans);
+                }
+
             })
             .catch(err=>{
                 reject(err);
@@ -265,7 +270,11 @@ async function getAllProjects(){
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').find({}).toArray()
             .then(ans=>{
-                resolve(ans);
+                if(ans === null){
+                    resolve("No projects");
+                }else{
+                    resolve(ans);
+                }
             })
             .catch(err=>{
                 reject(err);
