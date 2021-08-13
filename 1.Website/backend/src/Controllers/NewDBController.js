@@ -552,6 +552,66 @@ async function updateTaskStatus(id, newStat){
     })
 }
 
+async function updateTaskDueDate(id, ddate){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{status:ddate}
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
+async function updateTaskAssignee(id, assignee){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{status:assignee}
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
+async function updateTaskAssigner(id, assigner){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{status:assigner}
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////-Graph-//////////////////////////////////////////////////////////////
@@ -588,7 +648,10 @@ module.exports={
     insertTask,
     deleteTaskByID,
     updateTaskDescription,
-    updateTaskStatus
+    updateTaskStatus,
+    updateTaskDueDate,
+    updateTaskAssigner,
+    updateTaskAssignee
 
 
 };
