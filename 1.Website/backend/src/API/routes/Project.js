@@ -5,6 +5,7 @@ const {route} = require("express/lib/router");
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
+const scratchPad = require('../../Helpers/ScratchPad');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
