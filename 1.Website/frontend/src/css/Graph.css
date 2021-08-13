@@ -1,8 +1,4 @@
 .GraphBox{
-    display: flex;
-    flex-direction: column;    
-    max-width: 500px;
-    position: relative;
     /* overflow: scroll; */
     text-align: left;
 }
@@ -13,8 +9,10 @@
     
 }
 
-.projList{
-    /* width: 400px; */
+.projName{
+    font-size: medium;
+    font-family: sans-serif;
+    font-weight: bold;
 }
 .project-content{
     background-color: rgba(00, 11,22, 0.3);
@@ -33,4 +31,9 @@
 
 .projList li::before{
   color: white;
+}
+
+.SigmaParent{
+    color: blue;
+    width: 50vw;
 }

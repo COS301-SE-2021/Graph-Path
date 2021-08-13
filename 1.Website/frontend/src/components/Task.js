@@ -1,12 +1,15 @@
 import  React from 'react' ;
 import '../css/Task.css';
-import axios from "axios";
+
+/*
+   
+*/
 
 class Task extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            name: null,
+            name: '',
             members: [],
             startDate:null,
             dueDate:null,
@@ -14,17 +17,14 @@ class Task extends React.Component{
             status: null,
             about: null,
             api:'http://localhost:9001',
+            fullForm:false
         }
     }
-/*
-    addMember(){
-        this.setState(
-            {
-                members: [...this.state.members,""]
-            }
-        )
+    cleanUp=()=>{
+        this.setState({
+            name: '',
+        }) ;
     }
-*/
     changeToDefault = () =>{
         this.props.default() ;
     }
@@ -36,43 +36,8 @@ class Task extends React.Component{
         this.setState(
             {
                 members: temp
-            }
-        ,()=>{
-            console.log('After handle, members',this.state.members)
         })
     }
-
-
-    sendData (data){
-        //path to make the post and wait for the response
-       axios.post(`${this.state.api}/insertTask`,data)
-            .then((response) =>{
-                if(response.status===400){
-                    throw Error(response.statusText) ;
-                }//else
-                console.log('from back end',response)
-
-                const res = response.data;
-                console.log(res) ;
-                this.setState({
-                    answer:res.message,
-                    responseData:res.data //data
-                },()=>{
-                    // alert('res:'+this.state.answer)
-                    console.log(this.state)
-                    if (this.state.answer!== null && this.state.answer){
-                        //    this.props.changeToDefault() ;
-                    }
-                })
-
-            },(response)=>{
-                console.log('rejected',response) ;
-            })
-            .catch((error)=>{
-                console.log(error) ;
-            })
-    }
-
 
 
     handleSubmit = (event) => {
@@ -88,8 +53,8 @@ class Task extends React.Component{
         }
         //communicate with the API
         // this.sendData(data) ;
+        this.cleanUp();
         this.props.addTask(data) ;
-    
     }
 
     updateField = (event) => {
@@ -98,20 +63,32 @@ class Task extends React.Component{
         }, console.log(this.state));
     }
 
-    displayForm = () =>{
-
+    toogleForm = () =>{
+        this.setState({
+            fullForm:!this.state.fullForm
+        }) ;
     }
 
 
     render() {
+        var custom = this.props.label ;
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
-                    <h4>Add Task</h4>
+                    <h4>{!this.props.fullForm?'Add Node':'Edit Task'}</h4>
                     <p>Task</p>
-                    <input type="text" name="name" required={true} placeholder="Task Name" onChange={this.updateField} />
-               
-                    {this.props.fullForm ? <span>
+                    <input type="text" name="name" required={true}
+                     placeholder="Task Name" 
+                     value={custom === undefined ? this.state.name
+                        :this.props.label} 
+                     onChange={this.updateField} 
+                     onFocus={(e)=>{custom = undefined}}/>
+                    {
+                        this.state.fullForm?<></>
+                        :<div onClick={this.toogleForm}>Edit</div>
+                    
+                    }
+                    {this.state.fullForm ? <span>
                         <p>Description</p>
                         <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
                         <p>Start Date</p>

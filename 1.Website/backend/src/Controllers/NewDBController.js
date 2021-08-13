@@ -102,14 +102,21 @@ async function getAllOtherUsers(email,id){
                             return true;
                         }
                     });
+                    let specialized = [] ;
+                    newArray.forEach((val)=>{
+                        console.log(val) ;
+                        let temp = {
+                            label:`${val.firstName} ${val.lastName}`,
+                            value:val.email
+                        }
+                        specialized.push(temp) ;
+                    }) 
                     //send response
-                    resolve(newArray);
+                    resolve(specialized);
                 } else {
 
                     resolve(ans);
                 }
-
-                resolve(ans);
             })
             .catch(err=>{
                 reject(err);
@@ -122,27 +129,21 @@ async function insertUser(userObject){
 
 
     //first check if user exists
-    let UserExist = null;
-    db.collection('Users').findOne({
+    let UserExist = false;
+   await db.collection('Users').findOne({
         "email":userObject.email,
     }).then((result)=>{
 
-        if(result)
+        if(result !== null)
         {
-            resolve("")
+            UserExist = true;
+            resolve("Duplicate");
+
         }
 
-        UserExist = true;
-        if(UserExist == true)
-        {
-            console.log(result);
-        }
     }).catch((err)=>{
         UserExist= false;
-        console.log('New user');
     })
-
-
 
     const salt = await bcrypt.genSalt(10);
     userObject.password = await  bcrypt.hash(userObject.password,salt);
@@ -151,7 +152,6 @@ async function insertUser(userObject){
             .then((ans)=>{
                 resolve(ans);
             },(ans)=>{
-                console.log('rejected',ans) ;
                 resolve(ans);
             })
             .catch(err=>{
@@ -256,7 +256,12 @@ async function getProjectByID(id){
             "_id": ObjectId(id)
         })
             .then((ans)=>{
-                resolve(ans);
+                if(ans ===null){
+                    resolve("No project");
+                }else{
+                    resolve(ans);
+                }
+
             })
             .catch(err=>{
                 reject(err);
@@ -271,7 +276,11 @@ async function getAllProjects(){
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').find({}).toArray()
             .then(ans=>{
-                resolve(ans);
+                if(ans === null){
+                    resolve("No projects");
+                }else{
+                    resolve(ans);
+                }
             })
             .catch(err=>{
                 reject(err);
@@ -302,7 +311,7 @@ async function getAllProjectsByUserEmail(mail){
                             const obj = {
                                 role: GroupMembers[x].role,
                                 permissions: Permissions.getPermissions(GroupMembers[x].role),
-                                project:Projects[i],
+                                ...Projects[i],
 
                             }
                             MatchedProjects.push(obj);

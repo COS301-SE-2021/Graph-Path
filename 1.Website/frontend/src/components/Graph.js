@@ -4,9 +4,15 @@ import Node from './Node';
 import axios from 'axios';
 import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
+import '../css/Login.css'
 import {BrowserRouter as Router, Switch,Route,Link} from 'react-router-dom' ;
 import * as FaIcons from "react-icons/fa";
+import * as ImIcons from "react-icons/im";
 import Spinner from 'react-spinner-material';
+import GraphManager from './GraphManager';
+import {Button, Card} from "react-bootstrap";
+// Button
+// import TaskPic from '../images/task.svg';
 
 
 class Graph extends React.Component{
@@ -23,7 +29,8 @@ class Graph extends React.Component{
                 edges : []
             },
             api: "http://localhost:9001",
-            loading:false
+            loading:false,
+            graphManager: undefined,
         }
     }
     //GET ALL Projects for User
@@ -37,36 +44,25 @@ class Graph extends React.Component{
         return empty ;
     }
 
-    updateGraphView = (newGraph) =>{
-        if (this.state.grapRep === {}){
-            // if graph rep from project was not undefined but empty
+    updateGraphView = (manager) =>{
+        // console.log('updating from child',manager) ;
+        if (manager instanceof GraphManager){
             this.setState({
-                grapRep: this.emptyGraph() 
-            }) ;  //make it empty with representation for graph viewing
-        // console.log('updated from task: {}',this.state.grapRep) ;
-
-        }
-        else if (this.state.linkNumber >= 0 && this.state.projList.length > 0 && this.state.projList[this.state.linkNumber].graph !== undefined  ){
-        //if there was a graph existing
-            this.setState({
-                grapRep:newGraph
+                graphManager:manager,
+                grapRep:manager.getGraph()
             }) ;
-        // console.log('updated from task: not empty',this.state.grapRep) ;
-
         }
         else{
-            this.setState({
-                grapRep: this.emptyGraph() 
-            })
+            alert('Could not update Graph');
         }
-        // console.log('updated from task',this.state.grapRep) ;
-        //else keep the default one, from mount
     }
     componentDidMount = ()=>{ // no projects to display? 1 - call from api
             this.viewProjectsFromAPI() ;
             //initialize the original project list
             this.updateOldGraph() ;
-       
+        this.setState({
+            graphManager:new GraphManager({}) 
+        })
     }
     updateOldGraph = ()=>{
         fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
@@ -111,6 +107,7 @@ class Graph extends React.Component{
         }
     }
 
+    //save the current representation of graph
     saveCurrentGraph = ()=>{
         const projNode = this.state.projNodeList ; 
         console.log('Saving to porjec',projNode.projectName,this.state.grapRep) ;
@@ -123,21 +120,47 @@ class Graph extends React.Component{
             // var saveGraph =  window.confirm('Save Current Graph?') ;
             var saveGraph = this.validateGraphDifference(oldGraph,this.state.grapRep)
             if ( saveGraph){ // if its not the same graph
-                console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
+                // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
                 //set the loader while communicating with the server
                 this.setState({
                     loading:true
                 }) ;
-                const data = {
-                    graph : this.state.grapRep,
-                    projectName: projNode.projectName
+                // const minimalGraph = 
+                const minimalNodes = this.state.grapRep.nodes.map((node)=>{
+                    return {
+                        id:node.id,
+                        label:node.label,
+                        x:node.x,
+                        y:node.y,
+                        size:node.size,
+                        color:node.color
+                    }
+                }) ;
+                const minimalEdges = this.state.grapRep.edges.map((edge)=>{
+                    return {
+                        id: edge.id,
+                        source: edge.source,
+                        target: edge.target,
+                        label: edge.label,
+                        color: edge.color,
+                        size: edge.size,
+                    }
+                })
+                const minimalGraph = {
+                    nodes:minimalNodes,
+                    edges:minimalEdges
                 }
-                axios.put(`${this.state.api}/project/updateProjectGraph`,data)
+                const data = {
+                    graph : minimalGraph,
+                    projectName: projNode.projectName,
+                    projId:projNode._id
+                }
+                axios.put(`${this.state.api}/project/updateEverythingProject/${data.projId}`,data)
                 .then((res)=>{
-                    console.log('update graph response',res)
-                    if (res.data === undefined) {
+                    console.log('update graph response',res.data)
+                    if (res.data.data === undefined) {
                         // didn't save
-                        alert(res.message) ; 
+                        alert(res.data.message) ; 
                     }
                     //communication happened successfully
                     this.setState({
@@ -170,14 +193,17 @@ class Graph extends React.Component{
                 grapRep:this.emptyGraph(),
                 linkNumber:num
             }) ;
+            this.state.graphManager.setGraph(this.emptyGraph()) ; 
         }
         else{
-            if (num >= 0) //valid link number
-            this.setState({
-                projNodeList:node,
-                grapRep:node.graph,
-                linkNumber:num
-            }) ;
+            if (num >= 0){ //valid link number
+                this.setState({
+                    projNodeList:node,
+                    grapRep:node.graph,
+                    linkNumber:num,
+                })
+                this.state.graphManager.setGraph(node.graph) ; 
+            }
         }
     }
 
@@ -296,19 +322,19 @@ class Graph extends React.Component{
         /* sigmaKey is used for refreshing common Sigma graph representaion
          if nodes || edges are undefined, put 0 , else make key 
          the combination of node ^ egdes length */
-        var SigmaGraphkey = ( this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined ) ? "0"  
-        :`${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`
+        // var SigmaGraphkey = ( this.state.grapRep.nodes === undefined || this.state.grapRep.edges === undefined ) ? "0"  
+        // :`${this.state.grapRep.nodes.length}${this.state.grapRep.edges.length}`
 
+       
         let keyNum = -1 ;
         
         //project Name to display on the graph 
         var selectedProjectName =  this.state.projList.length>0 && this.state.linkNumber >= 0 ?
          this.state.projList[this.state.linkNumber].projectName: "No Data Found" ;
 
-        // console.log('sending graph obj ',this.state)
         return (
             <Router basename='viewProjects/graph'>
-                <div className="projectView">
+                <div className="projectView" >
                 <Spinner color={"#0000f2"} radius={350} visible={this.state.loading} />
 
                    <Link to={"/viewProjects"} className="dropbtn clickbtn" title={"Click to display projects"} onClick={this.openProjectList}>
@@ -326,8 +352,10 @@ class Graph extends React.Component{
                             this.state.projList.length>0 ? // validate if it is an array and not empty
                             this.state.projList.map( (node) => {       
                                 keyNum = keyNum+1 ;
-                                return <div key={keyNum}  data-project={node} className="project-content" > 
-                                    <Link data-projnum={keyNum}  
+                                return(
+
+                                    <>
+                                    {/* <Link data-projnum={keyNum}
                                     onClick={(e) =>{
                                     this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
                                     to={`/project/${keyNum}`}>{node.projectName}</Link>
@@ -338,42 +366,101 @@ class Graph extends React.Component{
                                         :
                                         <span/>
                                     }
-                                    
-                                </div>
+
+
+                                    <Card key={keyNum}  data-project={node} className="project-card">
+                                        <Card.Body>
+                                            <Card.Title id="pTitle">{node.projectName}</Card.Title>
+                                            <Card.Text id={"pText"}>Owner: {node.owner}</Card.Text>
+                                            <Card.Footer className="Footer">
+                                                <Link className="btn2"
+                                                      data-projnum={keyNum}
+                                                      onClick={(e) =>{
+                                                          this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                                      to={`/project/${keyNum}`}
+                                                      variant="primary">Open</Link>
+                                                {node.owner === this.props.userEmail ?
+                                                    <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
+                                                }
+                                            </Card.Footer>
+                                        </Card.Body>
+
+                                    </Card>
+                                    */}
+                                        <Card className="text-center" bsPrefix="project-card" key={keyNum}  data-project={node}>
+                                            <Card.Body>
+                                                <Card.Title>{node.projectName}</Card.Title>
+                                                <Card.Text>
+                                                    Owner: {node.owner}
+                                                </Card.Text>
+                                                <Card.Footer className="Footer">
+                                                    <Link className="btn2"
+                                                          data-projnum={keyNum}
+                                                          onClick={(e) =>{
+                                                              this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                                          to={`/project/${keyNum}`}>Open
+                                                          </Link>
+                                                          {node.owner === this.props.userEmail ?
+                                                              <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""}
+                                                              </Card.Footer>
+
+                                                              </Card.Body>
+                                                          </Card>
+
+                                    </>
+
+                                )
                             })
-                            : <span>
+                            : <div>
                                 <h1>Project List is empty,<br/>
                                 <p>Please refresh</p> or create a new project.</h1>
+
+                                {/*    <Card className="text-center" bsPrefix="project-card" key={keyNum}  data-project={node}>
+                                    <Card.Body>
+                                        <Card.Title>{node.projectName}</Card.Title>
+                                        <Card.Text>
+                                            Owner: {node.owner}
+                                        </Card.Text>
+                                        <Card.Footer className="Footer">
+                                            <Link className="btn2"
+                                            data-projnum={keyNum}
+                                                      onClick={(e) =>{
+                                                          this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
+                                                      to={`/project/${keyNum}`>Open</Link>
+                                                      {node.owner === this.props.userEmail ?
+                                            <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
+                                        </Card.Footer>
+
+                                    </Card.Body>
+
+                                </Card> */}
                             
-                            </span>
+                            </div>
                             
                         }
                     </div>
                 </div>
                 </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
-                        <SigmaGraph key={SigmaGraphkey}
-                            graphToDisplay={this.state.projList === undefined || this.state.projList.length <= 0  || this.state.linkNumber < 0 || this.state.grapRep.nodes ===undefined ? 
-                            this.emptyGraph()
-                            :this.state.projList[this.state.linkNumber].graph}
-                            projectName={ selectedProjectName}
+                        {/* <SigmaGraph  updateGraph={this.updateGraphView}
+                           projectName={ selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
-                            addEdge={this.addEdge}
-                        />
-                        <ProjectInfo projectToDisplay={this.state.linkNumber<0 ?''
+                            graphManager={this.state.graphManager}
+                        /> */}
+                        <ProjectInfo userEmail={this.props.userEmail} projectToDisplay={this.state.linkNumber<0 ?''
                         :this.state.projList[this.state.linkNumber]} />
                     </Route>
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
-                        <SigmaGraph key={SigmaGraphkey}
-                            graphToDisplay={this.state.grapRep}
+                        <SigmaGraph updateGraph={this.updateGraphView}
                             projectName={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
-                            addEdge={this.addEdge}
-
+                            graphManager={this.state.graphManager}
                         />
-                        <Node graph={this.state.grapRep}
-                            updateGraph={this.updateGraphView}/>
+                        <Node updateGraph={this.updateGraphView} 
+                        graphManager={this.state.graphManager} 
+                        project={this.state.linkNumber<0 ?''
+                        :this.state.projList[this.state.linkNumber]}/>                    
                     </Route>
                 </Switch>
             </Router>

@@ -177,7 +177,7 @@ const UserManagerService = require('../../Services/UserManagerService');
                     if(ans != null){
                         res.send({
                             message:"The user was created successfully.",
-                            data:ans
+                            data:ans.ops
                         });
 
                     }else{

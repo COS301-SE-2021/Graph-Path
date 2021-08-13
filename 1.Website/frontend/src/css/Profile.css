@@ -15,6 +15,11 @@
     padding: 6px;
 }
 
+.profileContainer #cancelBtn{
+    width: 100%;
+    padding: 14px 20px;
+}
+
 .profileContainer input[type="button"][disabled] {
     background-color: #a2eccc;
     cursor: none;
