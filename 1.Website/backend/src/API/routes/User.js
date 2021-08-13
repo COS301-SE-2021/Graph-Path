@@ -9,65 +9,7 @@ const bcrypt = require('bcrypt');
  function makeUserRoute (db)
 {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-     router.post('/login/',async (req,res,next)=>{
 
-         const emailParam = req.body.email;
-         const GivenPassword = req.body.password;
-
-         if(emailParam ==='' || emailParam === undefined)
-         {
-             res.status(400).send({
-                 message:"invalid email provided.",
-                 data:null
-             })
-         }
-
-         let returnedUser = null;
-        await db.getUserByEmail(emailParam).then((ans)=>{
-            if(ans != null){
-                returnedUser = ans;
-
-            }else{
-
-                res.send({
-                    message:`no user found ` ,
-                    data:ans
-                }) ;
-            }
-
-         }).catch(err=>{
-            res.status(500).send({
-                message:"User not found"
-            }) ;
-         });
-        if ( returnedUser !=null)
-        {
-
-            const MatchedPassword = returnedUser.password;
-            const isPasswordValid  = await bcrypt.compare(GivenPassword,MatchedPassword);
-            if(isPasswordValid)
-            {
-                returnedUser.password= null;
-                res.send({
-                    message:"successful",
-                    data: returnedUser,
-                })
-            }
-
-            else
-            {
-                res.send({
-                    message: "invalid password given",
-                    data: null
-                })
-            }
-
-
-        }
-        console.log("returned User is null");
-
-
-     }) ;
 
      router.get('/listOfAllUsers', (req, res, next) => {
          //console.log('received request ', req.body, 'servicing.....');
@@ -152,6 +94,67 @@ const bcrypt = require('bcrypt');
      }) ;
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+     router.post('/login/',async (req,res,next)=>{
+
+         const emailParam = req.body.email;
+         const GivenPassword = req.body.password;
+
+         if(emailParam ==='' || emailParam === undefined)
+         {
+             res.status(400).send({
+                 message:"invalid email provided.",
+                 data:null
+             })
+         }
+
+         let returnedUser = null;
+         await db.getUserByEmail(emailParam).then((ans)=>{
+             if(ans != null){
+                 returnedUser = ans;
+
+             }else{
+
+                 res.send({
+                     message:`no user found ` ,
+                     data:ans
+                 }) ;
+             }
+
+         }).catch(err=>{
+             res.status(500).send({
+                 message:"User not found"
+             }) ;
+         });
+         if ( returnedUser !=null)
+         {
+
+             const MatchedPassword = returnedUser.password;
+             const isPasswordValid  = await bcrypt.compare(GivenPassword,MatchedPassword);
+             if(isPasswordValid)
+             {
+                 returnedUser.password= null;
+                 res.send({
+                     message:"successful",
+                     data: returnedUser,
+                 })
+             }
+
+             else
+             {
+                 res.send({
+                     message: "invalid password given",
+                     data: null
+                 })
+             }
+
+
+         }
+         console.log("returned User is null");
+
+
+     }) ;
+
      router.post('/newUser',(req,res)=>{
          if (req == undefined || req.body == undefined || req == null ){
              res.json({
