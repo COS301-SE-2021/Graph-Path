@@ -39,10 +39,18 @@ function makeProjectRoute(db) {
 
         db.getAllProjects()
             .then((ans) => {
-               res.send({
-                   message: "The retrieval of the projects was successful.",
-                   data: ans
-               })
+                if(ans ==="No projects"){
+                    res.send({
+                        message: "There are no projects.",
+                        data: []
+                    })
+                }else{
+                    res.send({
+                        message: "The retrieval of the projects was successful.",
+                        data:ans
+                    })
+                }
+
                 })
             .catch(err => {
                 res.status(500).send({
@@ -64,7 +72,7 @@ function makeProjectRoute(db) {
                 {
                     res.send({
                         message: "unsuccessful. "+ans+" for user: "+mail,
-                        data: null
+                        data: []
                     })
                 }
 
@@ -97,21 +105,29 @@ function makeProjectRoute(db) {
         }
         db.getProjectByID(ID)
             .then(ans=>{
-                if(ans != null){
+                if(ans === "No project"){
+                    res.send({
+                        message: "No project with this ID",
+                        data:[]
+                    })
+
+                }else if(ans != null){
                     res.send({
                         message: "Project retrieved.",
                         data: ans
                     })
                 }else{
                     res.send({
-                        message: "Could not retrieve project."
+                        message: "Could not retrieve project.",
+                        data: null
                     })
                 }
 
             })
             .catch(err=>{
                 res.status(500).send({
-                    message: "Could not retrieve the project"
+                    message: "Server error: Could not retrieve the project, make sure your ID is valid and correct.",
+                    err:err
                 })
             })
     }) ;
