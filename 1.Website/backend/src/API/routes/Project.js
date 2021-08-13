@@ -101,8 +101,7 @@ function makeProjectRoute(db) {
             .then(ans=>{
                 if(ans === "No project"){
                     res.send({
-                        message: "No project with this ID",
-                        data:[]
+                        message: "No project with this ID"
                     })
 
                 }else if(ans != null){
@@ -112,8 +111,7 @@ function makeProjectRoute(db) {
                     })
                 }else{
                     res.send({
-                        message: "Could not retrieve project.",
-                        data: null
+                        message: "Could not retrieve project."
                     })
                 }
 
