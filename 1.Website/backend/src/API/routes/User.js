@@ -9,9 +9,10 @@ const bcrypt = require('bcrypt');
  function makeUserRoute (db)
 {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-     router.get('/login/:email',async (req,res,next)=>{
+     router.post('/login/',async (req,res,next)=>{
 
-         const emailParam = req.params.email;
+         const emailParam = req.body.email;
+         const GivenPassword = req.body.password;
 
          if(emailParam ==='' || emailParam === undefined)
          {
@@ -21,19 +22,11 @@ const bcrypt = require('bcrypt');
              })
          }
 
-
-
          let returnedUser = null;
         await db.getUserByEmail(emailParam).then((ans)=>{
             if(ans != null){
-
-
                 returnedUser = ans;
 
-                /*res.send({
-                    message:`user found ` ,
-                    data:ans
-                }) ;*/
             }else{
 
                 res.send({
@@ -49,7 +42,7 @@ const bcrypt = require('bcrypt');
          });
         if ( returnedUser !=null)
         {
-            const GivenPassword = req.body.password;
+
             const MatchedPassword = returnedUser.password;
             const isPasswordValid  = await bcrypt.compare(GivenPassword,MatchedPassword);
             if(isPasswordValid)
