@@ -22,9 +22,6 @@ class Login extends React.Component{
     }
 
     change =(e) => {
-       // this.setState({
-       //     [e.target.name]: e.target.value
-        //});
 
         console.log(e.target.name);
         e.preventDefault(); /*So the values entered don't show on URL*/
@@ -86,21 +83,13 @@ class Login extends React.Component{
                     responseData:'',
                 })
          }
-        else /*if (data.password !== '' && data.email!=='' && emailRegex.test(value) && data.password.length>= 8)*/{
+        else{
             //alert('before send');
             console.log(data);
             this.sendData(data) ;
             console.log('answer from sendData',this.state.answer);
-           /* this.setState({
-                email:'',
-                password:''
-            });*/
+         
         }
-     //  else formErrors.password='Make sure all fields are filled in '
-
-        //change status of login
-
-        //this.setState({ formErrors, [name]: value });
     }
     
     sendData(data){
@@ -109,7 +98,7 @@ class Login extends React.Component{
         try{  
 
         // fetch(`http://localhost:90001/user/login/${data.email}`)
-        axios.get(`http://localhost:9001/user/login/${data.email}`)
+        axios.post(`http://localhost:9001/user/login/`,data)
         .then((response)=>{
             if (response.status===400){
                 throw Error(response.statusText) ;
@@ -124,8 +113,8 @@ class Login extends React.Component{
             },()=>{
                 // alert('res:'+this.state.answer)
                 console.log(this.state)//Heavey checks
-                if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
-                    // alert('try again') ;
+                if (this.state.responseData === undefined || this.state.responseData === null ){
+                    alert('try again') ;
 
                     this.setState({
                         formErrors:{
@@ -134,7 +123,7 @@ class Login extends React.Component{
                         }
                     })
                 }
-                else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
+                else if (this.state.responseData.password !== undefined){
                     //access given
                     // alert('Am I getting access');
                     this.props.logIn(true) ; 

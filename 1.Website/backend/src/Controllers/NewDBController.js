@@ -97,21 +97,20 @@ async function getAllOtherUsers(email,id){
                         }
                     });
                     let specialized = [] ;
-                    for (user in newArray){
+                    newArray.forEach((val)=>{
+                        console.log(val) ;
                         let temp = {
                             label:`${val.firstName} ${val.lastName}`,
                             value:val.email
                         }
                         specialized.push(temp) ;
-                    } 
+                    }) 
                     //send response
                     resolve(specialized);
                 } else {
 
                     resolve(ans);
                 }
-
-                resolve(ans);
             })
             .catch(err=>{
                 reject(err);
