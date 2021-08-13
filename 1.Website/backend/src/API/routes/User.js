@@ -1,14 +1,15 @@
 const express = require('express')
 const router = express.Router();
-const ManageUser = require('../../Services/ManageUser')
 const mongoose = require('mongoose') ;
 var ObjectId = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
-
+const UserManagerService = require('../../Services/UserManager');
 
  function makeUserRoute (db)
 {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
      router.get('/listOfAllUsers', (req, res, next) => {
@@ -72,6 +73,7 @@ const bcrypt = require('bcrypt');
              })
          }
 
+
          db.getUserByID(ID).then((ans)=>{
              if(ans != null){
                  res.send({
@@ -87,7 +89,7 @@ const bcrypt = require('bcrypt');
              }
          }).catch((err)=>{
              res.status(500).send({
-                 message:"User not found"
+                 message:err,
              }) ;
          });
 

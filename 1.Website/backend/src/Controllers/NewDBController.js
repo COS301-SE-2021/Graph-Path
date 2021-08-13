@@ -21,7 +21,7 @@ const dbController = {
             }) ;
     },
     getDB : ()=>{
-        console.log('returned DB')
+        console.log('returned mongoDB connection instance')
         return db ;
     }
 }
@@ -474,7 +474,7 @@ async function getTaskByID(id){
 
 
 /////////////////////////////////////////////////////-exports-//////////////////////////////////////////////////////////////
-console.log(getUserByID);
+
 module.exports={
     //user
     getUserByID,
