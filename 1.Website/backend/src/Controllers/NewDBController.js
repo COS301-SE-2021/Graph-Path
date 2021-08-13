@@ -374,7 +374,30 @@ async function addNewProjectMember(id, email){
 }
 
 //***************************************************-put-**************************************************************
+async function updateEverythingProject(id, pname, ddate, sdate, own, grph, members){
+    return await new Promise((resolve, reject)=>{
 
+        db.collection('Projects').updateOne({
+            "_id":ObjectId(id)
+        },{
+            $set: {
+                "projectName": pname,
+                dueDate: ddate,
+                startDate: sdate,
+                owner: own,
+                groupMembers: members,
+                graph: grph
+            }
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+
+}
 
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
@@ -403,5 +426,6 @@ module.exports={
     getAllProjectsByUserEmail,
     removeProjectByID,
     updateProjectGraph,
-    addNewProjectMember
+    addNewProjectMember,
+    updateEverythingProject
 };
