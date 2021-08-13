@@ -66,6 +66,7 @@ componentDidMount()
         $('.login-info-box').fadeIn();
 
         $('.white-panel').addClass('right-log');
+
         $('.register-show').addClass('show-log-panel');
         $('.login-show').removeClass('show-log-panel');
 
@@ -97,12 +98,13 @@ componentDidMount()
                   <input type="radio" name="active-log-panel" value="log-login-show" id="log-login-show" />
                   </div>
                 <div className="white-panel">
+                  <div className="register-show">
+                    <Register/>
+                  </div>
                   <div className="login-show">
                   <Login/>
                   </div>
-                    <div className="register-show">
-                      <Register/>
-                    </div>
+
                 </div>
 
 
