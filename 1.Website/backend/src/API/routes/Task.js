@@ -575,51 +575,50 @@ function  makeTaskRoute(db)
      *
      *
      */
-    router.patch('/updateTaskDueDate/:project/:tasknr/:dueDate',(req,res,next)=>{
+    /*
+    router.patch('/updateTaskDueDate/:id/:dueDate/:startDate',(req,res,next)=>{
 
-        let proj = req.params.project;
-        let tsknr = req.params.tasknr;
-        let newdate = req.params.dueDate;
-        db.collection('Tasks').updateOne({
-            project:proj,
-            tasknr:tsknr
-        },{
-            $set:{due:newdate}
-        },(err,result)=>{
+        let ID = req.params.id;
+        let newDate = req.params.dueDate;
+        let beginDate =req.params.startDate;
+        if(newDate === undefined || newDate ===""){
+            res.send({
+                message: "The Due date provided is not valid."
+            })
+        }else if(beginDate === undefined || beginDate ===""){
+            res.send({
+                message: "The start date provided is not valid."
+            })
 
-            if(err){
+        }else if(beginDate > dueDate){
+            res.send({
+                message: "The due date can not be before the start date."
+            })
+        }
 
-                res.status(500).send({
-                    message: "Failed.Could not update the task date due to server error.",
-                    data: err
-                });
-            }
-            else{
 
-                const {matchedCount,modifiedCount} = result;
-                if(matchedCount === 0)
-                {
-                    res.status(400).send({
-                        message: "Failed. No matched task with given parameters",
-                        data:null
-                    })
-
-                }
-                else
-                {
-
+        db.updateTaskDueDate(ID, newDate)
+            .then(ans=>{
+                if(ans === "Success"){
                     res.send({
-                        message: "success",
-                        data: null
-                    });
+                        message: "The task updated successfully"
+                    })
+                }else{
+                    res.send({
+                        message: "Could not update the task."
+                    })
                 }
-
-
-            }
-
-        })
+            })
+            .catch(err=>{
+                res.status(500).send({
+                    message: "Server error: could not update the task",
+                    err: err
+                })
+            })
 
     });
+
+     */
 
 
     /**
@@ -649,49 +648,67 @@ function  makeTaskRoute(db)
      *
      *
      */
-    router.patch('/updateTaskAssignee/:project/:tasknr/:Assignee',(req,res,next)=>{
+    router.patch('/updateTaskAssignee/:id/:assignee',(req,res,next)=>{
 
-        let proj = req.params.project;
-        let tsknr = req.params.tasknr;
-        let newAssignee = req.params.Assignee;
-        db.collection('Tasks').updateOne({
-            project:proj,
-            tasknr:tsknr
-        },{
-            $set:{assignee:newAssignee}
-        },(err,result)=>{
+        let ID = req.params.id;
+        let assignee =req.params.assignee;
+        if(assignee === undefined || assignee ===""){
+            res.send({
+                message: "The assignee name provided is not valid."
+            })
+        }
 
-            if(err){
 
-                res.status(500).send({
-                    message: "Failed.Could not update the task assignee",
-                    data: err
-                });
-            }
-            else{
-
-                const {matchedCount,modifiedCount} = result;
-                if(matchedCount === 0)
-                {
-                    res.status(400).send({
-                        message: "Failed. No matched task with given parameters",
-                        data:null
-                    })
-
-                }
-                else
-                {
-
+        db.updateTaskAssignee(ID, assignee)
+            .then(ans=>{
+                if(ans === "Success"){
                     res.send({
-                        message: "success",
-                        data: null
-                    });
+                        message: "The task updated successfully"
+                    })
+                }else{
+                    res.send({
+                        message: "Could not update the task."
+                    })
                 }
+            })
+            .catch(err=>{
+                res.status(500).send({
+                    message: "Server error: could not update the task",
+                    err: err
+                })
+            })
+
+    });
+
+    router.patch('/updateTaskAssigner/:id/:assigner',(req,res,next)=>{
+
+        let ID = req.params.id;
+        let assigner =req.params.assigner;
+        if(assigner === undefined || assigner ===""){
+            res.send({
+                message: "The assigner name provided is not valid."
+            })
+        }
 
 
-            }
-
-        })
+        db.updateTaskAssigner(ID, assigner)
+            .then(ans=>{
+                if(ans === "Success"){
+                    res.send({
+                        message: "The task updated successfully"
+                    })
+                }else{
+                    res.send({
+                        message: "Could not update the task."
+                    })
+                }
+            })
+            .catch(err=>{
+                res.status(500).send({
+                    message: "Server error: could not update the task",
+                    err: err
+                })
+            })
 
     });
 
