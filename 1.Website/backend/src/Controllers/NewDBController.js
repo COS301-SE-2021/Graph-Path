@@ -516,7 +516,21 @@ async function deleteTaskByID(id){
     })
 }
 //***************************************************-patch-**************************************************************
-
+async function updateTaskDescription(id, newDesc){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{description:newDesc}
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
 
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
@@ -552,7 +566,8 @@ module.exports={
     getTaskByID,
     getAllTasksByProject,
     insertTask,
-    deleteTaskByID
+    deleteTaskByID,
+    updateTaskDescription
 
 
 };
