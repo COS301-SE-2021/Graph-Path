@@ -303,7 +303,7 @@ async function getAllProjectsByUserEmail(mail){
                             const obj = {
                                 role: GroupMembers[x].role,
                                 permissions: Permissions.getPermissions(GroupMembers[x].role),
-                                project:Projects[i],
+                                ...Projects[i],
 
                             }
                             MatchedProjects.push(obj);
