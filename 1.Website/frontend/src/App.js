@@ -85,7 +85,12 @@ componentDidMount()
         <div className="App">
           <Header api={url}/>
 
-              <div className="login-reg-panel">
+        </div>
+    )
+
+
+
+              {/* <div className="login-reg-panel">
                   <div className="login-info-box">
                     <h2>Have an account</h2>
                     <label id="label-register" htmlFor="log-reg-show">Sign In</label>
@@ -96,8 +101,9 @@ componentDidMount()
                   <h2>Don't have an account?</h2>
                   <label id="label-login" htmlFor="log-login-show">Sign Up</label>
                   <input type="radio" name="active-log-panel" value="log-login-show" id="log-login-show" />
-                  </div>
-                <div className="white-panel">
+                  </div> */}
+                
+                {/* <div className="white-panel">
                   <div className="register-show">
                     <Register/>
                   </div>
@@ -105,14 +111,13 @@ componentDidMount()
                   <Login/>
                   </div>
 
-                </div>
+                </div> */}
 
 
 
-              </div>
+              {/* </div> */}
 
-        </div>
-    )
+
     /*if (this.state.logged){
 
       return (
