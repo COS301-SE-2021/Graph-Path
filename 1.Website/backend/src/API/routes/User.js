@@ -14,6 +14,7 @@ const UserManagerService = require('../../Services/UserManagerService');
 
      router.get('/listOfAllUsers', (req, res, next) => {
          //console.log('received request ', req.body, 'servicing.....');
+
          UserManagerService.getAllUsers(db)
          .then((ans)=>{
                  if(ans != null){

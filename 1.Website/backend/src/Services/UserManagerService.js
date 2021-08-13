@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
 const ObjectId = require('mongodb').ObjectID;
 
-
 async function getAllUsers(dbController){
+
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
         db.collection('Users').find({}).toArray()
@@ -131,6 +131,7 @@ async function insertUser(dbController, userObject){
             })
     });
 }
+
 //***************************************************-delete-**************************************************************
 async function removeUserByID(dbController, id){
     const db = dbController.getConnectionInstance();
@@ -223,7 +224,6 @@ async function updateUsernameAndPassword(dbController, mail, usrnme, psw){
 
     }))
 }
-
 
 module.exports = {
     getUserByID,

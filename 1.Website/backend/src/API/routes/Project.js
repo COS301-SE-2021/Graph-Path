@@ -30,7 +30,7 @@ function makeProjectRoute(db) {
 
     router.get('/list', (req, res, next) => {
 
-        db.getAllProjects()
+        db.getAllProjects(db)
             .then((ans) => {
                 if(ans ==="No projects"){
                     res.send({
