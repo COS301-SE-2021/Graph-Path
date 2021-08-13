@@ -247,7 +247,7 @@ router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
 
 
 //PUT ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-router.put('/updateEverything/:id',(req,res)=>{
+router.put('/updateEverythingProject/:id',(req,res)=>{
     const ID = req.params.id;
     let pname = req.body.projectName;
     let ddate = req.body.dueDate;
