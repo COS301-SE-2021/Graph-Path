@@ -436,7 +436,7 @@ async function updateEverythingProject(id, pname, ddate, sdate, own, grph, membe
 /////////////////////////////////////////////////////-Task-//////////////////////////////////////////////////////////////
 async function getAllTasks(){
     return await new Promise((resolve,reject)=>{
-        db.find({}).toArray()
+        db.collection('Tasks').find({}).toArray()
             .then(ans=>{
                 if(ans == null){
                     resolve("No available tasks");
