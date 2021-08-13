@@ -434,6 +434,8 @@ async function updateEverythingProject(id, pname, ddate, sdate, own, grph, membe
 }
 
 /////////////////////////////////////////////////////-Task-//////////////////////////////////////////////////////////////
+//***************************************************-get-**************************************************************
+
 async function getAllTasks(){
     return await new Promise((resolve,reject)=>{
         db.collection('Tasks').find({}).toArray()
@@ -483,6 +485,25 @@ async function getAllTasksByProject(id){
             });
     })
 }
+
+//***************************************************-post-**************************************************************
+async function insertTask(taskObject){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').insertOne(taskObject)
+            .then((ans)=>{
+                console.log(ans);
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+//***************************************************-delete-**************************************************************
+
+//***************************************************-patch-**************************************************************
+
+
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////-Graph-//////////////////////////////////////////////////////////////
@@ -515,6 +536,7 @@ module.exports={
     //Task
     getAllTasks,
     getTaskByID,
-    getAllTasksByProject
+    getAllTasksByProject,
+    insertTask
 
 };
