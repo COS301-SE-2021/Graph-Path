@@ -467,6 +467,22 @@ async function getTaskByID(id){
             })
     })
 }
+
+async function getAllTasksByProject(id){
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').find({project:id}).toArray()
+            .then((ans)=>{
+                if(ans == null){
+                    resolve("No tasks found");
+                }else{
+                    resolve(ans);
+                }
+            })
+            .catch((err)=>{
+                reject(err);
+            });
+    })
+}
 /////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////-Graph-//////////////////////////////////////////////////////////////
@@ -498,5 +514,7 @@ module.exports={
     updateEverythingProject,
     //Task
     getAllTasks,
-    getTaskByID
+    getTaskByID,
+    getAllTasksByProject
+
 };
