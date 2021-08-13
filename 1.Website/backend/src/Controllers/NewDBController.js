@@ -4,9 +4,8 @@ const DB_URI =process.env.TEST_DB_URI ;
 var ObjectId = require('mongodb').ObjectID;
 const mongoose = require('mongoose') ;
 const bcrypt = require('bcrypt');
-const userService = require('../Services/UserManager');
+const userService = require('../Services/UserManagerService');
 const Permissions = require('../Helpers/Permissions');
-
 
 let db ;
 //connect to db
@@ -27,8 +26,15 @@ const dbController = {
 }
 dbController.connect();
 dbController.getDB();
-//console.log(db);
 
+ function getConnectionInstance()
+{
+    return db;
+}
+
+
+//console.log(db);
+const getUserByID2 = userService.getUserByID2;
 /////////////////////////////////////////////////////-User-///////////////////////////////////////////////////////////////////
 //***************************************************-get-**************************************************************
 async function getUserByID(id){
@@ -634,6 +640,7 @@ module.exports={
     updateUserUsername,
     updateUserPassword,
     updateUsernameAndPassword,
+    getConnectionInstance,
     //project
     insertProject,
     getProjectByID,
