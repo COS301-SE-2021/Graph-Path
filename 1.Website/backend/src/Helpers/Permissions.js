@@ -36,13 +36,23 @@ function getPermissions(role)
             return Permissions
             break;
 
-        case "":
+        case "Tester":
             Permissions = [
                 'edit',
                 'view'
             ];
             return Permissions
             break;
+
+
+        case "Client":
+            Permissions = [
+
+                'view'
+            ];
+            return Permissions
+            break;
+
 
 
         case "Owner":
