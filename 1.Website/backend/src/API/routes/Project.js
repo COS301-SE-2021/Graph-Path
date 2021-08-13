@@ -305,12 +305,45 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
             })
         })
 });
+router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
+    let projId = req.params.id;
+    let eml = req.params.email;
+    db.collection('Projects').updateOne({
+        "_id": ObjectId(projId)
+    },{
+
+            $push: {
+                "groupManagers": eml
+            }
+
+    },true,(err,result)=>{
+
+        if(err){
+            console.log("Could not update the project graph: "+err);
+            res.send({
+                message:"found",
+                data:projects//.json()
+            }) ;
+        }
+        else{
+            res.send({
+                message: "success"
+               // data: result['ops']
+            });
+        }
+
+    })
+    //.catch((err)=>{
+    //    console.log("Could not update the task description: "+err);
+    // })
+});
 
 router.put('/updateProjectGraph',(req,res)=>{
     const project = req.body.projectName ;
     const graph = req.body.graph ;
+    const projId = req.body.projId ;
 
-    console.log('PUT ../',project,'body: ',graph) ; 
+    console.log('PUT ../',project,'body: ',graph,projId) ; 
     if (graph === undefined || graph.nodes === undefined){
         return res.status(400).send({
             message:"Invalid Graph structure"
@@ -318,11 +351,12 @@ router.put('/updateProjectGraph',(req,res)=>{
     }
 
     db.collection('Projects').updateOne({
-        projectName:project
+        projectName:project,
+        "_id": ObjectId(projId)
     },
     {
-        $set:{graph:graph}
-    },(err,ans)=>{
+        $set:{"graph":graph}
+    },true,(err,ans)=>{
         if (err){
             console.log('error',err)
             return res.status(500).send({

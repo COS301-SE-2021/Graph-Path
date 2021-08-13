@@ -90,7 +90,9 @@ function getAllRolesAndPermissions()
     let Roles = getAllRoles();
     let RolesAndPerms = {};
     for (let i = 0; i < Roles.length ; i++) {
-        RolesAndPerms.Roles[i] = getPermissions(Roles[i]);
+
+        var role = Roles[i];
+        RolesAndPerms[role] = getPermissions(Roles[i]);
 
     }
     return RolesAndPerms;

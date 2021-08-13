@@ -1,126 +1,91 @@
 import React from 'react' ; 
 import Task from './Task' ;
-import EdgeManager from './Edge';
+import axios from 'axios';
 import {Link,withRouter, Route, Switch} from 'react-router-dom' ;
 // import '../css/Dashboard.css' ;
-
-class GraphManager{
-    constructor(graph){
-      if (graph === undefined || graph.nodes === undefined || graph.edges === undefined){
-        this.setGraph("") ;
-      }
-      else{
-        this.graph = graph ;
-      }
-    }
-  
-    setGraph(graph){
-      if (Array.isArray(graph.nodes) && Array.isArray(graph.edges) ){
-        this.graph = graph ;
-      }
-      else{
-        this.graph = {
-            nodes : [],
-            edges : []
-        }
-      }
-    }
-    getGraph(){
-      return this.graph ;
-    }
-    showNodeList(){
-      var nodes = this.graph.nodes ; 
-      if(nodes.length <= 0){
-        console.log('Nothing in the Array') ; 
-      }
-      else{
-        console.log(`${nodes.length} Nodes`)
-      }
-    }
-    addEdge=(src,tgt)=>{
-        var edg ;
-        var curr = this.graph ; 
-        edg = {id:`e${curr.edges.length+1}`, // give edge an id
-            source:src, 
-            target:tgt,
-            label:`${src} to ${tgt}` ,
-            color:'#00ff00'
-        }
-        curr.edges.push(edg) ;
-       
-    }
-    
-    addNode = (fromTask) =>{
-        // add the node and give it an id
-        var curr = this.graph ; 
-        var obj = {
-            label:fromTask.taskName , // give it lable fromTask
-            size:300,
-        }; 
-        // if there was already a node?
-        let len = curr.nodes.length ;
-        if (len>0){
-            obj["id"]= `n${curr.nodes.length+1}` ;
-            obj["color"] = '#0000ff' ;
-            if (len % 2 === 0){
-                obj["x"] = 15*len ; 
-                obj["y"] = 15*len ;
-            }
-            else{
-                obj["x"] = -15*len ; 
-                obj["y"] = -15*len ;
-            }
-            curr.nodes.push(obj) ;
-        }
-        else{
-            // add node with edge depending on self
-            obj["id"]= `n1` ;
-            obj["color"] = '#ff0000' ; //start is red
-            obj["x"] = 0 ; 
-            obj["y"] = 0 ;
-            curr.nodes.push(obj) ;
-        }
-    }
-}
 
 class Node extends React.Component{
     constructor(props){
         super(props) ; 
         this.state ={
+            taskList:[]
         }
         this.graphManager = null  ; 
     }
 
     componentDidMount(){
-        this.graphManager = new GraphManager(this.props.graph)
-        if (this.props.graph !== undefined){
-            this.graphManager.setGraph(this.props.graph)
-        }
+    
     }
     addNewNode = (name)=>{
-        this.graphManager.addNode(name) ; 
-        this.updateParent(this.graphManager.getGraph()) ;
+      
+        if (name.toString().trim().length<=0) {
+            alert('Cannot Submit Empty Name')
+        }
+        else{
+            var manager = this.props.graphManager ;
+            manager.addNode(name) ;
+            this.updateParent()
+        
+        }
     }
-    addNewEdge =(param1,param2)=>{
-        this.graphManager.addEdge(param1,param2) ;
-        this.updateParent(this.graphManager.getGraph()) ;
+    addNewTask = (data) =>{
+        axios.post(`${this.state.api}/insertTask`,data)
+        .then((response) =>{
+            if(response.status===400){
+                throw Error(response.statusText) ;
+            }//else
+            console.log('from back end',response)
+
+            const res = response.data;
+            console.log(res) ;
+            this.setState({
+                answer:res.message,
+                responseData:res.data //data
+            },()=>{
+                // alert('res:'+this.state.answer)
+                console.log(this.state)
+                if (this.state.answer!== null && this.state.answer){
+                    //    this.props.changeToDefault() ;
+                }
+            })
+
+        },(response)=>{
+            console.log('rejected',response) ;
+        })
+        .catch((error)=>{
+            console.log(error) ;
+        })
     }
-    updateParent=(graph)=>{
+    viewAllTasks =()=>{
+        
+    }
+    
+    updateParent=()=>{
         if (typeof this.props.updateGraph === 'function'){
-            this.props.updateGraph(graph) ;
+            this.props.updateGraph(this.props.graphManager) ;
         }else{
-            alert('Could not update graph') ;
+            alert('Could not update Parent graph') ;
         }
     }
 
     render(){
         const {match} = this.props ;
-    
+        var manager = this.props.graphManager ;
+        var {project} = this.props ;
+         
+        console.log(project) ;
+
+        if (manager === undefined){
+            return (<div>
+                No Graph Mounted
+            </div>)
+        }
+        const query = new URLSearchParams(this.props.location.search );
         return (
             <div>
                 <div>
                     <Link to={`${match.url}/addNode`}>Add Nodes</Link><span> </span>
-                    <Link to={`${match.url}/edges`}>Add Edges</Link>
+                    {/* <Link to={`${match.url}/edges`}>Add Edges</Link> */}
                     <br/>
                 </div>
                 <Switch>
@@ -129,11 +94,16 @@ class Node extends React.Component{
                         <Task addTask={this.addNewNode} 
                         />
                     </Route>
-                    <Route path={`${match.url}/edges`}>
-                        <EdgeManager graphToDisplay={this.props.graph}
-                            addEdge={this.addNewEdge}
+                    <Route path={`${match.url}/task/`} render={()=>{
+                        return <>
+                        <Task addTask={this.addNewNode} 
+                            fullForm={true}
+                            label={query.get('label')}
                         />
-                    </Route>
+
+                        </>
+                    }} />
+                        
                 </Switch>
             
         </div>

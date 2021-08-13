@@ -1,16 +1,19 @@
 .DashboardMenu{
     background-color: #001122;
     color: white;
-    left: 0px;
-    width: 150px;
-    min-height: 80vh;
-    min-width: 15vw;
+    left: 0;
+    width: 16vw;
+    min-height: 90vh;
     position: relative;
+    font-size: small;
+
+  /*  border-radius: 15px;*/
+    padding: 10px;
 
   }
 .DashboardMenu *{
     margin: 2px 2px 2px 2px;
-    
+
 }
 .App-link-routes {
     background-color: transparent;
@@ -18,23 +21,21 @@
     position: relative;
     top: 10px;
     width: 100%;
+    margin: 2px;
 }
 button{
-  margin:2px 2px 2px 2px ; 
-}
-
-.close{
-    background-color: #9A0001;
+  margin:2px 2px 2px 2px ;
 }
 
 .App-link-routes .opt {
     background-color: #04AA6D;
-    padding-top: 2px;
-    padding-bottom: 2px;
     height: auto;
-    width: 85%;
+     padding: 10px;
+    width: 200px;
     position: relative;
-    left: 20px;
+    font-size: 15px;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 .App-link-routes .opt a {
@@ -50,25 +51,65 @@ button{
     background-color: #0b714b;
 }
 .ContentArea{
-    display: flex;
+
     align-items: flex-start;
+    justify-content: center;
     flex-direction: row;
-    max-width: 100vw;
-    min-width: 70vw;
+    min-width: 80vw;
     padding: 2px 2px 2px 2px;
     margin-top: 2px;
+    flex-shrink: 3;
+    display: flex;
 }
+
+.ContentAreaView{
+    background-color: ghostwhite;
+    width: 100%;
+}
+
+#proj{
+    display: none;
+}
+
 
 .ContentArea > div{
     margin: 2px 2px 2px 2px;
-    padding: 20px;
+    padding: 2px;
 }
 
 .GraphDashboard{
-    display: flex;   
+    display: flex;
     flex-direction: row;
 }
 
 .imgContainer > img{
     max-width: 500px;
+}
+
+.imgContainer {
+    width: 100%;
+    position: relative;
+    z-index: -10000;
+}
+
+.closeBtn {
+    position: absolute;
+    color: white;
+    top:30px;
+    left: 26px;
+    font-size: 32px;
+}
+
+.closeBtn:hover{
+    cursor: pointer;
+}
+
+.scrumBoard{
+    width: 500px;
+    height: 500px;
+    z-index: -1000;
+    margin-top: 10px;
+    position: fixed;
+    left: 550px;
+
 }

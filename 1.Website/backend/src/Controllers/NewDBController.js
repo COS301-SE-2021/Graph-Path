@@ -96,14 +96,21 @@ async function getAllOtherUsers(email,id){
                             return true;
                         }
                     });
+                    let specialized = [] ;
+                    newArray.forEach((val)=>{
+                        console.log(val) ;
+                        let temp = {
+                            label:`${val.firstName} ${val.lastName}`,
+                            value:val.email
+                        }
+                        specialized.push(temp) ;
+                    }) 
                     //send response
-                    resolve(newArray);
+                    resolve(specialized);
                 } else {
 
                     resolve(ans);
                 }
-
-                resolve(ans);
             })
             .catch(err=>{
                 reject(err);
@@ -298,7 +305,7 @@ async function getAllProjectsByUserEmail(mail){
                             const obj = {
                                 role: GroupMembers[x].role,
                                 permissions: Permissions.getPermissions(GroupMembers[x].role),
-                                project:Projects[i],
+                                ...Projects[i],
 
                             }
                             MatchedProjects.push(obj);
