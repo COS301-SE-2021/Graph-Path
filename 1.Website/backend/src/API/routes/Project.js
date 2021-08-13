@@ -4,39 +4,10 @@ const mongoose = require('mongoose') ;
 const {route} = require("express/lib/router");
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
-const scratchPad = require('../../Helpers/ScratchPad');
+const ProjectManagerService = require('../../Services/ProjectManagerService');
+
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    router.get('/ConvertToKhanBoard/:id',(req,res)=>{
-
-        const ProjectId = req.params.id;
-        scratchPad.getProjectGraph(db,ProjectId)
-
-            .then((project)=>{
-
-                let projectNodes = scratchPad.getNodes(project);
-                if(projectNodes.length === 0)
-                {
-                    res.send({
-                        message:"this project graph has no nodes",
-                        data: []
-                    })
-                }
-
-                else
-                {
-                    // sort Nodes by status
-                }
-
-
-        })
-            .catch((err)=>{
-
-            })
-
-
-    })
     router.get('/find', (req, res, next) => {
 
 
@@ -60,7 +31,7 @@ function makeProjectRoute(db) {
 
     router.get('/list', (req, res, next) => {
 
-        db.getAllProjects(db)
+        ProjectManagerService.getAllProjects(db)
             .then((ans) => {
                 if(ans ==="No projects"){
                     res.send({
@@ -88,7 +59,7 @@ function makeProjectRoute(db) {
         // console.log('received request ', req.params, 'servicing.....');
         let mail=req.params.email;
 
-        db.getAllProjectsByUserEmail(mail)
+        ProjectManagerService.getAllProjectsByUserEmail(db,mail)
             .then(ans=>{
 
                 if (ans ==="No matched projects")
@@ -126,12 +97,11 @@ function makeProjectRoute(db) {
                 message:"Invalid ID provided."
             })
         }
-        db.getProjectByID(ID)
+        ProjectManagerService.getProjectByID(db,ID)
             .then(ans=>{
                 if(ans === "No project"){
                     res.send({
-                        message: "No project with this ID",
-                        data:[]
+                        message: "No project with this ID"
                     })
 
                 }else if(ans != null){
@@ -141,8 +111,7 @@ function makeProjectRoute(db) {
                     })
                 }else{
                     res.send({
-                        message: "Could not retrieve project.",
-                        data: null
+                        message: "Could not retrieve project."
                     })
                 }
 
@@ -187,7 +156,7 @@ function makeProjectRoute(db) {
             let data = req.body;
             const id = new mongoose.mongo.ObjectID();
             data["_id"] = id;
-            db.insertProject(data)
+            ProjectManagerService.insertProject(db,data)
                 .then(ans=>{
                     res.send({
                         message:"The Project has been created.",
@@ -228,7 +197,7 @@ router.delete('/deleteProject/:id',(req,res)=>{
     let ID = req.params.id;
 
         // console.log(projectName,owner); 
-        db.removeProjectByID(ID)
+    ProjectManagerService.removeProjectByID(db,ID)
         .then(ans =>{
             if(ans === null){
                 res.send({
@@ -256,7 +225,7 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
     //console.log("type of graph: "+ typeof grph);
    // console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
     //console.log("grph.edges[0].id: "+grph2.edges[0].id);
-    db.updateProjectGraph(ID,grph2 )
+    ProjectManagerService.updateProjectGraph(db,ID,grph2 )
     .then(ans=>{
             if(ans.modifiedCount === 0){
                 res.send({
@@ -278,7 +247,7 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
 router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
     let ID = req.params.id;
     let mail = req.params.email;
-    db.addNewProjectMember(ID, mail)
+    ProjectManagerService.addNewProjectMember(db,ID, mail)
         .then(ans=>{
             if(ans.modifiedCount >0){
                 res.send({
@@ -309,7 +278,7 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
    // let graph2 = JSON.parse(graph);
     let groupMembers = req.body.groupMembers;
 
-    db.updateEverythingProject(ID,pname,ddate,sdate,owner, graph, groupMembers)
+    ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
         .then(ans=>{
             if(ans.modifiedCount > 0){
                 res.send({
@@ -330,6 +299,7 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
             })
         })
 });
+
 router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
     let projId = req.params.id;
     let eml = req.params.email;
