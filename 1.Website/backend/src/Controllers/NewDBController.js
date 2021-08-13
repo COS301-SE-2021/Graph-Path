@@ -3,11 +3,6 @@ require('dotenv').config() ;
 const DB_URI =process.env.TEST_DB_URI ;
 var ObjectId = require('mongodb').ObjectID;
 const mongoose = require('mongoose') ;
-const bcrypt = require('bcrypt');
-const userService = require('../Services/UserManagerService');
-const projectService = require('../Services/ProjectManagerService');
-const taskService = require('../Services/TaskManagerService');
-const Permissions = require('../Helpers/Permissions');
 
 let db ;
 //connect to db
@@ -35,23 +30,8 @@ dbController.getDB();
 }
 
 
-//console.log(db);
-const getUserByID2 = userService.getUserByID2;
-
-
-
-
-/////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////-Graph-//////////////////////////////////////////////////////////////
-
-
-
-/////////////////////////////////////////////////////-exports-//////////////////////////////////////////////////////////////
-
 module.exports={
 
     getConnectionInstance
-
 
 };
