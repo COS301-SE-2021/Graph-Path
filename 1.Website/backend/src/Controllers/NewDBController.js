@@ -436,10 +436,28 @@ async function updateEverythingProject(id, pname, ddate, sdate, own, grph, membe
 /////////////////////////////////////////////////////-Task-//////////////////////////////////////////////////////////////
 async function getAllTasks(){
     return await new Promise((resolve,reject)=>{
-        db.find({}).toArray()
+        db.collection('Tasks').find({}).toArray()
             .then(ans=>{
                 if(ans == null){
                     resolve("No available tasks");
+                }else{
+                    resolve(ans);
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
+async function getTaskByID(id){
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').findOne({
+            "_id": ObjectId(id)
+        })
+            .then(ans=>{
+                if(ans == null){
+                    resolve("No available task");
                 }else{
                     resolve(ans);
                 }
@@ -479,5 +497,6 @@ module.exports={
     addNewProjectMember,
     updateEverythingProject,
     //Task
-    getAllTasks
+    getAllTasks,
+    getTaskByID
 };
