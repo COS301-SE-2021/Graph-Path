@@ -163,6 +163,7 @@ async function removeUserByEmail( dbController, mail){
         })
             .then((ans)=>{
                 resolve(ans);
+
             })
             .catch(err=>{
                 reject(err);
