@@ -41,21 +41,26 @@ const UserManagerService = require('../../Services/UserManagerService');
          let mail= req.params.email;
          UserManagerService.getAllOtherUsers(db,mail)
              .then((ans)=>{
-                 if(ans != null) {
+                 if(ans === "Users not found") {
                     res.send({
-                        message:"List of users retrieved.",
-                        data: ans
+                        message:"Could not get the users."
                     })
+                 }else if(ans === "No other users"){
+                     res.send({
+                         message:"There are no other users.",
+                         data: []
+                     })
                  }else{
                      res.send({
-                         message:"List of users not retrieved.",
+                         message:"List retrieved successfully.",
                          data: ans
                      })
                  }
              })
              .catch(err=>{
                  res.status(500).send({
-                     message: "Could not retrieve all users."
+                     message: "Server error: Could not retrieve the users.",
+                     err: err
                  });
              });
 
