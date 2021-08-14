@@ -65,8 +65,6 @@ const UserManagerService = require('../../Services/UserManagerService');
      router.get('/getUserByID/:id',(req,res,next)=>{
 
          const ID = req.params.id ;
-         console.log(ID);
-         //let ID = req.body.id;
          if(ID ==='' || ID === undefined)
          {
              res.status(400).send({
@@ -76,15 +74,13 @@ const UserManagerService = require('../../Services/UserManagerService');
 
          UserManagerService.getUserByID(db,ID).then((ans)=>{
 
-                 if(ans != null){
+                 if(ans === "No user found"){
+                     res.send({
+                         message: "User not found"
+                     })
+                 }else if(ans != null){
                      res.send({
                          message: "User found",
-                         data: ans
-                     })
-                 }else{
-                     console.log(ans);
-                     res.send({
-                         message: "User not found",
                          data: ans
                      })
                  }
@@ -92,7 +88,8 @@ const UserManagerService = require('../../Services/UserManagerService');
          }).catch((err)=>{
 
              res.status(500).send({
-                 message:err,
+                 message:"Server error: Could not find the user. Make sure the ID is correct and valid.",
+                 err:err
              }) ;
          });
 
