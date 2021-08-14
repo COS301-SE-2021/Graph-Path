@@ -152,12 +152,10 @@ class Graph extends React.Component{
                     nodes:minimalNodes,
                     edges:minimalEdges
                 }
-                const data = {
-                    graph : minimalGraph,
-                    projectName: projNode.projectName,
-                    projId:projNode._id
-                }
-                axios.put(`${this.state.api}/project/updateEverythingProject/${data.projId}`,data)
+                const data = { ...projNode}  ;
+                data.graph = minimalGraph
+                    
+                axios.put(`${this.state.api}/project/updateEverythingProject/${data._id}`,data)
                 .then((res)=>{
                     console.log('update graph response',res.data)
                     if (res.data.data === undefined) {
