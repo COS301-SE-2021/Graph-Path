@@ -132,7 +132,8 @@ const UserManagerService = require('../../Services/UserManagerService');
 
          }).catch(err=>{
              res.status(500).send({
-                 message:"User not found"
+                 message:"Server error: User not found",
+                 err:err
              }) ;
          });
          if ( returnedUser === "user not found")
@@ -168,7 +169,7 @@ const UserManagerService = require('../../Services/UserManagerService');
 
 
          }
-         console.log("returned User is null");
+         //console.log("returned User is null");
 
 
      }) ;
@@ -217,44 +218,58 @@ const UserManagerService = require('../../Services/UserManagerService');
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
     router.delete('/deleteUserByID/:id',(req,res, next)=>{
        let id = req.params.id;
-        //let id = req.body.id;
         UserManagerService.removeUserByID(db,id)
             .then((ans)=>{
-               if(ans != null){
+               if(ans == null){
+                   res.send({
+                       message: "Could not remove user."
+                   })
+               } else if(ans.deletedCount >0){
                    res.send({
                        message: "The user was removed."
                    })
-               } else{
+               }else if(ans.deletedCount < 1){
                    res.send({
-                       message: "Could not remove user."
+                       message: "User does not exist."
                    })
                }
             })
             .catch(err=>{
                 res.status(500).send({
-                    message: "Could not remove user."
+                    message: "Server error: Could not remove user.",
+                    err:err
                 })
             });
     });
 
      router.delete('/deleteUserByEmail/:email',(req,res, next)=>{
+
          let mail = req.params.email;
-         //let id = req.body.id;
+         if(mail ==="" || mail === undefined){
+             res.send({
+                 message: "Invalid email provided."
+             })
+         }
          UserManagerService.removeUserByEmail(db,mail)
              .then((ans)=>{
-                 if(ans != null){
+                 if(ans == null){
+                     res.send({
+                         message: "Could not remove user."
+                     })
+                 } else if(ans.deletedCount >0){
                      res.send({
                          message: "The user was removed."
                      })
-                 } else{
+                 }else if(ans.deletedCount < 1){
                      res.send({
-                         message: "Could not remove user."
+                         message: "User does not exist."
                      })
                  }
              })
              .catch(err=>{
                  res.status(500).send({
-                     message: "Could not remove user."
+                     message: "Server error:Could not remove user.",
+                     err: err
                  })
              });
      });
