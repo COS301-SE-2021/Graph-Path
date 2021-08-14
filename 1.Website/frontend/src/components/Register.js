@@ -1,8 +1,8 @@
 import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
-import { Link} from 'react-router-dom';
-import {form} from "react-bootstrap";
+// import { Link} from 'react-router-dom';
+// import {form} from "react-bootstrap";
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 /*Rest part checks for submitting null values for all inputs*/
