@@ -267,7 +267,8 @@ class Graph extends React.Component{
                     loading:true,
                     linkNumber:-1
                 }) ;
-                axios.delete(`${this.state.api}/project/deleteProject`,{
+                console.log('B4 del',project)
+                axios.delete(`${this.state.api}/project/deleteProject/${project._id}`,{
                     params:{
                         projectName:project,
                         owner:this.props.userEmail
@@ -401,7 +402,7 @@ class Graph extends React.Component{
                                                           to={`/project/${keyNum}`}>Open
                                                           </Link>
                                                           {node.owner === this.props.userEmail ?
-                                                              <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""}
+                                                              <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node)} /> : ""}
                                                               </Card.Footer>
 
                                                               </Card.Body>

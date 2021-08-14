@@ -26,16 +26,20 @@ class NewProject extends React.Component{
     addMember = (memberEmail) =>{
         console.log('add member',memberEmail) ;
         if (memberEmail !== undefined && Array.isArray(memberEmail)){
-            let users = [] ;
-            memberEmail.map((user)=>{
-                var label = user.label ;
-                var email = user.value
-                let roledUser = {
-                    email:email,
-                    role:"Client",
-                    label:label
+            let users = [...this.state.members] ;
+            memberEmail.map((user,index)=>{
+                if (users[index]===undefined){
+                    //no user yet?then push into array
+                    var label = user.label ;
+                    var email = user.value ;
+                    let roledUser = {
+                        email:email,
+                        role:"Client",
+                        label:label
+                    }
+                    users.push(roledUser) ;
                 }
-                users.push(roledUser) ;
+                return true
             }) ;
 
 
@@ -137,12 +141,17 @@ class NewProject extends React.Component{
         // this.changeToDefault() ;
     }
 
-    handleChange = (e, index) =>{
+    handleChange = (newRole, index) =>{
         // this.state.members[index] = e.target.value;
-        // console.log(this.members[index])
+        var newMembers = [...this.state.members] ;
+        var user = {...newMembers[index]} ;
+        user.role = newRole ;
+        newMembers[index] = user ; 
+        console.log(user.role,index)
+
         this.setState(
             {
-                members: this.state.members
+                members: newMembers
             }
         )
     }
@@ -175,7 +184,7 @@ class NewProject extends React.Component{
                         this.state.members.map((value,ind)=>{
                             return <>
                                 <span key={`q${ind}`} data-num={ind}>{value.label}</span> &nbsp;
-                                <select key={`w${ind}`} name="role" value={this.state.role} onChange={(e)=>this.updateField(e)}>
+                                <select key={`w${ind}`} name="role" value={value.role} onChange={(e)=>this.handleChange(e.target.value,ind)}>
                                     {this.state.rbca.roles.map((val,ind2)=>{
                                         return <option key={`k${ind2}`}value={val}>{val}</option>
                                     })}
