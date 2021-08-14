@@ -1,0 +1,63 @@
+#project-form-div{
+    background-color: transparent;
+    position: relative;
+    width: 100%;
+    padding-left: 2%;
+}
+
+#project-form{
+    max-width: 40%;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    background-color: #61dafb;
+    border-radius: 8px;
+    margin-top: 2%;
+}
+
+#project-form label{
+    float: left;
+    font-weight: bold;
+}
+
+#project-form input[type="text"]{
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #f3dfdf;
+    height: 40px;
+    background-color: transparent;
+    color: darkgrey;
+}
+
+#project-form input{
+
+}
+
+#view-graph-div{
+    background-color: yellow;
+    position: absolute;
+    margin-top: 5%;
+    width: 300px;
+    z-index: 100;
+}
+
+#div1{
+    background-color: #990001;
+}
+
+#div2{
+    background-color: green;
+}
+
+#div3{
+    background-color: blue;
+    width: 300px;
+    position: absolute;
+
+}
+
+#view-div{
+    background-color: darkmagenta;
+    display: inline-block;
+}
