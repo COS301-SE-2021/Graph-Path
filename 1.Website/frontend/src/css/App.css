@@ -35,6 +35,12 @@
   }
 }
 
+
+
+
+
+
+
 body{
   font-family: 'Mukta', sans-serif!important;
   height:100vh;
@@ -44,9 +50,8 @@ body{
   background-size:cover;
   background-position:center;
   position:relative;
-  /*overflow-y: hidden;*/
+  /* overflow-y: hidden; */
   float:none;
-  text-decoration: none;
 }
 
 

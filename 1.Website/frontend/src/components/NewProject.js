@@ -26,8 +26,21 @@ class NewProject extends React.Component{
     addMember = (memberEmail) =>{
         console.log('add member',memberEmail) ;
         if (memberEmail !== undefined && Array.isArray(memberEmail)){
+            let users = [] ;
+            memberEmail.map((user)=>{
+                var label = user.label ;
+                var email = user.value
+                let roledUser = {
+                    email:email,
+                    role:"Client",
+                    label:label
+                }
+                users.push(roledUser) ;
+            }) ;
+
+
             this.setState({
-                members:memberEmail 
+                members:users 
             }, console.log('after update',this.state))
         }
     }
@@ -161,9 +174,10 @@ class NewProject extends React.Component{
                         {this.state.members.length>0?
                         this.state.members.map((value,ind)=>{
                             return <>
-                                <span key={ind} data-num={ind}>{value.label}</span> &nbsp;<select name="role" value={this.state.role} onChange={(e)=>this.updateField(e)}>
-                                    {this.state.rbca.roles.map((value)=>{
-                                        return <option value={value}>{value}</option>
+                                <span key={`q${ind}`} data-num={ind}>{value.label}</span> &nbsp;
+                                <select key={`w${ind}`} name="role" value={this.state.role} onChange={(e)=>this.updateField(e)}>
+                                    {this.state.rbca.roles.map((val,ind2)=>{
+                                        return <option key={`k${ind2}`}value={val}>{val}</option>
                                     })}
                                 </select>
                                 <br/>
