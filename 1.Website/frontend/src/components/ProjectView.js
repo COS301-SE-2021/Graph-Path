@@ -54,17 +54,21 @@ class ProjectView extends React.Component{
         })
     }
     render(){
+        const EditPermissionRoles = ['owner','project manager']
+        const EditGraphPermissionRoles = ['owner','project manager','developer']
+
         const project = this.props.projectToDisplay ; 
+        
         const email = this.props.userEmail ;
         if (project !== undefined)
         return (
             <div>
                 { //The role you have must allow you to have your permissions
-                project.role === "owner" ||email === project.owner?
+                EditPermissionRoles.indexOf(project.role.toLowerCase())>=0 ?
                     <div >
-                    <span>
-                    <span onClick={this.toggleView}>{this.state.editView?'Project Details':'Edit Project'}
-                    </span>
+                        <span>
+                        <span onClick={this.toggleView}>{this.state.editView?'Project Details':'Edit Project'}
+                        </span>
                     &nbsp;
                     &nbsp;
                     <Link to="/addTask">Edit Graph
