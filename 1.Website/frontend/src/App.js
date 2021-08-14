@@ -2,12 +2,10 @@ import React from 'react';
 import './css/App.css';
 import './css/Login.css'
 import Header from './components/Header' ;
-import Register from './components/Register';
-import Login from './components/Login' ;
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'jquery/dist/jquery.min.js';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 /*Changed this to class type*/
 class App extends React.Component {
@@ -58,7 +56,15 @@ class App extends React.Component {
 
 
 
-              {/* <div className="login-reg-panel">
+  }
+
+}
+
+
+export default App;
+
+// **************************************************//
+   /* <div className="login-reg-panel">
                   <div className="login-info-box">
                     <h2>Have an account</h2>
                     <label id="label-register" htmlFor="log-reg-show">Sign In</label>
@@ -69,9 +75,9 @@ class App extends React.Component {
                   <h2>Don't have an account?</h2>
                   <label id="label-login" htmlFor="log-login-show">Sign Up</label>
                   <input type="radio" name="active-log-panel" value="log-login-show" id="log-login-show" />
-                  </div> */}
+                  </div> */
                 
-                {/* <div className="white-panel">
+                /* <div className="white-panel">
                   <div className="register-show">
                     <Register/>
                   </div>
@@ -79,12 +85,7 @@ class App extends React.Component {
                   <Login/>
                   </div>
 
-                </div> */}
-
-
-
-              {/* </div> */}
-
+                </div> */
 
     /*if (this.state.logged){
 
@@ -111,14 +112,6 @@ class App extends React.Component {
       );
   }
 */
-}
-
-}
-
-
-export default App;
-
-// **************************************************//
 
 
     // else if (this.state.dash && this.state.logged){

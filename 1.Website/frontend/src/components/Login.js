@@ -112,7 +112,7 @@ class Login extends React.Component{
                 responseData:res.data //data
             },()=>{
                 // alert('res:'+this.state.answer)
-                console.log(this.state)//Heavey checks
+                console.log(this.state)//Heavy checks
                 if (this.state.responseData === undefined || this.state.responseData === null ){
                     alert('try again') ;
 

@@ -8,7 +8,8 @@ function getPermissions(role)
         case "developer":
              Permissions = [
                 'edit',
-                'view'
+                'view',
+                'Save Graph changes'
             ];
             return Permissions
             break;
@@ -94,12 +95,10 @@ function getAllRoles()
         'Project Manager',
         'Client',
         'Owner',
-        'scrum-master',
-        'developer',
-        'Tester',
+        'Developer',
         'Business analyst',
-        'Tech Lead',
-        'QA engineer',
+        'Team Lead',
+        'Viewer',
     ]
 
     return Roles;

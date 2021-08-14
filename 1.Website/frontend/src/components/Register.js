@@ -1,8 +1,8 @@
 import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
-import { Link} from 'react-router-dom';
-import {form} from "react-bootstrap";
+// import { Link} from 'react-router-dom';
+// import {form} from "react-bootstrap";
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 /*Rest part checks for submitting null values for all inputs*/
@@ -181,7 +181,7 @@ class Register extends React.Component{
 
         return (
             <div className="base-container" ref={this.props.containerRef}>
-                <div id="registerscreen">
+                <div id="registerScreen">
                     <h4>Sign Up</h4>
                     <form className="logForm" onSubmit={this.onSubmit} >
                         <p >First Name</p>
@@ -249,10 +249,6 @@ class Register extends React.Component{
                         )}
                         <br />
                         <button  className="btn1" type="submit"> Submit </button>
-                        <small>Already Have an Account? Login
-
-                            <Link to="/signIn"> Here</Link>
-                        </small>
                     </form>
                 </div>
             </div>

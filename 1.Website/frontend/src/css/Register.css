@@ -3,34 +3,34 @@
 }
 
 
-#registerscreen {
+#registerScreen {
     background-color: #001122;
     color: white;
     max-width: 400px;
     height: auto;
     position: relative;
-    left: 37%;
-    top: 45%;
+    margin-left: 41%;
+    margin-top: 2%;
     box-sizing: border-box;
     padding: 20px 40px;
     border-radius: 20px;
 }
 
-#registerscreen p {
+#registerScreen p {
     margin: 0;
     padding: 0;
     text-align: left;
     font-weight: bold;
 }
 
-#registerscreen input{
+#registerScreen input{
     width: 100%;
     margin-bottom: 20px;
     font-size: 14px;
 
 }
 
-#registerscreen input[type="password"], input[type="email"],input[type="text"] {
+#registerScreen input[type="password"], input[type="email"],input[type="text"] {
     border: none;
     border-bottom: 1px solid #fff;
     background: transparent;
@@ -52,7 +52,7 @@ h4 {
     font-size: 20px;
 }
 
-#registerscreen .btn1 {
+#registerScreen .btn1 {
     width: 100%;
 }
 
@@ -68,5 +68,5 @@ input.error {
 .errorMessage {
     color: red;
     font-size: 0.75em;
-    display: relative;
+    position: relative;
 }

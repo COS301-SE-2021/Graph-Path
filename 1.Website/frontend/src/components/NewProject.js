@@ -17,6 +17,8 @@ class NewProject extends React.Component{
             answer:null,
             responseData:null,
             redirect:false,
+            rbca:[],
+            role:"Client"
         }
     }
 
@@ -24,10 +26,40 @@ class NewProject extends React.Component{
     addMember = (memberEmail) =>{
         console.log('add member',memberEmail) ;
         if (memberEmail !== undefined && Array.isArray(memberEmail)){
+            let users = [] ;
+            memberEmail.map((user)=>{
+                var label = user.label ;
+                var email = user.value
+                let roledUser = {
+                    email:email,
+                    role:"Client",
+                    label:label
+                }
+                users.push(roledUser) ;
+            }) ;
+
+
             this.setState({
-                members:memberEmail 
+                members:users 
             }, console.log('after update',this.state))
         }
+    }
+
+    getAllRoles=()=>{
+        axios.get('http://localhost:9001/project/AllPermissions')
+        .then((res)=>{
+            const control = res.data ; 
+
+            if (control.data !== null){
+                this.setState({
+                    rbca:control.data
+                })
+            }
+            else{
+
+            }
+            // console.log(control.data.roles,'rbca')
+        })
     }
     
 
@@ -81,6 +113,10 @@ class NewProject extends React.Component{
         }) ;
     }
 
+    componentDidMount(){
+        this.getAllRoles() ;
+    }
+
     
     handleSubmit = (event) =>{
         event.preventDefault() ; 
@@ -90,7 +126,6 @@ class NewProject extends React.Component{
             startDate:this.state.startDate,
             dueDate:this.state.dueDate,
             groupMembers:[{email:this.props.userEmail, role:"owner"},...this.state.members],
-            groupManagers:[this.props.userEmail] ,
             owner:this.props.userEmail, //add ownwer from dashboard
             graph:{}, //ES6
             //userId:from dashboard
@@ -139,7 +174,12 @@ class NewProject extends React.Component{
                         {this.state.members.length>0?
                         this.state.members.map((value,ind)=>{
                             return <>
-                                <span key={ind} data-num={ind}>{value.label}</span><select></select>
+                                <span key={`q${ind}`} data-num={ind}>{value.label}</span> &nbsp;
+                                <select key={`w${ind}`} name="role" value={this.state.role} onChange={(e)=>this.updateField(e)}>
+                                    {this.state.rbca.roles.map((val,ind2)=>{
+                                        return <option key={`k${ind2}`}value={val}>{val}</option>
+                                    })}
+                                </select>
                                 <br/>
                             </>
                         })

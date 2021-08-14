@@ -50,7 +50,7 @@ body{
   background-size:cover;
   background-position:center;
   position:relative;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   float:none;
 }
 
@@ -62,11 +62,10 @@ a{
 .login-reg-panel{
   position: absolute;
   top: 50%;
+  left: 20%;
   transform: translateY(-50%);
   text-align:center;
-  width:50%;
-  right:0;left:0;
-  margin:auto;
+  width:48%;
   height:400px;
   background-color: #0b714b;
 }
@@ -157,55 +156,4 @@ a{
 .show-log-panel{
   display:block;
   opacity:0.9;
-}
-.login-show input[type="text"], .login-show input[type="password"]{
-  width: 100%;
-  display: block;
-  margin:20px 0;
-  padding: 15px;
-  border: 1px solid #b5b5b5;
-  outline: none;
-}
-
-.login-show input[type="button"] {
-  max-width: 150px;
-  width: 100%;
-  background: #444444;
-  color: #f9f9f9;
-  border: none;
-  padding: 10px;
-  text-transform: uppercase;
-  border-radius: 2px;
-  float:right;
-  cursor:pointer;
-}
-.login-show a{
-  display:inline-block;
-  padding:10px 0;
-}
-
-.register-show input[type="text"], .register-show input[type="password"]{
-  width: 100%;
-  display: block;
-  margin:20px 0;
-  padding: 15px;
-  border: 1px solid #b5b5b5;
-  outline: none;
-}
-.register-show input[type="button"] {
-  max-width: 150px;
-  width: 100%;
-  background: #444444;
-  color: #f9f9f9;
-  border: none;
-  padding: 10px;
-  text-transform: uppercase;
-  border-radius: 2px;
-  float:right;
-  cursor:pointer;
-}
-
-a{
-  text-decoration:none;
-  color:#2c7715;
 }
