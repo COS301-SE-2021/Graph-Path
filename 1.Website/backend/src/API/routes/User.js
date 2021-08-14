@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const mongoose = require('mongoose') ;
-var ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
 const UserManagerService = require('../../Services/UserManagerService');
 
@@ -13,24 +13,23 @@ const UserManagerService = require('../../Services/UserManagerService');
 
 
      router.get('/listOfAllUsers', (req, res, next) => {
-         //console.log('received request ', req.body, 'servicing.....');
 
          UserManagerService.getAllUsers(db)
          .then((ans)=>{
-                 if(ans != null){
+                 if(ans === "No users"){
                      res.send({
-                         message:"All users retrieved",
-                         data:ans
+                         message:"No available users to retrieve."
                      })
                  }else{
                      res.send({
-                         message:"Could not retrieve the users.",
+                         message:"Users retrieved successfully.",
                          data: ans
                      })
                  }
          }).catch(err=>{
                  res.status(500).send({
-                    message: "Could not retrieve all users."
+                    message: "Server error: Could not retrieve all users.",
+                     err :err
                  });
          });
 
