@@ -26,9 +26,11 @@ async function getUserByID(dbController,id) {
             "_id": ObjectId(id)
         })
             .then((ans) => {
-
-                resolve(ans);
-
+                if(ans == null){
+                    resolve("No user found");
+                }else{
+                    resolve(ans);
+                }
 
             })
             .catch(err => {
