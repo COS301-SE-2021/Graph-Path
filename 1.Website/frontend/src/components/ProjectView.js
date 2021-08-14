@@ -2,8 +2,8 @@ import React from 'react' ;
 import { Link } from 'react-router-dom';
 import '../css/common.css' ;
 import '../css/ProjectView.css'
-import {Button} from "react-bootstrap";
-//import {Button, Offcanvas} from "react-bootstrap";
+import {Button, Offcanvas} from "react-bootstrap";
+
 //Receives as a prop the project to display
 class ProjectView extends React.Component{
     constructor(props){
@@ -54,36 +54,27 @@ class ProjectView extends React.Component{
                             type='text'
                             defaultValue={project.dueDate} disabled />
 
-                        <input type="button" id="editBtn" value="Edit" />
+                        <input id="btn1" disabled type="button" id="editBtn" value="Edit" />
                     </form>
+                     <br/>
+                     <Button id="div3" onClick={this.handleShow}>
+                         View Members
+                     </Button>
+
+                     <Offcanvas show={this.state.show} onHide={this.handleClose}>
+                        <Offcanvas.Header closeButton>
+                            <Offcanvas.Title>Project Members</Offcanvas.Title>
+                        </Offcanvas.Header>
+                         <Offcanvas.Body>
+                             {project.groupMembers.map((value,index)=>{
+                                 return <div key={index}>{value.email}</div>
+                             })}
+                         </Offcanvas.Body>
+                     </Offcanvas>
 
 
 
                 </div>
-                {/* <p>Project Name : {project.projectName} </p>
-
-            <p>Project Start Date: </p>{project.startDate===null?
-            <h6 className="project-alert-text">Start date not set </h6>:project.startDate}
-
-            <p>Project Due Date:</p>{project.dueDate===null?
-            <h6 className="project-alert-text">Due date not set </h6>:project.dueDate}
-
-*/}
-
-
-
-
-            <br/>
-            Members In Project
-                 <div id="div3">
-                     <Button>View Members</Button>
-                 </div>
-                {project.groupMembers.map((value,index)=>{
-                    return <div key={index}>{value.email}</div>
-                })}
-
-
-
 
             </div>
 
@@ -117,17 +108,14 @@ class ProjectView extends React.Component{
                    { //If project has groupManagers and u are one of them, you can edit, else just view
                         (project.groupManagers !== undefined && project.groupManagers.indexOf(email) > 0)||email === project.owner?
                             <div id="div2" >
-                                <span>
-                                    <span onClick={this.toggleView}>{this.state.editView?'Project Details':'Edit Project'}
-                                     </span>
-                                 &nbsp;
-                                 &nbsp;
+
+
                                     <span id="view-graph-div">
                                         <Link to="/addTask">View Graph</Link>
                                     </span>
 
-                                </span>
-                            </div>:<></>
+
+                            </div>: <></>
                    }
 
                 {
