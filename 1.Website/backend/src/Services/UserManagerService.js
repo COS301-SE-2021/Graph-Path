@@ -115,9 +115,7 @@ async function insertUser(dbController, userObject){
                         db.collection('Users').insertOne(userObject)
                         .then((ans)=>{
 
-
-                                 //console.log("ln 119",ans);
-                                 return "new user";
+                            resolve(ans);
                         })
                             .catch((err)=>{
 
@@ -132,12 +130,9 @@ async function insertUser(dbController, userObject){
             })
     })
 
-
-
-
-
-
 }
+
+
 
     //const salt = await bcrypt.genSalt(10);
     //userObject.password = await  bcrypt.hash(userObject.password,salt);
