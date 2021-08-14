@@ -134,7 +134,8 @@ class SigmaGraph extends React.Component{
             <div>
             <span className="projName">{this.props.project.projectName}</span>
             {
-                typeof this.props.sendGraphData === 'function'? //if there's a save option
+                typeof this.props.sendGraphData === 'function' &&
+                EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
                 <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
                 this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
                 Save</button>:""

@@ -55,7 +55,7 @@ class ProjectView extends React.Component{
                             type='text'
                             defaultValue={project.dueDate} disabled />
 
-                        <input id="btn1" disabled type="button" id="editBtn" value="Edit" />
+                        <input disabled type="button" id="editBtn" value="Edit" />
                     </form>
                      <br/>
 
@@ -110,7 +110,7 @@ class ProjectView extends React.Component{
 
         const project = this.props.projectToDisplay ; 
         
-        const email = this.props.userEmail ;
+        // const email = this.props.userEmail ;
         if (project !== undefined)
         return (
             <div id="div1">
