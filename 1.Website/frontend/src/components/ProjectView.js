@@ -9,7 +9,7 @@ class ProjectView extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            editView:false,
+            edit:false,
             show: false,
 
         }
@@ -55,7 +55,8 @@ class ProjectView extends React.Component{
                             type='text'
                             defaultValue={project.dueDate} disabled />
 
-                        <input disabled type="button" id="editBtn" value="Edit" />
+                        <input disabled={this.state.edit} type="button" id="editBtn" value="Edit" 
+                        onClick={this.toggleView}/>
                     </form>
                      <br/>
 
@@ -73,7 +74,8 @@ class ProjectView extends React.Component{
                         </Offcanvas.Header>
                          <Offcanvas.Body>
                              {project.groupMembers.map((value,index)=>{
-                                 return <div key={index}>{value.email}</div>
+                                 console.log('from members',value)
+                                 return <div key={index}>{value.email} {value.label}</div>
                              })}
                          </Offcanvas.Body>
                      </Offcanvas>
@@ -87,21 +89,11 @@ class ProjectView extends React.Component{
         )
     }
 
-    editView = (project)=>{
-         return(
-            <div className="edit">
-                <div className="box">
-                    
-                    <button onClick={this.toggleView}>Close</button>
-                    <button>Save</button>
-                </div>
-            </div>
-        )
-    }
 
     toggleView = ()=>{
+        console.log('change view',this.state.edit)
         this.setState({
-            editView:!this.state.editView
+            edit:!this.state.edit
         })
     }
 
@@ -122,16 +114,19 @@ class ProjectView extends React.Component{
                 
 
                 {
-                    this.state.editView ===false ? this.viewProject(project,EditPermissionRoles) :this.editView()
+                 this.viewProject(project,EditPermissionRoles) 
                 }
                
             </div>
         )
-        return (
-            <div>
-                Create a Project using the Create Project option on the Dashboard Menu 
-            </div>
-        )
+        else{
+
+            return (
+                <div>
+                    Create a Project using the Create Project option on the Dashboard Menu 
+                </div>
+            )
+        }
     }
 }
 

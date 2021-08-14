@@ -102,7 +102,7 @@ class Node extends React.Component{
                     </Route>
                     <Route path={`${match.url}/task/`} render={()=>{
                         return <>
-                        <Task addTask={this.addNewNode} 
+                        <Task addTask={this.addNewTask} 
                             fullForm={true}
                             label={query.get('label')}
                         />
