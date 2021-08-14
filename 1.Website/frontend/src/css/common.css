@@ -87,20 +87,21 @@
   z-index: 1000;
 }
 
-.btn2{
+#btn2{
   background-color: #04AA6D;
   color: white;
   padding: 10px 16px;
   margin-top: 30px;
-  margin-right: 90px;
+  margin-right: 10px;
   border: none;
   cursor: pointer;
   width: 100%;
   font-weight: bold;
   text-decoration: none;
+  border-radius: 5px;
 }
 
-.btn2:hover {
+#btn2:hover {
   background-color: #0b714b;
 }
 
@@ -112,7 +113,7 @@
   position: absolute;
 }
 
-.project-card{
+#project-card{
   background-color: #001122;
   color: white;
   display: inline-block;
@@ -125,21 +126,8 @@
   box-shadow: 5px 5px #01050c;
 }
 
-.card{
-  display: flex !important;
-  background-color: #fff !important;
-
-}
-
-.myCard{
-  display: inline-block;
-  background-color: #001122;
-  color: white;
-  width: 400px;
-}
-
-
-.Footer{
+#Footer{
+  margin-top: 25px;
   margin-right: 150px;
   position: relative;
   padding-top: 1%;
