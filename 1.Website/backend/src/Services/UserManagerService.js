@@ -68,7 +68,7 @@ async function getUserByEmail(dbController ,email){
 
 }
 
-async function getAllOtherUsers(dbController,email,id){
+async function getAllOtherUsers(dbController,email){
 
     const db = dbController.getConnectionInstance();
     return await  new Promise((resolve, reject)=>{
