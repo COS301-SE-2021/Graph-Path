@@ -31,6 +31,7 @@ async function updateNodesID( DBcontroller,Project) {
             node.uniqueID = Project['_id']+"_"+node.id;
             Project.graph.nodes[i] = node;
 
+
         }
        db.collection('Projects').updateOne({
            "_id": ObjectId(Project['_id'])
