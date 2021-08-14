@@ -2,23 +2,19 @@ const path = require('path') ;
 const express = require('express') ;
 const router = express.Router() ;
 
-
-/**
- * @swagger
+/**@swagger
+ *
  * /:
  *   get:
- *     summary: Returns the list of all the books
- *     tags: [Books]
+ *     summary: "this is the default home route"
  *     responses:
  *       200:
- *         description: The list of the books
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Book'
- */
+ *         description: successful retrieval of home page
+ *         contents:
+ *           html/text
+ *
+ *
+ * */
 router.get('/',(req,res)=>{
     console.log('GET ',req.url)
     res.sendFile(path.join(__dirname+'../../../public/graph1.png') );

@@ -1,9 +1,7 @@
 .newProject  {
-    /* position: relative; */
-    width: 500px;
+    width: auto;
     height: auto;
-    top: 25%;
-    left: 45%;
+    min-width: 40vw;
     background-color: #001122;
     box-sizing: border-box;
     padding: 20px 40px;

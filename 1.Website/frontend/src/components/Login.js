@@ -22,10 +22,8 @@ class Login extends React.Component{
     }
 
     change =(e) => {
-       // this.setState({
-       //     [e.target.name]: e.target.value
-        //});
 
+        console.log(e.target.name);
         e.preventDefault(); /*So the values entered don't show on URL*/
 
         const {name,value}=e.target;
@@ -85,21 +83,13 @@ class Login extends React.Component{
                     responseData:'',
                 })
          }
-        else /*if (data.password !== '' && data.email!=='' && emailRegex.test(value) && data.password.length>= 8)*/{
+        else{
             //alert('before send');
             console.log(data);
             this.sendData(data) ;
             console.log('answer from sendData',this.state.answer);
-           /* this.setState({
-                email:'',
-                password:''
-            });*/
+         
         }
-     //  else formErrors.password='Make sure all fields are filled in '
-
-        //change status of login
-
-        //this.setState({ formErrors, [name]: value });
     }
     
     sendData(data){
@@ -108,7 +98,7 @@ class Login extends React.Component{
         try{  
 
         // fetch(`http://localhost:90001/user/login/${data.email}`)
-        axios.get(`http://localhost:9001/user/login/${data.email}`)
+        axios.post(`http://localhost:9001/user/login/`,data)
         .then((response)=>{
             if (response.status===400){
                 throw Error(response.statusText) ;
@@ -122,9 +112,9 @@ class Login extends React.Component{
                 responseData:res.data //data
             },()=>{
                 // alert('res:'+this.state.answer)
-                console.log(this.state)//Heavey checks
-                if (this.state.responseData === undefined || this.state.responseData.password !== this.state.password.toString() ){
-                    // alert('try again') ;
+                console.log(this.state)//Heavy checks
+                if (this.state.responseData === undefined || this.state.responseData === null ){
+                    alert('try again') ;
 
                     this.setState({
                         formErrors:{
@@ -133,7 +123,7 @@ class Login extends React.Component{
                         }
                     })
                 }
-                else if (this.state.responseData.password === this.state.password.toString() && this.state.answer){
+                else if (this.state.responseData.password !== undefined){
                     //access given
                     // alert('Am I getting access');
                     this.props.logIn(true) ; 
@@ -164,37 +154,46 @@ class Login extends React.Component{
         const {formErrors} = this.state;
         return (
 
-            <div className="loginScreen">
-                <form className="logForm" id="inForm" onSubmit= {this.onSubmit}>
-                    <h4>Sign In</h4>
-                    <p>Email</p>
-                    <input
-                        className={formErrors.email===false ? 'error': null}
-                        name = 'email'
-                        type='email'
-                        placeholder='Email' value={this.state.email}
-                        onChange={this.change}
-                    />
-                    {formErrors.email === false && this.state.responseData ===undefined &&(
-                        <span className='errorMessage'>{this.state.answer}</span>
-                    )}
+            <div className="BoxContainer">
+                <div className="loginScreen">
+
+                    <form className="logForm" id="inForm" onSubmit= {this.onSubmit}>
+                        <div className="FormContainer">
+                            <h4>Sign In</h4>
+                            <p>Email</p>
+                            <input
+                                className={formErrors.email===false ? 'error': null}
+                                name = 'email'
+                                type='email'
+                                placeholder='Email' value={this.state.email}
+                                onChange={e=>this.change(e)}
+                            />
+                            {formErrors.email === false && this.state.responseData ===undefined &&(
+                                <span className='errorMessage'>{this.state.answer}</span>
+                            )}
 
 
-                    <p>Password</p>
-                    <input
-                        className={formErrors.password===false ? 'error': null}
-                        name='password'
-                        type='password'
-                        placeholder='Password' value={this.state.password}
-                        onChange={e=>this.change(e)}
-                    />
-                    {formErrors.password === false && this.state.responseData !==null &&(
-                        <span className='errorMessage'>Invalid Password</span>
-                    )}
-                    <input type="submit" className="btn1" value="Login" />
-                    Don't Have an Account? Register <Link to="/signUp"> Here</Link>
-                </form>
+                            <p>Password</p>
+                            <input
+                                className={formErrors.password===false ? 'error': null}
+                                name='password'
+                                type='password'
+                                placeholder='Password' value={this.state.password}
+                                onChange={e=>this.change(e)}
+                            />
+                            {formErrors.password === false && this.state.responseData !==null &&(
+                                <span className='errorMessage'>Invalid Password</span>
+                            )}
+                        </div>
+
+                        <input type="submit" className="btn1" value="Login" />
+                        <Link to=""> Forgot your password?</Link>
+                        <br/>
+
+                    </form>
+                </div>
             </div>
+
 
 
         );

@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "@shelf/jest-mongodb": "^2.0.1",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "db": "^3.3.1",
     "dotenv": "^10.0.0",
@@ -20,11 +21,13 @@
   },
   "devDependencies": {
     "jest": "^27.0.6",
-    "supertest": "^6.1.4"
+    "supertest": "^6.1.4",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "scripts": {
     "test": "jest",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",

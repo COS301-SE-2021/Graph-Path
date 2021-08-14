@@ -1,18 +1,83 @@
 const express = require('express');
-//swap out service
-const projectManager = require('../../Services/ProjectService');
+const Permissions = require('../../Helpers/Permissions');
 const mongoose = require('mongoose') ;
+const {route} = require("express/lib/router");
 const router = express.Router();
-var db = require('../../Controllers/DBController').getDB();
-console.log("-----test2-----")
-
-
+const ObjectId = require('mongodb').ObjectID;
+const ProjectManagerService = require('../../Services/ProjectManagerService');
+const scratchPad = require('../../Helpers/kanbanBoard');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+    router.get('/convertToKanbanBoard/:id',(req,res)=>{
+
+        const ProjectId = req.params.id;
+        scratchPad.getProjectGraph(db,ProjectId)
+
+            .then((project)=>{
+
+                scratchPad.updateNodesID(db ,project).then(()=>{})
+
+                let projectNodes = scratchPad.getNodes(project);
+                if(projectNodes.length === 0)
+                {
+                    res.send({
+                        message:"this project graph has no nodes",
+                        data: []
+                    })
+                }
+
+                else {
+                    // pool all tasks of nodes
+                    //console.log(projectNodes);
+                    scratchPad.getTasks(db,projectNodes).then((AllTasks)=>{
+                        if(AllTasks === "Tasks collection empty")
+                        {
+                            res.send({
+                                message:AllTasks,
+                                data: []
+                            })
+                        }
+
+                        else if(AllTasks.length == 0)
+                        {
+                            res.send({
+                                message: "This project has no tasks",
+                                data: []
+                            })
+                        }
+
+                        else
+                        {
+                            res.send({
+                                message:"success",
+                                data: scratchPad.splitTasksByStatus(AllTasks),
+                            })
+                        }
+
+                   })
+                        .catch((err)=>{
+                            res.send({
+                                message:"error",
+                                data: err
+                            })
+                        });
+
+
+
+                }
+
+
+            })
+            .catch((err)=>{
+
+            })
+
+
+    })
     router.get('/find', (req, res, next) => {
 
-        console.log("-----test2-----")
+
         db.collection('Projects').findOne({})
             .then((ans) => {
                 console.log('success', ans);
@@ -32,100 +97,146 @@ function makeProjectRoute(db) {
     });
 
     router.get('/list', (req, res, next) => {
-        console.log('received request ', req.body, 'servicing.....');
-        db.collection('Projects').find({}).toArray()
-            .then((projects) => {
-                console.log('success', projects);
-                if (projects.length > 0) {
+
+        ProjectManagerService.getAllProjects(db)
+            .then((ans) => {
+                if(ans ==="No projects"){
                     res.send({
-                        message: projects//.json()
-                    });
-                } else {
+                        message: "There are no projects.",
+                        data: []
+                    })
+                }else{
                     res.send({
-                        message: "No Projects found"
+                        message: "The retrieval of the projects was successful.",
+                        data:ans
                     })
                 }
-            }, (ans) => {
-                console.log('rejected', ans);
-                res.send({
-                    data: ans
-                });
-            })
+
+                })
             .catch(err => {
-                console.log('from db req', err)
+                res.status(500).send({
+                    message: "Could not retrieve the projects."
+                })
             })
 
     })
-
 
     router.get('/getAllProjectsByUserEmail/:email', (req, res, next) => {
+
         // console.log('received request ', req.params, 'servicing.....');
-        let usr=req.params.email;
-        db.collection('Projects').find({
-            "groupMembers":usr
-        }).toArray()
-            .then((projects) => {
-                // console.log('success', projects);
-                if (projects.length > 0) {
+        let mail=req.params.email;
+
+        ProjectManagerService.getAllProjectsByUserEmail(db,mail)
+            .then(ans=>{
+
+                if (ans ==="No matched projects")
+                {
                     res.send({
-                        message:`Found ${projects.length}projects` , 
-                        data:projects
-                    });
-                } else {
-                    res.send({
-                        message: "No Projects found"
+                        message: "unsuccessful. "+ans+" for user: "+mail,
+                        data: []
                     })
                 }
-            }, (ans) => {
-                console.log('rejected', ans);
-                res.status(500).send({
-                    data: ans
-                });
+
+                else{
+
+                    res.send({
+                        message: "successful",
+                        data: ans
+                    })
+                }
             })
             .catch(err => {
-                console.log('from db req', err)
-                res.send({
-                    message: "error",
-                    data: err
+                res.status(500).send({
+                    message: "Server error. Could not retrieve projects.",
+                    data: null
+
                 });
             })
 
     })
+
+    router.get('/getProjectByID/:id',(req,res,next)=>{
+
+        let ID = req.params.id ;
+        if(ID ==='' || ID === undefined)
+        {
+            res.status(400).send({
+                message:"Invalid ID provided."
+            })
+        }
+        ProjectManagerService.getProjectByID(db,ID)
+            .then(ans=>{
+                if(ans === "No project"){
+                    res.send({
+                        message: "No project with this ID"
+                    })
+
+                }else if(ans != null){
+                    res.send({
+                        message: "Project retrieved.",
+                        data: ans
+                    })
+                }else{
+                    res.send({
+                        message: "Could not retrieve project."
+                    })
+                }
+
+            })
+            .catch(err=>{
+                res.status(500).send({
+                    message: "Server error: Could not retrieve the project, make sure your ID is valid and correct.",
+                    err:err
+                })
+            })
+    }) ;
+
+    router.get("/AllPermissions",(req,res)=>{
+
+
+        console.log(Permissions.getAllRolesAndPermissions())
+        res.send({
+            message:"successful",
+            data: {
+                roles : Permissions.getAllRoles(),
+                rolePermissions: Permissions.getAllRolesAndPermissions(),
+            }
+        })
+    })
+
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
     router.post('/newProject',  (req, res, next) => {
-        if (req == undefined || req.body == undefined) {
+        if (req === undefined || req.body === undefined) {
             res.json({
-                message: "Req is null"
+                message: "There was no information provided."
             });
         }
-        if (req.body.projectName == undefined) {
+        if (req.body.projectName === undefined) {
             console.log('no project name')
             res.send({
                 message: "Please specify a Project Name"
             })
 
+
         } else {
-            console.log('received request ', req.body, 'servicing.....');
-            var data = req.body;
+            let data = req.body;
             const id = new mongoose.mongo.ObjectID();
             data["_id"] = id;
-             db.collection('Projects').insertOne(data)
-                .then((ans) => {
-                    console.log('success', ans.ops);
+            ProjectManagerService.insertProject(db,data)
+                .then(ans=>{
                     res.send({
-                        message: "saved",
-                        data: ans['ops']
-                    });
-                }, (ans) => {
-                    console.log('rejected', ans);
-                    res.send({
-                        message: "request has been denied please try again"
-                    });
+                        message:"The Project has been created.",
+                        data: id
+                    })
                 })
-                .catch(err => {
-                    console.log('from db req', err)
+                .catch(err=>{
+                    res.status(500).send({
+                        message: "The project was not created."
+                    })
                 })
+
+
         }
     });
 
@@ -149,92 +260,125 @@ function makeProjectRoute(db) {
  *          description:The body is not complete.
  */
 
-router.delete('/deleteProject',(req,res)=>{
-    console.log('DELETE ',req.query)
-    const {projectName,owner} = req.query ;
-    if (projectName !== undefined && owner !== undefined){
+router.delete('/deleteProject/:id',(req,res)=>{
+    let ID = req.params.id;
+
         // console.log(projectName,owner); 
-        db.collection('Projects').deleteOne({
-            projectName:projectName ,
-            owner:owner
-        })
-        .then(del =>{
-            console.log('result from db ',del.result) ;
-            if (del.result.n > 0){
+    ProjectManagerService.removeProjectByID(db,ID)
+        .then(ans =>{
+            if(ans === null){
                 res.send({
-                    message:"Deleted.",
-                    data:0
-                }) ;
-            }
-            else{
+                    message: "Couldn't remove project."
+                });
+            }else{
                 res.send({
-                    message:"Project not found"
-                }) ;
+                    message: "Project was removed successfully."
+                });
             }
+
         })
         .catch(err=>{
             res.status(500).send({
-                message:"Server Error",
-                err:err
+                message:"Could not remove project."
             })
         })
-    }
-    else{
-        res.send({
-            message:"Request not complete"
-        }) ;
-    }
 })
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
-router.patch('/updateProjectGraph/:name/:graph',(req, res, next)=>{
-    let nme = req.params.name;
+router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
+    let ID = req.params.id;
     let grph = req.params.graph;
-    //let tst = req.body.graph;
     let grph2 = JSON.parse(grph);
-    console.log("type of graph: "+ typeof grph);
-   // console.log("req.body: "+tst);
-    console.log("nme: "+nme);
-    console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
-    console.log("grph.edges[0].id: "+grph2.edges[0].id);
-    db.collection('Projects').updateOne({
-        projectName:nme
-    },{
-        $set:{graph:grph2}
-    },(err,result)=>{
+    //console.log("type of graph: "+ typeof grph);
+   // console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
+    //console.log("grph.edges[0].id: "+grph2.edges[0].id);
 
-        if(err){
-            console.log("Could not update the project graph: "+err);
-            res.send({
-                message: "Failed",
-                data: err
-            });
-        }else{
-            console.log("The update of the task description was a success: "+result);
-            res.send({
-                message: "success",
-                data: result
-            });
-        }
-
-    })
-    //.catch((err)=>{
-    //    console.log("Could not update the task description: "+err);
-    // })
+    ProjectManagerService.updateProjectGraph(db,ID,grph2 )
+    .then(ans=>{
+            if(ans.modifiedCount === 0){
+                res.send({
+                    message: "Could not update the graph."
+                })
+            }else{
+                res.send({
+                    message: "The graph was updated."
+                })
+            }
+        })
+    .catch((err)=>{
+       res.status(500).send({
+           message: "Could not update the project graph."
+       })
+     })
 });
 
-router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
-    let nme = req.params.name;
+router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
+    let ID = req.params.id;
+    let mail = req.params.email;
+    ProjectManagerService.addNewProjectMember(db,ID, mail)
+        .then(ans=>{
+            if(ans.modifiedCount >0){
+                res.send({
+                    message: "Member added successfully."
+                })
+            }else{
+                res.send({
+                    message: "Could not add member."
+                })
+            }
+        })
+    .catch((err)=>{
+        res.status(500).send({
+            message: "An error has occurred."
+        })
+     })
+});
+
+
+//PUT ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.put('/updateEverythingProject/:id',(req,res)=>{
+    const ID = req.params.id;
+    let pname = req.body.projectName;
+    let ddate = req.body.dueDate;
+    let sdate = req.body.startDate;
+    let owner = req.body.owner;
+    let graph = req.body.graph;
+   // let graph2 = JSON.parse(graph);
+    let groupMembers = req.body.groupMembers;
+
+    ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
+        .then(ans=>{
+            if(ans.modifiedCount > 0){
+                res.send({
+                    message: "The project was updated."
+                })
+            }else{
+                res.send({
+                    message: "The project was not updated."
+                })
+            }
+
+        })
+        .catch(err=>{
+            res.status(500).send({
+                message: "Server error: Could not update the project.",
+                err: err
+            })
+        })
+});
+
+router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
+    let projId = req.params.id;
     let eml = req.params.email;
     db.collection('Projects').updateOne({
-        projectName:nme
+        "_id": ObjectId(projId)
     },{
 
             $push: {
-                groupMembers: eml
+                "groupManagers": eml
             }
 
-    },(err,result)=>{
+    },true,(err,result)=>{
 
         if(err){
             console.log("Could not update the project graph: "+err);
@@ -259,8 +403,9 @@ router.patch('/addToProjectGroupMembers/:name/:email',(req, res, next)=>{
 router.put('/updateProjectGraph',(req,res)=>{
     const project = req.body.projectName ;
     const graph = req.body.graph ;
+    const projId = req.body.projId ;
 
-    console.log('PUT ../',project,'body: ',graph) ; 
+    console.log('PUT ../',project,'body: ',graph,projId) ; 
     if (graph === undefined || graph.nodes === undefined){
         return res.status(400).send({
             message:"Invalid Graph structure"
@@ -268,11 +413,12 @@ router.put('/updateProjectGraph',(req,res)=>{
     }
 
     db.collection('Projects').updateOne({
-        projectName:project
+        projectName:project,
+        "_id": ObjectId(projId)
     },
     {
-        $set:{graph:graph}
-    },(err,ans)=>{
+        $set:{"graph":graph}
+    },true,(err,ans)=>{
         if (err){
             console.log('error',err)
             return res.status(500).send({

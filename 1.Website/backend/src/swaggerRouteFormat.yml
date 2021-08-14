@@ -1,0 +1,42 @@
+---
+components:
+  schemas:
+    objectName:
+      type: object
+      required:
+        - field1
+        - field2
+        - fieldn
+      properties:
+        objAttrName:
+          type: attribute type
+          description: description of attribute
+        objAtrrName2:
+          type: attribute type
+          description: description of attribute
+      example:
+        objAttrName: "example name"
+        objAttrName2: "example name two"
+...
+
+---
+tags:
+  name: The primary object this route deals with
+  description: the short description of the this route
+...
+
+---
+/route:
+  get_Or_Post:
+    summary: "what this specific route actually does"
+    tags: [tagName]
+    responses:
+      code:
+        description: "what this status code means"
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Task'
+...

@@ -1,11 +1,68 @@
 .header_{
-    background-color: #0b714b;
+    background-color: transparent;
     width: 100%;
+
 }
 
 .header_ > div {
   margin: 1px;
 }
+
+/*
+- bigHeader - Shows when logged in
+- header_ - shows when logged out
+*/
+
+#btn1-link{
+    margin-right: 1%;
+    padding-left: 50px;
+    padding-right: 50px;
+    text-decoration: none;
+    color: white;
+}
+
+#btn2-link{
+    margin-left: 1%;
+    padding-left: 50px;
+    padding-right: 50px;
+    text-decoration: none;
+    color: white;
+}
+
+.img1{
+    width: 300px;
+    position: absolute;
+    top: 350px;
+    left: 25px;
+
+}
+
+.img2{
+    width: 300px;
+    position: absolute;
+    top: 150px;
+    right: 20px;
+    z-index: -1;
+}
+
+.log-container{
+    background-color: transparent;
+    position: relative;
+    padding-top: 15%;
+    padding-bottom: 10%;
+}
+
+.log{
+    background-color: #001122;
+    width: 40%;
+    position: relative;
+    margin-left: 30%;
+    border-radius: 25px;
+    padding-top: 5%;
+    padding-bottom: 5%;
+
+}
+
 
 .App-header {
     background-color: #001122;
@@ -15,7 +72,7 @@
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
-    position: relative;
+
 
   }
   
@@ -25,9 +82,15 @@
   align-items: unset;
   display: block;
   flex-direction: row;
+
+   /* border-radius: 15px;
+    width: 82%;
+    float: right;
+    margin-top: 2%;
+    margin-right: 1%;*/
 }
 .bigHeader > * {
-  margin: 0px;
+  margin: 0;
 }
 #DashButton{
     position: relative;
