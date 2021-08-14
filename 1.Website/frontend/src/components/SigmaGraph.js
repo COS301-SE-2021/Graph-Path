@@ -116,7 +116,9 @@ class SigmaGraph extends React.Component{
   
   render(){
     const {match} = this.props ;
-    var mgr = this.props.graphManager;
+    var mgr = this.props.graphManager; 
+    const EditGraphPermissionRoles = ['owner','project manager','developer']
+
     // console.log(' on mount', mgr) ;
     if (mgr !== undefined){
     
@@ -130,9 +132,10 @@ class SigmaGraph extends React.Component{
         return (
           <div className="graphContainer">
             <div>
-            <span className="projName">{this.props.projectName}</span>
+            <span className="projName">{this.props.project.projectName}</span>
             {
-                typeof this.props.sendGraphData === 'function'? //if there's a save option
+                typeof this.props.sendGraphData === 'function' &&
+                EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
                 <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
                 this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
                 Save</button>:""
@@ -173,7 +176,9 @@ class SigmaGraph extends React.Component{
                 {/* <RelativeSize  initialSize={200}/> */}
                 {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
                 {/* <RandomizeNodePositions seed={2} />         */}
-                <DragNodes />
+                {EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? 
+                <DragNodes />                
+                :<></> }
                 <GraphMessage  ref={this.bridge} label={this.state.source === 'Source Node'
                 ?"Press and hold Ctrl , select source node":
                 "Keep Holding Ctrl and select target node"} />

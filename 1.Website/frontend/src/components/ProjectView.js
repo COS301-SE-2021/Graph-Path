@@ -1,44 +1,94 @@
 import React from 'react' ;
 import { Link } from 'react-router-dom';
 import '../css/common.css' ;
-//Receives as a prop the poject to display
+import '../css/ProjectView.css'
+import {Button, Offcanvas} from "react-bootstrap";
+
+//Receives as a prop the project to display
 class ProjectView extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            editView:false
+            editView:false,
+            show: false,
+
         }
     }
-    viewProject = (project)=>{
-     
+
+    handleClose = () =>{
+        this.setState({
+            show:false
+        })
+    }
+
+    handleShow = () =>{
+        this.setState({
+            show: !this.state.show
+        })
+    }
+
+
+    viewProject = (project,permissions)=>{
+        console.log('project view',project,permissions)
         return(
-            <>
-            <p>Project Name : {project.projectName} </p>
+            <div id="view-div">
+                 <div id="project-form-div">
+                    <form id="project-form">
+                        <h3 style={{fontWeight:"bold"}}>Project Information</h3>
+                        <label>Project Name</label>
+                        <input
+                            type='text'
+                            defaultValue={project.projectName} disabled />
 
-            <p>Project Start Date: </p>{project.startDate===null?
-            <h6 className="project-alert-text">Start date not set </h6>:project.startDate}
-            
-            <p>Project Due Date:</p>{project.dueDate===null?
-            <h6 className="project-alert-text">Due date not set </h6>:project.dueDate}
+                        <label>Project Owner</label>
+                        <input
+                            type='text'
+                            value={project.owner} disabled/>
 
-            <>
-            <br/>
-            Members In Project
+                        <label>Start Date</label>
+                        <input
+                            type='text'
+                            defaultValue={project.startDate} disabled />
 
-            <div>
-                {project.groupMembers.map((value,index)=>{
-                    return <div key={index}>{value.email}</div>
-                })}
+                        <label>Due Date</label>
+                        <input
+                            type='text'
+                            defaultValue={project.dueDate} disabled />
+
+                        <input disabled type="button" id="editBtn" value="Edit" />
+                    </form>
+                     <br/>
+
+                    {  permissions.indexOf(project.role.toLowerCase())>=0 ? 
+                        <>
+                        <Button id="div3" onClick={this.handleShow}>
+                             View Members
+                        </Button>
+                        </>
+                    :""}
+                    
+                     <Offcanvas show={this.state.show} onHide={this.handleClose}>
+                        <Offcanvas.Header closeButton>
+                            <Offcanvas.Title>Project Members</Offcanvas.Title>
+                        </Offcanvas.Header>
+                         <Offcanvas.Body>
+                             {project.groupMembers.map((value,index)=>{
+                                 return <div key={index}>{value.email}</div>
+                             })}
+                         </Offcanvas.Body>
+                     </Offcanvas>
+
+
+
+                </div>
+
             </div>
-            </>
-
-            </>
 
         )
     }
-    
+
     editView = (project)=>{
-        return(
+         return(
             <div className="edit">
                 <div className="box">
                     
@@ -48,33 +98,31 @@ class ProjectView extends React.Component{
             </div>
         )
     }
+
     toggleView = ()=>{
         this.setState({
             editView:!this.state.editView
         })
     }
+
     render(){
+        const EditPermissionRoles = ['owner','project manager']
+
         const project = this.props.projectToDisplay ; 
-        const email = this.props.userEmail ;
+        
+        // const email = this.props.userEmail ;
         if (project !== undefined)
         return (
-            <div>
-                { //The role you have must allow you to have your permissions
-                project.role === "owner" ||email === project.owner?
-                    <div >
-                    <span>
-                    <span onClick={this.toggleView}>{this.state.editView?'Project Details':'Edit Project'}
-                    </span>
-                    &nbsp;
-                    &nbsp;
-                    <Link to="/addTask">Edit Graph
-                    </Link>
-                    </span>
-                </div>:<></>
-             
-                }
+            <div id="div1">
+                     <div id="div2" >
+                       <span id="view-graph-div">
+                            <Link to="/addTask">View Graph</Link>
+                        </span>
+            </div>: <></>
+                
+
                 {
-                    this.state.editView ===false ? this.viewProject(project) :this.editView()
+                    this.state.editView ===false ? this.viewProject(project,EditPermissionRoles) :this.editView()
                 }
                
             </div>
