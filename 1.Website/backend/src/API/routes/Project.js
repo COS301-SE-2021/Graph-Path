@@ -350,20 +350,19 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
         .then(ans=>{
             if(ans.modifiedCount > 0){
                 res.send({
-                    message: "The project was updated.",
-                    data: ans
+                    message: "The project was updated."
                 })
             }else{
                 res.send({
-                    message: "The project was not updated.",
-                    data: ans
+                    message: "The project was not updated."
                 })
             }
 
         })
         .catch(err=>{
             res.status(500).send({
-                message: "Server error: Could not update the project."
+                message: "Server error: Could not update the project.",
+                err: err
             })
         })
 });
