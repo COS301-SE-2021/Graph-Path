@@ -132,7 +132,8 @@ const UserManagerService = require('../../Services/UserManagerService');
 
          }).catch(err=>{
              res.status(500).send({
-                 message:"User not found"
+                 message:"Server error: User not found",
+                 err:err
              }) ;
          });
          if ( returnedUser !=null)
@@ -159,7 +160,7 @@ const UserManagerService = require('../../Services/UserManagerService');
 
 
          }
-         console.log("returned User is null");
+         //console.log("returned User is null");
 
 
      }) ;
