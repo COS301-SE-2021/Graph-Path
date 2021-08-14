@@ -341,6 +341,42 @@ const UserManagerService = require('../../Services/UserManagerService');
      });
 
 
+     router.put('/updateEverythingUser/:id',(req, res, next)=>{
+         let ID = req.params.id;
+         let mail = req.body.email;
+         let lastName = req.body.lastName;
+         let Notif = req.body.Notification;
+         let psw = req.body.password;
+         let type = req.body.type;
+         let firstName = req.body.firstName;
+         let userName = req.body.username;
+
+         UserManagerService.updateEverythingUser(db,ID, mail,lastName, Notif, psw, type, firstName, userName)
+             .then((ans)=>{
+                 if(ans == null){
+                     res.send({
+                         message:"The user was not updated."
+                     })
+                 }else if(ans.modifiedCount < 1){
+                     res.send({
+                         message: "The user does not exist."
+                     })
+                 }else if(ans.modifiedCount > 0){
+                     res.send({
+                         message: "The user was updated successfully."
+                     })
+                 }
+             })
+             .catch((err)=>{
+                 res.status(500).send({
+                     message: "Server error: Nothing was updated, make sure the provided ID is correct and valid.",
+                     err:err
+                 })
+             })
+
+     });
+
+
 
      //module.exports = router;
     return router;
