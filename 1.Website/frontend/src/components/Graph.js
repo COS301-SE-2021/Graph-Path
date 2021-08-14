@@ -269,7 +269,8 @@ class Graph extends React.Component{
                     loading:true,
                     linkNumber:-1
                 }) ;
-                axios.delete(`${this.state.api}/project/deleteProject`,{
+                console.log('B4 del',project)
+                axios.delete(`${this.state.api}/project/deleteProject/${project._id}`,{
                     params:{
                         projectName:project,
                         owner:this.props.userEmail
