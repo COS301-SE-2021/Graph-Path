@@ -191,6 +191,36 @@ async function updateTaskAssigner(dbController, id, assigner){
     })
 }
 
+async function updateEverythingTask(dbController,id, assignee, assigner, description, issued, due, nodeID, tasknr, status, project){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').updateOne({
+            "_id": ObjectId(id)
+        },{
+            $set:{
+                assignee: assignee,
+                assigner:assigner,
+                description: description,
+                issued: issued,
+                due : due,
+                nodeID : nodeID,
+                tasknr: tasknr,
+                status:status,
+                project: project
+            }
+        })
+            .then(ans=>{
+                if(ans.modifiedCount > 0){
+                    resolve("Success");
+                }else{
+                    resolve("Could not update the task");
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
 
 module.exports={
     //Task
@@ -203,5 +233,6 @@ module.exports={
     updateTaskStatus,
     //updateTaskDueDate,
     updateTaskAssigner,
-    updateTaskAssignee
+    updateTaskAssignee,
+    updateEverythingTask
 }
