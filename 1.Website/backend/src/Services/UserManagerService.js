@@ -74,7 +74,9 @@ async function getAllOtherUsers(dbController,email,id){
     return await  new Promise((resolve, reject)=>{
         db.collection('Users').find({}).toArray()
             .then((ans)=>{
-                if (ans.length > 0) {
+                if(ans == null || ans ===undefined){
+                    resolve("Users not found");
+                }else if (ans.length > 0) {
                     //remove current user first
                     let newArray = ans.filter((val)=>{
                         if(val.email !== email) {
@@ -83,12 +85,11 @@ async function getAllOtherUsers(dbController,email,id){
                     });
                     //send response
                     resolve(newArray);
-                } else {
+                } else if(ans.length < 1){
 
-                    resolve(ans);
+                    resolve("No other users");
                 }
 
-                resolve(ans);
             })
             .catch(err=>{
                 reject(err);
