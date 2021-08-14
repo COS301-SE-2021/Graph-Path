@@ -72,6 +72,8 @@ class Node extends React.Component{
         const {match} = this.props ;
         var manager = this.props.graphManager ;
         var {project} = this.props ;
+        const EditGraphPermissionRoles = ['owner','project manager','developer']
+
          
         console.log(project) ;
 
@@ -83,11 +85,15 @@ class Node extends React.Component{
         const query = new URLSearchParams(this.props.location.search );
         return (
             <div>
+                {EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? 
+              
                 <div>
                     <Link to={`${match.url}/addNode`}>Add Nodes</Link><span> </span>
                     {/* <Link to={`${match.url}/edges`}>Add Edges</Link> */}
                     <br/>
                 </div>
+                :""
+                }
                 <Switch>
                     <Route path={`${match.url}/addNode`} >
                         

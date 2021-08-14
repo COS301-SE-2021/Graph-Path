@@ -10,7 +10,7 @@ import * as FaIcons from "react-icons/fa";
 import * as ImIcons from "react-icons/im";
 import Spinner from 'react-spinner-material';
 import GraphManager from './GraphManager';
-import { Card} from "react-bootstrap";
+import { Card, ProgressBar} from "react-bootstrap";
 // Button
 // import TaskPic from '../images/task.svg';
 
@@ -24,6 +24,8 @@ class Graph extends React.Component{
             projNodeList: "",
             linkNumber : -1,
             projList: [] ,
+            ownList:[],
+            sharedList:[],
             grapRep: {
                 nodes : [],
                 edges : []
@@ -37,7 +39,7 @@ class Graph extends React.Component{
     //Display List of Projects
     //Display  Graph on Click
     emptyGraph = () =>{
-        var empty =  {
+        let empty =  {
             nodes : [],
             edges : []
         } ;
@@ -328,10 +330,10 @@ class Graph extends React.Component{
 
        
         let keyNum = -1 ;
-        
+        const placer = 100;
         //project Name to display on the graph 
         var selectedProjectName =  this.state.projList.length>0 && this.state.linkNumber >= 0 ?
-         this.state.projList[this.state.linkNumber].projectName: "No Data Found" ;
+         this.state.projList[this.state.linkNumber]: "No Data Found" ;
 
         return (
             <Router basename='viewProjects/graph'>
@@ -353,28 +355,21 @@ class Graph extends React.Component{
                             this.state.projList.length>0 ? // validate if it is an array and not empty
                             this.state.projList.map( (node) => {       
                                 keyNum = keyNum+1 ;
+
+
+
+
                                 return(
 
                                     <>
-                                    {/* <Link data-projnum={keyNum}
-                                    onClick={(e) =>{
-                                    this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
-                                    to={`/project/${keyNum}`}>{node.projectName}</Link>
-                                    {node.owner === this.props.userEmail ? 
-                                        <span title="Delete Project" id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)}>
-                                        X
-                                        </span>
-                                        :
-                                        <span/>
-                                    }
 
-
-                                    <Card key={keyNum}  data-project={node} className="project-card">
+                                    <Card key={keyNum}  data-project={node} id="project-card">
                                         <Card.Body>
                                             <Card.Title id="pTitle">{node.projectName}</Card.Title>
                                             <Card.Text id={"pText"}>Owner: {node.owner}</Card.Text>
-                                            <Card.Footer className="Footer">
-                                                <Link className="btn2"
+                                            <ProgressBar now={placer} label={`${placer}%`}/>
+                                            <Card.Footer id="Footer">
+                                                <Link id="btn2"
                                                       data-projnum={keyNum}
                                                       onClick={(e) =>{
                                                           this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
@@ -387,26 +382,8 @@ class Graph extends React.Component{
                                         </Card.Body>
 
                                     </Card>
-                                    */}
-                                        <Card className="text-center" bsPrefix="project-card" key={keyNum}  data-project={node}>
-                                            <Card.Body>
-                                                <Card.Title>{node.projectName}</Card.Title>
-                                                <Card.Text>
-                                                    Owner: {node.owner}
-                                                </Card.Text>
-                                                <Card.Footer className="Footer">
-                                                    <Link className="btn2"
-                                                          data-projnum={keyNum}
-                                                          onClick={(e) =>{
-                                                              this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
-                                                          to={`/project/${keyNum}`}>Open
-                                                          </Link>
-                                                          {node.owner === this.props.userEmail ?
-                                                              <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node)} /> : ""}
-                                                              </Card.Footer>
 
-                                                              </Card.Body>
-                                                          </Card>
+
 
                                     </>
 
@@ -416,26 +393,6 @@ class Graph extends React.Component{
                                 <h1>Project List is empty,<br/>
                                 <p>Please refresh</p> or create a new project.</h1>
 
-                                {/*    <Card className="text-center" bsPrefix="project-card" key={keyNum}  data-project={node}>
-                                    <Card.Body>
-                                        <Card.Title>{node.projectName}</Card.Title>
-                                        <Card.Text>
-                                            Owner: {node.owner}
-                                        </Card.Text>
-                                        <Card.Footer className="Footer">
-                                            <Link className="btn2"
-                                            data-projnum={keyNum}
-                                                      onClick={(e) =>{
-                                                          this.changeNodeList(node, e.target.getAttribute("data-projnum"))}}
-                                                      to={`/project/${keyNum}`>Open</Link>
-                                                      {node.owner === this.props.userEmail ?
-                                            <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
-                                        </Card.Footer>
-
-                                    </Card.Body>
-
-                                </Card> */}
-                            
                             </div>
                             
                         }
@@ -454,7 +411,7 @@ class Graph extends React.Component{
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
                         <SigmaGraph updateGraph={this.updateGraphView}
-                            projectName={selectedProjectName}
+                            project={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             graphManager={this.state.graphManager}
                         />

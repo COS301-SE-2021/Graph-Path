@@ -12,7 +12,7 @@
     margin-top: 5%;
     box-sizing: border-box;
     padding: 20px 40px;
-    border-radius: 20px;
+    border-radius: 8px;
   /*  width: 400px;
     height: 350px;
     left: 750px;
@@ -35,12 +35,13 @@
     width: 100%;
     margin-bottom: 20px;
 
+
 }
 
 .loginScreen input[type="password"] {
     border: none;
     border-bottom: 1px solid #fff;
-    background: transparent;
+    background: transparent !important;
     height: 40px;
     color: white;
     padding-left: 3px;
@@ -51,7 +52,7 @@
 .loginScreen input[type="email"]{
     border: none;
     border-bottom: 1px solid #fff;
-    background: transparent;
+    background: transparent !important;
     height: 40px;
     color: white;
     padding-left: 3px;
@@ -73,6 +74,7 @@ input[type="email"]:invalid{
     cursor: pointer;
     width: 100%;
     font-weight: bold;
+    border-radius: 8px;
 }
 
 .btn1:hover {
