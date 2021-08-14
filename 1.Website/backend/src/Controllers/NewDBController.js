@@ -286,7 +286,7 @@ async function getAllProjectsByUserEmail(mail){
         // get all projects.
         // search projects for where mail is a member of
         // return the projects if found else return error message
-        let Projects = null;
+        let Projects = [];
         db.collection('Projects').find({}).toArray()
             .then((ans)=>{
 
@@ -295,23 +295,26 @@ async function getAllProjectsByUserEmail(mail){
                 for(let i =0 ; i < Projects.length ; i++)
                 {
                     let GroupMembers = Projects[i].groupMembers;
-                    for( let x = 0 ; x <GroupMembers.length ;x++)
-                    {
-                        if(GroupMembers[x].email == mail)
+                    if (GroupMembers !== undefined && GroupMembers!== null){
+                        for( let x = 0 ; x <GroupMembers.length ;x++)
                         {
-                            console.log("Match found");
-                            const obj = {
-                                role: GroupMembers[x].role,
-                                permissions: Permissions.getPermissions(GroupMembers[x].role),
-                                ...Projects[i],
+                            if(GroupMembers[x].email == mail)
+                            {
+                                console.log("Match found",GroupMembers.length);
+                                const obj = {
+                                    role: GroupMembers[x].role,
+                                    permissions: Permissions.getPermissions(GroupMembers[x].role),
+                                    ...Projects[i],
 
+                                }
+                                MatchedProjects.push(obj);
+                                break;
                             }
-                            MatchedProjects.push(obj);
-                            break;
+
                         }
 
                     }
-
+                    
 
                 }
 
