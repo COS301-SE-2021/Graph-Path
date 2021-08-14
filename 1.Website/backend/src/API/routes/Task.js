@@ -707,6 +707,69 @@ function  makeTaskRoute(db)
 
     });
 
+    router.put('/updateEverythingTask/:id',(req, res, next)=>{
+        let ID = req.params.id;
+        let assignee = req.body.assignee;
+        let assigner = req.body.assigner;
+        let description = req.body.description;
+        let issued = req.body.issued;
+        let due = req.body.due;
+        let nodeID = req.body.nodeID;
+        let tasknr = req.body.tasknr;
+        let status = req.body.status;
+        let project = req.body.project;
+        if(description === undefined || description ===""){
+            res.send({
+                message:"The description provided is not valid."
+            })
+        }else if(nodeID === undefined || nodeID ===""){
+            res.send({
+                message:"The node ID provided is not valid."
+            })
+        }else if(ID ===undefined || ID ==="") {
+            res.send({
+                message: "The Task ID provided is not valid."
+            })
+        }else  if(project  ===undefined || project ===""){
+            res.send({
+                message: "The project ID provided is not valid."
+            })
+        }else if(status ===undefined || status ===""){
+            res.send({
+                message:"The Task status cant be empty."
+            })
+        }else if(  !((status === "complete")||(status === "In-progress")||(status === "not yet started")||(status === "on hold"))  ){
+            res.send({
+                message:"The Task status can only be one of: completed, In-progress, not yet started, on hold"
+            })
+        }
+
+        TaskManagerService.updateEverythingTask(db,ID, assignee, assigner, description, issued, due, nodeID, tasknr, status, project)
+            .then((ans)=>{
+                if(ans == null){
+                    res.send({
+                        message:"The task was not updated."
+                    })
+                }else if(ans.modifiedCount < 1){
+                    res.send({
+                        message: "The task does not exist."
+                    })
+                }else if(ans.modifiedCount > 0){
+                    res.send({
+                        message: "The task was updated successfully."
+                    })
+                }
+            })
+            .catch((err)=>{
+                res.status(500).send({
+                    message: "Server error: Nothing was updated, make sure the provided ID is correct and valid.",
+                    err:err
+                })
+            })
+
+    });
+
+
 
     //module.exports = router;
     return router
