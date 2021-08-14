@@ -9,7 +9,7 @@ const scratchPad = require('../../Helpers/ScratchPad');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-    router.get('/ConvertToKanbanBoard/:id',(req,res)=>{
+    router.get('/convertToKanbanBoard/:id',(req,res)=>{
 
         const ProjectId = req.params.id;
         scratchPad.getProjectGraph(db,ProjectId)
