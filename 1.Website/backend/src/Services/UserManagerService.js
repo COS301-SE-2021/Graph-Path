@@ -7,7 +7,11 @@ async function getAllUsers(dbController){
     return await new Promise((resolve, reject)=>{
         db.collection('Users').find({}).toArray()
             .then((ans)=>{
-                resolve(ans);
+                if(ans == null){
+                    resolve("No users");
+                }else{
+                    resolve(ans);
+                }
             }).catch(err=>{
             reject(err);
         })
