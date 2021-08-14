@@ -135,10 +135,19 @@ const UserManagerService = require('../../Services/UserManagerService');
                  message:"User not found"
              }) ;
          });
-         if ( returnedUser !=null)
+         if ( returnedUser === "user not found")
+         {
+             res.send({
+                 message:"unsuccessful. user not found",
+                 data: []
+             })
+         }
+
+         else
          {
 
              const MatchedPassword = returnedUser.password;
+             console.log(returnedUser)
              const isPasswordValid  = await bcrypt.compare(GivenPassword,MatchedPassword);
              if(isPasswordValid)
              {
