@@ -185,15 +185,20 @@ const UserManagerService = require('../../Services/UserManagerService');
              data["_id"] = id ;
              UserManagerService.insertUser(db,data)
                  .then((ans)=>{
-                    if(ans != null){
+                     console.log(ans)
+                    if(ans === "user already exists"){
+                        res.send({
+                            message:" Unsuccessful . The user already exists",
+                           data: []
+                        });
+
+                    }
+
+
+                    else{
                         res.send({
                             message:"The user was created successfully.",
                             data:ans.ops
-                        });
-
-                    }else{
-                        res.send({
-                            message:"The user was not created successfully."
                         })
                     }
                  })

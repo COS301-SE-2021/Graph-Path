@@ -100,32 +100,47 @@ async function getAllOtherUsers(dbController,email){
 async function insertUser(dbController, userObject){
 
     const db = dbController.getConnectionInstance();
-    //first check if user exists
-    let UserExist = null;
-    db.collection('Users').findOne({
-        "email":userObject.email,
-    }).then((result)=>{
 
-        if(result)
-        {
-            resolve("")
-        }
+    return await new Promise((resolve, reject)=>{
+        db.collection('Users').findOne({email:userObject.email})
+            .then(async (ans)=>{
 
-        UserExist = true;
-        if(UserExist === true)
-        {
-            console.log(result);
-        }
-    }).catch((err)=>{
-        UserExist= false;
-        console.log('New user');
+                if(ans != null){
+                    resolve("user already exists");
+                }
+                else
+                {
+                    const salt = await bcrypt.genSalt(10);
+                    userObject.password = await  bcrypt.hash(userObject.password,salt);
+                        db.collection('Users').insertOne(userObject)
+                        .then((ans)=>{
+
+                                 //console.log("ln 119",ans);
+                                 return "new user";
+                        })
+                            .catch((err)=>{
+
+                            reject(err);
+                        })
+
+
+                }
+            })
+            .catch((err)=>{
+            reject(err);
+            })
     })
 
 
 
-    const salt = await bcrypt.genSalt(10);
-    userObject.password = await  bcrypt.hash(userObject.password,salt);
-    return await new Promise((resolve, reject)=>{
+
+
+
+}
+
+    //const salt = await bcrypt.genSalt(10);
+    //userObject.password = await  bcrypt.hash(userObject.password,salt);
+    /*return await new Promise((resolve, reject)=>{
         db.collection('Users').insertOne(userObject)
             .then((ans)=>{
                 resolve(ans);
@@ -136,9 +151,7 @@ async function insertUser(dbController, userObject){
             .catch(err=>{
                 reject(err);
             })
-    });
-}
-
+    });*/
 //***************************************************-delete-**************************************************************
 async function removeUserByID(dbController, id){
     const db = dbController.getConnectionInstance();
