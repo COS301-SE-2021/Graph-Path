@@ -356,6 +356,15 @@ const UserManagerService = require('../../Services/UserManagerService');
          let type = req.body.type;
          let firstName = req.body.firstName;
          let userName = req.body.username;
+    if(mail === undefined || mail ===""){
+        res.send({
+            message:"The email provided is not valid."
+        })
+    }else if(psw === undefined || psw ===""){
+        res.send({
+            message:"The password provided is not valid."
+        })
+    }
 
          UserManagerService.updateEverythingUser(db,ID, mail,lastName, Notif, psw, type, firstName, userName)
              .then((ans)=>{
