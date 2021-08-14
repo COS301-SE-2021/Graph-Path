@@ -215,19 +215,24 @@ const UserManagerService = require('../../Services/UserManagerService');
         //let id = req.body.id;
         UserManagerService.removeUserByID(db,id)
             .then((ans)=>{
-               if(ans != null){
+               if(ans == null){
+                   res.send({
+                       message: "Could not remove user."
+                   })
+               } else if(ans.deletedCount >0){
                    res.send({
                        message: "The user was removed."
                    })
-               } else{
+               }else if(ans.deletedCount < 1){
                    res.send({
-                       message: "Could not remove user."
+                       message: "User does not exist."
                    })
                }
             })
             .catch(err=>{
                 res.status(500).send({
-                    message: "Could not remove user."
+                    message: "Server error: Could not remove user.",
+                    err:err
                 })
             });
     });
