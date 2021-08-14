@@ -28,7 +28,8 @@ class ProjectView extends React.Component{
     }
 
 
-    viewProject = (project)=>{
+    viewProject = (project,permissions)=>{
+        console.log('project view',project,permissions)
         return(
             <div id="view-div">
                  <div id="project-form-div">
@@ -57,10 +58,15 @@ class ProjectView extends React.Component{
                         <input id="btn1" disabled type="button" id="editBtn" value="Edit" />
                     </form>
                      <br/>
-                     <Button id="div3" onClick={this.handleShow}>
-                         View Members
-                     </Button>
 
+                    {  permissions.indexOf(project.role.toLowerCase())>=0 ? 
+                        <>
+                        <Button id="div3" onClick={this.handleShow}>
+                             View Members
+                        </Button>
+                        </>
+                    :""}
+                    
                      <Offcanvas show={this.state.show} onHide={this.handleClose}>
                         <Offcanvas.Header closeButton>
                             <Offcanvas.Title>Project Members</Offcanvas.Title>
@@ -100,26 +106,23 @@ class ProjectView extends React.Component{
     }
 
     render(){
+        const EditPermissionRoles = ['owner','project manager']
+
         const project = this.props.projectToDisplay ; 
+        
         const email = this.props.userEmail ;
         if (project !== undefined)
         return (
             <div id="div1">
-                   { //If project has groupManagers and u are one of them, you can edit, else just view
-                        (project.groupManagers !== undefined && project.groupManagers.indexOf(email) > 0)||email === project.owner?
-                            <div id="div2" >
-
-
-                                    <span id="view-graph-div">
-                                        <Link to="/addTask">View Graph</Link>
-                                    </span>
-
-
-                            </div>: <></>
-                   }
+                     <div id="div2" >
+                       <span id="view-graph-div">
+                            <Link to="/addTask">View Graph</Link>
+                        </span>
+            </div>: <></>
+                
 
                 {
-                    this.state.editView ===false ? this.viewProject(project) :this.editView()
+                    this.state.editView ===false ? this.viewProject(project,EditPermissionRoles) :this.editView()
                 }
                
             </div>

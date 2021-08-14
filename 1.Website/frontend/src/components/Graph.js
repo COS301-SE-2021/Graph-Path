@@ -333,7 +333,7 @@ class Graph extends React.Component{
         const placer = 100;
         //project Name to display on the graph 
         var selectedProjectName =  this.state.projList.length>0 && this.state.linkNumber >= 0 ?
-         this.state.projList[this.state.linkNumber].projectName: "No Data Found" ;
+         this.state.projList[this.state.linkNumber]: "No Data Found" ;
 
         return (
             <Router basename='viewProjects/graph'>
@@ -411,7 +411,7 @@ class Graph extends React.Component{
                     <Route path="/addTask">
                         {console.log('When a task is added, state has, ',this.state)}
                         <SigmaGraph updateGraph={this.updateGraphView}
-                            projectName={selectedProjectName}
+                            project={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             graphManager={this.state.graphManager}
                         />
