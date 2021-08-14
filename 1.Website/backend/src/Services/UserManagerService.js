@@ -233,6 +233,37 @@ async function updateUsernameAndPassword(dbController, mail, usrnme, psw){
     }))
 }
 
+async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, type, firstName, userName){
+    const db = dbController.getConnectionInstance();
+
+    const salt = await bcrypt.genSalt(10);
+    psw = await  bcrypt.hash(psw,salt);
+
+    return await  new Promise(((resolve, reject) => {
+        db.collection('Users').updateOne({
+            "_id":ObjectId(id)
+        },{
+            $set:{
+                email: mail,
+                lastName: lastName,
+                Notification:Notif,
+                password:psw,
+                type: type,
+                firstName:firstName,
+                username:userName
+            }})
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            });
+
+
+    }))
+
+}
+
 module.exports = {
     getUserByID,
     getAllUsers,
@@ -244,6 +275,7 @@ module.exports = {
     updateUserUsername,
     updateUserPassword,
     updateUsernameAndPassword,
+    updateEverythingUser
 
 }
 
