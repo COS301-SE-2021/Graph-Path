@@ -5,6 +5,7 @@ import '../css/ProjectView.css'
 import PopUpMessage from "./PopUpMessage";
 import {Button, Offcanvas} from "react-bootstrap";
 import * as HiIcons from "react-icons/hi";
+import * as FaIcons from "react-icons/fa";
 import axios from "axios";
 
 
@@ -209,21 +210,22 @@ class ProjectView extends React.Component{
                         ""}
                     
                      <Offcanvas show={this.state.show} onHide={this.handleClose}>
-                        <Offcanvas.Header closeButton>
+                        <Offcanvas.Header id="canvasHeader" closeButton>
                             <Offcanvas.Title>Project Members</Offcanvas.Title>
                         </Offcanvas.Header>
-                         <Offcanvas.Body>
+                         <Offcanvas.Body id="canvasBody">
                              {project.groupMembers.map((value,index)=>{
                                  console.log('from members',value)
                                  return (
-                                     <div key={index}><p>Full names: {value.label}<br/>Email: {value.email}</p>
-                                         <HiIcons.HiUserRemove />
-                                         <hr/>
+                                     <div key={index} id="memberDiv"><p>Full names: {value.label}<br/>Email: {value.email}</p>
+                                         <HiIcons.HiUserRemove id="userRemove" />
+                                         <FaIcons.FaUserEdit id="userEdit" />
+
 
                                      </div>
                                  )
                              })}
-                             <HiIcons.HiUserAdd />
+                             <HiIcons.HiUserAdd id="userAdd" />
                          </Offcanvas.Body>
                      </Offcanvas>
                 </div>
