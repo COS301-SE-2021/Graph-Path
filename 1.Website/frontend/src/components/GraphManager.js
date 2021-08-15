@@ -45,6 +45,10 @@ class GraphManager{
         }
         curr.edges.push(edg) ;
     }
+
+    removeNode = (id)=>{
+      
+    }
     
     addNode = (fromTask) =>{
       // console.log('Manager:addNode') ; 
