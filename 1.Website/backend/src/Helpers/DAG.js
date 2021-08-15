@@ -1,5 +1,47 @@
 
 
+function isAcyclic(graph)
+{
+
+    if (graph.nodes.length == 0)
+        return false;
+
+    else
+    {
+
+        let stack = [];
+        let Nodes = SetNodes(graph);
+
+
+        for( let i = 0 ; i < Nodes.length ; i ++)
+        {
+            //console.log(Nodes);
+            if(isAcyclicRec(Nodes[i],stack,Nodes))
+            {
+                console.log("Graph is acyclic");
+                return true;
+            }
+        }
+        console.log("Graph is not acyclic");
+        return false;
+
+
+        /*console.log(Nodes);
+        VisitNode('n1',Nodes);
+        console.log(Nodes);
+
+
+        stack.push(Nodes[0]);
+        stack.push(Nodes[1]);
+        console.log(stack);
+        removeNodeFromStack(Nodes[0],stack);*/
+
+
+
+    }
+
+
+}
 
 function isAcyclicRec(node,stack,Nodes)
 {
@@ -114,4 +156,9 @@ function VisitNode(id, Nodes)
         }
     }
 
+}
+
+
+module.exports = {
+    isAcyclic
 }
