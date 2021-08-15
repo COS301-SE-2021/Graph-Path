@@ -2,7 +2,7 @@
 class GraphManager{
     constructor(graph){
       if (graph === undefined || graph.nodes === undefined || graph.edges === undefined){
-        this.setGraph("") ;
+        this.setGraph({}) ;
       }
       else{
         this.graph = graph ;
@@ -47,7 +47,52 @@ class GraphManager{
     }
 
     removeNode = (id)=>{
-      
+
+      var newNodes = this.graph.nodes.filter((node)=>{
+        if (node.id !== id){
+          return true ;
+        }
+        return false ;
+      }) ;
+      if (this.graph.nodes.length === newNodes.length){
+        return false ;
+      }
+      else{
+        this.graph.nodes = newNodes ;
+        //delete edges where node with id is source || target
+        if (this.graph.edges.length>0){
+          var newEdges = this.graph.edges.filter((edge)=>{
+            if (edge.source !== id || edge.target !== id){
+              return true ;
+            }
+            return false ;
+          })
+          this.graph.edges = newEdges ;
+          return true ;
+          
+        }
+        else{
+          return true ;
+
+        }
+      };
+
+    }
+
+    removeEdgeWithEdgeId = (edgeId)=>{
+      var edgesAfter = this.graph.edges.filter((edge)=>{
+        if (edge.id !== edgeId){
+          return true ;
+        }
+        return false ;
+      }) ; 
+      if (this.graph.edges.length === edgesAfter.length){
+        return false ;
+      }
+      else{
+        this.graph.edges = edgesAfter ;
+        return true ;
+      }
     }
     
     addNode = (fromTask) =>{

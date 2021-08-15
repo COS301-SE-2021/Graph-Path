@@ -64,6 +64,14 @@ class SigmaGraph extends React.Component{
     }
 }
   
+  deleteNode = (nodeId)=>{
+    var deleteNode = this.props.graphManager.removeNode(nodeId) ;
+    if (deleteNode){
+      //delete successfully
+      this.props.updateGraph(this.props.graphManager) ;
+    }
+    
+  }
   
   /*
   When ctrl key is pressed and source node not set
@@ -99,7 +107,15 @@ class SigmaGraph extends React.Component{
       }
       console.log(this.state)
     }
-    else{
+    else if(event.data.captor.altKey){
+      if (typeof event.data.node.id === 'string'){
+        this.deleteNode(event.data.node.id) ;
+      }
+      else{
+        console.log('invalid id for delete')
+      }
+    }
+    else {
 
       if (this.state.source !== "Source Node"){
         this.cleanUp() ;
@@ -119,14 +135,15 @@ class SigmaGraph extends React.Component{
     const {match} = this.props ;
     var mgr = this.props.graphManager; 
     const EditGraphPermissionRoles = ['owner','project manager','developer'];
-    const saveGraphPermissions = ['owner','project manager']
+    const saveGraphPermissions = ['owner','project manager'] ;
+    const project = this.props.project ; 
 
-    console.log(' on mount', this.props.project) ;
+    console.log(' on mount', mgr) ;
     if (mgr !== undefined){
     
 
       const graph = mgr.getGraph() ; 
-      if (graph !== undefined && graph.nodes !== undefined ){
+      if (graph !== undefined && graph.nodes !== undefined && project !== undefined){
         let SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
 
         const nodeId = this.state.nodeId ; 
@@ -134,7 +151,7 @@ class SigmaGraph extends React.Component{
         return (
           <div className="graphContainer">
             <div>
-            <span className="projName">{this.props.project.projectName}</span>
+            <span className="projName">{project.projectName}</span>
             {
                 typeof this.props.sendGraphData === 'function' &&
                 saveGraphPermissions.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
