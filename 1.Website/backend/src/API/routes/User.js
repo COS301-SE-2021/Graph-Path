@@ -309,6 +309,7 @@ const UserManagerService = require('../../Services/UserManagerService');
                          message:"The Password was updated."
                      })
                  }else{
+
                      res.send({
                          message: "The Password was not updated."
                      })
