@@ -347,7 +347,7 @@ function  makeTaskRoute(db)
                 }else if(ans.insertedCount > 0){
                     res.send({
                         message:"The task was saved successfully.",
-                        data:id
+                        data:ans.ops
                     }) ;
                 }else{
                     res.send({
