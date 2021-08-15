@@ -5,7 +5,8 @@ const {route} = require("express/lib/router");
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
-const scratchPad = require('../../Helpers/kanbanBoard');
+const kanbanBoard = require('../../Helpers/kanbanBoard');
+const DAGservice = require('../../Helpers/DAG')
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,7 +16,24 @@ function makeProjectRoute(db) {
         const ProjectId = req.params.id;
         ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
             const Graph = project.graph;
-            scratchPad.isAcyclic(Graph);
+
+            if(DAGservice.isAcyclic(Graph))
+            {
+                res.send({
+                    message: "Graph is acyclic",
+                    data: []
+                })
+            }
+
+            else
+            {
+                res.send({
+                    message:"Graph is cyclic",
+                    data: []
+                })
+            }
+
+
 
 
         })
@@ -23,13 +41,13 @@ function makeProjectRoute(db) {
     router.get('/convertToKanbanBoard/:id',(req,res)=>{
 
         const ProjectId = req.params.id;
-        scratchPad.getProjectGraph(db,ProjectId)
+        kanbanBoard.getProjectGraph(db,ProjectId)
 
             .then((project)=>{
 
-                scratchPad.updateNodesID(db ,project).then(()=>{})
+                kanbanBoard.updateNodesID(db ,project).then(()=>{})
 
-                let projectNodes = scratchPad.getNodes(project);
+                let projectNodes = kanbanBoard.getNodes(project);
                 if(projectNodes.length === 0)
                 {
                     res.send({
@@ -41,7 +59,7 @@ function makeProjectRoute(db) {
                 else {
                     // pool all tasks of nodes
                     //console.log(projectNodes);
-                    scratchPad.getTasks(db,projectNodes).then((AllTasks)=>{
+                    kanbanBoard.getTasks(db,projectNodes).then((AllTasks)=>{
                         if(AllTasks === "Tasks collection empty")
                         {
                             res.send({
@@ -62,7 +80,7 @@ function makeProjectRoute(db) {
                         {
                             res.send({
                                 message:"success",
-                                data: scratchPad.splitTasksByStatus(AllTasks),
+                                data: kanbanBoard.splitTasksByStatus(AllTasks),
                             })
                         }
 
