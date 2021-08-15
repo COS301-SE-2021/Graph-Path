@@ -36,3 +36,18 @@ function SetNodes(graph)
     return Nodes;
 
 }
+
+function getNodeByID(id,Nodes)
+{
+    for( let i =0 ; i < Nodes.length; i ++)
+    {
+
+        if(Nodes[i].id == id)
+        {
+
+            return Nodes[i];
+        }
+    }
+
+
+}
