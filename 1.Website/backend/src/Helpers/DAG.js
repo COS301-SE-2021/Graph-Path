@@ -51,3 +51,9 @@ function getNodeByID(id,Nodes)
 
 
 }
+
+function isNodeInStack(node, stack)
+{
+
+    return stack.includes(node);
+}
