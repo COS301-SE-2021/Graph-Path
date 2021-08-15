@@ -1,22 +1,83 @@
 const express = require('express');
-//swap out service
-const projectManager = require('../../Services/ProjectService');
 const Permissions = require('../../Helpers/Permissions');
 const mongoose = require('mongoose') ;
 const {route} = require("express/lib/router");
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
-var db = require('../../Controllers/DBController').getDB();
-
-console.log("-----test2-----")
-
-
+const ProjectManagerService = require('../../Services/ProjectManagerService');
+const scratchPad = require('../../Helpers/kanbanBoard');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+    router.get('/convertToKanbanBoard/:id',(req,res)=>{
+
+        const ProjectId = req.params.id;
+        scratchPad.getProjectGraph(db,ProjectId)
+
+            .then((project)=>{
+
+                scratchPad.updateNodesID(db ,project).then(()=>{})
+
+                let projectNodes = scratchPad.getNodes(project);
+                if(projectNodes.length === 0)
+                {
+                    res.send({
+                        message:"this project graph has no nodes",
+                        data: []
+                    })
+                }
+
+                else {
+                    // pool all tasks of nodes
+                    //console.log(projectNodes);
+                    scratchPad.getTasks(db,projectNodes).then((AllTasks)=>{
+                        if(AllTasks === "Tasks collection empty")
+                        {
+                            res.send({
+                                message:AllTasks,
+                                data: []
+                            })
+                        }
+
+                        else if(AllTasks.length == 0)
+                        {
+                            res.send({
+                                message: "This project has no tasks",
+                                data: []
+                            })
+                        }
+
+                        else
+                        {
+                            res.send({
+                                message:"success",
+                                data: scratchPad.splitTasksByStatus(AllTasks),
+                            })
+                        }
+
+                   })
+                        .catch((err)=>{
+                            res.send({
+                                message:"error",
+                                data: err
+                            })
+                        });
+
+
+
+                }
+
+
+            })
+            .catch((err)=>{
+
+            })
+
+
+    })
     router.get('/find', (req, res, next) => {
 
-        console.log("-----test2-----")
+
         db.collection('Projects').findOne({})
             .then((ans) => {
                 console.log('success', ans);
@@ -37,12 +98,20 @@ function makeProjectRoute(db) {
 
     router.get('/list', (req, res, next) => {
 
-        db.getAllProjects()
+        ProjectManagerService.getAllProjects(db)
             .then((ans) => {
-               res.send({
-                   message: "The retrieval of the projects was successful.",
-                   data: ans
-               })
+                if(ans ==="No projects"){
+                    res.send({
+                        message: "There are no projects.",
+                        data: []
+                    })
+                }else{
+                    res.send({
+                        message: "The retrieval of the projects was successful.",
+                        data:ans
+                    })
+                }
+
                 })
             .catch(err => {
                 res.status(500).send({
@@ -57,7 +126,7 @@ function makeProjectRoute(db) {
         // console.log('received request ', req.params, 'servicing.....');
         let mail=req.params.email;
 
-        db.getAllProjectsByUserEmail(mail)
+        ProjectManagerService.getAllProjectsByUserEmail(db,mail)
             .then(ans=>{
 
                 if (ans ==="No matched projects")
@@ -95,9 +164,14 @@ function makeProjectRoute(db) {
                 message:"Invalid ID provided."
             })
         }
-        db.getProjectByID(ID)
+        ProjectManagerService.getProjectByID(db,ID)
             .then(ans=>{
-                if(ans != null){
+                if(ans === "No project"){
+                    res.send({
+                        message: "No project with this ID"
+                    })
+
+                }else if(ans != null){
                     res.send({
                         message: "Project retrieved.",
                         data: ans
@@ -111,13 +185,16 @@ function makeProjectRoute(db) {
             })
             .catch(err=>{
                 res.status(500).send({
-                    message: "Could not retrieve the project"
+                    message: "Server error: Could not retrieve the project, make sure your ID is valid and correct.",
+                    err:err
                 })
             })
     }) ;
 
     router.get("/AllPermissions",(req,res)=>{
 
+
+        console.log(Permissions.getAllRolesAndPermissions())
         res.send({
             message:"successful",
             data: {
@@ -146,7 +223,7 @@ function makeProjectRoute(db) {
             let data = req.body;
             const id = new mongoose.mongo.ObjectID();
             data["_id"] = id;
-            db.insertProject(data)
+            ProjectManagerService.insertProject(db,data)
                 .then(ans=>{
                     res.send({
                         message:"The Project has been created.",
@@ -187,7 +264,7 @@ router.delete('/deleteProject/:id',(req,res)=>{
     let ID = req.params.id;
 
         // console.log(projectName,owner); 
-        db.removeProjectByID(ID)
+    ProjectManagerService.removeProjectByID(db,ID)
         .then(ans =>{
             if(ans === null){
                 res.send({
@@ -215,7 +292,8 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
     //console.log("type of graph: "+ typeof grph);
    // console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
     //console.log("grph.edges[0].id: "+grph2.edges[0].id);
-    db.updateProjectGraph(ID,grph2 )
+
+    ProjectManagerService.updateProjectGraph(db,ID,grph2 )
     .then(ans=>{
             if(ans.modifiedCount === 0){
                 res.send({
@@ -237,7 +315,7 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
 router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
     let ID = req.params.id;
     let mail = req.params.email;
-    db.addNewProjectMember(ID, mail)
+    ProjectManagerService.addNewProjectMember(db,ID, mail)
         .then(ans=>{
             if(ans.modifiedCount >0){
                 res.send({
@@ -268,27 +346,27 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
    // let graph2 = JSON.parse(graph);
     let groupMembers = req.body.groupMembers;
 
-    db.updateEverythingProject(ID,pname,ddate,sdate,owner, graph, groupMembers)
+    ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
         .then(ans=>{
             if(ans.modifiedCount > 0){
                 res.send({
-                    message: "The project was updated.",
-                    data: ans
+                    message: "The project was updated."
                 })
             }else{
                 res.send({
-                    message: "The project was not updated.",
-                    data: ans
+                    message: "The project was not updated."
                 })
             }
 
         })
         .catch(err=>{
             res.status(500).send({
-                message: "Server error: Could not update the project."
+                message: "Server error: Could not update the project.",
+                err: err
             })
         })
 });
+
 router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
     let projId = req.params.id;
     let eml = req.params.email;

@@ -1,9 +1,11 @@
 const http = require('http');
 const port = process.env.PORT || 9001 || 3000 ;
-
-
+const makeApp = require('./app');
+const AliDB = require('./Controllers/NewDBController');
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUI = require('swagger-ui-express')
+
+
 const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
@@ -22,17 +24,8 @@ const swaggerOptions = {
 };
 
 const swaggerDocs =swaggerJsDoc(swaggerOptions);
+const app = makeApp(AliDB);
 
-const makeApp = require('./app');
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const AliDB = require('./Controllers/NewDBController');
-const app = makeApp(false,AliDB);
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-const app = makeApp(true,)
- */
 app.use("/api-docs",swaggerUI.serve,swaggerUI.setup(swaggerDocs));
 const server = http.createServer(app);
 
