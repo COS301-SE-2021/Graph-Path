@@ -1,6 +1,7 @@
 import React from 'react' ; 
 import Task from './Task' ;
 import axios from 'axios';
+import '../css/Graph.css'
 import {Link,withRouter, Route, Switch} from 'react-router-dom' ;
 // import '../css/Dashboard.css' ;
 
@@ -84,10 +85,10 @@ class Node extends React.Component{
         }
         const query = new URLSearchParams(this.props.location.search );
         return (
-            <div>
+            <div id="add-node-div">
                 {EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? 
               
-                <div>
+                <div id="add-node">
                     <Link to={`${match.url}/addNode`}>Add Nodes</Link><span> </span>
                     {/* <Link to={`${match.url}/edges`}>Add Edges</Link> */}
                     <br/>

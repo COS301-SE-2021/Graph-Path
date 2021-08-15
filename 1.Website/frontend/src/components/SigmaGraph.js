@@ -5,6 +5,7 @@ import {Sigma, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGE
 // import Dagre from 'react-sigma/lib/Dagre' ;
 import {DragNodes,} from 'react-sigma';
 import {Redirect,withRouter} from 'react-router-dom' ;
+import {Card, Nav} from "react-bootstrap";
 
 
 class GraphMessage extends React.Component{
@@ -116,7 +117,7 @@ class SigmaGraph extends React.Component{
   
   render(){
     const {match} = this.props ;
-    var mgr = this.props.graphManager; 
+    let mgr = this.props.graphManager;
     const EditGraphPermissionRoles = ['owner','project manager','developer']
 
     // console.log(' on mount', mgr) ;
@@ -125,7 +126,7 @@ class SigmaGraph extends React.Component{
 
       const graph = mgr.getGraph() ; 
       if (graph !== undefined && graph.nodes !== undefined ){
-        var SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
+        let SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
 
         const nodeId = this.state.nodeId ; 
         const nodeLabel = this.state.nodeLabel ;
@@ -141,11 +142,22 @@ class SigmaGraph extends React.Component{
                 Save</button>:""
               }
             </div>
-            
             <div key={SigmaGraphkey} className="GraphBox">
+            <Card id="graph-card">
+              <Card.Header>
+                <Nav variant="tabs" defaultActiveKey="first">
+                  <Nav.Item>
+                    <Nav.Link>DAG</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link>Kanban</Nav.Link>
+                  </Nav.Item>
+                </Nav>
+              </Card.Header>
+              <Card.Body>
 
-              <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
-              style={{position:"relative", 
+              <Sigma renderer="canvas" graph={graph} id="SigmaParent"
+              style={{position:"relative",
               width:"50vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
               onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
               onClickNode={e => this.handleControlClick(e)}
@@ -188,6 +200,9 @@ class SigmaGraph extends React.Component{
                 ?<Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} />  
                 :""            
               }
+
+              </Card.Body>
+            </Card>
             </div>
           </div>
         );

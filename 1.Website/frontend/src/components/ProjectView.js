@@ -65,7 +65,8 @@ class ProjectView extends React.Component{
                              View Members
                         </Button>
                         </>
-                    :""}
+                    :
+                        ""}
                     
                      <Offcanvas show={this.state.show} onHide={this.handleClose}>
                         <Offcanvas.Header closeButton>
@@ -118,7 +119,7 @@ class ProjectView extends React.Component{
                        <span id="view-graph-div">
                             <Link to="/addTask">View Graph</Link>
                         </span>
-            </div>: <></>
+            </div>
                 
 
                 {
