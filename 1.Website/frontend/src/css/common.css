@@ -1,9 +1,10 @@
 .dropbtn {
     background-color: #04AA6D;
-    color: white;
-    padding: 3px;
-
+    color: white !important;
+    padding: 5px;
     border: none;
+    border-radius: 5px;
+  text-decoration: none;
   }
 
   .UsernameDiv{
