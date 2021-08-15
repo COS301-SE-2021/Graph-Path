@@ -1,3 +1,31 @@
+
+
+
+function isAcyclicRec(node,stack,Nodes)
+{
+
+    if(isNodeInStack(node,stack))
+        return true;
+
+    if(node.isVisit === true)
+        return false;
+
+    VisitNode(node.id,Nodes);
+    stack.push(node);
+
+    let children = node.adjacent;
+    for( let i =0 ; i  < children.length ; i++)
+    {
+
+        if(isAcyclicRec(getNodeByID(children[i],Nodes),stack,Nodes))
+            return true;
+    }
+    removeNodeFromStack(node,stack);
+    return false;
+
+
+}
+
 function SetNodes(graph)
 {
     let Nodes = [];
@@ -56,4 +84,34 @@ function isNodeInStack(node, stack)
 {
 
     return stack.includes(node);
+}
+
+function removeNodeFromStack(node,stack)
+{
+
+    for( let i =0 ; i < stack.length ; i ++)
+    {
+
+        if(stack[i] == node)
+        {
+            stack[i] =null;
+        }
+    }
+
+}
+
+function VisitNode(id, Nodes)
+{
+
+    for( let i =0 ; i < Nodes.length; i ++)
+    {
+
+        if(Nodes[i].id === id)
+        {
+
+            Nodes[i].isVisit = true;
+            return;
+        }
+    }
+
 }
