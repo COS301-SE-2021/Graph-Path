@@ -51,7 +51,7 @@ class Graph extends React.Component{
         if (manager instanceof GraphManager){
             this.setState({
                 graphManager:manager,
-                grapRep:manager.getGraph()
+                grapRep:this.state.graphManager.getGraph()
             }) ;
         }
         else{

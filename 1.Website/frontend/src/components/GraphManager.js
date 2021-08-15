@@ -58,23 +58,27 @@ class GraphManager{
         return false ;
       }
       else{
-        this.graph.nodes = newNodes ;
         //delete edges where node with id is source || target
         if (this.graph.edges.length>0){
           var newEdges = this.graph.edges.filter((edge)=>{
+            console.log('edge ')
             if (edge.source !== id || edge.target !== id){
               return true ;
             }
             return false ;
-          })
+          }) ;
           this.graph.edges = newEdges ;
+          this.graph.nodes = newNodes ;
+
           return true ;
           
         }
         else{
+          this.graph.nodes = newNodes ;
           return true ;
 
         }
+
       };
 
     }

@@ -54,7 +54,13 @@ class Task extends React.Component{
         //communicate with the API
         // this.sendData(data) ;
         this.cleanUp();
+        if (this.state.fullForm){
+
+        }
+        else{
         this.props.addTask(data) ;
+
+        }
     }
 
     updateField = (event) => {

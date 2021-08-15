@@ -25,7 +25,7 @@ class Node extends React.Component{
         else{
             var manager = this.props.graphManager ;
             manager.addNode(name) ;
-            this.updateParent()
+            this.updateParent(manager) ;
         
         }
     }
@@ -93,7 +93,7 @@ class Node extends React.Component{
                     {/* <Link to={`${match.url}/edges`}>Add Edges</Link> */}
                     <br/>
                 </div>
-                :""
+                :"No perm"
                 }
                 <Switch>
                     <Route path={`${match.url}/addNode`} >
