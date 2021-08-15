@@ -26,18 +26,6 @@ function isAcyclic(graph)
         return false;
 
 
-        /*console.log(Nodes);
-        VisitNode('n1',Nodes);
-        console.log(Nodes);
-
-
-        stack.push(Nodes[0]);
-        stack.push(Nodes[1]);
-        console.log(stack);
-        removeNodeFromStack(Nodes[0],stack);*/
-
-
-
     }
 
 
