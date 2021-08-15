@@ -21,6 +21,9 @@ const UserManagerService = require('../../Services/UserManagerService');
                          message:"No available users to retrieve."
                      })
                  }else{
+                     ans.forEach((user)=>{
+                         user.password = null;
+                     });
                      res.send({
                          message:"Users retrieved successfully.",
                          data: ans
@@ -51,6 +54,9 @@ const UserManagerService = require('../../Services/UserManagerService');
                          data: []
                      })
                  }else{
+                     ans.forEach((user)=>{
+                         user.password = null;
+                     });
                      res.send({
                          message:"List retrieved successfully.",
                          data: ans
