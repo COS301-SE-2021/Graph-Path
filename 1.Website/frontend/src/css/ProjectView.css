@@ -74,3 +74,49 @@
     display: inline-block;
     position: relative;
 }
+
+#userRemove{
+    background-color: transparent;
+    font-size: 20px;
+    position: absolute;
+    margin-left: 320px;
+    bottom: 40px;
+}
+
+#userEdit{
+    background-color: transparent;
+    font-size: 20px;
+    position: absolute;
+    margin-left: 320px;
+    bottom: 10px;
+}
+
+#userAdd{
+    background-color: transparent;
+    font-size: 35px;
+    position: absolute;
+    margin-left: 150px;
+}
+
+#memberDiv{
+    background-color: ghostwhite;
+    position: relative;
+    padding: 2px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#canvasBody{
+    position: relative;
+    padding-bottom: 70px;
+    background-color: #b9fab9;
+}
+
+#canvasHeader{
+    background-color: #001122;
+    color: white;
+}
+
+.offcanvas-header .btn-close{
+    background-color: white;
+}
