@@ -2,10 +2,11 @@
 function getPermissions(role)
 {
 
+    let Permissions = null;
     switch(role)
     {
         case "developer":
-            var Permissions = [
+             Permissions = [
                 'edit',
                 'view',
                 'Save Graph changes'
@@ -13,7 +14,7 @@ function getPermissions(role)
             return Permissions
             break;
         case "scrum-master":
-            var Permissions = [
+            Permissions = [
                 'edit',
                 'view'
             ];
@@ -21,7 +22,7 @@ function getPermissions(role)
             break;
 
         case "Project Manager":
-            var Permissions = [
+             Permissions = [
                 'edit',
                 'view'
             ];
@@ -29,7 +30,15 @@ function getPermissions(role)
             break;
 
         case "Business analyst":
-            var Permissions = [
+             Permissions = [
+                'edit',
+                'view'
+            ];
+            return Permissions
+            break;
+
+        case "Tester":
+            Permissions = [
                 'edit',
                 'view'
             ];
@@ -37,8 +46,18 @@ function getPermissions(role)
             break;
 
 
-        case "owner":
-            var Permissions = [
+        case "Client":
+            Permissions = [
+
+                'view'
+            ];
+            return Permissions
+            break;
+
+
+
+        case "Owner":
+             Permissions = [
                 'Assign Manager',
                 'Change Manager',
                 'Assign user to task',
@@ -55,7 +74,7 @@ function getPermissions(role)
                 'Save Graph changes',
                 'Change task status',
                 'Edit Member permissions',
-                
+                'Create statistic report'
             ];
             return Permissions
             break;
@@ -95,6 +114,8 @@ function getAllRolesAndPermissions()
         RolesAndPerms[role] = getPermissions(Roles[i]);
 
     }
+
+
     return RolesAndPerms;
 }
 

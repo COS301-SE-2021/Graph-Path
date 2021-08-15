@@ -1,34 +1,35 @@
 const express = require('express')
 const router = express.Router();
-const ManageUser = require('../../Services/ManageUser')
 const mongoose = require('mongoose') ;
-var ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
+const UserManagerService = require('../../Services/UserManagerService');
 
 
  function makeUserRoute (db)
 {
+
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
      router.get('/listOfAllUsers', (req, res, next) => {
-         //console.log('received request ', req.body, 'servicing.....');
-         db.getAllUsers()
+
+         UserManagerService.getAllUsers(db)
          .then((ans)=>{
-                 if(ans != null){
+                 if(ans === "No users"){
                      res.send({
-                         message:"All users retrieved",
-                         data:ans
+                         message:"No available users to retrieve."
                      })
                  }else{
                      res.send({
-                         message:"Could not retrieve the users.",
+                         message:"Users retrieved successfully.",
                          data: ans
                      })
                  }
          }).catch(err=>{
                  res.status(500).send({
-                    message: "Could not retrieve all users."
+                    message: "Server error: Could not retrieve all users.",
+                     err :err
                  });
          });
 
@@ -36,24 +37,30 @@ const bcrypt = require('bcrypt');
 
      router.get('/listOfAllUsersExceptYourself/:email', (req, res, next) => {
 
+
          let mail= req.params.email;
-         db.getAllOtherUsers(mail)
+         UserManagerService.getAllOtherUsers(db,mail)
              .then((ans)=>{
-                 if(ans != null) {
+                 if(ans === "Users not found") {
                     res.send({
-                        message:"List of users retrieved.",
-                        data: ans
+                        message:"Could not get the users."
                     })
+                 }else if(ans === "No other users"){
+                     res.send({
+                         message:"There are no other users.",
+                         data: []
+                     })
                  }else{
                      res.send({
-                         message:"List of users not retrieved.",
+                         message:"List retrieved successfully.",
                          data: ans
                      })
                  }
              })
              .catch(err=>{
                  res.status(500).send({
-                     message: "Could not retrieve all users."
+                     message: "Server error: Could not retrieve the users.",
+                     err: err
                  });
              });
 
@@ -63,8 +70,6 @@ const bcrypt = require('bcrypt');
      router.get('/getUserByID/:id',(req,res,next)=>{
 
          const ID = req.params.id ;
-         console.log(ID);
-         //let ID = req.body.id;
          if(ID ==='' || ID === undefined)
          {
              res.status(400).send({
@@ -72,24 +77,28 @@ const bcrypt = require('bcrypt');
              })
          }
 
-         db.getUserByID(ID).then((ans)=>{
-             if(ans != null){
-                 res.send({
-                     message: "User found",
-                     data: ans
-                 })
-             }else{
-                 console.log(ans);
-                 res.send({
-                    message: "User not found",
-                     data: ans
-                 })
-             }
+         UserManagerService.getUserByID(db,ID).then((ans)=>{
+
+                 if(ans === "No user found"){
+                     res.send({
+                         message: "User not found"
+                     })
+                 }else if(ans != null){
+                     res.send({
+                         message: "User found",
+                         data: ans
+                     })
+                 }
+
          }).catch((err)=>{
+
              res.status(500).send({
-                 message:"User not found"
+                 message:"Server error: Could not find the user. Make sure the ID is correct and valid.",
+                 err:err
              }) ;
          });
+
+
 
      }) ;
 
@@ -109,7 +118,7 @@ const bcrypt = require('bcrypt');
          }
 
          let returnedUser = null;
-         await db.getUserByEmail(emailParam).then((ans)=>{
+         await UserManagerService.getUserByEmail(db,emailParam).then((ans)=>{
              if(ans != null){
                  returnedUser = ans;
 
@@ -123,13 +132,23 @@ const bcrypt = require('bcrypt');
 
          }).catch(err=>{
              res.status(500).send({
-                 message:"User not found"
+                 message:"Server error: User not found",
+                 err:err
              }) ;
          });
-         if ( returnedUser !=null)
+         if ( returnedUser === "user not found")
+         {
+             res.send({
+                 message:"unsuccessful. user not found",
+                 data: []
+             })
+         }
+
+         else
          {
 
              const MatchedPassword = returnedUser.password;
+             console.log(returnedUser)
              const isPasswordValid  = await bcrypt.compare(GivenPassword,MatchedPassword);
              if(isPasswordValid)
              {
@@ -150,33 +169,32 @@ const bcrypt = require('bcrypt');
 
 
          }
-         console.log("returned User is null");
+         //console.log("returned User is null");
 
 
      }) ;
 
      router.post('/newUser',(req,res)=>{
-         if (req == undefined || req.body == undefined || req == null ){
+         if (req === undefined || req.body === undefined || req === null ){
              res.json({
                  message:"There is no user to insert."
              }) ;
          }else{
-             //console.log('received request ',req.body,'servicing.....') ;
 
              let data = req.body ;
              const id = new mongoose.mongo.ObjectID() ;
              data["_id"] = id ;
-             db.insertUser(data)
+             UserManagerService.insertUser(db,data)
                  .then((ans)=>{
-                    if(ans != null){
+                    if(ans === "user already exists"){
                         res.send({
-                            message:"The user was created successfully.",
-                            data:ans
+                            message:" Unsuccessful . The user already exists"
                         });
 
                     }else{
                         res.send({
-                            message:"The user was not created successfully."
+                            message:"The user was created successfully.",
+                            data:ans.ops
                         })
                     }
                  })
@@ -194,44 +212,58 @@ const bcrypt = require('bcrypt');
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
     router.delete('/deleteUserByID/:id',(req,res, next)=>{
        let id = req.params.id;
-        //let id = req.body.id;
-        db.removeUserByID(id)
+        UserManagerService.removeUserByID(db,id)
             .then((ans)=>{
-               if(ans != null){
+               if(ans == null){
+                   res.send({
+                       message: "Could not remove user."
+                   })
+               } else if(ans.deletedCount >0){
                    res.send({
                        message: "The user was removed."
                    })
-               } else{
+               }else if(ans.deletedCount < 1){
                    res.send({
-                       message: "Could not remove user."
+                       message: "User does not exist."
                    })
                }
             })
             .catch(err=>{
                 res.status(500).send({
-                    message: "Could not remove user."
+                    message: "Server error: Could not remove user.",
+                    err:err
                 })
             });
     });
 
      router.delete('/deleteUserByEmail/:email',(req,res, next)=>{
+
          let mail = req.params.email;
-         //let id = req.body.id;
-         db.removeUserByEmail(mail)
+         if(mail ==="" || mail === undefined){
+             res.send({
+                 message: "Invalid email provided."
+             })
+         }
+         UserManagerService.removeUserByEmail(db,mail)
              .then((ans)=>{
-                 if(ans != null){
+                 if(ans == null){
+                     res.send({
+                         message: "Could not remove user."
+                     })
+                 } else if(ans.deletedCount >0){
                      res.send({
                          message: "The user was removed."
                      })
-                 } else{
+                 }else if(ans.deletedCount < 1){
                      res.send({
-                         message: "Could not remove user."
+                         message: "User does not exist."
                      })
                  }
              })
              .catch(err=>{
                  res.status(500).send({
-                     message: "Could not remove user."
+                     message: "Server error:Could not remove user.",
+                     err: err
                  })
              });
      });
@@ -241,7 +273,7 @@ const bcrypt = require('bcrypt');
          let mail = req.params.email;
          let usrnme = req.params.username;
 
-        db.updateUserUsername(mail, usrnme)
+        UserManagerService.updateUserUsername(db ,mail, usrnme)
             .then((ans)=>{
                 if(ans != null){
                     res.send({
@@ -264,7 +296,7 @@ const bcrypt = require('bcrypt');
          let mail = req.params.email;
          let psw = req.params.password;
 
-         db.updateUserPassword(mail, psw)
+         UserManagerService.updateUserPassword(db,mail, psw)
              .then((ans)=>{
                  if(ans != null){
                      res.send({
@@ -288,7 +320,7 @@ const bcrypt = require('bcrypt');
          let usrnme = req.params.username;
          let psw = req.params.password;
 
-         db.updateUsernameAndPassword(mail,usrnme, psw)
+         UserManagerService.updateUsernameAndPassword(db,mail,usrnme, psw)
              .then((ans)=>{
                  if(ans != null){
                      res.send({
@@ -303,6 +335,51 @@ const bcrypt = require('bcrypt');
              .catch((err)=>{
                  res.status(500).send({
                      message: "Nothing was updated."
+                 })
+             })
+
+     });
+
+
+     router.put('/updateEverythingUser/:id',(req, res, next)=>{
+         let ID = req.params.id;
+         let mail = req.body.email;
+         let lastName = req.body.lastName;
+         let Notif = req.body.Notification;
+         let psw = req.body.password;
+         let type = req.body.type;
+         let firstName = req.body.firstName;
+         let userName = req.body.username;
+    if(mail === undefined || mail ===""){
+        res.send({
+            message:"The email provided is not valid."
+        })
+    }else if(psw === undefined || psw ===""){
+        res.send({
+            message:"The password provided is not valid."
+        })
+    }
+
+         UserManagerService.updateEverythingUser(db,ID, mail,lastName, Notif, psw, type, firstName, userName)
+             .then((ans)=>{
+                 if(ans == null){
+                     res.send({
+                         message:"The user was not updated."
+                     })
+                 }else if(ans.modifiedCount < 1){
+                     res.send({
+                         message: "The user does not exist."
+                     })
+                 }else if(ans.modifiedCount > 0){
+                     res.send({
+                         message: "The user was updated successfully."
+                     })
+                 }
+             })
+             .catch((err)=>{
+                 res.status(500).send({
+                     message: "Server error: Nothing was updated, make sure the provided ID is correct and valid.",
+                     err:err
                  })
              })
 

@@ -3,7 +3,6 @@ const router = express.Router();
 const mongo = require('mongodb').MongoClient;
 const mongoose = require('mongoose') ;
 const assert = require('assert');
-var db = require('../../Controllers/DBController').getDB();
 //const ManageNode = require('../../Services/ManageNode')
 
 function  makeNodeRoute(db) {
@@ -28,6 +27,7 @@ function  makeNodeRoute(db) {
             });
 
     })
+
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
     router.post('/createNode', (req, res, next) => {

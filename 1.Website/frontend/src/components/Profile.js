@@ -158,7 +158,7 @@ class Profile extends React.Component{
                     alert('Server Error, Please try again later');
                 })
                 .then(()=>{
-                    axios.get(`http://localhost:9001/user/login/${this.state.email}`)
+                    axios.get(`http://localhost:9001/user/getUserByID/${this.props.userEmail.id}`)
                         .then((response)=>{
                             if(response.status === 400){
                                 throw Error(response.statusText);
@@ -173,6 +173,7 @@ class Profile extends React.Component{
                                 }
                             })
                         })
+                        .catch((err)=>console.log('Really?',err))
                 })
 
         }catch (error){
@@ -185,6 +186,7 @@ class Profile extends React.Component{
 
         const {formErrors} = this.state;
     const userInfo = this.props.userEmail;
+    console.log(userInfo)
         return(
             <div className="profileContainer">
                 <div className="App-Link">

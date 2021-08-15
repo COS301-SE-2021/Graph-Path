@@ -1,40 +1,42 @@
-const mongClient = require('mongodb').MongoClient ;
-require('dotenv').config() ;
-const DB_URI =process.env.TEST_DB_URI ;
-var ObjectId = require('mongodb').ObjectID;
-const mongoose = require('mongoose') ;
+const bcrypt = require("bcrypt");
+const ObjectId = require('mongodb').ObjectID;
+const Permissions = require('../Helpers/Permissions');
 
-let db ;
-//connect to db
-const dbController = {
-    connect: (callback)=>{
-        mongClient.connect(DB_URI,
-            {useNewUrlParser:true,useUnifiedTopology:true},
-            (err,clientDB)=>{
-                db = clientDB.db('test') ;
-                console.log('+++++++++++++++++++++++++++connect to db, to serve request++++++++++') ;
-                //return callback(err) ;
-            }) ;
-    },
-    getDB : ()=>{
-        console.log('returned mongoDB connection instance')
-        return db ;
-    }
-}
-dbController.connect();
-dbController.getDB();
+/////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
+//***************************************************-get-**************************************************************
+async function getProjectByID(dbController, id){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject)=>{
+        db.collection('Projects').findOne({
+            "_id": ObjectId(id)
+        })
+            .then((ans)=>{
+                if(ans ===null){
+                    resolve("No project");
+                }else{
+                    resolve(ans);
+                }
 
- function getConnectionInstance()
-{
-    return db;
+            })
+            .catch(err=>{
+                reject(err);
+            });
+
+
+
+    })
 }
 
-
-async function getAllProjects(){
+async function getAllProjects(dbController){
+    const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').find({}).toArray()
             .then(ans=>{
-                resolve(ans);
+                if(ans === null){
+                    resolve("No projects");
+                }else{
+                    resolve(ans);
+                }
             })
             .catch(err=>{
                 reject(err);
@@ -42,13 +44,14 @@ async function getAllProjects(){
     })
 }
 
-async function getAllProjectsByUserEmail(mail){
+async function getAllProjectsByUserEmail(dbController,mail){
+    const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
 
         // get all projects.
         // search projects for where mail is a member of
         // return the projects if found else return error message
-        let Projects = [];
+        let Projects = null;
         db.collection('Projects').find({}).toArray()
             .then((ans)=>{
 
@@ -57,12 +60,13 @@ async function getAllProjectsByUserEmail(mail){
                 for(let i =0 ; i < Projects.length ; i++)
                 {
                     let GroupMembers = Projects[i].groupMembers;
-                    if (GroupMembers !== undefined && GroupMembers!== null){
+                    if (GroupMembers !== null && GroupMembers !== undefined){
+
                         for( let x = 0 ; x <GroupMembers.length ;x++)
                         {
-                            if(GroupMembers[x].email == mail)
+                            if(GroupMembers[x].email === mail)
                             {
-                                console.log("Match found",GroupMembers.length);
+                                console.log("Match found");
                                 const obj = {
                                     role: GroupMembers[x].role,
                                     permissions: Permissions.getPermissions(GroupMembers[x].role),
@@ -74,15 +78,14 @@ async function getAllProjectsByUserEmail(mail){
                             }
 
                         }
-
                     }
-                    
+
 
                 }
 
                 if( MatchedProjects.length === 0)
                 {
-                   resolve("No matched projects");
+                    resolve("No matched projects");
                 }
                 else
                 {
@@ -93,27 +96,28 @@ async function getAllProjectsByUserEmail(mail){
             })
 
 
-       /* db.collection('Projects').find({
-            "groupMembers":mail
-        }).toArray()
-            .then((ans) => {
-                if (ans.length > 0) {
-                    resolve(ans);
-                } else {
-                    resolve(0);
-                }
+        /* db.collection('Projects').find({
+             "groupMembers":mail
+         }).toArray()
+             .then((ans) => {
+                 if (ans.length > 0) {
+                     resolve(ans);
+                 } else {
+                     resolve(0);
+                 }
 
 
-            })
-            .catch(err => {
+             })
+             .catch(err => {
 
-                reject(err);
-            })*/
+                 reject(err);
+             })*/
     })
 
 }
 //***************************************************-post-**************************************************************
-async function insertProject(projectObject){
+async function insertProject(dbController, projectObject){
+    const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').insertOne(projectObject)
             .then((ans)=>{
@@ -125,8 +129,8 @@ async function insertProject(projectObject){
     });
 }
 //***************************************************-delete-**************************************************************
-async function removeProjectByID(ID){
-
+async function removeProjectByID(dbController, ID){
+    const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').deleteOne({
             "_id": ObjectId(ID)
@@ -143,7 +147,8 @@ async function removeProjectByID(ID){
 
 
 //***************************************************-patch-**************************************************************
-async function updateProjectGraph(id, graphObject){
+async function updateProjectGraph(dbController,id, graphObject){
+    const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').updateOne({
             "_id": ObjectId(id)
@@ -159,7 +164,8 @@ async function updateProjectGraph(id, graphObject){
     })
 }
 
-async function addNewProjectMember(id, email){
+async function addNewProjectMember(dbController, id, email){
+    const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
 
         db.collection('Projects').updateOne({
@@ -180,7 +186,8 @@ async function addNewProjectMember(id, email){
 }
 
 //***************************************************-put-**************************************************************
-async function updateEverythingProject(id, pname, ddate, sdate, own, grph, members){
+async function updateEverythingProject(dbController, id, pname, ddate, sdate, own, grph, members){
+    const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
 
         db.collection('Projects').updateOne({
@@ -205,66 +212,15 @@ async function updateEverythingProject(id, pname, ddate, sdate, own, grph, membe
 
 }
 
-/////////////////////////////////////////////////////-Task-//////////////////////////////////////////////////////////////
-async function getAllTasks(){
-    return await new Promise((resolve,reject)=>{
-        db.collection('Tasks').find({}).toArray()
-            .then(ans=>{
-                if(ans == null){
-                    resolve("No available tasks");
-                }else{
-                    resolve(ans);
-                }
-            })
-            .catch(err=>{
-                reject(err);
-            })
-    })
+module.exports = {
+    //project
+    insertProject,
+    getProjectByID,
+    getAllProjects,
+    getAllProjectsByUserEmail,
+    removeProjectByID,
+    updateProjectGraph,
+    addNewProjectMember,
+    updateEverythingProject
+
 }
-
-async function getTaskByID(id){
-    return await new Promise((resolve, reject)=>{
-        db.collection('Tasks').findOne({
-            "_id": ObjectId(id)
-        })
-            .then(ans=>{
-                if(ans == null){
-                    resolve("No available task");
-                }else{
-                    resolve(ans);
-                }
-            })
-            .catch(err=>{
-                reject(err);
-            })
-    })
-}
-
-async function getAllTasksByProject(id){
-    return await new Promise((resolve,reject)=>{
-        db.collection('Tasks').find({project:id}).toArray()
-            .then((ans)=>{
-                if(ans == null){
-                    resolve("No tasks found");
-                }else{
-                    resolve(ans);
-                }
-            })
-            .catch((err)=>{
-                reject(err);
-            });
-    })
-}
-/////////////////////////////////////////////////////-Node-//////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////-Graph-//////////////////////////////////////////////////////////////
-
-
-
-/////////////////////////////////////////////////////-exports-//////////////////////////////////////////////////////////////
-// console.log(getUserByID);
-module.exports={
-
-    getConnectionInstance
-
-};
