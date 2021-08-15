@@ -9,6 +9,17 @@ const scratchPad = require('../../Helpers/kanbanBoard');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    router.get('/isAcyclic/:id',(req,res)=>{
+
+        const ProjectId = req.params.id;
+        ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
+            const Graph = project.graph;
+            scratchPad.isAcyclic(Graph);
+
+
+        })
+    })
     router.get('/convertToKanbanBoard/:id',(req,res)=>{
 
         const ProjectId = req.params.id;
