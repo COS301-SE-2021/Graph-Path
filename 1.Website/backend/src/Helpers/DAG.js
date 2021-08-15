@@ -2,8 +2,19 @@
 function isAcyclic(graph)
 {
 
-    if (graph.nodes.length == 0)
-        return false;
+    if (JSON.stringify(graph) === '{}')
+    {
+        console.log();
+        return true
+    }
+
+
+
+    else if (graph.nodes.length == 0)
+    {
+        return true;
+    }
+
 
     else
     {
@@ -11,18 +22,20 @@ function isAcyclic(graph)
         let stack = [];
         let Nodes = SetNodes(graph);
 
-
+        console.log(Nodes);
         for( let i = 0 ; i < Nodes.length ; i ++)
         {
             //console.log(Nodes);
             if(isAcyclicRec(Nodes[i],stack,Nodes))
             {
-                console.log("Graph is acyclic");
-                return true;
+
+                //console.log("Graph is not DAG");
+                return false;
             }
         }
-        console.log("Graph is not acyclic");
-        return false;
+
+        //console.log("Graph is  DAG");
+        return true;
 
 
     }
