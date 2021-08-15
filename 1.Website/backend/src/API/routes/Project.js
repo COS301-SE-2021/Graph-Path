@@ -6,7 +6,7 @@ const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
-const DAGservice = require('../../Helpers/DAG')
+const DAGservice = require('../../Helpers/DAG');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
