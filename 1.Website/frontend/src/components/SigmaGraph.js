@@ -172,11 +172,11 @@ class SigmaGraph extends React.Component{
                   </Nav.Item>
                 </Nav>
               </Card.Header>
-              <Card.Body>
+              <Card.Body id="graph-card-body">
 
               <Sigma renderer="canvas" graph={graph} id="SigmaParent"
               style={{position:"relative",
-              width:"50vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
+              width:"52vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
               onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
               onClickNode={e => this.handleControlClick(e)}
               onClickEdge={ e => console.log(e)}

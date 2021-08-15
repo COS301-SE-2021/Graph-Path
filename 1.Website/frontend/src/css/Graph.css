@@ -3,21 +3,23 @@
     text-align: left;
     position: relative;
     padding-left: 3%;
-    background-color: blue;
+    background-color: transparent;
 }
 
 .graphContainer{
-    background-color: green;
+    background-color: transparent;
 }
 
 #add-node{
     width: 100%;
     float: right;
-    background-color: yellow;
+    background-color: #04AA6D;
+    border-radius: 5px;
+    text-decoration: none;
 }
 
 #add-node-div{
-    background-color: #990001;
+    background-color: transparent;
     position: relative;
     bottom: 450px;
     width: 20%;
@@ -28,7 +30,8 @@
 
 .projectView{
     min-width: min-content  ;
-    text-align: left;
+    text-align: center;
+    padding: 10px;
     
 }
 
@@ -62,7 +65,11 @@
 }
 
 #graph-card{
-    background-color: pink;
+    background-color: whitesmoke;
     width: 52vw;
     position: relative;
+}
+
+#graph-card-body{
+    padding: 0;
 }
