@@ -18,6 +18,7 @@ class NewProject extends React.Component{
             responseData:null,
             redirect:false,
             rbca:[],
+            users:[],
             role:"Client"
         }
     }

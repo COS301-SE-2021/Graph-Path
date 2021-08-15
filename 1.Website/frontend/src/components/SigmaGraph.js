@@ -117,9 +117,10 @@ class SigmaGraph extends React.Component{
   render(){
     const {match} = this.props ;
     var mgr = this.props.graphManager; 
-    const EditGraphPermissionRoles = ['owner','project manager','developer']
+    const EditGraphPermissionRoles = ['owner','project manager','developer'];
+    const saveGraphPermissions = ['owner','project manager']
 
-    // console.log(' on mount', mgr) ;
+    console.log(' on mount', this.props.project) ;
     if (mgr !== undefined){
     
 
@@ -135,7 +136,7 @@ class SigmaGraph extends React.Component{
             <span className="projName">{this.props.project.projectName}</span>
             {
                 typeof this.props.sendGraphData === 'function' &&
-                EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
+                saveGraphPermissions.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
                 <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
                 this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
                 Save</button>:""

@@ -30,8 +30,16 @@ class Team extends React.Component{
                 const users = res.data.data
                 console.log('suers',users) ;
                 if (users !== undefined && Array.isArray(users)){
+                    var specilized = []  ;
+                    users.forEach((val)=>{
+                        let temp = {
+                            label:`${val.firstName} ${val.lastName}`,
+                            value: val.email
+                        }
+                        specilized.push(temp)
+                    }) ; 
                     this.setState({
-                        list:users
+                        list:specilized
                     }) ;
                 }
                 else{
