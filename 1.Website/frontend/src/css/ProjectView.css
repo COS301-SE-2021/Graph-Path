@@ -13,7 +13,6 @@
     background-color: ghostwhite;
     border-radius: 8px;
     margin-top: 2%;
-    left: 570px;
 }
 
 #project-form label{
@@ -37,7 +36,7 @@
     position: absolute;
     margin-top: 4%;
     width: 300px;
-    left: 420px;
+    margin-right: 1%;
     z-index: 100;
     border-radius: 5px;
     padding-top: 10px;
@@ -62,7 +61,7 @@
     background-color: #04AA6D;
     width: 300px;
     bottom: 250px;
-    right: 690px;
+    left: 527px;
     position: absolute;
     border-radius: 5px;
     padding-top: 10px;
