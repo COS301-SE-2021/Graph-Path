@@ -20,7 +20,7 @@ function makeProjectRoute(db) {
             if(DAGservice.isAcyclic(Graph))
             {
                 res.send({
-                    message: "Graph is acyclic",
+                    message: "Graph is DAG",
                     data: []
                 })
             }
@@ -28,7 +28,7 @@ function makeProjectRoute(db) {
             else
             {
                 res.send({
-                    message:"Graph is cyclic",
+                    message:"Graph is not DAG",
                     data: []
                 })
             }
