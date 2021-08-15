@@ -48,9 +48,6 @@ async function updateNodesID( DBcontroller,Project) {
            })
 
 
-
-
-
     }
 
     return Project;
@@ -106,6 +103,7 @@ async function getTasks(controller , Nodes) {
         uniqueIDs.push(Nodes[i].uniqueID);
     }
 
+    console.log(uniqueIDs);
     //------get All Tasks with uniqueIDs--------------------
     return await new Promise((resolve, reject) => {
         db.collection('Tasks').find({}).toArray()
