@@ -35,9 +35,9 @@
     background-color: #04AA6D;
     position: absolute;
     margin-top: 4%;
-    width: 300px;
-    z-index: 100;
+    width: 28vw;
     margin-right: 1%;
+    z-index: 100;
     border-radius: 5px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -61,7 +61,7 @@
     background-color: #04AA6D;
     width: 300px;
     bottom: 250px;
-    left: 530px;
+    left: 527px;
     position: absolute;
     border-radius: 5px;
     padding-top: 10px;

@@ -76,9 +76,9 @@ class Task extends React.Component{
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
                     <h4>{!this.props.fullForm?'Add Node':'Edit Task'}</h4>
-                    <p>Task</p>
+                    <p>Node Name</p>
                     <input type="text" name="name" required={true}
-                     placeholder="Task Name" 
+                     placeholder="Node Name"
                      value={custom === undefined ? this.state.name
                         :this.props.label} 
                      onChange={this.updateField} 
