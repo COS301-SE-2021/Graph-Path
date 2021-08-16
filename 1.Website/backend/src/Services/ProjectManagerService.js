@@ -148,15 +148,16 @@ async function removeProjectByID(dbController, ID){
 async function removeProjectMember(dbController, id, email){
     const db = dbController.getConnectionInstance();
     return await new Promise(async (resolve,reject)=>{
-        console.log("1234: ");
+
         let proj = await  getProjectByID(dbController, id);
-        console.log("1234 proj: ",proj);
+
         if(proj === undefined || proj === null){
             resolve("Could not find the project.");
+        }else if(proj === "No project"){
+                resolve("Project does not exist.");
         }
 
         let memberList = proj.groupMembers;
-        console.log("1234 memberlist: ", memberList);
 
 
                 let newArray = memberList.filter((val)=>{
