@@ -10,6 +10,7 @@ describe('/getAllTasks',()=> {
         let connection;
         let MockDB;
         beforeAll(async () => {
+
             connection = await MongoClient.connect(global.__MONGO_URI__, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
@@ -24,7 +25,7 @@ describe('/getAllTasks',()=> {
         });
 
         it('it should return status code 200', async ()=> {
-            let app = makeApp(false,MockDB)
+            let app = makeApp(AliDB);
             let response  = await supertest(app)
                 .get('/task/getAllTasks')
                 .expect(200)
