@@ -84,7 +84,7 @@ class Task extends React.Component{
     handleSearch=(ans)=>{
       console.log('task members',ans)
       this.setState({
-          members:ans
+          taskMembers:ans
       })
 
     }
@@ -139,7 +139,6 @@ class Task extends React.Component{
                         <p>Due Date</p>
                         <input  type="date" name="dueDate" onChange={this.updateField} />
                         <p>Assign Task</p>
-                        <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e,0)} />
                         <Select options={this.state.members} 
                         onChange={this.handleSearch}
                         placeholder={'Search Member'}
@@ -151,7 +150,7 @@ class Task extends React.Component{
                                 return (
                                         <span  
                                            
-                                        >{member.label}</span>
+                                        >{member.label+'\n'}</span>
                                 )
                             })
                         }
@@ -159,7 +158,7 @@ class Task extends React.Component{
                     :<span/>}
                     
                     {
-                     custom === undefined && this.props.fullForm
+                     (custom === undefined && !this.state.fullForm)
                     ?<input type="submit" value="Add Node" className="btn1"/>
                         :`Viewing Node ${this.props.label}`       
                     }
