@@ -48,9 +48,6 @@ async function updateNodesID( DBcontroller,Project) {
            })
 
 
-
-
-
     }
 
     return Project;
@@ -106,6 +103,7 @@ async function getTasks(controller , Nodes) {
         uniqueIDs.push(Nodes[i].uniqueID);
     }
 
+    console.log(uniqueIDs);
     //------get All Tasks with uniqueIDs--------------------
     return await new Promise((resolve, reject) => {
         db.collection('Tasks').find({}).toArray()
@@ -142,8 +140,7 @@ async function getTasks(controller , Nodes) {
     })
 }
 
-function splitTasksByStatus(Tasks)
-{
+function splitTasksByStatus(Tasks) {
     let InProgress = [];
     let Complete = [];
     let NotStarted =[];
@@ -197,13 +194,15 @@ function splitTasksByStatus(Tasks)
 
 }
 
+
 module.exports = {
     getProjectGraph,
     getNodes,
     updateNodesID,
     getTasks,
     mapTaskToNode,
-    splitTasksByStatus
+    splitTasksByStatus,
+
 }
 
 /* notes: Now we need to include the uniqueNode ID for every task*/

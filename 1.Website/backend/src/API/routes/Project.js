@@ -5,20 +5,49 @@ const {route} = require("express/lib/router");
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
-const scratchPad = require('../../Helpers/kanbanBoard');
+const kanbanBoard = require('../../Helpers/kanbanBoard');
+const DAGservice = require('../../Helpers/DAG');
 
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    router.get('/isAcyclic/:id',(req,res)=>{
+
+        const ProjectId = req.params.id;
+        ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
+            const Graph = project.graph;
+
+            if(DAGservice.isAcyclic(Graph))
+            {
+                res.send({
+                    message: "Graph is DAG",
+                    data: []
+                })
+            }
+
+            else
+            {
+                res.send({
+                    message:"Graph is not DAG",
+                    data: []
+                })
+            }
+
+
+
+
+        })
+    })
     router.get('/convertToKanbanBoard/:id',(req,res)=>{
 
         const ProjectId = req.params.id;
-        scratchPad.getProjectGraph(db,ProjectId)
+        kanbanBoard.getProjectGraph(db,ProjectId)
 
             .then((project)=>{
 
-                scratchPad.updateNodesID(db ,project).then(()=>{})
+                kanbanBoard.updateNodesID(db ,project).then(()=>{})
 
-                let projectNodes = scratchPad.getNodes(project);
+                let projectNodes = kanbanBoard.getNodes(project);
                 if(projectNodes.length === 0)
                 {
                     res.send({
@@ -30,7 +59,7 @@ function makeProjectRoute(db) {
                 else {
                     // pool all tasks of nodes
                     //console.log(projectNodes);
-                    scratchPad.getTasks(db,projectNodes).then((AllTasks)=>{
+                    kanbanBoard.getTasks(db,projectNodes).then((AllTasks)=>{
                         if(AllTasks === "Tasks collection empty")
                         {
                             res.send({
@@ -51,7 +80,7 @@ function makeProjectRoute(db) {
                         {
                             res.send({
                                 message:"success",
-                                data: scratchPad.splitTasksByStatus(AllTasks),
+                                data: kanbanBoard.splitTasksByStatus(AllTasks),
                             })
                         }
 
@@ -333,6 +362,29 @@ router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
         })
      })
 });
+
+    router.patch('/removeProjectMember/:id/:email',(req, res, next)=>{
+        let ID = req.params.id;
+        let mail = req.params.email;
+        ProjectManagerService.removeProjectMember(db,ID, mail)
+            .then(ans=>{
+                if(ans.modifiedCount >0){
+                    res.send({
+                        message: "Member removed successfully."
+                    })
+                }else{
+                    res.send({
+                        message: "Could not remove member."
+                    })
+                }
+            })
+            .catch((err)=>{
+                res.status(500).send({
+                    message: "Server error: could not remove member.",
+                    err: err
+                })
+            })
+    });
 
 
 //PUT ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
