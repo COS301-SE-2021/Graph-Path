@@ -1,11 +1,37 @@
 .GraphBox{
     /* overflow: scroll; */
     text-align: left;
+    position: relative;
+    padding-left: 3%;
+    background-color: transparent;
+}
+
+.graphContainer{
+    background-color: transparent;
+}
+
+#add-node{
+    width: 100%;
+    float: right;
+    background-color: #04AA6D;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+#add-node-div{
+    background-color: transparent;
+    position: relative;
+    bottom: 450px;
+    width: 20%;
+    float: right;
+    margin-right: 5%;
+    padding: 5px;
 }
 
 .projectView{
     min-width: min-content  ;
-    text-align: left;
+    text-align: center;
+    padding: 10px;
     
 }
 
@@ -36,4 +62,14 @@
 .SigmaParent{
     color: blue;
     width: 50vw;
+}
+
+#graph-card{
+    background-color: whitesmoke;
+    width: 52vw;
+    position: relative;
+}
+
+#graph-card-body{
+    padding: 0;
 }

@@ -140,13 +140,13 @@ class Register extends React.Component{
                 if(response.status===400){
                     throw Error(response.statusText) ;
                 }//else
-                // console.log('from back end',response)
+                console.log('from back end',response)
 
                 const res = response.data;
                 // console.log(res) ;
                 this.setState({
                     answer:res.message,
-                    responseData:res.data //data
+                    responseData:res.data[0] //data
                 },()=>{
 
                    console.log(this.state)

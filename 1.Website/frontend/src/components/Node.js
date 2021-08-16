@@ -1,6 +1,7 @@
 import React from 'react' ; 
 import Task from './Task' ;
 import axios from 'axios';
+import '../css/Graph.css'
 import {Link,withRouter, Route, Switch} from 'react-router-dom' ;
 // import '../css/Dashboard.css' ;
 
@@ -24,7 +25,7 @@ class Node extends React.Component{
         else{
             var manager = this.props.graphManager ;
             manager.addNode(name) ;
-            this.updateParent()
+            this.updateParent(manager) ;
         
         }
     }
@@ -77,44 +78,46 @@ class Node extends React.Component{
          
         console.log(project) ;
 
-        if (manager === undefined){
+        if (manager === undefined || project === undefined){
             return (<div>
                 No Graph Mounted
             </div>)
         }
-        const query = new URLSearchParams(this.props.location.search );
-        return (
-            <div>
-                {EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? 
-              
-                <div>
-                    <Link to={`${match.url}/addNode`}>Add Nodes</Link><span> </span>
-                    {/* <Link to={`${match.url}/edges`}>Add Edges</Link> */}
-                    <br/>
-                </div>
-                :""
-                }
-                <Switch>
-                    <Route path={`${match.url}/addNode`} >
-                        
-                        <Task addTask={this.addNewNode} 
-                        />
-                    </Route>
-                    <Route path={`${match.url}/task/`} render={()=>{
-                        return <>
-                        <Task addTask={this.addNewNode} 
-                            fullForm={true}
-                            label={query.get('label')}
-                        />
+        else{
+            // console.log('Node remounting',manager.getGraph())
+            const query = new URLSearchParams(this.props.location.search );
+            return (
+                <div id="add-node-div">
+                    {EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? 
+                
+                    <div id="add-node">
+                        <Link to={`${match.url}/addNode`}>Add Nodes</Link><span> </span>
+                        {/* <Link to={`${match.url}/edges`}>Add Edges</Link> */}
+                        <br/>
+                    </div>
+                    :"No perm"
+                    }
+                    <Switch>
+                        <Route path={`${match.url}/addNode`} >
+                            
+                            <Task addTask={this.addNewNode} 
+                            />
+                        </Route>
+                        <Route path={`${match.url}/task/`} render={()=>{
+                            return <>
+                            <Task addTask={this.addNewTask} 
+                                fullForm={true}
+                                label={query.get('label')}
+                            />
 
-                        </>
-                    }} />
-                        
-                </Switch>
-            
-        </div>
+                            </>
+                        }} />
+                            
+                    </Switch>
+                
+            </div>
         
-        )
+        )}
     }
 
     displayTask =()=>{

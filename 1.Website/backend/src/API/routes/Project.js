@@ -413,6 +413,7 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
 
     ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
         .then(ans=>{
+            console.log('Response',ans)
             if(ans.modifiedCount > 0){
                 res.send({
                     message: "The project was updated."

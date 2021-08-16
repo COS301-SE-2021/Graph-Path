@@ -35,9 +35,9 @@
     background-color: #04AA6D;
     position: absolute;
     margin-top: 4%;
-    width: 300px;
-    z-index: 100;
+    width: 28vw;
     margin-right: 1%;
+    z-index: 100;
     border-radius: 5px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -59,10 +59,10 @@
 
 #div3{
     background-color: #04AA6D;
-    width: 300px;
-    bottom: 250px;
-    left: 530px;
-    position: absolute;
+    width: 28vw;
+    bottom: 200px;
+    margin-left: 36.9%;
+    position: relative;
     border-radius: 5px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -73,4 +73,58 @@
     background-color: transparent;
     display: inline-block;
     position: relative;
+}
+
+#userRemove{
+    background-color: transparent;
+    font-size: 20px;
+    position: absolute;
+    margin-left: 320px;
+    bottom: 40px;
+}
+
+#userRemove:hover{
+    color: red;
+}
+
+#userEdit{
+    background-color: transparent;
+    font-size: 20px;
+    position: absolute;
+    margin-left: 320px;
+    bottom: 10px;
+}
+
+#userEdit:hover{
+    color: #04AA6D;
+}
+
+#userAdd{
+    background-color: transparent;
+    font-size: 35px;
+    position: absolute;
+    margin-left: 150px;
+}
+
+#memberDiv{
+    background-color: ghostwhite;
+    position: relative;
+    padding: 2px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#canvasBody{
+    position: relative;
+    padding-bottom: 70px;
+    background-color: #b9fab9;
+}
+
+#canvasHeader{
+    background-color: #001122;
+    color: white;
+}
+
+.offcanvas-header .btn-close{
+    background-color: white;
 }

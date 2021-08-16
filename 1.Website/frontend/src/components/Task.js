@@ -54,6 +54,7 @@ class Task extends React.Component{
         //communicate with the API
         // this.sendData(data) ;
         this.cleanUp();
+       
         this.props.addTask(data) ;
     }
 
@@ -76,9 +77,9 @@ class Task extends React.Component{
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
                     <h4>{!this.props.fullForm?'Add Node':'Edit Task'}</h4>
-                    <p>Task</p>
+                    <p>Node Name</p>
                     <input type="text" name="name" required={true}
-                     placeholder="Task Name" 
+                     placeholder="Node Name"
                      value={custom === undefined ? this.state.name
                         :this.props.label} 
                      onChange={this.updateField} 
@@ -120,7 +121,11 @@ class Task extends React.Component{
                         </span>
                     :<span/>}
                     
-                    <input type="submit" value="Add Task" className="btn1"/>
+                    {
+                     custom === undefined 
+                    ?<input type="submit" value="Add Node" className="btn1"/>
+                        :`Viewing Node ${this.props.label}`       
+                    }
                 </form>
             </div>
         )

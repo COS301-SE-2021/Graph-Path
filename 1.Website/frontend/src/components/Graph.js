@@ -1,6 +1,5 @@
 import React from 'react' ; 
 import SigmaGraph from './SigmaGraph';
-import Node from './Node';
 import axios from 'axios';
 import ProjectInfo from './ProjectView';
 import '../css/common.css' ;
@@ -222,7 +221,7 @@ class Graph extends React.Component{
         .then(data => {
             // console.log('from api req',data) ;
             const proj = data ;
-            if (proj.data !== undefined ){
+            if (proj.data !== undefined && proj.data !== null ){
                 this.setState({
                     projList:proj.data,
                     loading:false
@@ -398,25 +397,17 @@ class Graph extends React.Component{
                 </div>
                 </Route>
                     <Route path={`/project/:${this.state.linkNumber}`}> 
-                        {/* <SigmaGraph  updateGraph={this.updateGraphView}
-                           projectName={ selectedProjectName}
-                            sendGraphData={this.saveCurrentGraph}
-                            graphManager={this.state.graphManager}
-                        /> */}
                         <ProjectInfo userEmail={this.props.userEmail} projectToDisplay={this.state.linkNumber<0 ?''
                         :this.state.projList[this.state.linkNumber]} />
                     </Route>
                     <Route path="/addTask">
-                        {console.log('When a task is added, state has, ',this.state)}
+                        {console.log('When a task is added, state has, ',this.state.graphManager)}
                         <SigmaGraph updateGraph={this.updateGraphView}
                             project={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             graphManager={this.state.graphManager}
                         />
-                        <Node updateGraph={this.updateGraphView} 
-                        graphManager={this.state.graphManager} 
-                        project={this.state.linkNumber<0 ?''
-                        :this.state.projList[this.state.linkNumber]}/>                    
+                                            
                     </Route>
                 </Switch>
             </Router>

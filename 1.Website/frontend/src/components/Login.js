@@ -114,7 +114,6 @@ class Login extends React.Component{
                 // alert('res:'+this.state.answer)
                 console.log(this.state)//Heavy checks
                 if (this.state.responseData === undefined || this.state.responseData === null ){
-                    alert('try again') ;
 
                     this.setState({
                         formErrors:{
@@ -181,9 +180,10 @@ class Login extends React.Component{
                                 placeholder='Password' value={this.state.password}
                                 onChange={e=>this.change(e)}
                             />
-                            {formErrors.password === false && this.state.responseData !==null &&(
+                            {formErrors.password === false && this.state.responseData !==null ?
                                 <span className='errorMessage'>Invalid Password</span>
-                            )}
+                                :<span className='errorMessage'>{this.state.answer.indexOf('password')>0?this.state.answer:''}</span>
+                            }
                         </div>
 
                         <input type="submit" className="btn1" value="Login" />

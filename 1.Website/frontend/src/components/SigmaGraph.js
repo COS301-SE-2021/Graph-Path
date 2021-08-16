@@ -5,6 +5,8 @@ import {Sigma, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGE
 // import Dagre from 'react-sigma/lib/Dagre' ;
 import {DragNodes,} from 'react-sigma';
 import {Redirect,withRouter} from 'react-router-dom' ;
+import {Card, Nav} from "react-bootstrap";
+import Node from './Node';
 
 
 class GraphMessage extends React.Component{
@@ -25,6 +27,20 @@ class GraphMessage extends React.Component{
     )
   }
 }
+
+class UpdateNodeProps extends React.Component {
+  componentDidUpdate(){ 
+   var { sigma, nodes } = this.props
+    console.log('extra',sigma,nodes)
+    sigma.graph.nodes().forEach(n => {
+      var updated = nodes.find(e => e.id === n.id)
+      Object.assign(n, updated)
+    })
+  }
+
+  render = () => null
+}
+
 
 class SigmaGraph extends React.Component{  
   constructor(props){
@@ -52,17 +68,45 @@ class SigmaGraph extends React.Component{
   }
 
   addNewEdge =(param1,param2)=>{
-    this.props.graphManager.addEdge(param1,param2) ;
-    this.updateParent() ;
+    let addedEdge = this.props.graphManager.addEdge(param1,param2) ;
+    console.log('adding edge',addedEdge) ;
+
+    if (addedEdge === 1){
+      this.updateParent() ;
+    }
+    else if (addedEdge === 0 ){
+      alert('Edge Makes graph Cyclic')
+    }
+    else{
+      alert('Edge Exists')
+    }
   }
   updateParent=()=>{
     if (typeof this.props.updateGraph === 'function'){
+      console.log('Updating manager to ',this.props.graphManager.getGraph())
         this.props.updateGraph(this.props.graphManager) ;
     }else{
         alert('Could not Parent graph') ;
     }
 }
   
+  deleteNode = (nodeId)=>{
+    var deleteNode = this.props.graphManager.removeNode(nodeId) ;
+    if (deleteNode){
+      //delete successfully
+      this.props.updateGraph(this.props.graphManager) ;
+    }
+    
+  }
+  handleEdgeCick=(event)=>{
+    console.log('event Edge',event)
+    if (event.data.captor.altKey){
+      var deleteEdge = this.props.graphManager.removeEdgeWithEdgeId(event.data.edge.id) ;
+      if (deleteEdge){
+        this.props.updateGraph(this.props.graphManager) ;
+      }
+    }
+  }
   
   /*
   When ctrl key is pressed and source node not set
@@ -98,7 +142,15 @@ class SigmaGraph extends React.Component{
       }
       console.log(this.state)
     }
-    else{
+    else if(event.data.captor.altKey){
+      if (typeof event.data.node.id === 'string'){
+        this.deleteNode(event.data.node.id) ;
+      }
+      else{
+        console.log('invalid id for delete')
+      }
+    }
+    else {
 
       if (this.state.source !== "Source Node"){
         this.cleanUp() ;
@@ -113,54 +165,71 @@ class SigmaGraph extends React.Component{
     }
 
   }
+  componentDidUpdate(){
+    console.log('Sigma Updated ') ;
+  }
   
   render(){
     const {match} = this.props ;
     var mgr = this.props.graphManager; 
-    const EditGraphPermissionRoles = ['owner','project manager','developer']
+    const EditGraphPermissionRoles = ['owner','project manager','developer'];
+    const saveGraphPermissions = ['owner','project manager'] ;
+    const project = this.props.project ; 
 
-    // console.log(' on mount', mgr) ;
-    if (mgr !== undefined){
+    if (mgr !== undefined && project !== undefined){
+      console.log(' on remount', mgr.getGraph(),project) ;
     
 
-      const graph = mgr.getGraph() ; 
-      if (graph !== undefined && graph.nodes !== undefined ){
-        var SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
+      var graph = mgr.getGraph() ; 
+      if (graph !== undefined && graph.nodes !== undefined && project !== undefined){
+        let SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
+        console.log('Sigma Key ',SigmaGraphkey)
 
         const nodeId = this.state.nodeId ; 
         const nodeLabel = this.state.nodeLabel ;
         return (
           <div className="graphContainer">
             <div>
-            <span className="projName">{this.props.project.projectName}</span>
+            <span className="projName">{project.projectName}</span>
             {
                 typeof this.props.sendGraphData === 'function' &&
-                EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
+                saveGraphPermissions.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
                 <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
                 this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
                 Save</button>:""
               }
             </div>
-            
-            <div key={SigmaGraphkey} className="GraphBox">
+            <div className="GraphBox">
+            <Card id="graph-card">
+              <Card.Header>
+                <Nav variant="tabs" defaultActiveKey="first">
+                  <Nav.Item>
+                    <Nav.Link>DAG</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link>Kanban</Nav.Link>
+                  </Nav.Item>
+                </Nav>
+              </Card.Header>
+              <Card.Body id="graph-card-body">
 
-              <Sigma renderer="canvas" graph={graph} className="SigmaParent" 
-              style={{position:"relative", 
-              width:"50vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
+              <Sigma renderer="canvas" graph={graph} id="SigmaParent" key={SigmaGraphkey} 
+              style={{position:"relative",
+              width:"52vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
               onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
               onClickNode={e => this.handleControlClick(e)}
-              onClickEdge={ e => console.log(e)}
+              onClickEdge={ e => this.handleEdgeCick(e)}
               onOverEdge={(e)=>console.log('hover')}
               settings={{
                 clone: false, // do not clone the nodes
-                immutable:true,// cannot updated id of node
+                immutable:false,// cannot updated id of node
                 // labelSizeRatio:1,
                 labelThreshold:0.5,
                 scalingMode:"inside",
                 sideMargin:100,
                 minNodeSize:3,
                 maxNodeSize:10,
-                minEdgeSize:1,
+                // minEdgeSize:0.1,
                 defaultEdgeHoverColor:'#000',
                 maxEdgeSize:4,
                 drawNodes:true, //draw node ?
@@ -171,6 +240,7 @@ class SigmaGraph extends React.Component{
                 enableEdgeHovering:true,
                 edgeHoverPrecision:100
               }}>
+                <UpdateNodeProps nodes={graph.nodes} />
                 <EdgeShapes default="arrow"/>
                 <NodeShapes default="def"/>
                 {/* <RelativeSize  initialSize={200}/> */}
@@ -185,10 +255,16 @@ class SigmaGraph extends React.Component{
               </Sigma>
               {
               this.state.redirect 
-                ?<Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} />  
+                ? <Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} /> 
                 :""            
               }
+
+              </Card.Body>
+            </Card>
             </div>
+            <Node updateGraph={this.props.updateGraph} 
+              graphManager={this.props.graphManager} 
+              project={this.props.project}/>
           </div>
         );
       }
