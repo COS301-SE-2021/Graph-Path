@@ -26,6 +26,7 @@ class ProjectView extends React.Component{
             answer:'',
             popUp: false,
             popUpText: "",
+            memberId:[]
         }
     }
 
@@ -58,7 +59,7 @@ class ProjectView extends React.Component{
         e.preventDefault();
         const {name,value} = e.target;
 
-        switch(name){
+        {/*   switch(name){
             case 'projName':
                 this.setState({
                     empty: value.length === 0
@@ -69,7 +70,7 @@ class ProjectView extends React.Component{
                 this.setState({
 
                 })
-        }
+        }*/}
         this.setState({ [name]: value })
 
     }
@@ -153,6 +154,41 @@ class ProjectView extends React.Component{
         }
     }
 
+    removeMember = (email)=>{
+        console.log("email",email)
+        try{
+            axios.patch(`${this.state.api}/project/removeProjectMember/${this.props.projectToDisplay._id}/${email}`)
+                .then((response)=>{
+                    if(response.status === 400){
+                        throw Error(response.statusText);
+                    }
+
+                    const res = response.data;
+
+                    this.setState({
+                        answer:res.message
+                    },()=>{
+                        if(this.state.answer !== undefined){
+                            this.setState({
+                                popUpText: email+" has been removed from the project."
+                            });
+                            this.showPopUP()
+                        }else{
+                            alert("something went wrong please remove again")
+                        }
+                    })
+                },(response)=>{
+                    console.log('rejected',response);
+                    alert('Server Error, Please try again later')
+                })
+                .then(()=>{
+                   //instant update
+                })
+        }catch(error){
+            console.log(error);
+        }
+    }
+
 
     viewProject = (project,permissions)=>{
         console.log('project view',project,permissions)
@@ -214,7 +250,10 @@ class ProjectView extends React.Component{
                             <Offcanvas.Title>Project Members</Offcanvas.Title>
                         </Offcanvas.Header>
                          <Offcanvas.Body id="canvasBody">
-                             {project.groupMembers.map((value,index)=>{
+
+                             {
+
+                                 project.groupMembers.map((value,index)=>{
                                  console.log('from members',value)
                                  return (
                                      <div key={index} id="memberDiv">
@@ -222,7 +261,7 @@ class ProjectView extends React.Component{
                                          <>
                                          <p>Full names: {value.label}<br/>Email: {value.email}
                                          </p>
-                                         <HiIcons.HiUserRemove id="userRemove" />
+                                         <HiIcons.HiUserRemove id="userRemove" onClick={()=>this.removeMember(value.email)} />
                                          <FaIcons.FaUserEdit id="userEdit" />
                                          </> : <>
                                                  Owner: {value.email}
