@@ -210,11 +210,7 @@ async function updateEverythingTask(dbController,id, assignee, assigner, descrip
             }
         })
             .then(ans=>{
-                if(ans.modifiedCount > 0){
-                    resolve("Success");
-                }else{
-                    resolve("Could not update the task");
-                }
+                resolve(ans);
             })
             .catch(err=>{
                 reject(err);

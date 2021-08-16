@@ -346,7 +346,8 @@ function  makeTaskRoute(db)
                     })
                 }else if(ans.insertedCount > 0){
                     res.send({
-                        message:"The task was saved successfully."
+                        message:"The task was saved successfully.",
+                        data:ans.ops
                     }) ;
                 }else{
                     res.send({
@@ -752,7 +753,7 @@ function  makeTaskRoute(db)
                     })
                 }else if(ans.modifiedCount < 1){
                     res.send({
-                        message: "The task does not exist."
+                        message: "Could not update the task."
                     })
                 }else if(ans.modifiedCount > 0){
                     res.send({

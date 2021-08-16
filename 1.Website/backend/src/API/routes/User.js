@@ -21,6 +21,9 @@ const UserManagerService = require('../../Services/UserManagerService');
                          message:"No available users to retrieve."
                      })
                  }else{
+                     ans.forEach((user)=>{
+                         user.password = null;
+                     });
                      res.send({
                          message:"Users retrieved successfully.",
                          data: ans
@@ -51,6 +54,9 @@ const UserManagerService = require('../../Services/UserManagerService');
                          data: []
                      })
                  }else{
+                     ans.forEach((user)=>{
+                         user.password = null;
+                     });
                      res.send({
                          message:"List retrieved successfully.",
                          data: ans
@@ -222,7 +228,7 @@ const UserManagerService = require('../../Services/UserManagerService');
                    res.send({
                        message: "The user was removed."
                    })
-               }else if(ans.deletedCount < 1){
+               }else if(ans.deletedCount < 1 ||  ans==="User does not exist"){
                    res.send({
                        message: "User does not exist."
                    })
@@ -303,6 +309,7 @@ const UserManagerService = require('../../Services/UserManagerService');
                          message:"The Password was updated."
                      })
                  }else{
+
                      res.send({
                          message: "The Password was not updated."
                      })
