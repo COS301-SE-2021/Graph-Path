@@ -268,6 +268,24 @@ function makeProjectRoute(db) {
 
         }
     });
+    router.post('/addToProjectGroupMembers',(req, res, next)=>{
+        let ID = req.body.id;
+        let memberObjects = req.body.groupMembers;
+
+        ProjectManagerService.addNewProjectMember(db,ID,memberObjects)
+            .then((ans)=>{
+
+               res.send(ans)
+            })
+            .catch((err)=>{
+                res.send({
+                    message: "unsuccessful. Server Error",
+                    data: []
+                })
+            })
+
+
+    });
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -341,27 +359,7 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
      })
 });
 
-router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
-    let ID = req.params.id;
-    let mail = req.params.email;
-    ProjectManagerService.addNewProjectMember(db,ID, mail)
-        .then(ans=>{
-            if(ans.modifiedCount >0){
-                res.send({
-                    message: "Member added successfully."
-                })
-            }else{
-                res.send({
-                    message: "Could not add member."
-                })
-            }
-        })
-    .catch((err)=>{
-        res.status(500).send({
-            message: "An error has occurred."
-        })
-     })
-});
+
 
     router.patch('/removeProjectMember/:id/:email',(req, res, next)=>{
         let ID = req.params.id;

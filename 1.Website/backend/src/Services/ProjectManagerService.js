@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const ObjectId = require('mongodb').ObjectID;
 const Permissions = require('../Helpers/Permissions');
+const {each} = require("mongodb/lib/operations/cursor_ops");
 
 /////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
 //***************************************************-get-**************************************************************
@@ -202,7 +203,85 @@ async function updateProjectGraph(dbController,id, graphObject){
     })
 }
 
-async function addNewProjectMember(dbController, id, memberObject){
+
+async function addNewProjectMember(dbController, id, newMembers){
+
+    const db = dbController.getConnectionInstance();
+    let  project = null;
+    await new Promise((resolve, reject)=>{
+        db.collection('Projects').findOne({
+            "_id": ObjectId(id)
+        })
+            .then((ans)=>{
+                if(ans !==null){
+
+                    project = ans;
+                    resolve();
+                }else{
+                   throw "Project with given ID does not exist"
+                }
+
+            })
+            .catch(err=>{
+               console.log(err);
+               reject(err);
+            });
+
+    })
+    if(project !== null)
+    {
+        let Members = project.groupMembers;
+       for( let i =0 ; i < newMembers.length ; i ++)
+       {
+           Members.push(newMembers[i]);
+       }
+
+        return await new Promise((resolve,reject)=>{
+
+            db.collection('Projects').updateOne({
+                "_id":ObjectId(id)
+            },{
+                $set: {
+                    groupMembers: Members
+                }
+            })
+                .then(ans=>{
+
+                    if(ans.result.nModified >= 1)
+                    {
+
+                        project.groupMembers = Members;
+                        resolve({
+                            message: "successfully added new Members",
+                            data: project
+                        });
+                    }
+
+                    else
+                    {
+
+                        resolve({
+                            message: "Project members not updated",
+                            data: []
+                        });
+
+                    }
+                })
+                .catch(err=>{
+
+                    reject(err);
+                })
+        })
+
+
+    }
+
+
+
+}
+
+/*async function addNewProjectMember(dbController, id, mail ){
+
 
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
@@ -211,7 +290,7 @@ async function addNewProjectMember(dbController, id, memberObject){
             "_id":ObjectId(id)
         },{
             $push: {
-                groupMembers: email
+                groupMembers: MemberObject
             }
         })
             .then(ans=>{
@@ -223,7 +302,7 @@ async function addNewProjectMember(dbController, id, memberObject){
     })
 
 }
-
+*/
 
 
 //***************************************************-put-**************************************************************
