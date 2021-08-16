@@ -83,12 +83,20 @@
     bottom: 40px;
 }
 
+#userRemove:hover{
+    color: red;
+}
+
 #userEdit{
     background-color: transparent;
     font-size: 20px;
     position: absolute;
     margin-left: 320px;
     bottom: 10px;
+}
+
+#userEdit:hover{
+    color: #04AA6D;
 }
 
 #userAdd{
