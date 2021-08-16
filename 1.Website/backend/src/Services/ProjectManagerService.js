@@ -204,7 +204,7 @@ async function updateProjectGraph(dbController,id, graphObject){
 }
 
 
-async function addNewProjectMember2(dbController, id, newMembers){
+async function addNewProjectMember(dbController, id, newMembers){
 
     const db = dbController.getConnectionInstance();
     let  project = null;
@@ -280,7 +280,7 @@ async function addNewProjectMember2(dbController, id, newMembers){
 
 }
 
-async function addNewProjectMember(dbController, id, mail ){
+/*async function addNewProjectMember(dbController, id, mail ){
 
 
     const db = dbController.getConnectionInstance();
@@ -302,7 +302,7 @@ async function addNewProjectMember(dbController, id, mail ){
     })
 
 }
-
+*/
 
 
 //***************************************************-put-**************************************************************
@@ -341,7 +341,6 @@ module.exports = {
     removeProjectByID,
     updateProjectGraph,
     addNewProjectMember,
-    addNewProjectMember2,
     updateEverythingProject,
     removeProjectMember
 

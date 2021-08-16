@@ -272,7 +272,7 @@ function makeProjectRoute(db) {
         let ID = req.body.id;
         let memberObjects = req.body.groupMembers;
 
-        ProjectManagerService.addNewProjectMember2(db,ID,memberObjects)
+        ProjectManagerService.addNewProjectMember(db,ID,memberObjects)
             .then((ans)=>{
 
                res.send(ans)
