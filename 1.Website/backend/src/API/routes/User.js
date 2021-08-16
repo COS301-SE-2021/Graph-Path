@@ -228,7 +228,7 @@ const UserManagerService = require('../../Services/UserManagerService');
                    res.send({
                        message: "The user was removed."
                    })
-               }else if(ans.deletedCount < 1){
+               }else if(ans.deletedCount < 1 ||  ans==="User does not exist"){
                    res.send({
                        message: "User does not exist."
                    })

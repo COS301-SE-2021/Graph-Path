@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const ObjectId = require('mongodb').ObjectID;
+const ProjectManagerService = require('./ProjectManagerService');
 
 async function getAllUsers(dbController){
 
@@ -151,32 +152,91 @@ async function insertUser(dbController, userObject){
 //***************************************************-delete-**************************************************************
 async function removeUserByID(dbController, id){
     const db = dbController.getConnectionInstance();
-    return await new Promise((resolve, reject) => {
-        db.collection('Users').deleteOne({
-            "_id": ObjectId(id)
-        })
-            .then((ans)=>{
-                resolve(ans);
+    return await new Promise(async (resolve, reject) => {
+        //remove from all projects
+            //retrieve user email
+            let mail = await getUserByID(dbController,id);
+            if(mail === "No user found"){
+                resolve("User does not exist");
+            }
+            let email = mail.email;
+            //console.log("email: ",email);
+            //get list of all projects involved in
+        let ProjectList = await ProjectManagerService.getAllProjectsByUserEmail(dbController, email)
+            .then(ans=>{
+                //console.log("ProjectList: ",ans);
+
+                if(ans !== "No matched projects"){
+                    //delete user from each of those projects
+
+                    for(let i=0; i<ans.length;i++){
+                        ProjectManagerService.removeProjectMember(dbController, ans[i]._id, email)
+                            .catch(err=>{
+                                reject(err);
+                            });
+                    }
+
+                }
+                //remove user
+                db.collection('Users').deleteOne({
+                    "_id": ObjectId(id)
+                })
+                    .then((ans)=>{
+                        resolve(ans);
+                    })
+                    .catch(err=>{
+                        reject(err);
+                    });
+
             })
             .catch(err=>{
                 reject(err);
             });
+
+
+
     });
 }
 
 async function removeUserByEmail( dbController, mail){
     const db = dbController.getConnectionInstance();
-    return await new Promise((resolve, reject) => {
-        db.collection('Users').deleteOne({
-            email: mail
-        })
-            .then((ans)=>{
-                resolve(ans);
+    return await new Promise(async (resolve, reject) => {
+        //remove from all projects
+
+        //get list of all projects involved in
+        let ProjectList = await ProjectManagerService.getAllProjectsByUserEmail(dbController, mail)
+            .then(ans=>{
+               // console.log("ProjectList: ",ans);
+               // console.log(ans[0]._id);
+                if(ans !== "No matched projects"){
+                    //delete user from each of those projects
+
+                    for(let i=0; i<ans.length;i++){
+                        ProjectManagerService.removeProjectMember(dbController, ans[i]._id, mail)
+                            .catch(err=>{
+                                reject(err);
+                            });
+                    }
+
+                }
+                //remove user
+                db.collection('Users').deleteOne({
+                    email: mail
+                })
+                    .then((ans)=>{
+                        resolve(ans);
+
+                    })
+                    .catch(err=>{
+                        reject(err);
+                    });
 
             })
             .catch(err=>{
                 reject(err);
-            });
+             });
+
+
     });
 }
 //***************************************************-patch-**************************************************************
