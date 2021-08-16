@@ -217,9 +217,17 @@ class ProjectView extends React.Component{
                              {project.groupMembers.map((value,index)=>{
                                  console.log('from members',value)
                                  return (
-                                     <div key={index} id="memberDiv"><p>Full names: {value.label}<br/>Email: {value.email}</p>
+                                     <div key={index} id="memberDiv">
+                                         { value.email !== project.owner ?
+                                         <>
+                                         <p>Full names: {value.label}<br/>Email: {value.email}
+                                         </p>
                                          <HiIcons.HiUserRemove id="userRemove" />
                                          <FaIcons.FaUserEdit id="userEdit" />
+                                         </> : <>
+                                                 Owner: {value.email}
+                                             </>
+                                         }
 
 
                                      </div>
