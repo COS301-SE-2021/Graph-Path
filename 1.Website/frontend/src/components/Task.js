@@ -152,7 +152,7 @@ class Task extends React.Component{
                                 return (
                                         <span  
                                            
-                                        >{member.label+'\n'}</span>
+                                        >{member.label+'<br/>'}</span>
                                 )
                             })
                         }
