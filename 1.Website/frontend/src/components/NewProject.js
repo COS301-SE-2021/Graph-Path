@@ -25,22 +25,28 @@ class NewProject extends React.Component{
 
 
     addMember = (memberEmail) =>{
-        console.log('add member',memberEmail) ;
         if (memberEmail !== undefined && Array.isArray(memberEmail)){
-            let users = [...this.state.members] ;
-            memberEmail.map((user,index)=>{
-                if (users[index]===undefined){
+            console.log('add member',memberEmail) ;
+
+            let users = memberEmail.length === 0 ? [] :this.state.members ;
+            users = memberEmail.map((user,index)=>{
+                if (users[index]===undefined ){
                     //no user yet?then push into array
+                    var userRole = this.state.members[index] === undefined ? "Client" :  this.state.members[index].role ;
                     var label = user.label ;
                     var email = user.value ;
                     let roledUser = {
                         email:email,
-                        role:"Client",
+                        role:userRole,
                         label:label
                     }
-                    users.push(roledUser) ;
+                    // users.push(roledUser) ;
+                    return roledUser
                 }
-                return true
+                else{
+                    return users[index] ;
+
+                }
             }) ;
 
 

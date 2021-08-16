@@ -215,7 +215,6 @@ class ProjectView extends React.Component{
                         </Offcanvas.Header>
                          <Offcanvas.Body id="canvasBody">
                              {project.groupMembers.map((value,index)=>{
-                                 console.log('from members',value)
                                  return (
                                      <div key={index} id="memberDiv">
                                          { value.email !== project.owner ?

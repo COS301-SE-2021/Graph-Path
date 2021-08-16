@@ -54,13 +54,8 @@ class Task extends React.Component{
         //communicate with the API
         // this.sendData(data) ;
         this.cleanUp();
-        if (this.state.fullForm){
-
-        }
-        else{
+       
         this.props.addTask(data) ;
-
-        }
     }
 
     updateField = (event) => {
@@ -126,7 +121,11 @@ class Task extends React.Component{
                         </span>
                     :<span/>}
                     
-                    <input type="submit" value="Add Task" className="btn1"/>
+                    {
+                     custom === undefined 
+                    ?<input type="submit" value="Add Node" className="btn1"/>
+                        :`Viewing Node ${this.props.label}`       
+                    }
                 </form>
             </div>
         )
