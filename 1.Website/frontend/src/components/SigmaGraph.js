@@ -6,6 +6,7 @@ import {Sigma, EdgeShapes,NodeShapes} from 'react-sigma' ; //,ForceAtlas2,LoadGE
 import {DragNodes,} from 'react-sigma';
 import {Redirect,withRouter} from 'react-router-dom' ;
 import {Card, Nav} from "react-bootstrap";
+import Node from './Node';
 
 
 class GraphMessage extends React.Component{
@@ -26,6 +27,18 @@ class GraphMessage extends React.Component{
     )
   }
 }
+
+class UpdateNodeProps extends React.Component {
+  componentDidUpdate({ sigma, nodes }) {
+    sigma.graph.nodes().forEach(n => {
+      var updated = nodes.find(e => e.id === n.id)
+      Object.assign(n, updated)
+    })
+  }
+
+  render = () => null
+}
+
 
 class SigmaGraph extends React.Component{  
   constructor(props){
@@ -53,11 +66,22 @@ class SigmaGraph extends React.Component{
   }
 
   addNewEdge =(param1,param2)=>{
-    this.props.graphManager.addEdge(param1,param2) ;
-    this.updateParent() ;
+    let addedEdge = this.props.graphManager.addEdge(param1,param2) ;
+    console.log('adding edge',addedEdge) ;
+
+    if (addedEdge === 1){
+      this.updateParent() ;
+    }
+    else if (addedEdge === 0 ){
+      alert('Edge Makes graph Cyclic')
+    }
+    else{
+      alert('Edge Exists')
+    }
   }
   updateParent=()=>{
     if (typeof this.props.updateGraph === 'function'){
+      console.log('Updating manager to ',this.props.graphManager.getGraph())
         this.props.updateGraph(this.props.graphManager) ;
     }else{
         alert('Could not Parent graph') ;
@@ -130,6 +154,9 @@ class SigmaGraph extends React.Component{
     }
 
   }
+  componentDidUpdate(){
+    console.log('Sigma Updated ') ;
+  }
   
   render(){
     const {match} = this.props ;
@@ -138,13 +165,14 @@ class SigmaGraph extends React.Component{
     const saveGraphPermissions = ['owner','project manager'] ;
     const project = this.props.project ; 
 
-    console.log(' on mount', mgr) ;
-    if (mgr !== undefined){
+    if (mgr !== undefined && project !== undefined){
+      // console.log(' on remount', mgr.getGraph(),project) ;
     
 
-      const graph = mgr.getGraph() ; 
+      var graph = mgr.getGraph() ; 
       if (graph !== undefined && graph.nodes !== undefined && project !== undefined){
         let SigmaGraphkey =`${mgr.graph.nodes.length}${mgr.graph.edges.length}` ;
+        console.log('Sigma Key ',SigmaGraphkey)
 
         const nodeId = this.state.nodeId ; 
         const nodeLabel = this.state.nodeLabel ;
@@ -160,7 +188,7 @@ class SigmaGraph extends React.Component{
                 Save</button>:""
               }
             </div>
-            <div key={SigmaGraphkey} className="GraphBox">
+            <div className="GraphBox">
             <Card id="graph-card">
               <Card.Header>
                 <Nav variant="tabs" defaultActiveKey="first">
@@ -174,7 +202,7 @@ class SigmaGraph extends React.Component{
               </Card.Header>
               <Card.Body id="graph-card-body">
 
-              <Sigma renderer="canvas" graph={graph} id="SigmaParent"
+              <Sigma renderer="canvas" graph={graph} id="SigmaParent" key={SigmaGraphkey} 
               style={{position:"relative",
               width:"52vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
               onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
@@ -183,14 +211,14 @@ class SigmaGraph extends React.Component{
               onOverEdge={(e)=>console.log('hover')}
               settings={{
                 clone: false, // do not clone the nodes
-                immutable:true,// cannot updated id of node
+                immutable:false,// cannot updated id of node
                 // labelSizeRatio:1,
                 labelThreshold:0.5,
                 scalingMode:"inside",
                 sideMargin:100,
                 minNodeSize:3,
                 maxNodeSize:10,
-                minEdgeSize:1,
+                // minEdgeSize:0.1,
                 defaultEdgeHoverColor:'#000',
                 maxEdgeSize:4,
                 drawNodes:true, //draw node ?
@@ -201,6 +229,7 @@ class SigmaGraph extends React.Component{
                 enableEdgeHovering:true,
                 edgeHoverPrecision:100
               }}>
+                <UpdateNodeProps nodes={graph.nodes} />
                 <EdgeShapes default="arrow"/>
                 <NodeShapes default="def"/>
                 {/* <RelativeSize  initialSize={200}/> */}
@@ -215,13 +244,16 @@ class SigmaGraph extends React.Component{
               </Sigma>
               {
               this.state.redirect 
-                ?<Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} />  
+                ? <Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} /> 
                 :""            
               }
 
               </Card.Body>
             </Card>
             </div>
+            <Node updateGraph={this.props.updateGraph} 
+                        graphManager={this.props.graphManager} 
+                        project={this.props.project}/>
           </div>
         );
       }
