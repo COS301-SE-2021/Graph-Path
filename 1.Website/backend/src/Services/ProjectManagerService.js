@@ -202,7 +202,8 @@ async function updateProjectGraph(dbController,id, graphObject){
     })
 }
 
-async function addNewProjectMember(dbController, id, email){
+async function addNewProjectMember(dbController, id, memberObject){
+
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
 
