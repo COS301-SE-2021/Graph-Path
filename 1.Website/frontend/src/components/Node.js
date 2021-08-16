@@ -100,7 +100,8 @@ class Node extends React.Component{
                     <Switch>
                         <Route path={`${match.url}/addNode`} >
                             
-                            <Task addTask={this.addNewNode} 
+                            <Task addTask={this.addNewNode}
+                                fullForm = {false} 
                             />
                         </Route>
                         <Route path={`${match.url}/task/`} render={()=>{

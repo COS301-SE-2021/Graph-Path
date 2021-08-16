@@ -114,6 +114,7 @@ class Task extends React.Component{
 
     render() {
         var custom = this.props.label ;
+        console.log('comm',custom,this.state.fullForm)
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
@@ -131,6 +132,7 @@ class Task extends React.Component{
                         :<></>
                         
                     }
+                    
                     {this.state.fullForm ? <span>
                         <p>Description</p>
                         <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
@@ -158,9 +160,10 @@ class Task extends React.Component{
                     :<span/>}
                     
                     {
-                     (custom === undefined && !this.state.fullForm)
-                    ?<input type="submit" value="Add Node" className="btn1"/>
-                        :`Viewing Node ${this.props.label}`       
+                     (custom !== undefined && !this.state.fullForm)
+                    ?`Viewing Node ${this.props.label}`:
+                    <input type="submit" value="Add Node" className="btn1"/>
+                               
                     }
                 </form>
             </div>
