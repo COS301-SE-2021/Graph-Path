@@ -264,7 +264,8 @@ class SigmaGraph extends React.Component{
             </div>
             <Node updateGraph={this.props.updateGraph} 
               graphManager={this.props.graphManager} 
-              project={this.props.project}/>
+              project={this.props.project}
+              userEmail={this.props.userEmail}/>
           </div>
         );
       }

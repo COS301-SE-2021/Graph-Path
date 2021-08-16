@@ -9,7 +9,8 @@ class Node extends React.Component{
     constructor(props){
         super(props) ; 
         this.state ={
-            taskList:[]
+            taskList:[],
+            api:'http://localhost:9001'
         }
         this.graphManager = null  ; 
     }
@@ -25,12 +26,12 @@ class Node extends React.Component{
         else{
             var manager = this.props.graphManager ;
             manager.addNode(name) ;
-            this.updateParent(manager) ;
+            this.updateParent() ;
         
         }
     }
     addNewTask = (data) =>{
-        axios.post(`${this.state.api}/insertTask`,data)
+        axios.post(`${this.state.api}/task/insertTask`,data)
         .then((response) =>{
             if(response.status===400){
                 throw Error(response.statusText) ;
@@ -42,12 +43,6 @@ class Node extends React.Component{
             this.setState({
                 answer:res.message,
                 responseData:res.data //data
-            },()=>{
-                // alert('res:'+this.state.answer)
-                console.log(this.state)
-                if (this.state.answer!== null && this.state.answer){
-                    //    this.props.changeToDefault() ;
-                }
             })
 
         },(response)=>{
@@ -84,8 +79,14 @@ class Node extends React.Component{
             </div>)
         }
         else{
-            // console.log('Node remounting',manager.getGraph())
             const query = new URLSearchParams(this.props.location.search );
+            console.log('Node remounting',query)
+
+            const currUser = {
+                email:this.props.userEmail, 
+                role: project.role,
+            }
+
             return (
                 <div id="add-node-div">
                     {EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? 
@@ -105,15 +106,16 @@ class Node extends React.Component{
                             />
                         </Route>
                         <Route path={`${match.url}/task/`} render={()=>{
-                            const nodeID = project._id+'_'+query.get('id') ;
+                            
                             return <>
                             
                             <Task addTask={this.addNewTask} 
                                 fullForm={true}
                                 label={query.get('label')}
-                                nodeId={nodeID}
+                                nodeId={query.get('id')}
                                 projectId={project._id}
                                 members={project.groupMembers}
+                                user={currUser}
                             />
 
                             </>

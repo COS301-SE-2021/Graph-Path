@@ -22,7 +22,6 @@ class GraphManager{
       }
     }
     getGraph=()=>{
-      console.log('called get 4 graph')
       return this.graph ;
     }
 
@@ -79,7 +78,6 @@ class GraphManager{
           return 0 ;
         }
         else{
-         console.log('Curr edges',this.graph.edges)
         //  this.graph = copy ; 
           //true - add 
           return 1 ;
@@ -91,7 +89,6 @@ class GraphManager{
     }
 
     removeNode = (id)=>{
-      console.log('node rm ')
 
 
       var newNodes = this.graph.nodes.filter((node)=>{
@@ -109,7 +106,6 @@ class GraphManager{
         newGraph.nodes = newNodes ;
         if (this.graph.edges.length>0){
           var newEdges = this.graph.edges.filter((edge)=>{
-            console.log('edge ',edge.source)
             if (edge.source === id ){
               return false
             }
@@ -125,7 +121,6 @@ class GraphManager{
           
         }
         else{
-          console.log('edge not rm')
 
           this.graph = newGraph ;
           return true ;
@@ -153,11 +148,11 @@ class GraphManager{
     }
     
     addNode = (fromTask) =>{
-      // console.log('Manager:addNode') ; 
+      console.log('Manager:addNode',fromTask) ; 
         // add the node and give it an id
         var curr = this.graph ; 
         var obj = {
-            label:fromTask.taskName , // give it lable fromTask
+            label:fromTask , // give it lable fromTask
             size:300,
         }; 
         // if there was already a node?
@@ -167,7 +162,6 @@ class GraphManager{
             let allIds = this.graph.nodes.map((value)=>{
               return value.id ;
             })
-            console.log('all Ids',allIds)
             while (allIds.indexOf(`n${nodeId}`)>=0){
               nodeId = nodeId+1 ;
             }
@@ -193,7 +187,7 @@ class GraphManager{
         }
         
         this.graph.nodes.push(obj) ;
-        console.log('Manager:',this.graph) ; 
+        // console.log('Manager:',this.graph) ; 
       
     }
 }

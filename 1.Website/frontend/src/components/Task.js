@@ -13,10 +13,10 @@ class Task extends React.Component{
         this.state = {
             name: '',
             taskMembers:[],
-            startDate:null,
-            dueDate:null,
+            startDate:new Date().toJSON().slice(0,10),
+            dueDate: new Date().toJSON().slice(0,10),
             priority: null,
-            status: null,
+            status: "not started",
             about: null,
             api:'http://localhost:9001',
             fullForm:false
@@ -44,28 +44,46 @@ class Task extends React.Component{
 
     handleSubmit = (event) => {
         event.preventDefault();
+        const emailUsers = [] ;
+        for (let user of this.state.taskMembers){
+            var userEmail = {
+                email:user.value ,
+                role:user.role
+            }
+            emailUsers.push(userEmail) ;
+        } 
 
-        const data = {
-            description: this.state.about,
-            issued: this.state.startDate,
-            due: this.state.dueDate,
-            members: this.state.taskMembers,
-            status:"not started",
-            assignee:{},
-            assigner:{},
-            nodeID:this.props.nodeID,
-            project:this.props.projectId
-        }
+        
         //communicate with the API
         // this.sendData(data) ;
-        this.cleanUp();
         if (this.props.fullForm){
             // this.props.addTask - for req
+            const data = {
+            
+                description: this.state.about,
+                issued: this.state.startDate,
+                due: this.state.dueDate,
+                assignee: emailUsers   ,
+                status:"not started",
+                assigner:this.props.user,
+                nodeID:`${this.props.projectId}_${this.props.nodeId}`,
+                project:this.props.projectId
+            }
+            
+            console.log('Sending ',data) ;
+        
+
+            this.props.addTask(data)
         }
         else{
+            const data = this.state.name
+            
+            console.log('Sending ',data) ;
+
             this.props.addTask(data) ;
 
         }
+        this.cleanUp();
        
     }
 
@@ -137,9 +155,9 @@ class Task extends React.Component{
                         <p>Description</p>
                         <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
                         <p>Start Date</p>
-                        <input type="date" name="startDate" onChange={this.updateField} />
+                        <input type="date" value={this.state.startDate} name="startDate" onChange={this.updateField} />
                         <p>Due Date</p>
-                        <input  type="date" name="dueDate" onChange={this.updateField} />
+                        <input  type="date"  value={this.state.dueDate} name="dueDate" onChange={this.updateField} />
                         <p>Assign Task</p>
                         <Select options={this.state.members} 
                         onChange={this.handleSearch}
