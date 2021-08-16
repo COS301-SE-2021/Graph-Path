@@ -3,6 +3,7 @@ import Task from './Task' ;
 import axios from 'axios';
 import '../css/Graph.css'
 import {Link,withRouter, Route, Switch} from 'react-router-dom' ;
+import PopUpMessage from './PopUpMessage';
 // import '../css/Dashboard.css' ;
 
 class Node extends React.Component{
@@ -10,17 +11,30 @@ class Node extends React.Component{
         super(props) ; 
         this.state ={
             taskList:[],
-            api:'http://localhost:9001'
+            api:'http://localhost:9001',
+            popUp:false
         }
         this.graphManager = null  ; 
     }
 
     componentDidMount(){
+        console.log('mount')
     
+    }
+    showPopUP = () =>{
+        this.setState({
+            popUp: true
+        })
+        setTimeout(
+            () =>
+                this.setState({
+                    popUp: false
+                }),5000
+        );
     }
     addNewNode = (name)=>{
       
-        if (name.toString().trim().length<=0) {
+        if (!name.toString().trim().length) {
             alert('Cannot Submit Empty Name')
         }
         else{
@@ -44,6 +58,7 @@ class Node extends React.Component{
                 answer:res.message,
                 responseData:res.data //data
             })
+            this.showPopUP();
 
         },(response)=>{
             console.log('rejected',response) ;
@@ -80,7 +95,6 @@ class Node extends React.Component{
         }
         else{
             const query = new URLSearchParams(this.props.location.search );
-            console.log('Node remounting',query)
 
             const currUser = {
                 email:this.props.userEmail, 
@@ -117,6 +131,7 @@ class Node extends React.Component{
                                 members={project.groupMembers}
                                 user={currUser}
                             />
+                            {this.state.popUp && <PopUpMessage text={this.state.answer}/>}
 
                             </>
                         }} />

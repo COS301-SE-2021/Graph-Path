@@ -31,7 +31,6 @@ class GraphMessage extends React.Component{
 class UpdateNodeProps extends React.Component {
   componentDidUpdate(){ 
    var { sigma, nodes } = this.props
-    console.log('extra',sigma,nodes)
     sigma.graph.nodes().forEach(n => {
       var updated = nodes.find(e => e.id === n.id)
       Object.assign(n, updated)
@@ -55,7 +54,7 @@ class SigmaGraph extends React.Component{
 
   componentDidMount(){
     this.setState({
-      redirect:false
+      redirect:false,
     })
   }
 
@@ -192,7 +191,7 @@ class SigmaGraph extends React.Component{
             <div>
             <span className="projName">{project.projectName}</span>
             {
-                typeof this.props.sendGraphData === 'function' &&
+                typeof this.props.sendGraphData === 'function' &&this.props.project.role !== undefined &&
                 saveGraphPermissions.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
                 <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
                 this.props.sendGraphData : ()=>{console.log('failed save validation')}}>

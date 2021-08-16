@@ -19,12 +19,19 @@ class Task extends React.Component{
             status: "not started",
             about: null,
             api:'http://localhost:9001',
-            fullForm:false
+            fullForm:false,
         }
     }
     cleanUp=()=>{
         this.setState({
             name: '',
+            taskMembers:[],
+            startDate:new Date().toJSON().slice(0,10),
+            dueDate: new Date().toJSON().slice(0,10),
+            priority: null,
+            status: "not started",
+            about: null,
+            fullForm:false
         }) ;
     }
     changeToDefault = () =>{
@@ -123,11 +130,13 @@ class Task extends React.Component{
                 }
             }
             this.setState({
-                members : options 
+                members : options ,
+                fullForm:false
             })
             
             console.log('task valued mems',options)
         }
+        console.log('Task Mount') ;
     }
 
     render() {
@@ -146,12 +155,12 @@ class Task extends React.Component{
                      onFocus={(e)=>{custom = undefined}}/>
                     {
                         this.props.fullForm
-                        ?<div onClick={this.toogleForm}>Attach Task</div>
+                        ?<button onClick={this.toogleForm}>Attach Task</button>
                         :<></>
                         
                     }
                     
-                    {this.state.fullForm ? <span>
+                    {this.state.fullForm && this.props.fullForm ? <span>
                         <p>Description</p>
                         <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
                         <p>Start Date</p>
