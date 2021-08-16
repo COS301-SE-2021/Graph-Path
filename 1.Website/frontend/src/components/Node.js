@@ -104,10 +104,15 @@ class Node extends React.Component{
                             />
                         </Route>
                         <Route path={`${match.url}/task/`} render={()=>{
+                            const nodeID = project._id+'_'+query.get('id') ;
                             return <>
+                            
                             <Task addTask={this.addNewTask} 
                                 fullForm={true}
                                 label={query.get('label')}
+                                nodeId={nodeID}
+                                projectId={project._id}
+                                members={project.groupMembers}
                             />
 
                             </>

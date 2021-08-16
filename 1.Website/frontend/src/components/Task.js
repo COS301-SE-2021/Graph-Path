@@ -1,5 +1,6 @@
 import  React from 'react' ;
 import '../css/Task.css';
+import Select from 'react-select' ;
 
 /*
    
@@ -8,9 +9,10 @@ import '../css/Task.css';
 class Task extends React.Component{
     constructor(props) {
         super(props);
+        this.members= [];   
         this.state = {
             name: '',
-            members: [],
+            taskMembers:[],
             startDate:null,
             dueDate:null,
             priority: null,
@@ -44,18 +46,27 @@ class Task extends React.Component{
         event.preventDefault();
 
         const data = {
-            taskName: this.state.name,
             description: this.state.about,
-            startDate: this.state.startDate,
-            dueDate: this.state.dueDate,
-            members: this.state.members,
-            priority: this.state.priority
+            issued: this.state.startDate,
+            due: this.state.dueDate,
+            members: this.state.taskMembers,
+            status:"not started",
+            assignee:{},
+            assigner:{},
+            nodeID:this.props.nodeID,
+            project:this.props.projectId
         }
         //communicate with the API
         // this.sendData(data) ;
         this.cleanUp();
+        if (this.props.fullForm){
+            // this.props.addTask - for req
+        }
+        else{
+            this.props.addTask(data) ;
+
+        }
        
-        this.props.addTask(data) ;
     }
 
     updateField = (event) => {
@@ -70,6 +81,36 @@ class Task extends React.Component{
         }) ;
     }
 
+    handleSearch=(ans)=>{
+      console.log('task members',ans)
+      this.setState({
+          members:ans
+      })
+
+    }
+
+    componentDidMount(){
+        if (this.props.members!== undefined && Array.isArray(this.props.members)){
+            var options = [];
+             for (let member of this.props.members){
+                let mem = {
+                    value:member.email,
+                }
+                if (member.label === undefined){
+                    
+                }
+                else{
+                    mem["label"] = member.label
+                    options.push(mem)
+                }
+            }
+            this.setState({
+                members : options 
+            })
+            
+            console.log('task valued mems',options)
+        }
+    }
 
     render() {
         var custom = this.props.label ;
@@ -85,9 +126,10 @@ class Task extends React.Component{
                      onChange={this.updateField} 
                      onFocus={(e)=>{custom = undefined}}/>
                     {
-                        this.state.fullForm?<></>
-                        :<div onClick={this.toogleForm}>Edit</div>
-                    
+                        this.props.fullForm
+                        ?<div onClick={this.toogleForm}>Attach Task</div>
+                        :<></>
+                        
                     }
                     {this.state.fullForm ? <span>
                         <p>Description</p>
@@ -98,31 +140,26 @@ class Task extends React.Component{
                         <input  type="date" name="dueDate" onChange={this.updateField} />
                         <p>Assign Task</p>
                         <input type="text" placeholder="Email" onChange={(e)=>this.handleChange(e,0)} />
+                        <Select options={this.state.members} 
+                        onChange={this.handleSearch}
+                        placeholder={'Search Member'}
+                        isSearchable={true}
+                        isMulti={true} />
                         {
-                            this.state.members.map((member,index)=>{
+
+                            this.state.taskMembers.map((member,index)=>{
                                 return (
-                                        <input  key={index}
-                                            onChange={(e)=>this.handleChange(e,index+1)}
-                                            type="text" placeholder="Email" />
+                                        <span  
+                                           
+                                        >{member.label}</span>
                                 )
                             })
                         }
-                        {/* <button onClick={(e)=>this.handleRemove(index)}>-</button>*/}
-                        {/* <input type="button" onClick={(e)=>this.addMember(e)} />*/}
-                        <label>
-                            <p>Priority</p>
-                            <select name="priority" onChange={this.updateField}>
-                                <option value="Urgent">Urgent</option>
-                                <option value="High">High</option>
-                                <option value="Normal">Normal</option>
-                                <option value="Low">Low</option>
-                            </select>
-                        </label>
                         </span>
                     :<span/>}
                     
                     {
-                     custom === undefined 
+                     custom === undefined && this.props.fullForm
                     ?<input type="submit" value="Add Node" className="btn1"/>
                         :`Viewing Node ${this.props.label}`       
                     }
