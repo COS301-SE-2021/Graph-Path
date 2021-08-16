@@ -98,6 +98,15 @@ class SigmaGraph extends React.Component{
     }
     
   }
+  handleEdgeCick=(event)=>{
+    console.log('event Edge',event)
+    if (event.data.captor.altKey){
+      var deleteEdge = this.props.graphManager.removeEdgeWithEdgeId(event.data.edge.id) ;
+      if (deleteEdge){
+        this.props.updateGraph(this.props.graphManager) ;
+      }
+    }
+  }
   
   /*
   When ctrl key is pressed and source node not set
@@ -209,7 +218,7 @@ class SigmaGraph extends React.Component{
               width:"52vw" , height:"65vh" ,  border:"double 3px black" , backgroundColor:'#E0E0E0'  }}
               onOverNode={e => console.log("Mouse over node: " + e.data.node.label+" x:"+e.data.node.x+" y:"+e.data.node.y)}
               onClickNode={e => this.handleControlClick(e)}
-              onClickEdge={ e => console.log(e)}
+              onClickEdge={ e => this.handleEdgeCick(e)}
               onOverEdge={(e)=>console.log('hover')}
               settings={{
                 clone: false, // do not clone the nodes
