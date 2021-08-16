@@ -4,7 +4,7 @@ function isAcyclic(graph)
 
     if (JSON.stringify(graph) === '{}')
     {
-        console.log();
+
         return true
     }
 
@@ -22,10 +22,10 @@ function isAcyclic(graph)
         let stack = [];
         let Nodes = SetNodes(graph);
 
-        console.log(Nodes);
+
         for( let i = 0 ; i < Nodes.length ; i ++)
         {
-            //console.log(Nodes);
+
             if(isAcyclicRec(Nodes[i],stack,Nodes))
             {
 
