@@ -22,6 +22,7 @@ class GraphManager{
       }
     }
     getGraph=()=>{
+      console.log('called get 4 graph')
       return this.graph ;
     }
 
@@ -36,7 +37,11 @@ class GraphManager{
     }
 
     addEdge=(src,tgt)=>{
-      const oldGraph =  this.graph ;
+      const oldGraph = {
+        nodes:[...this.graph.nodes] ,
+        edges:[...this.graph.edges]
+      } 
+      const copy = Object.assign({},this.graph) ;
       let edgeId = 1;
       let edgeAlreadyInGraph = false ;
       let allIds = this.graph.edges.map((value)=>{
@@ -44,14 +49,14 @@ class GraphManager{
           edgeAlreadyInGraph = true ;
         }
         return value.id ;
-      })
+      });
 
       if (edgeAlreadyInGraph === true){
         //edge exists
         return 2 ;
       }
       else{
-        while (allIds.indexOf(`n${edgeId}`)>=0){
+        while (allIds.indexOf(`e${edgeId}`)>=0){
           edgeId = edgeId+1 ;
         }
   
@@ -61,18 +66,21 @@ class GraphManager{
               target:tgt,
               label:`${ src} to ${tgt}` ,
               color:'#080',
-              size:1
+              size:1,
           }
-        this.graph.edges.push(edg) ; 
+          edg["read_cam0:size"] = 4
+          
+          // this.graph.edges.push(edg) ; 
+          copy.edges.push(edg) ;
   
-        if (!isAcyclic(this.graph)){     
+        if (!isAcyclic(copy)){     
           this.graph = oldGraph ;
           //cyclic edge
           return 0 ;
         }
         else{
          console.log('Curr edges',this.graph.edges)
-          
+        //  this.graph = copy ; 
           //true - add 
           return 1 ;
         }

@@ -84,7 +84,7 @@ class Node extends React.Component{
             </div>)
         }
         else{
-            console.log('Node remounting',manager.getGraph())
+            // console.log('Node remounting',manager.getGraph())
             const query = new URLSearchParams(this.props.location.search );
             return (
                 <div id="add-node-div">

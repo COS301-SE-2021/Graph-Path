@@ -29,7 +29,9 @@ class GraphMessage extends React.Component{
 }
 
 class UpdateNodeProps extends React.Component {
-  componentDidUpdate({ sigma, nodes }) {
+  componentDidUpdate(){ 
+   var { sigma, nodes } = this.props
+    console.log('extra',sigma,nodes)
     sigma.graph.nodes().forEach(n => {
       var updated = nodes.find(e => e.id === n.id)
       Object.assign(n, updated)
@@ -166,7 +168,7 @@ class SigmaGraph extends React.Component{
     const project = this.props.project ; 
 
     if (mgr !== undefined && project !== undefined){
-      // console.log(' on remount', mgr.getGraph(),project) ;
+      console.log(' on remount', mgr.getGraph(),project) ;
     
 
       var graph = mgr.getGraph() ; 
@@ -252,8 +254,8 @@ class SigmaGraph extends React.Component{
             </Card>
             </div>
             <Node updateGraph={this.props.updateGraph} 
-                        graphManager={this.props.graphManager} 
-                        project={this.props.project}/>
+              graphManager={this.props.graphManager} 
+              project={this.props.project}/>
           </div>
         );
       }
