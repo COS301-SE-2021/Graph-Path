@@ -66,7 +66,7 @@ async function getAllProjectsByUserEmail(dbController,mail){
                         {
                             if(GroupMembers[x].email === mail)
                             {
-                                console.log("Match found");
+                                //console.log("Match found");
                                 const obj = {
                                     role: GroupMembers[x].role,
                                     permissions: Permissions.getPermissions(GroupMembers[x].role),
@@ -145,6 +145,44 @@ async function removeProjectByID(dbController, ID){
 
 }
 
+async function removeProjectMember(dbController, id, email){
+    const db = dbController.getConnectionInstance();
+    return await new Promise(async (resolve,reject)=>{
+
+        let proj = await  getProjectByID(dbController, id);
+
+        if(proj === undefined || proj === null){
+            resolve("Could not find the project.");
+        }else if(proj === "No project"){
+                resolve("Project does not exist.");
+        }
+
+        let memberList = proj.groupMembers;
+
+
+                let newArray = memberList.filter((val)=>{
+                    if(val.email !== email) {
+                        return true;
+                    }
+                });
+
+
+
+        db.collection('Projects').updateOne({
+            "_id":ObjectId(id)
+        },{
+            $set: {
+                groupMembers: newArray
+            }
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
 
 //***************************************************-patch-**************************************************************
 async function updateProjectGraph(dbController,id, graphObject){
@@ -185,6 +223,8 @@ async function addNewProjectMember(dbController, id, email){
 
 }
 
+
+
 //***************************************************-put-**************************************************************
 async function updateEverythingProject(dbController, id, pname, ddate, sdate, own, grph, members){
     const db = dbController.getConnectionInstance();
@@ -221,6 +261,7 @@ module.exports = {
     removeProjectByID,
     updateProjectGraph,
     addNewProjectMember,
-    updateEverythingProject
+    updateEverythingProject,
+    removeProjectMember
 
 }

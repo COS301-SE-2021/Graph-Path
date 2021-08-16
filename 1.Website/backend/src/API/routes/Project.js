@@ -363,6 +363,29 @@ router.patch('/addToProjectGroupMembers/:id/:email',(req, res, next)=>{
      })
 });
 
+    router.patch('/removeProjectMember/:id/:email',(req, res, next)=>{
+        let ID = req.params.id;
+        let mail = req.params.email;
+        ProjectManagerService.removeProjectMember(db,ID, mail)
+            .then(ans=>{
+                if(ans.modifiedCount >0){
+                    res.send({
+                        message: "Member removed successfully."
+                    })
+                }else{
+                    res.send({
+                        message: "Could not remove member."
+                    })
+                }
+            })
+            .catch((err)=>{
+                res.status(500).send({
+                    message: "Server error: could not remove member.",
+                    err: err
+                })
+            })
+    });
+
 
 //PUT ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.put('/updateEverythingProject/:id',(req,res)=>{
