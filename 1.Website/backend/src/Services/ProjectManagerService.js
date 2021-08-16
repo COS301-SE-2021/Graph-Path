@@ -304,6 +304,89 @@ async function addNewProjectMember(dbController, id, newMembers){
 }
 */
 
+async function editMemberRole(dbController, id, email , newRole){
+
+
+    const db = dbController.getConnectionInstance();
+    let  project = null;
+    await new Promise((resolve, reject)=>{
+        db.collection('Projects').findOne({
+            "_id": ObjectId(id)
+        })
+            .then((ans)=>{
+                if(ans !==null){
+
+                    project = ans;
+                    resolve();
+                }else{
+                    throw "Project with given ID does not exist"
+                }
+
+            })
+            .catch(err=>{
+                console.log(err);
+                reject(err);
+            });
+
+    })
+
+    if(project !== null)
+    {
+        let Members = project.groupMembers;
+        let MemberFound = false;
+        for( let i =0 ; i < Members.length ; i ++)
+        {
+          if(Members[i].email === email)
+          {
+              Members[i].role = newRole;
+              MemberFound = true;
+
+          }
+        }
+
+        return await new Promise((resolve,reject)=>{
+
+            db.collection('Projects').updateOne({
+                "_id":ObjectId(id)
+            },{
+                $set: {
+                    groupMembers: Members
+                }
+            })
+                .then(ans=>{
+
+
+                    if(ans.result.nModified >= 1 && MemberFound === true)
+                    {
+                        project.groupMembers = Members;
+                        resolve({
+                            message: "successfully edited role",
+                            data: project
+                        });
+                    }
+
+                    else if(!MemberFound)
+                    {
+                        resolve({
+                            message:"Role update failed. Member does not exist in in project",
+                            data: []
+                        })
+                    }
+
+                })
+                .catch(err=>{
+
+
+                    reject(err);
+                })
+        })
+
+
+    }
+
+
+
+}
 
 //***************************************************-put-**************************************************************
 async function updateEverythingProject(dbController, id, pname, ddate, sdate, own, grph, members){
@@ -342,6 +425,7 @@ module.exports = {
     updateProjectGraph,
     addNewProjectMember,
     updateEverythingProject,
-    removeProjectMember
+    removeProjectMember,
+    editMemberRole
 
 }

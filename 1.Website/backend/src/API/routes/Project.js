@@ -358,7 +358,22 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
        })
      })
 });
+router.patch('/updateUserRole', (req,res)=>{
+    const id = req.body.id;
+    const  email = req.body.email;
+    const newRole = req.body.role;
 
+    ProjectManagerService.editMemberRole(db,id,email,newRole).then((result)=>{
+        res.send(result)
+    })
+        .catch((err)=>{
+            res.send({
+                message: "unsuccessful",
+                data: err,
+            })
+        })
+
+})
 
 
     router.patch('/removeProjectMember/:id/:email',(req, res, next)=>{
