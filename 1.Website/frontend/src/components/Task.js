@@ -1,6 +1,9 @@
 import  React from 'react' ;
 import '../css/Task.css';
 import Select from 'react-select' ;
+import {Button, Card, CloseButton} from "react-bootstrap";
+import {Link,withRouter} from "react-router-dom";
+
 
 /*
    
@@ -19,12 +22,19 @@ class Task extends React.Component{
             status: "not started",
             about: null,
             api:'http://localhost:9001',
-            fullForm:false
+            fullForm:false,
         }
     }
     cleanUp=()=>{
         this.setState({
             name: '',
+            taskMembers:[],
+            startDate:new Date().toJSON().slice(0,10),
+            dueDate: new Date().toJSON().slice(0,10),
+            priority: null,
+            status: "not started",
+            about: null,
+            fullForm:false
         }) ;
     }
     changeToDefault = () =>{
@@ -70,7 +80,7 @@ class Task extends React.Component{
                 project:this.props.projectId
             }
             
-            console.log('Sending ',data) ;
+            // console.log('Sending ',data) ;
         
 
             this.props.addTask(data)
@@ -78,7 +88,6 @@ class Task extends React.Component{
         else{
             const data = this.state.name
             
-            console.log('Sending ',data) ;
 
             this.props.addTask(data) ;
 
@@ -100,7 +109,7 @@ class Task extends React.Component{
     }
 
     handleSearch=(ans)=>{
-      console.log('task members',ans)
+    //   console.log('task members',ans)
       this.setState({
           taskMembers:ans
       })
@@ -123,16 +132,27 @@ class Task extends React.Component{
                 }
             }
             this.setState({
-                members : options 
+                members : options ,
+                fullForm:false
             })
             
-            console.log('task valued mems',options)
+            // console.log('task valued mems',options)
         }
+        // console.log('Task Mount') ;
     }
 
+    handleCriticalClick =(event)=>{
+        console.log('clicked for node',this.props.nodeId) ; 
+
+        if (this.props.nodeId !== undefined && typeof this.props.criticalPath === 'function'){
+            this.props.criticalPath(this.props.nodeId) ;
+        }
+
+    }
     render() {
+        const {match} = this.props ;
         var custom = this.props.label ;
-        console.log('comm',custom,this.state.fullForm)
+        // console.log('comm',custom,this.state.fullForm)
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
@@ -146,12 +166,24 @@ class Task extends React.Component{
                      onFocus={(e)=>{custom = undefined}}/>
                     {
                         this.props.fullForm
-                        ?<div onClick={this.toogleForm}>Attach Task</div>
+                        // ?<div onClick={this.toogleForm}>Attach Task</div>
+                            ?
+                            <>
+
+                                <Button onClick={this.toogleForm}>{this.state.fullForm?'Close':'Add Task'}</Button>
+                                    <br/>
+                                <Link to={`${match.url}viewTask/?id=${this.props.nodeId}`}>View Task</Link>
+                                <br/>
+                                <Button onClick={(e)=>this.handleCriticalClick(e)}> Critical from </Button>
+                                <br/>
+
+                            </>
+
                         :<></>
                         
                     }
                     
-                    {this.state.fullForm ? <span>
+                    {this.state.fullForm && this.props.fullForm ? <span>
                         <p>Description</p>
                         <input type="text" name="about" required={true} placeholder="Description" onChange={this.updateField}/>
                         <p>Start Date</p>
@@ -188,4 +220,4 @@ class Task extends React.Component{
         )
     }
 }
-export default Task;
+export default withRouter(Task);

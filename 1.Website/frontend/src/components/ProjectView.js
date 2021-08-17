@@ -193,8 +193,67 @@ class ProjectView extends React.Component{
         console.log('project view',project,permissions)
         return(
             <div id="view-div">
+                <div id="main-view">
+                    <div id="form-div">
+                        <form id="project-form" onSubmit={this.onSubmit}>
+                            <h3 style={{fontWeight:"bold"}}>Project Information</h3>
+                            <label>Project Name</label>
+                            <input
+                                type='text'
+                                name = "projName"
+                                defaultValue={project.projectName}
+                                placeholder="Enter Project Name"
+                                onChange={this.change}
+                                required
+                            />
+
+                            <label>Project Owner</label>
+                            <input
+                                type='text'
+                                value={project.owner}
+                                disabled/>
+
+                            <label>Start Date</label>
+                            <input
+                                type='date'
+                                name = "startD"
+                                onChange={this.change}
+                                defaultValue={project.startDate}
+                                required
+                            />
+
+                            <label>Due Date</label>
+                            <input
+                                type='date'
+                                name = "dueD"
+                                onChange={this.change}
+                                defaultValue={project.dueDate} required />
+
+
+                            <input type="submit" id="editBtn" value="Submit"
+                            />
+
+                        </form>
+                    </div>
+                    <div id="button-div">
+
+                         <span id="view-graph-div">
+                            <Link to="/addTask">View Graph</Link>
+                        </span>
+
+                        {  permissions.indexOf(project.role.toLowerCase())>=0 ?
+                            <>
+                                <Button id="div3" onClick={this.handleShow}>
+                                    View Members
+                                </Button>
+                            </>
+                            :
+                            ""}
+                    </div>
+                </div>
                  <div id="project-form-div">
-                    <form id="project-form" onSubmit={this.onSubmit}>
+
+                     {/* <form id="project-form" onSubmit={this.onSubmit}>
                         <h3 style={{fontWeight:"bold"}}>Project Information</h3>
                         <label>Project Name</label>
                         <input
@@ -232,17 +291,10 @@ class ProjectView extends React.Component{
                         <input type="submit" id="editBtn" value="Submit"
                                 />
 
-                    </form>
+                    </form>*/}
                      <br/>
 
-                    {  permissions.indexOf(project.role.toLowerCase())>=0 ? 
-                        <>
-                        <Button id="div3" onClick={this.handleShow}>
-                             View Members
-                        </Button>
-                        </>
-                    :
-                        ""}
+
                     
                      <Offcanvas show={this.state.show} onHide={this.handleClose}>
                         <Offcanvas.Header id="canvasHeader" closeButton>
@@ -295,9 +347,7 @@ class ProjectView extends React.Component{
         return (
             <div id="div1">
                      <div id="div2" >
-                       <span id="view-graph-div">
-                            <Link to="/addTask">View Graph</Link>
-                        </span>
+
             </div>
                 
 
