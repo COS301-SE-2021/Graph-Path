@@ -16,7 +16,7 @@ describe('TaskManagerService',  ()=> {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-        MockDB = await MockDBController.getConnectionInstance();
+        MockDB =  MockDBController.dbController;
 
 
 
@@ -26,10 +26,10 @@ describe('TaskManagerService',  ()=> {
         await connection.close();
         await MockDB.close();
     });
-    it('should return controller returned',    () => {
-        TaskmanagerService.testFunc(MockDB,true).then((K)=>{
+    it('should return controller returned',   async () => {
+        await TaskmanagerService.getAllTasks(MockDB).then((K)=>{
             console.log('n mock fn',K)
-            expect(K).toBe("null");
+             expect(K).toBe("null");
         }).catch(err=>{
 
         })

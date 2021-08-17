@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const ObjectId = require('mongodb').ObjectID;
 const Permissions = require('../Helpers/Permissions');
 const {each} = require("mongodb/lib/operations/cursor_ops");
-
+//const email = require("../Helpers/SendMail");
 /////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
 //***************************************************-get-**************************************************************
 async function getProjectByID(dbController, id){
@@ -125,6 +125,8 @@ async function insertProject(dbController, projectObject){
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').insertOne(projectObject)
             .then((ans)=>{
+                // email.sendNotification("New project",'');
+
                 resolve(ans);
             })
             .catch(err=>{
@@ -305,7 +307,7 @@ async function editMemberRole(dbController, id, email , newRole){
 
             })
             .catch(err=>{
-                console.log(err);
+                //console.log(err);
                 reject(err);
             });
 
@@ -369,6 +371,33 @@ async function editMemberRole(dbController, id, email , newRole){
 
 }
 
+async function updateProjectOwner(dbController, id, mail){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject)=>{
+
+        db.collection('Projects').updateOne({
+            "_id":ObjectId(id)
+        },{
+            $set: {
+                owner: mail
+            }
+        })
+        .then((ans)=>{
+            if(ans ===null){
+
+                resolve("No project found");
+            }else{
+                resolve(ans);
+            }
+
+        })
+            .catch(err=>{
+                reject(err);
+            });
+    })
+
+}
+
 //***************************************************-put-**************************************************************
 async function updateEverythingProject(dbController, id, pname, ddate, sdate, own, grph, members){
     const db = dbController.getConnectionInstance();
@@ -407,6 +436,7 @@ module.exports = {
     addNewProjectMember,
     updateEverythingProject,
     removeProjectMember,
-    editMemberRole
+    editMemberRole,
+    updateProjectOwner
 
 }
