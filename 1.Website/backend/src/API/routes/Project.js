@@ -524,6 +524,45 @@ router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
     // })
 });
 
+router.patch('/updateProjectOwner/:id/:email',(req,res)=>{
+    let ID = req.params.id;
+    let mail = req.params.email;
+    if(ID=== undefined || ID == null){
+        res.send({
+            message: "The ID provided was not valid"
+        })
+    }else if(mail ===undefined || mail == null){
+        res.send({
+            message: "The email address provided is not valid."
+        })
+    }
+
+    ProjectManagerService.updateProjectOwner(db,ID,mail)
+        .then(ans=>{
+            if(ans == null || undefined){
+                res.send({
+                    message: "Could not update the project."
+                })
+            }else if(ans.modifiedCount > 0){
+                res.send({
+                    message: "The project was updated."
+                })
+            }else{
+                res.send({
+                    message: "The project was not updated."
+                })
+            }
+
+        })
+        .catch(err=>{
+            res.status(500).send({
+                message: "Server error: Could not update the project.",
+                err: err
+            })
+        })
+
+});
+
 router.put('/updateProjectGraph',(req,res)=>{
     const project = req.body.projectName ;
     const graph = req.body.graph ;
