@@ -98,5 +98,9 @@ function sendNotification(type , recipients, bodyInfo)
 
 }
 
-sendNotification("New project",['u17049106@tuks.co.za'])
+
+module.exports = {
+    sendNotification,
+}
+
 

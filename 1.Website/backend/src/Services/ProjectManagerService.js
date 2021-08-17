@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const ObjectId = require('mongodb').ObjectID;
 const Permissions = require('../Helpers/Permissions');
 const {each} = require("mongodb/lib/operations/cursor_ops");
-
+const email = require("../Helpers/SendMail");
 /////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
 //***************************************************-get-**************************************************************
 async function getProjectByID(dbController, id){
@@ -125,6 +125,7 @@ async function insertProject(dbController, projectObject){
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').insertOne(projectObject)
             .then((ans)=>{
+                email.sendNotification("New project",'u19016477@tuks.co.za');
                 resolve(ans);
             })
             .catch(err=>{
