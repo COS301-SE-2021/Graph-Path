@@ -20,7 +20,7 @@ class Node extends React.Component{
     }
 
     componentDidMount(){
-        this.viewAllTasks(this.props.project._id)
+        this.viewAllTasks(this.props.project._id) ;
     }
     showPopUP = () =>{
         this.setState({
@@ -60,6 +60,8 @@ class Node extends React.Component{
                 responseData:res.data //data
             })
             this.showPopUP();
+            this.viewAllTasks(this.props.project._id) ;
+
 
         },(response)=>{
             console.log('rejected',response) ;
