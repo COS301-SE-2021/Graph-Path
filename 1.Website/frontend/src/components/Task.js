@@ -156,7 +156,7 @@ class Task extends React.Component{
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
-                    <h4>{!this.props.fullForm?'Add Node':'Edit Task'}</h4>
+                    <h4>{!this.props.fullForm?'Add Node':''}</h4>
                     <p>Node Name</p>
                     <input type="text" name="name" required={true}
                      placeholder="Node Name"
@@ -212,7 +212,7 @@ class Task extends React.Component{
                     {
                      (custom !== undefined && !this.state.fullForm)
                     ?`Viewing Node ${this.props.label}`:
-                    <input type="submit" value="Add Node" className="btn1"/>
+                <input type="submit" value={custom !== undefined?'Add Task': "Add Node"} className="btn1"/>
                                
                     }
                 </form>

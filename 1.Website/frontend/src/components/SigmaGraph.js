@@ -116,7 +116,7 @@ class SigmaGraph extends React.Component{
   */
   handleControlClick = (event) =>{
     // alert('cliked'+event.data.node.label);
-    if (event.data.captor.ctrlKey){
+    if (event.data.captor.ctrlKey || event.data.captor.shiftKey ){
       if (this.state.source === 'Source Node'){
         this.setState({
           source:event.data.node.id
