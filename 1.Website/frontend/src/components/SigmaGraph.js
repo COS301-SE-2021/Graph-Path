@@ -164,7 +164,13 @@ class SigmaGraph extends React.Component{
     }
 
   }
-  componentDidUpdate(){
+  componentWillUnmount(){
+    this.resetRedirect()
+  }
+  resetRedirect = ()=>{
+    this.setState({
+      redirect:false
+    })
   }
   
   render(){
@@ -175,7 +181,7 @@ class SigmaGraph extends React.Component{
     const project = this.props.project ; 
 
     if (mgr !== undefined && project !== undefined){
-      console.log(' on remount', mgr.getGraph(),project) ;
+      // console.log(' on remount', mgr.getGraph(),project) ;
     
 
       var graph = mgr.getGraph() ; 
@@ -254,7 +260,7 @@ class SigmaGraph extends React.Component{
               {
               this.state.redirect 
                 ? <Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} /> 
-                :""            
+                :"" 
               }
 
               </Card.Body>

@@ -1,7 +1,7 @@
 import  React from 'react' ;
 import '../css/Task.css';
 import Select from 'react-select' ;
-import {Button, Card, CloseButton} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import {Link,withRouter} from "react-router-dom";
 
 
@@ -149,6 +149,7 @@ class Task extends React.Component{
         }
 
     }
+
     render() {
         const {match} = this.props ;
         var custom = this.props.label ;
@@ -176,7 +177,6 @@ class Task extends React.Component{
                                 <br/>
                                 <Button onClick={(e)=>this.handleCriticalClick(e)}> Critical from </Button>
                                 <br/>
-
                             </>
 
                         :<></>

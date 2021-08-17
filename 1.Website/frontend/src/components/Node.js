@@ -82,9 +82,9 @@ class Node extends React.Component{
                         }
 
                         if(response.data !== undefined){
-                            console.log('from back end res', response.data.data)
+                            // console.log('from back end res', response.data.data)
                             const list = response.data.data
-                            console.log("list",list)
+                            // console.log("list",list)
                             if(list !== undefined && Array.isArray(list)){
                                 let filtered = []
                                 list.forEach((val)=>{
@@ -142,7 +142,7 @@ class Node extends React.Component{
         const EditGraphPermissionRoles = ['owner','project manager','developer']
 
          
-        console.log("match",project) ;
+        // console.log("match",project) ;
 
 
         if (manager === undefined || project === undefined){

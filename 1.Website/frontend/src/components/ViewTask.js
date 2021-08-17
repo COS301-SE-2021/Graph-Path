@@ -1,8 +1,8 @@
 import React from 'react' ;
 import '../css/ViewTask.css';
 import '../css/Task.css';
-import {Button, Card, CloseButton, Offcanvas} from "react-bootstrap";
-import Select from "react-select";
+import {Button, Offcanvas} from "react-bootstrap";
+// import Select from "react-select";
 import * as HiIcons from "react-icons/hi";
 import * as FaIcons from "react-icons/fa";
 
@@ -48,7 +48,7 @@ class ViewTask extends React.Component{
         const taskList = this.props.taskList;
         const nodeId = this.props.nodeId;
         const projId = this.props.projectId;
-        console.log("tasklist",taskList)
+        // console.log("tasklist",taskList)
         let temp =[];
        // includes(projId+'_'+nodeId)
 
@@ -57,7 +57,7 @@ class ViewTask extends React.Component{
 
 
 
-        console.log("fil list",temp)
+        // console.log("fil list",temp)
 
         return(
             <div id="add-of-task-div">
@@ -106,7 +106,7 @@ class ViewTask extends React.Component{
 
                                     temp.map((value,index)=>{
                                         return (
-                                        <div key={index} id="project-form-div" id="nP">
+                                        <div key={index} className="project-form-div" id="nP">
                                             <form id="new-project-form" onSubmit={this.onSubmit}>
                                                 <h3 style={{fontWeight:"bold"}}>Task {index+1}</h3>
                                                 <label>Description</label>
