@@ -115,7 +115,7 @@ class ProjectView extends React.Component{
             })
 
             this.setState({
-                popUpText: "User Information Updated"
+                popUpText: "Project Information Updated"
             });
             this.showPopUP()
         }
