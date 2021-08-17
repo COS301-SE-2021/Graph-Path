@@ -2,6 +2,7 @@ import React from 'react' ;
 import Graph from './Graph';
 import NewProject from './NewProject' ;
 import TaskList from './TaskList';
+import Kanban from './Kanban';
 import Reports from "./Reports";
 import '../css/App.css' ;
 import '../css/Dashboard.css'
@@ -74,7 +75,7 @@ class Dashboard extends React.Component{
                         </div>
 
                         <div className="opt">
-                            <Link to="TaskList">View Tasks</Link>
+                            <Link to="/Kanban">View Tasks</Link>
                         </div>
                         <div className="opt">
                             <Link to="/reports">Reports</Link>
@@ -112,9 +113,9 @@ class Dashboard extends React.Component{
 
                     </Route>
 
-                    <Route path="/TaskList" >
+                    <Route path="/Kanban" >
                         <div className="ContentArea">
-                            <TaskList/>
+                            <Kanban/>
                         </div>
                     </Route>
 
