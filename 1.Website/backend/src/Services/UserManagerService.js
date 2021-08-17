@@ -308,7 +308,6 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
     const salt = await bcrypt.genSalt(10);
     psw = await  bcrypt.hash(psw,salt);
     let oldEmail ;
-    let role;
     let Person=[{
         "email": "",
         "role": "",
@@ -319,7 +318,7 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
         //check if new email is already in use
        await getUserByEmail(dbController, mail)
             .then(ans=>{
-               // console.log("getUserByEmail call: ",ans);
+
                 if(ans !== "user not found" && ans !== null){
                     resolve("email already in use");
                 }
@@ -330,11 +329,11 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
         //get old email and role
         await  getUserByID(dbController, id)
             .then(ans=>{
-                //console.log("updateEverythingUser: ",ans);
+
                 if(ans !== "No user found" && ans != null){
                     oldEmail = ans.email;
                     Person[0].label = firstName+" "+lastName;
-                    //console.log("This is person: ",Person);
+
                 }
             })
             .catch(err=>{
@@ -346,7 +345,7 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
         let Members;
        await ProjectManagerService.getAllProjectsByUserEmail(dbController,oldEmail)
             .then(async (ans)=>{
-                console.log("Peanuts:",ans);
+
                 if(ans != null && ans !== "No matched projects"){
                     if(ans.length > 0){
                         for(let i =0; i<ans.length;i++){//projects
@@ -356,20 +355,11 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
 
                             await ProjectManagerService.removeProjectMember(dbController,ans[i]._id,oldEmail)
                                 .catch(err=>{reject(err)});
-
-                                                // for(let k=0; k<ans[i].groupMembers.length;k++){
-                                                //     if(ans[i].groupMembers[k].email === oldEmail){
-                                                //         role = ans[i].role;
-                                                //         Person.role = role;
-                                                //         console.log("This is role: ",role);
-                                                //     }
-                                                // }
                         }
                     }
                 }
             })
             .catch(err=>{
-                console.log("err was thrown from down here");
                 reject(err);
             })
 
