@@ -440,6 +440,36 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
    // let graph2 = JSON.parse(graph);
     let groupMembers = req.body.groupMembers;
 
+    if(ID===undefined || ID == null){
+        res.send({
+            message: "The provided ID is invalid."
+        })
+    }else if(pname===undefined || pname == null){
+        res.send({
+            message: "The provided project name is invalid."
+        })
+    }else if(ddate===undefined || ddate == null){
+        res.send({
+            message: "The provided due date is invalid."
+        })
+    }else if(sdate===undefined || sdate == null){
+        res.send({
+            message: "The provided starting date is invalid."
+        })
+    }else if(owner===undefined || owner == null){
+        res.send({
+            message: "The provided owner is invalid."
+        })
+    }else if(graph===undefined || graph == null){
+        res.send({
+            message: "The provided graph is invalid."
+        })
+    }else if(groupMembers===undefined || groupMembers == null){
+        res.send({
+            message: "The provided groupmembers is invalid."
+        })
+    }
+
     ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
         .then(ans=>{
             if(ans.modifiedCount > 0){
