@@ -407,7 +407,7 @@ const UserManagerService = require('../../Services/UserManagerService');
                      })
                  }else if(ans ==="email already in use"){
                      res.send({
-                         message: "The email is already use."
+                         message: "The email address is already in use."
                      })
                  }
              })

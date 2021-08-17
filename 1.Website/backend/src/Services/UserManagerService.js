@@ -307,8 +307,74 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
 
     const salt = await bcrypt.genSalt(10);
     psw = await  bcrypt.hash(psw,salt);
+    let oldEmail ;
+    let role;
+    let Person=[{
+        "email": "",
+        "role": "",
+        "label": ""
+    }]
+    Person[0].email = mail;
+    return await  new Promise(async (resolve, reject) => {
+        //check if new email is already in use
+       await getUserByEmail(dbController, mail)
+            .then(ans=>{
+               // console.log("getUserByEmail call: ",ans);
+                if(ans !== "user not found" && ans !== null){
+                    resolve("email already in use");
+                }
+            })
+           .catch(err=>{
+               reject(err);
+           })
+        //get old email and role
+        await  getUserByID(dbController, id)
+            .then(ans=>{
+                //console.log("updateEverythingUser: ",ans);
+                if(ans !== "No user found" && ans != null){
+                    oldEmail = ans.email;
+                    Person[0].label = firstName+" "+lastName;
+                    //console.log("This is person: ",Person);
+                }
+            })
+            .catch(err=>{
+                console.log("err was thrown here");
+                reject(err);
 
-    return await  new Promise(((resolve, reject) => {
+            })
+        //use old email to retrieve all projects the user belongs in
+        let Members;
+       await ProjectManagerService.getAllProjectsByUserEmail(dbController,oldEmail)
+            .then(async (ans)=>{
+                console.log("Peanuts:",ans);
+                if(ans != null && ans !== "No matched projects"){
+                    if(ans.length > 0){
+                        for(let i =0; i<ans.length;i++){//projects
+                            Person[0].role = ans[i].role;
+                            await ProjectManagerService.addNewProjectMember(dbController, ans[i]._id,Person)
+                                .catch(err=>{reject(err)});
+
+                            await ProjectManagerService.removeProjectMember(dbController,ans[i]._id,oldEmail)
+                                .catch(err=>{reject(err)});
+
+                                                // for(let k=0; k<ans[i].groupMembers.length;k++){
+                                                //     if(ans[i].groupMembers[k].email === oldEmail){
+                                                //         role = ans[i].role;
+                                                //         Person.role = role;
+                                                //         console.log("This is role: ",role);
+                                                //     }
+                                                // }
+                        }
+                    }
+                }
+            })
+            .catch(err=>{
+                console.log("err was thrown from down here");
+                reject(err);
+            })
+
+
+
         db.collection('Users').updateOne({
             "_id":ObjectId(id)
         },{
@@ -329,7 +395,7 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
             });
 
 
-    }))
+    })
 
 }
 

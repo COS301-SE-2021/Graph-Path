@@ -47,6 +47,7 @@ async function getAllProjects(dbController){
 
 async function getAllProjectsByUserEmail(dbController,mail){
     const db = dbController.getConnectionInstance();
+    //console.log("projectsbyueremail mail:",mail);
     return await new Promise((resolve,reject)=>{
 
         // get all projects.
@@ -55,19 +56,21 @@ async function getAllProjectsByUserEmail(dbController,mail){
         let Projects = null;
         db.collection('Projects').find({}).toArray()
             .then((ans)=>{
-
+                //console.log("ans",ans);
                 Projects = ans;
                 let MatchedProjects = [];
                 for(let i =0 ; i < Projects.length ; i++)
                 {
                     let GroupMembers = Projects[i].groupMembers;
+                    //console.log(GroupMembers);
+
                     if (GroupMembers !== null && GroupMembers !== undefined){
 
                         for( let x = 0 ; x <GroupMembers.length ;x++)
                         {
                             if(GroupMembers[x].email === mail)
                             {
-                                //console.log("Match found");
+                                console.log("Match found");
                                 const obj = {
                                     role: GroupMembers[x].role,
                                     permissions: Permissions.getPermissions(GroupMembers[x].role),
@@ -203,7 +206,6 @@ async function updateProjectGraph(dbController,id, graphObject){
     })
 }
 
-
 async function addNewProjectMember(dbController, id, newMembers){
 
     const db = dbController.getConnectionInstance();
@@ -218,23 +220,25 @@ async function addNewProjectMember(dbController, id, newMembers){
                     project = ans;
                     resolve();
                 }else{
-                   throw "Project with given ID does not exist"
+                    throw "Project with given ID does not exist";
                 }
 
             })
             .catch(err=>{
-               console.log(err);
-               reject(err);
+                console.log(err);
+                reject(err);
             });
 
     })
     if(project !== null)
     {
         let Members = project.groupMembers;
-       for( let i =0 ; i < newMembers.length ; i ++)
-       {
-           Members.push(newMembers[i]);
-       }
+        for( let i =0 ; i < newMembers.length ; i ++)
+        {
+                //check if member already in project
+
+            Members.push(newMembers[i]);
+        }
 
         return await new Promise((resolve,reject)=>{
 
@@ -280,29 +284,6 @@ async function addNewProjectMember(dbController, id, newMembers){
 
 }
 
-/*async function addNewProjectMember(dbController, id, mail ){
-
-
-    const db = dbController.getConnectionInstance();
-    return await new Promise((resolve,reject)=>{
-
-        db.collection('Projects').updateOne({
-            "_id":ObjectId(id)
-        },{
-            $push: {
-                groupMembers: MemberObject
-            }
-        })
-            .then(ans=>{
-                resolve(ans);
-            })
-            .catch(err=>{
-                reject(err);
-            })
-    })
-
-}
-*/
 
 async function editMemberRole(dbController, id, email , newRole){
 

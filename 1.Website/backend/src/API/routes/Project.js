@@ -271,6 +271,20 @@ function makeProjectRoute(db) {
     router.post('/addToProjectGroupMembers',(req, res, next)=>{
         let ID = req.body.id;
         let memberObjects = req.body.groupMembers;
+       //  let memberObjects = [{
+       //          "email": "demo3@gmail.com",
+       //          "role": "owner"
+       //      },
+       //      {
+       //          "email": "ntpnaane@gmail.com",
+       //          "role": "Project Manager",
+       //          "label": "Godiragetse Naane"
+       //      },
+       //      {
+       //          "email": "kage@gmail.com",
+       //          "role": "Developer",
+       //          "label": "Kagiso Monareng"
+       //      }]
 
         ProjectManagerService.addNewProjectMember(db,ID,memberObjects)
             .then((ans)=>{
@@ -280,7 +294,7 @@ function makeProjectRoute(db) {
             .catch((err)=>{
                 res.send({
                     message: "unsuccessful. Server Error",
-                    data: []
+                    data: err
                 })
             })
 
@@ -358,23 +372,38 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
        })
      })
 });
-router.patch('/updateUserRole', (req,res)=>{
-    const id = req.body.id;
-    const  email = req.body.email;
-    const newRole = req.body.role;
 
-    ProjectManagerService.editMemberRole(db,id,email,newRole).then((result)=>{
-        res.send(result)
-    })
-        .catch((err)=>{
-            res.send({
-                message: "unsuccessful",
-                data: err,
-            })
+router.patch('/addToProjectGroupMembers/:id/:memberObject',(req, res, next)=>{
+    let ID = req.params.id;
+    let mail = req.params.memberObject;
+    //console.log("mail:",mail);
+    ProjectManagerService.addNewProjectMember(db,ID, mail)
+
+        .then(ans=>{
+            if(ans.modifiedCount >0){
+                res.send({
+                    message: "Member added successfully."
+                })
+            }else if(ans === "Invalid project id"){
+                res.send({
+                    message: "Invalid project id provided."
+                })
+            }else if(ans === "Invalid memberObject"){
+                res.send({
+                    message: "Invalid member object provided."
+                })
+            }else{
+                res.send({
+                    message: "Could not add member."
+                })
+            }
         })
-
-})
-
+    .catch((err)=>{
+        res.status(500).send({
+            message: "An error has occurred."
+        })
+     })
+});
 
     router.patch('/removeProjectMember/:id/:email',(req, res, next)=>{
         let ID = req.params.id;
@@ -413,7 +442,6 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
 
     ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
         .then(ans=>{
-            console.log('Response',ans)
             if(ans.modifiedCount > 0){
                 res.send({
                     message: "The project was updated."
