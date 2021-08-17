@@ -19,7 +19,6 @@ class Node extends React.Component{
 
     componentDidMount(){
         this.viewAllTasks(this.props.project._id)
-        this.filterTask()
     }
     addNewNode = (name)=>{
       
