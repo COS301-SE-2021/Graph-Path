@@ -406,6 +406,7 @@ class Graph extends React.Component{
                             project={selectedProjectName}
                             sendGraphData={this.saveCurrentGraph}
                             graphManager={this.state.graphManager}
+                            userEmail={this.props.userEmail}
                         />
                                             
                     </Route>
