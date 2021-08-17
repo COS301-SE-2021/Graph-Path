@@ -26,7 +26,7 @@ function sendNotification(type , recipients, bodyInfo)
         case "New project":
             subject=" New project assignment"
             body  = "You Have been added to new Project\n";
-            viewPath = "./Notifications/views/"
+            viewPath = "./1.Website/backend/src/Helpers/Notifications/views/"
             templateName = 'newProjectNotification'
 
             break;
@@ -72,12 +72,12 @@ function sendNotification(type , recipients, bodyInfo)
         text: body,
         attachments: [{
            filename:'graphPathLogo.png',
-           path: './Notifications/views/images/graphPathLogo.png',
+           path: './1.Website/backend/src/Helpers/Notifications/views/images/graphPathLogo.png',
             cid:'logo'
         },
             {
                 filename:'bee.png',
-                path: './Notifications/views/images/bee.png',
+                path: './1.Website/backend/src/Helpers/Notifications/views/images/bee.png',
                 cid:'footer'
             }
         ],
