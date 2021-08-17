@@ -1,37 +1,44 @@
-
 export let MockData: Object[] = [
     {
-        Status: 'ToDo',
+        Id:1,
+        Status: 'inProgress',
         Description: 'Fix Bugs',
         Assignee: 'Naane'
     },
     {
-        Status: 'ToDo',
+        Id: 2,
+        Status: 'done',
         Description: 'Work on Graph ',
         Assignee: 'Naane'
     },
     {
-        Status: 'Done',
+        Id: 3,
+        Status: 'open',
         Description: 'Something',
         Assignee: 'Baster'
     },
     {
-        Status: 'InProgress',
+        Id:4,
+        Status: 'inProgress',
         Description: 'Fix the UI issues',
         Assignee: 'Mvhali'
     },
+
     {
-        Status: 'Review',
+        Id:5,
+        Status: 'done',
         Description: 'Fix the issues reported by the customer.',
         Assignee: 'Monareng'
     },
     {
-        Status: 'Done',
+        Id:6,
+        Status: 'open',
         Description: 'Make the Kanban board and Link to database.',
         Assignee: 'Mndebele'
     },
     {
-        Status: 'Validate',
+        Id:7,
+        Status: 'done',
         Description: 'Work on bugs',
         Assignee: 'Baster'
     }
