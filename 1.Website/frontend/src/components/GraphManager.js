@@ -8,7 +8,62 @@ class GraphManager{
       else{
         this.graph = graph ;
       }
+      this.adjacencyList = {} ;
     }
+
+    addVertex=(vertex)=>{
+      if (!this.adjacencyList[vertex]){
+        // if it does not exist
+        this.adjacencyList[vertex] = [] ;
+      }
+    }
+    addEdge(source,target){
+      if (!this.adjacencyList[source]){
+        this.addVertex(source) ;
+      }
+
+      this.adjacencyList[source].push(target) ;
+    }
+
+    pathFrom=(start)=>{
+      //bfs -- queue ;FIFO
+      var queue = [start] ;
+      var result = [] ; 
+      var visited = {} ;
+      visited[start] = true ;
+      let currVertex ;
+      while (queue.length){
+        currVertex = queue.shift() ;
+        if (currVertex !== undefined){
+          result.push(currVertex) ;
+          this.adjacencyList[currVertex].forEach((neighbor)=>{
+            if (!visited[neighbor]){
+              visited[neighbor] = true ;
+              queue.push(neighbor) ;
+            }
+          })
+
+        }
+        
+      }
+      return result ;
+
+    }
+
+    removeEdge=(source,target)=>{
+      this.adjacencyList[source] = this.adjacencyList[source].filter((vertex)=>{
+        vertex !== target 
+      }) ;
+    }
+
+    removeVertex=(vertex)=>{
+      while(this.adjacencyList[vertex]){
+        const adjacentVertex = this.adjacencyList[vertex].pop() ;
+        this.removeEdge(vertex,adjacentVertex) ;
+      }
+      delete this.adjacencyList[vertex] ;
+    }
+
   
     setGraph = (graph)=>{
       if (Array.isArray(graph.nodes) && Array.isArray(graph.edges) ){
