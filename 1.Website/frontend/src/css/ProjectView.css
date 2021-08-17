@@ -6,7 +6,7 @@
 }
 
 #project-form{
-    max-width: 40%;
+    max-width: 100%;
     padding: 20px;
     box-sizing: border-box;
     position: relative;
@@ -33,17 +33,16 @@
 
 #view-graph-div{
     background-color: #04AA6D;
-    position: absolute;
-    margin-top: 4%;
+    margin: 8px 100px;
     width: 28vw;
-    margin-right: 1%;
     z-index: 100;
     border-radius: 5px;
     padding-top: 10px;
     padding-bottom: 10px;
+    display: block;
 }
 
-#view-graph-div Link{
+#view-graph-div a{
     text-decoration: none;
     color: white;
 }
@@ -60,13 +59,11 @@
 #div3{
     background-color: #04AA6D;
     width: 28vw;
-    bottom: 200px;
-    margin-left: 36.9%;
-    position: relative;
     border-radius: 5px;
     padding-top: 10px;
     padding-bottom: 10px;
     border: none;
+    margin: 8px 100px;
 }
 
 #view-div{
@@ -127,4 +124,22 @@
 
 .offcanvas-header .btn-close{
     background-color: white;
+}
+
+#main-view{
+    display: flex;
+}
+
+#form-div{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    padding: 16px 100px;
+}
+
+#button-div{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

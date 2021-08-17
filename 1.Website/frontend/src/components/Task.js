@@ -1,6 +1,9 @@
 import  React from 'react' ;
 import '../css/Task.css';
 import Select from 'react-select' ;
+import {Button, Card, CloseButton} from "react-bootstrap";
+import {Link,withRouter} from "react-router-dom";
+
 
 /*
    
@@ -131,6 +134,7 @@ class Task extends React.Component{
     }
 
     render() {
+        const {match} = this.props ;
         var custom = this.props.label ;
         console.log('comm',custom,this.state.fullForm)
         return(
@@ -146,7 +150,15 @@ class Task extends React.Component{
                      onFocus={(e)=>{custom = undefined}}/>
                     {
                         this.props.fullForm
-                        ?<div onClick={this.toogleForm}>Attach Task</div>
+                        // ?<div onClick={this.toogleForm}>Attach Task</div>
+                            ?
+                            <>
+                                <Button onClick={this.toogleForm}>Add Task</Button>
+
+                                    <Link to={`${match.url}viewTask/?id=${this.props.nodeId}`}>View Task</Link>
+
+                            </>
+
                         :<></>
                         
                     }
@@ -188,4 +200,4 @@ class Task extends React.Component{
         )
     }
 }
-export default Task;
+export default withRouter(Task);

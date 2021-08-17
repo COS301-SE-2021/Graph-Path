@@ -1,0 +1,53 @@
+#add-of-task-div{
+    background-color: #990001;
+    padding: 5px;
+    width: 70vw;
+    position: absolute;
+    right: 0;
+    top:300px
+}
+
+#task-card{
+    margin-left: 2%;
+    background-color: green;
+    width: 20vw;
+    position: absolute;
+}
+
+#member-button{
+
+}
+
+#newTS{
+    max-width: 20vw !important;
+    height: 30vh;
+}
+
+#nP{
+    background-color: pink !important;
+    max-width: 20vw;
+    margin: 16px;
+}
+
+#new-project-form{
+    max-width: 100% !important;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    background-color: ghostwhite;
+    border-radius: 8px;
+    margin-top: 2%;
+}
+
+new-project-form input[type="text"]{
+    color: black !important;
+}
+
+#task-container{
+    margin-top: 180px;
+    background-color: yellow;
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    flex-wrap: wrap;
+}

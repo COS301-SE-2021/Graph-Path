@@ -3,6 +3,7 @@ import Task from './Task' ;
 import axios from 'axios';
 import '../css/Graph.css'
 import {Link,withRouter, Route, Switch} from 'react-router-dom' ;
+import ViewTask from "./ViewTask";
 // import '../css/Dashboard.css' ;
 
 class Node extends React.Component{
@@ -10,13 +11,15 @@ class Node extends React.Component{
         super(props) ; 
         this.state ={
             taskList:[],
+            filterList:[],
             api:'http://localhost:9001'
         }
         this.graphManager = null  ; 
     }
 
     componentDidMount(){
-    
+        this.viewAllTasks(this.props.project._id)
+        this.filterTask()
     }
     addNewNode = (name)=>{
       
@@ -52,8 +55,46 @@ class Node extends React.Component{
             console.log(error) ;
         })
     }
-    viewAllTasks =()=>{
-        
+    viewAllTasks =(projectId)=>{
+
+        if(this.props !== undefined || this.props !== null) {
+            // alert(this.props.project)
+            try {
+                axios.get(`${this.state.api}/task/getAllTasksByProject/${projectId}`)
+                    .then((response) => {
+                        if (response === 400) {
+                            throw Error(response.statusText);
+                        }
+
+                        if(response.data !== undefined){
+                            console.log('from back end res', response.data.data)
+                            const list = response.data.data
+                            console.log("list",list)
+                            if(list !== undefined && Array.isArray(list)){
+                                let filtered = []
+                                list.forEach((val)=>{
+                                    filtered.push(val)
+                                })
+
+                                this.setState({
+                                    taskList:filtered
+                                });
+                            }else{
+                                alert("something went wrong")
+                            }
+                        }else{
+                            this.setState({
+                                taskList:[]
+                            })
+                        }
+
+
+
+                    })
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
     
     updateParent=()=>{
@@ -64,6 +105,10 @@ class Node extends React.Component{
         }
     }
 
+    filterTask=()=>{
+
+    }
+
     render(){
         const {match} = this.props ;
         var manager = this.props.graphManager ;
@@ -71,7 +116,8 @@ class Node extends React.Component{
         const EditGraphPermissionRoles = ['owner','project manager','developer']
 
          
-        console.log(project) ;
+        console.log("match",project) ;
+
 
         if (manager === undefined || project === undefined){
             return (<div>
@@ -104,6 +150,11 @@ class Node extends React.Component{
                             <Task addTask={this.addNewNode}
                                 fullForm = {false} 
                             />
+                        </Route>
+                        <Route path={`${match.url}/task/viewTask/`}>
+
+
+                            <ViewTask taskList={this.state.taskList} nodeId={query.get('id')} projectId={project._id} />
                         </Route>
                         <Route path={`${match.url}/task/`} render={()=>{
                             
