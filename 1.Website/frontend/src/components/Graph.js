@@ -269,23 +269,22 @@ class Graph extends React.Component{
                     linkNumber:-1
                 }) ;
                 console.log('B4 del',project)
-                axios.delete(`${this.state.api}/project/deleteProject/${project._id}`,{
-                    params:{
-                        projectName:project,
-                        owner:this.props.userEmail
-                    },
-                    
-                
-                })
+                axios.delete(`${this.state.api}/project/deleteProject/${project._id}`)
                 .then((res)=>{
-                    console.log('Delete',res)
-                    if(res.data.data === undefined){
-                        alert(res.data.message) ;
+                    if (res.status >=400){
+                        throw res ;
+                    }
+                    if(res.data.message === undefined){
+                        alert('Network Error') ;
                         this.setState({
                             loading:false
                         }) ;
                     }
                     else{
+                        this.setState({
+                            answer:res.data.message
+                        },()=>this.showPopUP()) ;
+                        ;
                         this.viewProjectsFromAPI() ;
                     }
                 })
@@ -387,7 +386,7 @@ class Graph extends React.Component{
                                                       to={`/project/${keyNum}`}
                                                       variant="primary">Open</Link>
                                                 {node.owner === this.props.userEmail ?
-                                                    <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
+                                                    <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node)} /> : ""
                                                 }
                                             </Card.Footer>
                                         </Card.Body>
