@@ -8,7 +8,153 @@ class GraphManager{
       else{
         this.graph = graph ;
       }
+      this.adjacencyList = {} ;
     }
+
+    addVertex=(vertex)=>{
+      if (!this.adjacencyList[vertex]){
+        // if it does not exist
+        this.adjacencyList[vertex] = [] ;
+      }
+    }
+    addAdjacencyEdge(source,target){
+      if (!this.adjacencyList[source]){
+        this.addVertex(source) ;
+      }
+
+      this.adjacencyList[source].push(target) ;
+
+    }
+
+    editNodeCriticality=(nodeId,critical)=>{
+      var nodeFound = this.graph.nodes.filter(node => node.id === nodeId) ;
+      if (nodeFound.length){
+        nodeFound[0][`critical`]=critical ;
+        return true ;
+      }
+      else{
+        return false ;
+      }
+    }
+
+    createTraversableGraph =()=>{
+      const nodes = this.graph.nodes ;
+      const edges = this.graph.edges ;
+
+      if (nodes !== undefined && edges !== undefined){
+        for (let x of nodes.map(node => node.id)){
+          this.addVertex(x) ;
+          const edgesFiltered = this.graph.edges.filter((edge,index) =>{
+            let y = {...edge} ;
+            y['color'] ='#080' ;
+            this.graph.edges[index] = y ;
+          
+            if ( edge.source=== x){
+              return y ;
+            }
+            else{
+              return false ;
+            }
+          }) ;
+
+          edgesFiltered.forEach((y)=>{
+            this.addAdjacencyEdge(x,y.target) ;
+            
+
+          }) 
+          
+          
+        }
+      }
+    }
+
+
+    pathFrom=(start)=>{
+      this.createTraversableGraph() ;
+      //bfs -- queue ;FIFO
+      var queue = [start] ;
+      var result = [] ; 
+      var visited = {} ;
+      visited[start] = true ;
+      let currVertex ;
+      while (queue.length){
+        currVertex = queue.shift() ;
+        if (currVertex !== undefined){
+          result.push(currVertex) ;
+          this.adjacencyList[currVertex].forEach((neighbor)=>{
+            if (!visited[neighbor]){
+              visited[neighbor] = true ;
+              queue.push(neighbor) ;
+            }
+          })
+
+        }
+        
+      }
+      return result ;
+
+    }
+
+    highlightCritical=(start)=>{
+
+      if (typeof start === 'string'){
+        var path = this.pathFrom(start) ;
+        console.log('colored edge',path)
+
+        if (path.length){
+          //edit the color to red
+          const colorEdges = this.graph.edges.map((value)=>{
+            var del = path.indexOf(value.target) ;
+            if (value.source === start){
+              if (del>=0){
+                path = path.splice(del,1) ;
+                let newE = {...value} ; 
+                newE['color'] = '#200' ;
+                console.log('colored edge', newE)
+                return newE ;
+              }
+              else{
+                return value
+              }
+            }
+            else{
+              if (del>=0){
+                let newE = {...value} ; 
+                newE['color'] = '#200' ;
+                console.log('colored edge', newE)
+                return newE ; 
+              }
+              else{
+                return value
+
+              }
+            }
+          }) ;
+          this.graph.edges = colorEdges ;
+          return true ;
+
+        }
+      }
+      else{
+        return false ;
+      }
+
+    }
+
+    removeEdge=(source,target)=>{
+      this.adjacencyList[source] = this.adjacencyList[source].filter(vertex =>
+        vertex !== target 
+      ) ;
+    }
+
+    removeVertex=(vertex)=>{
+      while(this.adjacencyList[vertex]){
+        const adjacentVertex = this.adjacencyList[vertex].pop() ;
+        this.removeEdge(vertex,adjacentVertex) ;
+      }
+      delete this.adjacencyList[vertex] ;
+    }
+
   
     setGraph = (graph)=>{
       if (Array.isArray(graph.nodes) && Array.isArray(graph.edges) ){

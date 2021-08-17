@@ -5,7 +5,6 @@
 // import {MockData} from './MockData';
 // import { extend } from '@syncfusion/ej2-base';
 // class Kanban extends React.Component {
-//
 //     MockData: Object[] = [
 //         {
 //             Status: 'ToDo',
@@ -43,7 +42,6 @@
 //             Assignee: 'Baster'
 //         }
 //     ];
-//
 //     constructor() {
 //         super(...arguments);
 //         this.data = extend([], MockData, null, true);
