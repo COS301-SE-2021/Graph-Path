@@ -13,9 +13,9 @@ class Kanban extends React.Component {
     render() {
         return (<KanbanComponent id="root" keyField="Status" dataSource={this.data} cardSettings={{contentField: "Description", headerField: "Id"}} swimlaneSettings={{ keyField: "Assignee"}}>
                 <ColumnsDirective>
-                    <ColumnDirective headerText="Not Started" keyField="notStartedTasks"/>
-                    <ColumnDirective headerText="In Progress" keyField="inProgressTasks"/>
-                    <ColumnDirective headerText="Complete" keyField="completeTasks"/>
+                    <ColumnDirective headerText="Not Started" keyField="open"/>
+                    <ColumnDirective headerText="In Progress" keyField="inProgress"/>
+                    <ColumnDirective headerText="Complete" keyField="done"/>
                 </ColumnsDirective>
             </KanbanComponent>
         )
