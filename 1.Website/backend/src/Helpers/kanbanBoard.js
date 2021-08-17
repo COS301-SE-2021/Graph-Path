@@ -144,21 +144,49 @@ function splitTasksByStatus(Tasks) {
     let InProgress = [];
     let Complete = [];
     let NotStarted =[];
+
     for(let i = 0 ; i < Tasks.length ; i++)
     {
         if(Tasks[i].status ==="complete")
         {
-            Complete.push(Tasks[i]);
+            const customTaskCard = {
+                status: Tasks[i].Status,
+                description: Tasks[i].description,
+                issueDate: Tasks[i].issued,
+                DueDate: Tasks[i].due,
+                TaskUniqiueID:Tasks[i]["_id"] ,
+                NodeID: Tasks[i].nodeID,
+                Assignee: Tasks[i].assignee,
+            }
+            Complete.push(customTaskCard);
         }
 
         else if(Tasks[i].status ==="in-progress")
         {
-            InProgress.push(Tasks[i]);
+            const customTaskCard = {
+                status: Tasks[i].Status,
+                description: Tasks[i].description,
+                issueDate: Tasks[i].issued,
+                DueDate: Tasks[i].due,
+                TaskUniqiueID:Tasks[i]["_id"] ,
+                NodeID: Tasks[i].nodeID,
+                Assignee: Tasks[i].assignee,
+            }
+            InProgress.push(customTaskCard);
         }
 
-        else if(Tasks[i].status ==="notStarted")
+        else if(Tasks[i].status ==="not started")
         {
-            NotStarted.push(Tasks[i]);
+            const customTaskCard = {
+                status: Tasks[i].Status,
+                description: Tasks[i].description,
+                issueDate: Tasks[i].issued,
+                DueDate: Tasks[i].due,
+                TaskUniqiueID:Tasks[i]["_id"] ,
+                NodeID: Tasks[i].nodeID,
+                Assignee: Tasks[i].assignee,
+            }
+            NotStarted.push(customTaskCard);
         }
 
     }

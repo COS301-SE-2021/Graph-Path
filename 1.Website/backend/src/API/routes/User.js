@@ -365,6 +365,30 @@ const UserManagerService = require('../../Services/UserManagerService');
         res.send({
             message:"The password provided is not valid."
         })
+    }else if(ID === undefined || ID ===""){
+        res.send({
+            message:"The ID provided is not valid."
+        })
+    }else if(firstName === undefined || firstName ===""){
+        res.send({
+            message:"The firstname provided is not valid."
+        })
+    }else if(lastName === undefined || lastName ===""){
+        res.send({
+            message:"The lastname provided is not valid."
+        })
+    }else if(userName === undefined || userName ===""){
+        res.send({
+            message:"The username provided is not valid."
+        })
+    }else if(Notif === undefined || Notif ===""){
+        res.send({
+            message:"The notification provided is not valid."
+        })
+    }else if(type === undefined || type ===""){
+        res.send({
+            message:"The type provided is not valid."
+        })
     }
 
          UserManagerService.updateEverythingUser(db,ID, mail,lastName, Notif, psw, type, firstName, userName)
@@ -380,6 +404,10 @@ const UserManagerService = require('../../Services/UserManagerService');
                  }else if(ans.modifiedCount > 0){
                      res.send({
                          message: "The user was updated successfully."
+                     })
+                 }else if(ans ==="email already in use"){
+                     res.send({
+                         message: "The email address is already in use."
                      })
                  }
              })

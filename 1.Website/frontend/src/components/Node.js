@@ -3,6 +3,7 @@ import Task from './Task' ;
 import axios from 'axios';
 import '../css/Graph.css'
 import {Link,withRouter, Route, Switch} from 'react-router-dom' ;
+import PopUpMessage from './PopUpMessage';
 import ViewTask from "./ViewTask";
 // import '../css/Dashboard.css' ;
 
@@ -11,6 +12,7 @@ class Node extends React.Component{
         super(props) ; 
         this.state ={
             taskList:[],
+            popUp:false,
             filterList:[],
             api:'http://localhost:9001'
         }
@@ -20,9 +22,20 @@ class Node extends React.Component{
     componentDidMount(){
         this.viewAllTasks(this.props.project._id)
     }
+    showPopUP = () =>{
+        this.setState({
+            popUp: true
+        })
+        setTimeout(
+            () =>
+                this.setState({
+                    popUp: false
+                }),5000
+        );
+    }
     addNewNode = (name)=>{
       
-        if (name.toString().trim().length<=0) {
+        if (!name.toString().trim().length) {
             alert('Cannot Submit Empty Name')
         }
         else{
@@ -46,6 +59,7 @@ class Node extends React.Component{
                 answer:res.message,
                 responseData:res.data //data
             })
+            this.showPopUP();
 
         },(response)=>{
             console.log('rejected',response) ;
@@ -108,6 +122,17 @@ class Node extends React.Component{
 
     }
 
+    criticalPath=(from)=>{
+        let path = this.props.graphManager.highlightCritical(from) ;
+
+        if (path){
+            this.updateParent() ;
+        }
+        else{
+            alert('Something wrong')
+        }
+    }
+
     render(){
         const {match} = this.props ;
         var manager = this.props.graphManager ;
@@ -125,7 +150,6 @@ class Node extends React.Component{
         }
         else{
             const query = new URLSearchParams(this.props.location.search );
-            console.log('Node remounting',query)
 
             const currUser = {
                 email:this.props.userEmail, 
@@ -166,7 +190,9 @@ class Node extends React.Component{
                                 projectId={project._id}
                                 members={project.groupMembers}
                                 user={currUser}
+                                criticalPath={this.criticalPath}
                             />
+                            {this.state.popUp && <PopUpMessage text={this.state.answer}/>}
 
                             </>
                         }} />

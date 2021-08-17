@@ -10,6 +10,7 @@ import * as ImIcons from "react-icons/im";
 import Spinner from 'react-spinner-material';
 import GraphManager from './GraphManager';
 import { Card, ProgressBar} from "react-bootstrap";
+import PopUpMessage from './PopUpMessage';
 // Button
 // import TaskPic from '../images/task.svg';
 
@@ -32,6 +33,7 @@ class Graph extends React.Component{
             api: "http://localhost:9001",
             loading:false,
             graphManager: undefined,
+            popUp:false
         }
     }
     //GET ALL Projects for User
@@ -157,14 +159,17 @@ class Graph extends React.Component{
                 axios.put(`${this.state.api}/project/updateEverythingProject/${data._id}`,data)
                 .then((res)=>{
                     console.log('update graph response',res.data)
-                    if (res.data.data === undefined) {
-                        // didn't save
-                        alert(res.data.message) ; 
-                    }
+                    // if (res.data.data === undefined) {
+                    //     // didn't save
+                    //     alert(res.data.message) ; 
+                    // }
                     //communication happened successfully
                     this.setState({
-                        loading:false
+                        loading:false,
+                        answer:res.data.message,
+                        
                     }) ;
+                    this.showPopUP() ;
                 })
                 .catch((err)=>{
                     alert('saving failed',err)
@@ -207,9 +212,6 @@ class Graph extends React.Component{
     }
 
     viewProjectsFromAPI =()=>{
-        // console.log('call to api') ;
-        // axios.get('http://graphpath.herokuapp.com/Project/Demo_project')
-        // fetch(`${this.state.api}/project/list`)
         
         //Display Loading State
         this.setState({
@@ -267,23 +269,22 @@ class Graph extends React.Component{
                     linkNumber:-1
                 }) ;
                 console.log('B4 del',project)
-                axios.delete(`${this.state.api}/project/deleteProject/${project._id}`,{
-                    params:{
-                        projectName:project,
-                        owner:this.props.userEmail
-                    },
-                    
-                
-                })
+                axios.delete(`${this.state.api}/project/deleteProject/${project._id}`)
                 .then((res)=>{
-                    console.log('Delete',res)
-                    if(res.data.data === undefined){
-                        alert(res.data.message) ;
+                    if (res.status >=400){
+                        throw res ;
+                    }
+                    if(res.data.message === undefined){
+                        alert('Network Error') ;
                         this.setState({
                             loading:false
                         }) ;
                     }
                     else{
+                        this.setState({
+                            answer:res.data.message
+                        },()=>this.showPopUP()) ;
+                        ;
                         this.viewProjectsFromAPI() ;
                     }
                 })
@@ -315,6 +316,18 @@ class Graph extends React.Component{
     refreshAll = ()=>{
         this.viewProjectsFromAPI() ;
         this.updateOldGraph() ;
+    }
+
+    showPopUP = () =>{
+        this.setState({
+            popUp: true
+        })
+        setTimeout(
+            () =>
+                this.setState({
+                    popUp: false
+                }),5000
+        );
     }
 
     render(){
@@ -373,7 +386,7 @@ class Graph extends React.Component{
                                                       to={`/project/${keyNum}`}
                                                       variant="primary">Open</Link>
                                                 {node.owner === this.props.userEmail ?
-                                                    <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node.projectName)} /> : ""
+                                                    <ImIcons.ImBin id="del-proj" onClick={(e)=>this.deleteProject(node)} /> : ""
                                                 }
                                             </Card.Footer>
                                         </Card.Body>
@@ -408,6 +421,7 @@ class Graph extends React.Component{
                             graphManager={this.state.graphManager}
                             userEmail={this.props.userEmail}
                         />
+                    {this.state.answer && this.state.popUp&&<PopUpMessage text={this.state.answer}/>}
                                             
                     </Route>
                 </Switch>

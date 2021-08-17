@@ -307,8 +307,64 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
 
     const salt = await bcrypt.genSalt(10);
     psw = await  bcrypt.hash(psw,salt);
+    let oldEmail ;
+    let Person=[{
+        "email": "",
+        "role": "",
+        "label": ""
+    }]
+    Person[0].email = mail;
+    return await  new Promise(async (resolve, reject) => {
+        //check if new email is already in use
+       await getUserByEmail(dbController, mail)
+            .then(ans=>{
 
-    return await  new Promise(((resolve, reject) => {
+                if(ans !== "user not found" && ans !== null){
+                    resolve("email already in use");
+                }
+            })
+           .catch(err=>{
+               reject(err);
+           })
+        //get old email and role
+        await  getUserByID(dbController, id)
+            .then(ans=>{
+
+                if(ans !== "No user found" && ans != null){
+                    oldEmail = ans.email;
+                    Person[0].label = firstName+" "+lastName;
+
+                }
+            })
+            .catch(err=>{
+                console.log("err was thrown here");
+                reject(err);
+
+            })
+        //use old email to retrieve all projects the user belongs in
+        let Members;
+       await ProjectManagerService.getAllProjectsByUserEmail(dbController,oldEmail)
+            .then(async (ans)=>{
+
+                if(ans != null && ans !== "No matched projects"){
+                    if(ans.length > 0){
+                        for(let i =0; i<ans.length;i++){//projects
+                            Person[0].role = ans[i].role;
+                            await ProjectManagerService.addNewProjectMember(dbController, ans[i]._id,Person)
+                                .catch(err=>{reject(err)});
+
+                            await ProjectManagerService.removeProjectMember(dbController,ans[i]._id,oldEmail)
+                                .catch(err=>{reject(err)});
+                        }
+                    }
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+
+
+
         db.collection('Users').updateOne({
             "_id":ObjectId(id)
         },{
@@ -329,7 +385,7 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
             });
 
 
-    }))
+    })
 
 }
 
