@@ -2,7 +2,7 @@ import React from 'react'
 import '../css/Register.css'
 import axios from 'axios';
 // import { Link} from 'react-router-dom';
-// import {form} from "react-bootstrap";
+ import {form } from "react-bootstrap";
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
 /*Rest part checks for submitting null values for all inputs*/
@@ -34,6 +34,7 @@ class Register extends React.Component{
         wait:false,
         api:'http://localhost:9001',
         answer:undefined,
+        type: 'text',
 
         //Errors
         formErrors: {
@@ -44,6 +45,7 @@ class Register extends React.Component{
             password:""
         }
     };
+
 
     change =(e) => {
         //this.setState({
@@ -73,7 +75,7 @@ class Register extends React.Component{
 
             case "email":
                 formErrors.email = emailRegex.test(value)
-                    ? ""
+                    ? ''
                     : "Invalid email address";
                 break;
 
@@ -210,7 +212,6 @@ class Register extends React.Component{
                         <p>Username</p>
                         <input
                             className={['form-control', formErrors.userName.length > 0 ? 'error': null]}
-                            //className="form-control"
                             name= 'userName' type='text'
                             placeholder='Username' value={this.state.userName}
                             onChange={this.change}
@@ -227,7 +228,6 @@ class Register extends React.Component{
                             type='email'
                             placeholder='Email' value={this.state.email}
                             onChange={this.change}
-                            required={true}
 
                         />
                         {formErrors.email.length > 0 && (
@@ -242,6 +242,7 @@ class Register extends React.Component{
                             placeholder='Password' value={this.state.password}
                             onChange={e=>this.change(e)}
                             required={true}
+
                         />
 
                         {formErrors.password.length > 0 && (
