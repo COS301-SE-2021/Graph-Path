@@ -147,7 +147,7 @@ class GraphManager{
     highlightCritical=(start)=>{
 
       if (typeof start === 'string'){
-        var path = this.pathFromDFS(start) ;
+        var path = this.pathFromBFS(start) ;
         console.log('colored edge',path)
 
         if (path.length){
@@ -180,27 +180,27 @@ class GraphManager{
             }
           }) ;
 
-          for (let i = 0 ; i < path.length-1 ; i++){
-            let source = path[i] ;
-            let tar = path[i+1] ;
-            let ind = -1 ;
-            let colorEdge = this.graph.edges.find( (edge,index)=>{
-              ind = index ;
-              if (edge.source === source && edge.target === tar){
-                return edge ;
-              }
-              else{
-                return undefined
-              }
-            } ) ; 
-            if (colorEdge !== undefined && ind>=0){
-              colorEdge.color = '#200' ;
-              this.graph.edges[ind] = colorEdge ;
-              // console.log('Auth',this.graph.edges[ind],'after update')
-            }
-            // console.log('Auth',this.graph.edges[ind],'after update')
+          // for (let i = 0 ; i < path.length-1 ; i++){
+          //   let source = path[i] ;
+          //   let tar = path[i+1] ;
+          //   let ind = -1 ;
+          //   let colorEdge = this.graph.edges.find( (edge,index)=>{
+          //     ind = index ;
+          //     if (edge.source === source && edge.target === tar){
+          //       return edge ;
+          //     }
+          //     else{
+          //       return undefined
+          //     }
+          //   } ) ; 
+          //   if (colorEdge !== undefined && ind>=0){
+          //     colorEdge.color = '#200' ;
+          //     this.graph.edges[ind] = colorEdge ;
+          //     // console.log('Auth',this.graph.edges[ind],'after update')
+          //   }
+          //   // console.log('Auth',this.graph.edges[ind],'after update')
 
-          }
+          // }
 
 
           this.graph.edges = colorEdges ;
