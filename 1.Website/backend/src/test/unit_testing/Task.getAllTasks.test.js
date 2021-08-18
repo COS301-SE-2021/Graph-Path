@@ -1,7 +1,7 @@
 const makeApp = require('../../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb')
-
+const AliDB = require('../../Controllers/MockDBController');
 
 describe('/getAllTasks',()=> {
 
@@ -60,15 +60,16 @@ describe('/getAllTasks',()=> {
                 .get('/task/getAllTasks')
                 .expect(200)
                 .then((res)=>{
-                    res.body
-                    expect(res.body[0]['description']).toBeDefined()
-                    expect(res.body[0]['status']).toBeDefined()
-                    expect(res.body[0]['project']).toBeDefined()
-                    expect(res.body[0]['tasknr']).toBeDefined()
-                    expect(res.body[0]['assignee']).toBeDefined()
-                    expect(res.body[0]['assigner']).toBeDefined()
-                    expect(res.body[0]['due']).toBeDefined()
-                    expect(res.body[0]['issued']).toBeDefined()
+
+                    let x = "null"
+                    expect(res.body.data).toBeDefined()
+                    expect(res.body.data[0]['status']).toBeDefined()
+                    expect(res.body.data[0]['project']).toBeDefined()
+                    expect(res.body.data[0]['tasknr']).toBeDefined()
+                    expect(res.body.data[0]['assignee']).toBeDefined()
+                    expect(res.body.data[0]['assigner']).toBeDefined()
+                    expect(res.body.data[0]['due']).toBeDefined()
+                    expect(res.body.data[0]['issued']).toBeDefined()
 
                 })
         });
@@ -81,7 +82,10 @@ describe('/getAllTasks',()=> {
                 .expect(200)
                 .then((res)=>{
 
-                    expect(res.body).toStrictEqual([])
+                    expect(res.body).toEqual({
+                        message: "The tasks were retrieved.",
+                        data: []
+                    })
                 })
         });
     })
