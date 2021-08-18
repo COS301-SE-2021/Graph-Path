@@ -153,7 +153,7 @@ class Task extends React.Component{
     render() {
         const {match} = this.props ;
         var custom = this.props.label ;
-        // console.log('comm',custom,this.state.fullForm)
+        // console.log('comm',this.props.members)
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
@@ -165,6 +165,7 @@ class Task extends React.Component{
                         :this.props.label} 
                      onChange={this.updateField} 
                      onFocus={(e)=>{custom = undefined}}/>
+                    <span> Critical : {this.props.critical}</span> 
                     {
                         this.props.fullForm
                         // ?<div onClick={this.toogleForm}>Attach Task</div>

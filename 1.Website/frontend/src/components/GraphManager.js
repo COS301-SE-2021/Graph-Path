@@ -69,11 +69,12 @@ class GraphManager{
     }
 
 
-    pathFrom=(start)=>{
+    pathFromBFS=(start)=>{
       this.createTraversableGraph() ;
       //bfs -- queue ;FIFO
       var queue = [start] ;
       var result = [] ; 
+      var paths =[] ; //Array of array , will return path to all critical nodes. 
       var visited = {} ;
       visited[start] = true ;
       let currVertex ;
@@ -95,10 +96,45 @@ class GraphManager{
 
     }
 
+    pathFromDFS =(start)=>{
+      this.createTraversableGraph() ;
+      var visited = {} ;
+      for ( let node of Object.keys(this.adjacencyList)){
+        console.log('Node:',node)
+        visited[node] = false ;
+      }
+
+      let stack = [] ;
+      stack.push(start) ;
+      var result = [] ;
+
+      while(stack.length !== 0){
+        var s = stack.pop() ;
+        if (s !== undefined){
+          if (visited[s] == false){
+            result.push(s) ;
+            visited[s] = true ;
+            if (s.critical === undefined){
+              console.log('not critical')
+            }
+          }
+          for (let neighbor of this.adjacencyList[s]){
+            if (!visited[neighbor]){
+              stack.push(neighbor) ; 
+
+            }
+          }
+
+        }
+      }
+      console.log('Result' ,result)
+      return result ; 
+    }
+
     highlightCritical=(start)=>{
 
       if (typeof start === 'string'){
-        var path = this.pathFrom(start) ;
+        var path = this.pathFromDFS(start) ;
         console.log('colored edge',path)
 
         if (path.length){
@@ -300,6 +336,7 @@ class GraphManager{
         var obj = {
             label:fromTask , // give it lable fromTask
             size:300,
+            critical:false
         }; 
         // if there was already a node?
         let len = curr.nodes.length ;

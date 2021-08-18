@@ -67,6 +67,10 @@ class Graph extends React.Component{
             graphManager:new GraphManager({}) 
         })
     }
+    componentWillUnmount(){
+        delete this.state.graphManager ;
+    }
+
     updateOldGraph = ()=>{
         fetch(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.userEmail}`)
         .then(res=>res.json())
@@ -169,6 +173,7 @@ class Graph extends React.Component{
                         answer:res.data.message,
                         
                     }) ;
+                    this.viewProjectsFromAPI() ;
                     this.showPopUP() ;
                 })
                 .catch((err)=>{

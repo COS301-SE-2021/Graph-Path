@@ -115,7 +115,7 @@ class SigmaGraph extends React.Component{
   If resulting edge exists - alert the user and discard changes
   */
   handleControlClick = (event) =>{
-    // alert('cliked'+event.data.node.label);
+    console.log('cliked',event);
     if (event.data.captor.ctrlKey || event.data.captor.shiftKey ){
       if (this.state.source === 'Source Node'){
         this.setState({
@@ -158,6 +158,7 @@ class SigmaGraph extends React.Component{
         this.setState({
           nodeId:event.data.node.id ,
           nodeLabel:event.data.node.label,
+          critcal:event.data.node.critcal,
           redirect:true
         }) ;
       }
@@ -197,7 +198,7 @@ class SigmaGraph extends React.Component{
             <span className="projName">{project.projectName}</span>
             {
                 typeof this.props.sendGraphData === 'function' && this.props.project.role !== undefined &&
-                saveGraphPermissions.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
+                saveGraphPermissions.indexOf(project.role.toLowerCase())>=0 ? //if there's a save option
                 <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
                 this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
                 Save</button>:""

@@ -174,6 +174,8 @@ class Node extends React.Component{
                             
                             <Task addTask={this.addNewNode}
                                 fullForm = {false} 
+                                members={project.groupMembers}
+
                             />
                         </Route>
                         <Route path={`${match.url}/task/viewTask/`}>
