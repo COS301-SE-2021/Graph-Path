@@ -2,7 +2,7 @@ const makeApp = require('../../app');
 const supertest = require('supertest');
 const {MongoClient, ObjectId} = require('mongodb');
 const MockDBController = require('../../Controllers/MockDBController');
-const {mongo} = require("mongoose");
+
 
 describe('/getAllTasksByProject',  ()=>{
     describe("when requested with a project name", ()=>{
