@@ -1,6 +1,8 @@
 const makeApp = require('../../app');
 const supertest = require('supertest');
-const {MongoClient} = require('mongodb');
+const {MongoClient, ObjectId} = require('mongodb');
+const MockDBController = require('../../Controllers/MockDBController');
+const {mongo} = require("mongoose");
 
 describe('/getAllTasksByProject',  ()=>{
     describe("when requested with a project name", ()=>{
@@ -11,7 +13,7 @@ describe('/getAllTasksByProject',  ()=>{
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
-            MockDB = await connection.db(global.__MONGO_DB_NAME__);
+            MockDB = await MockDBController.getConnectionInstance();
 
 
         });
@@ -19,33 +21,21 @@ describe('/getAllTasksByProject',  ()=>{
             await connection.close();
             await MockDB.close();
         });
-        beforeAll(async () => {
-            connection = await MongoClient.connect(global.__MONGO_URI__, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
-            MockDB = await connection.db(global.__MONGO_DB_NAME__);
 
-            const Users = MockDB.collection('Users');
-        });
-        afterAll(async () => {
-            await connection.close();
-            await MockDB.close();
-        });
 
         it('it should return status code 200', async ()=> {
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             let response  = await supertest(app)
-                .get('/task/getAllTasksByProject')
+                .get('/task/getAllTasksByProject/id')
                 .expect(200)
                 .then((res)=>{})
         });
 
         it('it should return a JSON object', async ()=> {
 
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
-                .get('/task/getAllTasksByProject')
+                .get('/task/getAllTasksByProject/id')
                 .expect(200)
                 .then((res)=>{
                     expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
@@ -54,6 +44,7 @@ describe('/getAllTasksByProject',  ()=>{
         it('it should return JSON object with all the task\'s fields', async ()=> {
             const Tasks = MockDB.collection('Tasks');
             let MockTask = {
+                _id: ObjectId,
                 CreationDate: Date.now() ,
                 DueDate: Date.now()+1 ,
                 TaskName: "Task 0 ",
@@ -65,34 +56,30 @@ describe('/getAllTasksByProject',  ()=>{
                 Parent_Node : "SomeID of the parent Node",
             }
             await Tasks.insertOne(MockTask);
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController);
+            const id = toString(MockTask._id);
             const response = await supertest(app)
-                .get('/task/getAllTasksByProject')
+                .get('/task/getAllTasksByProject/'+id)
                 .expect(200)
                 .then((res)=>{
                     res.body
-                    expect(res.body[0]['CreationDate']).toBeDefined()
-                    expect(res.body[0]['DueDate']).toBeDefined()
-                    expect(res.body[0]['TaskName']).toBeDefined()
-                    expect(res.body[0]['Description']).toBeDefined()
-                    expect(res.body[0]['Label']).toBeDefined()
-                    expect(res.body[0]['Status']).toBeDefined()
-                    expect(res.body[0]['Assignee']).toBeDefined()
-                    expect(res.body[0]['Assigner']).toBeDefined()
-                    expect(res.body[0]['Parent_Node']).toBeDefined()
+                    expect(res.body.data).toBeDefined()
+                    expect(res.body.message).toBeDefined()
+                    expect(res.body.message).toEqual("Tasks found successfully.")
+
                 })
         });
         it('it should return empty JSON object when there are no projects ', async ()=>{
 
             var Tasks = MockDB.collection('Tasks');
             Tasks.deleteMany({})
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
-                .get('/task/getAllTasksByProject')
+                .get('/task/getAllTasksByProject/id')
                 .expect(200)
                 .then((res)=>{
 
-                    expect(res.body).toStrictEqual([])
+                    expect(res.body.data).toStrictEqual([])
                 })
         },6000);
         it('it should return  JSON object of projects with the give name ', async ()=>{
@@ -113,13 +100,13 @@ describe('/getAllTasksByProject',  ()=>{
             let app = makeApp(false,MockDB)
 
             const response = await supertest(app)
-                .get('/task/getAllTasksByProject')
+                .get('/task/getAllTasksByProject/:id')
                 .expect(200)
                 .send({
                     project: MockTask['TaskName']
                 })
                 .then((res)=>{
-                    expect(res.body).toStrictEqual([])
+                    expect(res.body.data).toStrictEqual([])
                 })
 
         });
@@ -138,16 +125,16 @@ describe('/getAllTasksByProject',  ()=>{
                 Parent_Node : "SomeID of the parent Node",
             }
             await Tasks.insertOne(MockTask);
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
 
             const response = await supertest(app)
-                .get('/task/getAllTasksByProject')
+                .get('/task/getAllTasksByProject/:id')
                 .expect(200)
                 .send({
                     project: "jvbnkfjvbh18578"
                 })
                 .then((res)=>{
-                    expect(res.body).toStrictEqual([])
+                    expect(res.body.data).toStrictEqual([])
                 })
 
         });
