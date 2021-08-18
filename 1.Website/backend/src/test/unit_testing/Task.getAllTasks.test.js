@@ -1,7 +1,7 @@
 const makeApp = require('../../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb')
-const AliDB = require('../../Controllers/MockDBController');
+const MockDBController = require('../../Controllers/MockDBController');
 
 describe('/getAllTasks',()=> {
 
@@ -15,7 +15,7 @@ describe('/getAllTasks',()=> {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
-            MockDB = await connection.db(global.__MONGO_DB_NAME__);
+            MockDB = await MockDBController.getConnectionInstance();
 
 
         });
@@ -25,7 +25,7 @@ describe('/getAllTasks',()=> {
         });
 
         it('it should return status code 200', async ()=> {
-            let app = makeApp(AliDB);
+            let app = makeApp(MockDBController);
             let response  = await supertest(app)
                 .get('/task/getAllTasks')
                 .expect(200)
@@ -34,7 +34,7 @@ describe('/getAllTasks',()=> {
         });
         it('it should return a JSON object', async ()=> {
 
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
                 .get('/task/getAllTasks')
                 .expect(200)
@@ -55,14 +55,13 @@ describe('/getAllTasks',()=> {
                 issued: Date.now()+48,
             }
             await Tasks.insertOne(MockTask);
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController);
             const response = await supertest(app)
                 .get('/task/getAllTasks')
                 .expect(200)
                 .then((res)=>{
 
-                    let x = "null"
-                    expect(res.body.data).toBeDefined()
+
                     expect(res.body.data[0]['status']).toBeDefined()
                     expect(res.body.data[0]['project']).toBeDefined()
                     expect(res.body.data[0]['tasknr']).toBeDefined()
@@ -76,7 +75,7 @@ describe('/getAllTasks',()=> {
         it('it should return empty JSON object when there are no projects', async ()=>{
             var Tasks = MockDB.collection('Tasks');
             Tasks.deleteMany({})
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
                 .get('/task/getAllTasks')
                 .expect(200)
