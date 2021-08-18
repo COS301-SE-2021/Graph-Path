@@ -1,7 +1,7 @@
-const makeApp = require('../../app');
+const makeApp = require('../app');
 const supertest = require('supertest');
-const {MongoClient} = require('mongodb')
-
+const {MongoClient, ObjectID} = require('mongodb')
+const MockDBController = require('../Controllers/MockDBController');
 
 describe('/updateTaskDescription' , ()=>{
     describe('when requested with a new task description',()=>{
@@ -12,7 +12,7 @@ describe('/updateTaskDescription' , ()=>{
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
-            MockDB = await connection.db(global.__MONGO_DB_NAME__);
+            MockDB = await MockDBController.getConnectionInstance();
 
 
         });
@@ -22,15 +22,25 @@ describe('/updateTaskDescription' , ()=>{
         });
 
         it('it should return a JSON object', async ()=> {
-
-            let projectName = "";
-            let taskNumber = 0;
+            const Tasks = MockDB.collection('Tasks');
+            let MockTask = {
+                description: "Help Mark with his work",
+                status: "in-progress",
+                project: "Graph-Path",
+                tasknr: 1,
+                assignee: "Joe",
+                assigner: "Alistair",
+                due: Date.now(),
+                issued: Date.now()+48,
+            }
+            await Tasks.insertOne(MockTask);
+            let projectID = "647635df78747a453";
             let newDescription = "this is a new test description."
-            const requestString = '/task/updateTaskDescription/:'+projectName+'/:'+taskNumber+'/:'+newDescription
-            let app = makeApp(false,MockDB)
+            const requestString = '/task/updateTaskDescription/'+projectID+'/'+newDescription
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
                 .patch(requestString)
-                .expect(400)
+                .expect(200)
                 .then((res)=>{
                     expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
                 })
@@ -38,14 +48,25 @@ describe('/updateTaskDescription' , ()=>{
 
         it('it should return status 200 or 400', async ()=> {
 
-            let projectName = "";
-            let taskNumber = 0;
+            const Tasks = MockDB.collection('Tasks');
+            let MockTask = {
+                description: "Help Mark with his work",
+                status: "in-progress",
+                project: "Graph-Path",
+                tasknr: 1,
+                assignee: "Joe",
+                assigner: "Alistair",
+                due: Date.now(),
+                issued: Date.now()+48,
+            }
+            await Tasks.insertOne(MockTask);
+            let projectID = "647635df78747a453";
             let newDescription = "this is a new test description."
-            const requestString = '/task/updateTaskDescription/:'+projectName+'/:'+taskNumber+'/:'+newDescription
-            let app = makeApp(false,MockDB)
+            const requestString = '/task/updateTaskDescription/'+projectID+'/'+newDescription
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
                 .patch(requestString)
-                .expect(400)
+                .expect(200)
                 .then((res)=>{
                     expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
                 })
@@ -53,15 +74,14 @@ describe('/updateTaskDescription' , ()=>{
 
         it('should return jsonObject with "message" and "body" fields', async ()=> {
 
-            let projectName = "";
-            let taskNumber = "0";
+            let projectID = "678367df9789a4f5ec65";
             let newDescription = "this is a new test description."
-            const requestString = '/task/updateTaskDescription/:'+projectName+'/:'+taskNumber+'/:'+newDescription
+            const requestString = '/task/updateTaskDescription/'+projectID+'/'+newDescription
 
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
                 .patch(requestString)
-                .expect(400)
+                .expect(200)
                 .then((res)=>{
                     expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
                     expect(res.body['message']).toBeDefined()
@@ -70,22 +90,22 @@ describe('/updateTaskDescription' , ()=>{
                 })
         });
 
-        it('should return status 400 and message = "Failed. No matched task with given parameters" when the task does not exist', async ()=> {
+        it('should return status 200 and message = "Failed. No matched task with given parameters" when the task does not exist', async ()=> {
 
-            let projectName = "";
+            let projectID = "678367df9789a4f5ec65";
             let taskNumber = "0";
             let newDescription = "this is a new test description."
-            const requestString = '/task/updateTaskDescription/:'+projectName+'/:'+taskNumber+'/:'+newDescription
+            const requestString = '/task/updateTaskDescription/'+projectID+'/'+newDescription
 
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
                 .patch(requestString)
-                .expect(400)
+                .expect(200)
                 .then((res)=>{
                     expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
                     expect(res.body['message']).toBeDefined()
                     expect(res.body['data']).toBeDefined()
-                    expect(res.body['message']).toStrictEqual("Failed. No matched task with given parameters")
+                    expect(res.body['message']).toStrictEqual("server error: could not update task.")
 
                 })
         });
@@ -93,6 +113,7 @@ describe('/updateTaskDescription' , ()=>{
         it('should return status 200 and message = "successful" when the task description is updated', async ()=> {
             const Tasks = MockDB.collection('Tasks');
             let MockTask = {
+                _id : ObjectID._id,
                 assignee: ['User1' , 'User2'],
                 description: "This is a test task",
                 issued: Date.now().toString() ,
@@ -104,15 +125,12 @@ describe('/updateTaskDescription' , ()=>{
 
             }
             await Tasks.insertOne(MockTask);
+            let MockTask2 = await Tasks.find({}).toArray();
+            let app = makeApp(MockDBController)
 
-            let app = makeApp(false,MockDB)
-
-            let projectName = MockTask['project'];
-            let taskNumber = MockTask['tasknr'];
-            let newDescription = "this";
-
-            const requestString = '/task/updateTaskDescription/'+projectName+'/'+taskNumber+'/'+newDescription
-
+            let projectID = MockTask2[0]._id;
+            let newDescription = "this is a new Task Description";
+            const requestString = '/task/updateTaskDescription/'+projectID+'/'+newDescription;
 
             const response = await supertest(app)
                 .patch(requestString)
@@ -126,7 +144,7 @@ describe('/updateTaskDescription' , ()=>{
                     expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
                     expect(res.body['message']).toBeDefined()
                     expect(res.body['data']).toBeDefined()
-                    expect(res.body['message']).toStrictEqual("success")
+                    expect(res.body['message']).toStrictEqual("The task was updated successfully.")
 
                 })
 
@@ -148,13 +166,13 @@ describe('/updateTaskDescription' , ()=>{
             }
             await Tasks.insertOne(MockTask);
 
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
 
-            let projectName = "WrongName";
+            let projectID = MockTask.id;
             let taskNumber = "xx";
             let newDescription = "this";
 
-            const requestString = '/task/updateTaskDescription/'+projectName+'/'+taskNumber+'/'+newDescription
+            const requestString = '/task/updateTaskDescription/'+projectID+'/'+newDescription;
 
 
             const response = await supertest(app)
@@ -164,12 +182,12 @@ describe('/updateTaskDescription' , ()=>{
                     tasknr: 3,
                     description: newDescription
                 })
-                .expect(400)
+                .expect(200)
                 .then((res)=>{
                     expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
                     expect(res.body['message']).toBeDefined()
                     expect(res.body['data']).toBeDefined()
-                    expect(res.body['message']).toStrictEqual("Failed. No matched task with given parameters")
+                    expect(res.body['message']).toStrictEqual("server error: could not update task.")
 
                 })
 

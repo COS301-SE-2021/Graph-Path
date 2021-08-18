@@ -1,10 +1,8 @@
-const makeApp = require('../../app');
+const makeApp = require('../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb');
+const MockDBController = require('../Controllers/MockDBController');
 
-/**** here we mock the database with the relevant collections and documents ***/
-
-/**** here we mock the database with the relevant collections and documents  documents ***/
 
 describe('/deleteTaskByTasknr',  ()=> {
 
@@ -16,7 +14,7 @@ describe('/deleteTaskByTasknr',  ()=> {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
-            MockDB = await connection.db(global.__MONGO_DB_NAME__);
+            MockDB = await MockDBController.getConnectionInstance();
 
 
         });
@@ -24,19 +22,7 @@ describe('/deleteTaskByTasknr',  ()=> {
             await connection.close();
             await MockDB.close();
         });
-        beforeAll(async () => {
-            connection = await MongoClient.connect(global.__MONGO_URI__, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
-            MockDB = await connection.db(global.__MONGO_DB_NAME__);
 
-            const Users = MockDB.collection('Users');
-        });
-        afterAll(async () => {
-            await connection.close();
-            await MockDB.close();
-        });
 
         it('it should return status code 200', async ()=> {
 
@@ -53,7 +39,7 @@ describe('/deleteTaskByTasknr',  ()=> {
             }
 
             await Tasks.insertOne(MockTask)
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             let response  = await supertest(app)
                 .delete('/task/deleteTaskByTasknr')
                 .send({
@@ -77,7 +63,7 @@ describe('/deleteTaskByTasknr',  ()=> {
             }
 
             await Tasks.insertOne(MockTask)
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             let response  = await supertest(app)
                 .delete('/task/deleteTaskByTasknr')
                 .send({
@@ -103,7 +89,7 @@ describe('/deleteTaskByTasknr',  ()=> {
             }
 
             await Tasks.insertOne(MockTask)
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             let response  = await supertest(app)
                 .delete('/task/deleteTaskByTasknr')
                 .send({

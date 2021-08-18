@@ -446,25 +446,28 @@ function  makeTaskRoute(db)
         let newDesc = req.params.description;
         if(newDesc === undefined || newDesc === ""){
             res.send({
-                message:"The description can't be empty."
+                message:"The description can't be empty.",
+                data: []
             })
         }
         TaskManagerService.updateTaskDescription(db,id, newDesc)
             .then(ans=>{
                 if(ans.modifiedCount >0){
                     res.send({
-                        message: "The task was updated successfully."
+                        message: "The task was updated successfully.",
+                        data: []
                     })
                 }else{
                     res.send({
-                        message: "The task could not be updated."
+                        message: "The task could not be updated.",
+                        data: []
                     })
                 }
             })
             .catch(err=>{
-                res.status(500).send({
+                res.status(200).send({
                     message: "server error: could not update task.",
-                    err:err
+                    data:err
                 })
             })
 
