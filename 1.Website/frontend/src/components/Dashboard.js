@@ -115,7 +115,7 @@ class Dashboard extends React.Component{
 
                     <Route path="/Kanban" >
                         <div className="ContentArea">
-                            <Kanban/>
+                            <Kanban userEmail={this.props.loggedUser} />
                         </div>
                     </Route>
 
