@@ -170,7 +170,7 @@ class GraphManager{
               if (del>=0){
                 let newE = {...value} ; 
                 newE['color'] = '#200' ;
-                console.log('colored edge', newE)
+                // console.log('colored edge', newE)
                 return newE ; 
               }
               else{
@@ -196,14 +196,14 @@ class GraphManager{
             if (colorEdge !== undefined && ind>=0){
               colorEdge.color = '#200' ;
               this.graph.edges[ind] = colorEdge ;
-              console.log('Auth',this.graph.edges[ind],'after update')
+              // console.log('Auth',this.graph.edges[ind],'after update')
             }
-            console.log('Auth',this.graph.edges[ind],'after update')
+            // console.log('Auth',this.graph.edges[ind],'after update')
 
           }
 
 
-          // this.graph.edges = colorEdges ;
+          this.graph.edges = colorEdges ;
           return true ;
 
         }
