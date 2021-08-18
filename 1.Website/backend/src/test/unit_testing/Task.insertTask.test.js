@@ -1,7 +1,7 @@
 const makeApp = require('../../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb');
-
+const MockDBController = require('../../Controllers/MockDBController');
 
 describe('/insertTask',  ()=> {
     describe('When request with a given JSON body ',  () =>{
@@ -12,7 +12,7 @@ describe('/insertTask',  ()=> {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
-            MockDB = await connection.db(global.__MONGO_DB_NAME__);
+            MockDB = await MockDBController.getConnectionInstance();
 
 
         });
@@ -20,19 +20,7 @@ describe('/insertTask',  ()=> {
             await connection.close();
             await MockDB.close();
         });
-        beforeAll(async () => {
-            connection = await MongoClient.connect(global.__MONGO_URI__, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
-            MockDB = await connection.db(global.__MONGO_DB_NAME__);
 
-            const Users = MockDB.collection('Users');
-        });
-        afterAll(async () => {
-            await connection.close();
-            await MockDB.close();
-        });
         it('it should return status code 200', async ()=> {
 
             let MockTask = {
@@ -45,7 +33,7 @@ describe('/insertTask',  ()=> {
                 due: Date.now(),
                 issued: Date.now()+48,
             }
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController);
             let response  = await supertest(app)
                 .post('/task/insertTask')
                 .send(MockTask)
@@ -64,7 +52,7 @@ describe('/insertTask',  ()=> {
                 due: Date.now(),
                 issued: Date.now()+48,
             }
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             let response  = await supertest(app)
                 .post('/task/insertTask')
                 .send(MockTask)
@@ -86,14 +74,14 @@ describe('/insertTask',  ()=> {
                 issued: Date.now()+48,
             }
             await Tasks.insertOne(MockTask);
-            let app = makeApp(false,MockDB)
+            let app = makeApp(MockDBController)
             const response = await supertest(app)
                 .post('/task/insertTask')
                 .send(MockTask)
                 .expect(200)
                 .then((res)=>{
                     res.body
-                    expect(res.body['message']).toBe('saved')
+                    expect(res.body['message']).toBe('The task was saved successfully.')
 
                 })
         });
