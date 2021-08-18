@@ -1,7 +1,7 @@
-const makeApp = require('../app');
+const makeApp = require('../../app');
 const supertest = require('supertest');
 const {MongoClient, ObjectID} = require('mongodb')
-const MockDBController = require('../Controllers/MockDBController');
+const MockDBController = require('../../Controllers/MockDBController');
 
 describe('/updateTaskDescription' , ()=>{
     describe('when requested with a new task description',()=>{
