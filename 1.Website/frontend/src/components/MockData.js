@@ -1,38 +1,63 @@
-
 export let MockData: Object[] = [
     {
-        Status: 'ToDo',
-        Description: 'Fix Bugs',
-        Assignee: 'Naane'
+        Id:1,
+        Status: 'inProgressTasks',
+        Description: 'Link nodes and edges',
+        Project: 'Graph Traversal'
     },
     {
-        Status: 'ToDo',
-        Description: 'Work on Graph ',
-        Assignee: 'Naane'
+        Id: 2,
+        Status: 'notStartedTasks',
+        Description: 'Do backtracking of the nodes ',
+        Project: 'Recursion'
     },
     {
-        Status: 'Done',
-        Description: 'Something',
-        Assignee: 'Baster'
+        Id: 3,
+        Status: 'notStartedTasks',
+        Description: 'Project Spec Elicitation',
+        Project: 'Capstone'
     },
     {
-        Status: 'InProgress',
+        Id:4,
+        Status: 'inProgressTasks',
         Description: 'Fix the UI issues',
-        Assignee: 'Mvhali'
+        Project: 'Capstone'
+    },
+
+    {
+        Id:5,
+        Status: 'completeTasks',
+        Description: 'Fix the issues associated the UI design',
+        Project: 'Mini Project'
     },
     {
-        Status: 'Review',
-        Description: 'Fix the issues reported by the customer.',
-        Assignee: 'Monareng'
+        Id:6,
+        Status: 'notStartedTasks',
+        Description: 'Restructure the algorithm.',
+        Project: 'Recursion'
     },
     {
-        Status: 'Done',
-        Description: 'Make the Kanban board and Link to database.',
-        Assignee: 'Mndebele'
-    },
-    {
-        Status: 'Validate',
+        Id:7,
+        Status: 'completeTasks',
         Description: 'Work on bugs',
-        Assignee: 'Baster'
+        Project: 'COS 301'
+    },
+    {
+        Id:8,
+        Status: 'completeTasks',
+        Description: 'Version 3 of the SRS document',
+        Project: 'COS 301'
+    },
+    {
+        Id:9,
+        Status: 'completeTasks',
+        Description: 'Prepare for the demo presentation',
+        Project: 'Mini Project'
+    },
+    {
+        Id:10,
+        Status: 'completeTasks',
+        Description: 'Demo4 last minute bugs',
+        Project: 'Capstone'
     }
 ];

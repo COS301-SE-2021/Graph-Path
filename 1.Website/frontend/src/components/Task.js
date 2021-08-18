@@ -1,7 +1,7 @@
 import  React from 'react' ;
 import '../css/Task.css';
 import Select from 'react-select' ;
-import {Button, Card, CloseButton} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import {Link,withRouter} from "react-router-dom";
 
 
@@ -23,6 +23,7 @@ class Task extends React.Component{
             about: null,
             api:'http://localhost:9001',
             fullForm:false,
+            critical:false
         }
     }
     cleanUp=()=>{
@@ -34,7 +35,9 @@ class Task extends React.Component{
             priority: null,
             status: "not started",
             about: null,
-            fullForm:false
+            fullForm:false,
+            critical:false
+
         }) ;
     }
     changeToDefault = () =>{
@@ -86,7 +89,10 @@ class Task extends React.Component{
             this.props.addTask(data)
         }
         else{
-            const data = this.state.name
+            const data = {
+                label:this.state.name,
+                critical:this.state.critical
+            }
             
 
             this.props.addTask(data) ;
@@ -100,6 +106,13 @@ class Task extends React.Component{
         this.setState({
             [event.target.name]:event.target.value
         }, console.log(this.state));
+    }
+
+    handleCriticalChange =(event)=>{
+        this.setState({
+            critical:!this.state.critical
+
+        })
     }
 
     toogleForm = () =>{
@@ -149,14 +162,15 @@ class Task extends React.Component{
         }
 
     }
+
     render() {
         const {match} = this.props ;
         var custom = this.props.label ;
-        // console.log('comm',custom,this.state.fullForm)
+        // console.log('comm',this.props.members)
         return(
             <div className="TaskScreen">
                 <form method="POST" encType="multipart/form-data" onSubmit={this.handleSubmit}>
-                    <h4>{!this.props.fullForm?'Add Node':'Edit Task'}</h4>
+                    <h4>{!this.props.fullForm?'Add Node':''}</h4>
                     <p>Node Name</p>
                     <input type="text" name="name" required={true}
                      placeholder="Node Name"
@@ -164,6 +178,7 @@ class Task extends React.Component{
                         :this.props.label} 
                      onChange={this.updateField} 
                      onFocus={(e)=>{custom = undefined}}/>
+                    
                     {
                         this.props.fullForm
                         // ?<div onClick={this.toogleForm}>Attach Task</div>
@@ -174,12 +189,13 @@ class Task extends React.Component{
                                     <br/>
                                 <Link to={`${match.url}viewTask/?id=${this.props.nodeId}`}>View Task</Link>
                                 <br/>
-                                <Button onClick={(e)=>this.handleCriticalClick(e)}> Critical from </Button>
+                                <Button onClick={(e)=>this.handleCriticalClick(e)} > Critical From Current Node </Button>
                                 <br/>
-
                             </>
 
-                        :<></>
+                        :<>
+                            <label>Critical?</label><input type="checkbox" value={"Critical"} checked={this.state.critical} onChange={this.handleCriticalChange}/>  
+                        </>
                         
                     }
                     
@@ -212,7 +228,7 @@ class Task extends React.Component{
                     {
                      (custom !== undefined && !this.state.fullForm)
                     ?`Viewing Node ${this.props.label}`:
-                    <input type="submit" value="Add Node" className="btn1"/>
+                <input type="submit" value={custom !== undefined?'Add Task': "Add Node"} className="btn1"/>
                                
                     }
                 </form>

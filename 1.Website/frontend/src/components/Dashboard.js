@@ -1,7 +1,7 @@
 import React from 'react' ; 
 import Graph from './Graph';
 import NewProject from './NewProject' ;
-import TaskList from './TaskList';
+// import TaskList from './TaskList';
 import Kanban from './Kanban';
 import Reports from "./Reports";
 import '../css/App.css' ;
@@ -115,7 +115,7 @@ class Dashboard extends React.Component{
 
                     <Route path="/Kanban" >
                         <div className="ContentArea">
-                            <Kanban/>
+                            <Kanban userEmail={this.props.loggedUser} />
                         </div>
                     </Route>
 

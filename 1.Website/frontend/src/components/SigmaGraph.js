@@ -115,8 +115,8 @@ class SigmaGraph extends React.Component{
   If resulting edge exists - alert the user and discard changes
   */
   handleControlClick = (event) =>{
-    // alert('cliked'+event.data.node.label);
-    if (event.data.captor.ctrlKey){
+    console.log('cliked',event);
+    if (event.data.captor.ctrlKey || event.data.captor.shiftKey ){
       if (this.state.source === 'Source Node'){
         this.setState({
           source:event.data.node.id
@@ -158,13 +158,20 @@ class SigmaGraph extends React.Component{
         this.setState({
           nodeId:event.data.node.id ,
           nodeLabel:event.data.node.label,
+          critcal:event.data.node.critcal,
           redirect:true
         }) ;
       }
     }
 
   }
-  componentDidUpdate(){
+  componentWillUnmount(){
+    this.resetRedirect()
+  }
+  resetRedirect = ()=>{
+    this.setState({
+      redirect:false
+    })
   }
   
   render(){
@@ -175,7 +182,7 @@ class SigmaGraph extends React.Component{
     const project = this.props.project ; 
 
     if (mgr !== undefined && project !== undefined){
-      console.log(' on remount', mgr.getGraph(),project) ;
+      // console.log(' on remount', mgr.getGraph(),project) ;
     
 
       var graph = mgr.getGraph() ; 
@@ -191,7 +198,7 @@ class SigmaGraph extends React.Component{
             <span className="projName">{project.projectName}</span>
             {
                 typeof this.props.sendGraphData === 'function' && this.props.project.role !== undefined &&
-                saveGraphPermissions.indexOf(this.props.project.role.toLowerCase())>=0 ? //if there's a save option
+                saveGraphPermissions.indexOf(project.role.toLowerCase())>=0 ? //if there's a save option
                 <button className="clickbtn" title="Save Current Graph" onClick={this.props.sendGraphData?
                 this.props.sendGraphData : ()=>{console.log('failed save validation')}}>
                 Save</button>:""
@@ -244,7 +251,7 @@ class SigmaGraph extends React.Component{
                 {/* <RelativeSize  initialSize={200}/> */}
                 {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
                 {/* <RandomizeNodePositions seed={2} />         */}
-                {EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? 
+                {EditGraphPermissionRoles.indexOf(project.role.toLowerCase())>=0 ? 
                 <DragNodes />                
                 :<></> }
                 <GraphMessage  ref={this.bridge} label={this.state.source === 'Source Node'
@@ -254,7 +261,7 @@ class SigmaGraph extends React.Component{
               {
               this.state.redirect 
                 ? <Redirect to={`${match.url}/task/?id=${nodeId}&label=${nodeLabel}`} /> 
-                :""            
+                :"" 
               }
 
               </Card.Body>

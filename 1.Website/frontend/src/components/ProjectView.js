@@ -57,19 +57,6 @@ class ProjectView extends React.Component{
     change = (e)=>{
         e.preventDefault();
         const {name,value} = e.target;
-
-        {/*   switch(name){
-            case 'projName':
-                this.setState({
-                    empty: value.length === 0
-                })
-                break;
-
-            case 'startDate':
-                this.setState({
-
-                })
-        }*/}
         this.setState({ [name]: value })
 
     }
@@ -190,7 +177,7 @@ class ProjectView extends React.Component{
 
 
     viewProject = (project,permissions)=>{
-        console.log('project view',project,permissions)
+        // console.log('project view',project,permissions)
         return(
             <div id="view-div">
                 <div id="main-view">

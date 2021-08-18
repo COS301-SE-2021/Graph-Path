@@ -20,7 +20,7 @@ class Node extends React.Component{
     }
 
     componentDidMount(){
-        this.viewAllTasks(this.props.project._id)
+        this.viewAllTasks(this.props.project._id) ;
     }
     showPopUP = () =>{
         this.setState({
@@ -35,7 +35,7 @@ class Node extends React.Component{
     }
     addNewNode = (name)=>{
       
-        if (!name.toString().trim().length) {
+        if (!name.label.toString().trim().length) {
             alert('Cannot Submit Empty Name')
         }
         else{
@@ -60,6 +60,8 @@ class Node extends React.Component{
                 responseData:res.data //data
             })
             this.showPopUP();
+            this.viewAllTasks(this.props.project._id) ;
+
 
         },(response)=>{
             console.log('rejected',response) ;
@@ -80,9 +82,9 @@ class Node extends React.Component{
                         }
 
                         if(response.data !== undefined){
-                            console.log('from back end res', response.data.data)
+                            // console.log('from back end res', response.data.data)
                             const list = response.data.data
-                            console.log("list",list)
+                            // console.log("list",list)
                             if(list !== undefined && Array.isArray(list)){
                                 let filtered = []
                                 list.forEach((val)=>{
@@ -140,7 +142,7 @@ class Node extends React.Component{
         const EditGraphPermissionRoles = ['owner','project manager','developer']
 
          
-        console.log("match",project) ;
+        // console.log("match",project) ;
 
 
         if (manager === undefined || project === undefined){
@@ -172,6 +174,8 @@ class Node extends React.Component{
                             
                             <Task addTask={this.addNewNode}
                                 fullForm = {false} 
+                                members={project.groupMembers}
+
                             />
                         </Route>
                         <Route path={`${match.url}/task/viewTask/`}>
