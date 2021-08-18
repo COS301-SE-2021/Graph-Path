@@ -251,7 +251,7 @@ class SigmaGraph extends React.Component{
                 {/* <RelativeSize  initialSize={200}/> */}
                 {/* <Dagre directed={true} multigraph={false} compound={false}/> */}
                 {/* <RandomizeNodePositions seed={2} />         */}
-                {EditGraphPermissionRoles.indexOf(this.props.project.role.toLowerCase())>=0 ? 
+                {EditGraphPermissionRoles.indexOf(project.role.toLowerCase())>=0 ? 
                 <DragNodes />                
                 :<></> }
                 <GraphMessage  ref={this.bridge} label={this.state.source === 'Source Node'

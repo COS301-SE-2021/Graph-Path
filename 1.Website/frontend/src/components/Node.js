@@ -35,7 +35,7 @@ class Node extends React.Component{
     }
     addNewNode = (name)=>{
       
-        if (!name.toString().trim().length) {
+        if (!name.label.toString().trim().length) {
             alert('Cannot Submit Empty Name')
         }
         else{

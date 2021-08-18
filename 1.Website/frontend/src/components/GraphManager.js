@@ -59,8 +59,6 @@ class GraphManager{
 
           edgesFiltered.forEach((y)=>{
             this.addAdjacencyEdge(x,y.target) ;
-            
-
           }) 
           
           
@@ -74,7 +72,6 @@ class GraphManager{
       //bfs -- queue ;FIFO
       var queue = [start] ;
       var result = [] ; 
-      var paths =[] ; //Array of array , will return path to all critical nodes. 
       var visited = {} ;
       visited[start] = true ;
       let currVertex ;
@@ -104,18 +101,34 @@ class GraphManager{
         visited[node] = false ;
       }
 
+      var paths =[] ; //Array of array , will return path to all critical nodes. 
+
       let stack = [] ;
       stack.push(start) ;
       var result = [] ;
-
       while(stack.length !== 0){
-        var s = stack.pop() ;
+        let s = stack.pop() ;
         if (s !== undefined){
-          if (visited[s] == false){
+          if (visited[s] === false){
             result.push(s) ;
             visited[s] = true ;
-            if (s.critical === undefined){
+            var currNode = this.graph.nodes.find(node => node.id === s ) ; 
+            if (currNode !== undefined && !currNode.critical){
               console.log('not critical')
+            }
+            else{
+              console.log(' critical',result)
+              //create path
+              let c = result.pop() ; 
+              let temp = [] ; 
+              while (c !== start){
+                temp.unshift(c) ; 
+                c = result.pop() ;
+              } 
+              temp.unshift(start) ;
+              paths.push(temp) ;
+              result.push(start) ; 
+
             }
           }
           for (let neighbor of this.adjacencyList[s]){
@@ -127,8 +140,8 @@ class GraphManager{
 
         }
       }
-      console.log('Result' ,result)
-      return result ; 
+      console.log('Result' ,paths)
+      return paths ; 
     }
 
     highlightCritical=(start)=>{
@@ -166,7 +179,31 @@ class GraphManager{
               }
             }
           }) ;
-          this.graph.edges = colorEdges ;
+
+          for (let i = 0 ; i < path.length-1 ; i++){
+            let source = path[i] ;
+            let tar = path[i+1] ;
+            let ind = -1 ;
+            let colorEdge = this.graph.edges.find( (edge,index)=>{
+              ind = index ;
+              if (edge.source === source && edge.target === tar){
+                return edge ;
+              }
+              else{
+                return undefined
+              }
+            } ) ; 
+            if (colorEdge !== undefined && ind>=0){
+              colorEdge.color = '#200' ;
+              this.graph.edges[ind] = colorEdge ;
+              console.log('Auth',this.graph.edges[ind],'after update')
+            }
+            console.log('Auth',this.graph.edges[ind],'after update')
+
+          }
+
+
+          // this.graph.edges = colorEdges ;
           return true ;
 
         }
@@ -334,9 +371,9 @@ class GraphManager{
         // add the node and give it an id
         var curr = this.graph ; 
         var obj = {
-            label:fromTask , // give it lable fromTask
+            label:fromTask.label , // give it lable fromTask
             size:300,
-            critical:false
+            critical:fromTask.critical
         }; 
         // if there was already a node?
         let len = curr.nodes.length ;

@@ -23,6 +23,7 @@ class Task extends React.Component{
             about: null,
             api:'http://localhost:9001',
             fullForm:false,
+            critical:false
         }
     }
     cleanUp=()=>{
@@ -34,7 +35,9 @@ class Task extends React.Component{
             priority: null,
             status: "not started",
             about: null,
-            fullForm:false
+            fullForm:false,
+            critical:false
+
         }) ;
     }
     changeToDefault = () =>{
@@ -86,7 +89,10 @@ class Task extends React.Component{
             this.props.addTask(data)
         }
         else{
-            const data = this.state.name
+            const data = {
+                label:this.state.name,
+                critical:this.state.critical
+            }
             
 
             this.props.addTask(data) ;
@@ -100,6 +106,13 @@ class Task extends React.Component{
         this.setState({
             [event.target.name]:event.target.value
         }, console.log(this.state));
+    }
+
+    handleCriticalChange =(event)=>{
+        this.setState({
+            critical:!this.state.critical
+
+        })
     }
 
     toogleForm = () =>{
@@ -165,7 +178,7 @@ class Task extends React.Component{
                         :this.props.label} 
                      onChange={this.updateField} 
                      onFocus={(e)=>{custom = undefined}}/>
-                    <span> Critical : {this.props.critical}</span> 
+                    
                     {
                         this.props.fullForm
                         // ?<div onClick={this.toogleForm}>Attach Task</div>
@@ -176,11 +189,13 @@ class Task extends React.Component{
                                     <br/>
                                 <Link to={`${match.url}viewTask/?id=${this.props.nodeId}`}>View Task</Link>
                                 <br/>
-                                <Button onClick={(e)=>this.handleCriticalClick(e)}> Critical from </Button>
+                                <Button onClick={(e)=>this.handleCriticalClick(e)} > Critical From Current Node </Button>
                                 <br/>
                             </>
 
-                        :<></>
+                        :<>
+                            <label>Critical?</label><input type="checkbox" value={"Critical"} checked={this.state.critical} onChange={this.handleCriticalChange}/>  
+                        </>
                         
                     }
                     

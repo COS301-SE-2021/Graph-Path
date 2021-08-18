@@ -29,3 +29,6 @@
 .TaskScreen select:hover{
     background-color: darkgrey;
 }
+.smallT{
+    font-size: x-small;
+}
