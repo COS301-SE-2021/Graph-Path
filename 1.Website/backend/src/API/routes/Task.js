@@ -5,6 +5,8 @@ const mongo = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectId = require('mongodb').ObjectID;
 const TaskManagerService = require('../../Services/TaskManagerService');
+const { body, validationResult, param,check} = require('express-validator');
+const {isIn} = require("validator");
 
 /**
  * @swagger
@@ -333,10 +335,31 @@ function  makeTaskRoute(db)
      *
      *
      */
-    router.post('/insertTask',(req, res, next)=>{
-        let data = req.body;
-        const id = new mongoose.mongo.ObjectID() ;
-        data["_id"] = id ;
+    router.post('/insertTask',
+
+        // insert Task validation
+        body('description').exists(),
+        body('status').exists().isIn(['not started' ,'in progress', 'complete' , 'back-log']),
+        body('project').exists(),
+        body('assignee').exists(),
+        body('assigner').exists(),
+        body('due').isDate(),
+        body('issued').isDate(),
+
+
+        (req, res)=>{
+
+            // check if any of the above validations failed
+            const validationFails = validationResult(req);
+            if(!validationFails.isEmpty()){
+                res.status(400).send({
+                    message: "unsuccessful",
+                    data : validationFails
+                })
+            }
+            let data = req.body;
+            const id = new mongoose.mongo.ObjectID() ;
+            data["_id"] = id ;
 
         TaskManagerService.insertTask(db,data)
             .then((ans)=>{
@@ -711,7 +734,26 @@ function  makeTaskRoute(db)
 
     });
 
-    router.put('/updateEverythingTask/:id',(req, res, next)=>{
+    router.put('/updateEverythingTask/:id',
+        param('id').exists(),
+        body('assignee').exists().isJSON(),
+        body('assigner').exists().isJSON(),
+        body('description').exists().isString(),
+        body('issued').isDate(),
+        body('due').isDate(),
+        body('nodeID').exists(),
+        body('status').exists().isIn(['not started' , 'in progress' , 'complete']),
+        body('project').exists().isMongoId(),
+        (req, res)=>{
+
+        const invalidFields = validationResult(req);
+        if(!invalidFields.isEmpty()){
+            res.status(420).send({
+                message: "Bad Request. Validation failed",
+                data: invalidFields
+            })
+        }
+
         let ID = req.params.id;
         let assignee = req.body.assignee;
         let assigner = req.body.assigner;
