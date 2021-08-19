@@ -1,13 +1,12 @@
 const express = require('express');
 const Permissions = require('../../Helpers/Permissions');
 const mongoose = require('mongoose') ;
-const {route} = require("express/lib/router");
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
 const DAGservice = require('../../Helpers/DAG');
-
+const { body, validationResult } = require('express-validator');
 function makeProjectRoute(db) {
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -235,7 +234,7 @@ function makeProjectRoute(db) {
 
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
-    router.post('/newProject',  (req, res, next) => {
+    router.post('/newProject', (req, res, next) => {
         if (req === undefined || req.body === undefined) {
             res.json({
                 message: "There was no information provided."
