@@ -483,8 +483,8 @@ function  makeTaskRoute(db)
             let ID = req.body.id;
             let assignee =req.body.assignee;
 
-        TaskManagerService.updateTaskAssignee(db,ID, assignee)
-            .then(ans=>{
+            TaskManagerService.updateTaskAssignee(db,ID, assignee)
+                .then(ans=>{
                 if(ans === "Success"){
                     res.send({
                         message: "The task updated successfully"
@@ -495,7 +495,7 @@ function  makeTaskRoute(db)
                     })
                 }
             })
-            .catch(err=>{
+                .catch(err=>{
                 res.status(500).send({
                     message: "Server error: could not update the task",
                     err: err
@@ -504,22 +504,34 @@ function  makeTaskRoute(db)
 
     });
 
-    router.patch('/updateTaskAssigner/:id/:assigner',
 
-        (req,res,next)=>{
+    /**
+     * @api {patch}  /updateTaskAssigner'
+     * @apiName  update task Assigner
+     * @apiDescription This endpoint updates the assigner of the task matching the passed in ID
+     * @apiGroup Task
+     * @apiParam  {String} [id] task ID
+     * @apiParam  {object} [Assignee] '{email:"" , role:""}'
+     * @apiSuccess (200) {object}  message : "The task updated successfully"
+     */
+    router.patch('/updateTaskAssigner',
+        body('id').exists().notEmpty().isMongoId(),
+        body('assigner').exists().notEmpty(),
+
+        (req,res,)=>{
+            const failedValidation = validationResult(req);
+            if(!failedValidation.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid parameters",
+                    data: failedValidation
+                })
+            }
 
 
-        let ID = req.params.id;
-        let assigner =req.params.assigner;
-        if(assigner === undefined || assigner ===""){
-            res.send({
-                message: "The assigner name provided is not valid."
-            })
-        }
-
-
-        TaskManagerService.updateTaskAssigner(db,ID, assigner)
-            .then(ans=>{
+            let ID = req.body.id;
+            let assigner =req.body.assigner;
+            TaskManagerService.updateTaskAssigner(db,ID, assigner)
+                .then(ans=>{
                 if(ans === "Success"){
                     res.send({
                         message: "The task updated successfully"
@@ -530,7 +542,7 @@ function  makeTaskRoute(db)
                     })
                 }
             })
-            .catch(err=>{
+                .catch(err=>{
                 res.status(500).send({
                     message: "Server error: could not update the task",
                     err: err
