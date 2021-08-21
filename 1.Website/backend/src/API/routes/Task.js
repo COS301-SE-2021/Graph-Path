@@ -410,7 +410,7 @@ function  makeTaskRoute(db)
 
 
     /**
-     * @api {patch}  /updateTaskStatus/:id/:status'
+     * @api {patch}  /updateTaskStatus'
      * @apiName  update task status
      * @apiDescription This endpoint updates the status of the task matching the passed in ID
      * @apiGroup Task
@@ -418,9 +418,9 @@ function  makeTaskRoute(db)
      * @apiParam  {String} [status] 'not started' ,'in progress', 'complete' , 'back-log'
      * @apiSuccess (200) {object}  message : "The task updated successfully"
      */
-    router.patch('/updateTaskStatus/:id/:status',
-        param('id').isMongoId(),
-        param('status').exists().notEmpty().isIn(['not started' ,'in progress', 'complete' , 'back-log']),
+    router.patch('/updateTaskStatus',
+        body('id').isMongoId(),
+        body('status').exists().notEmpty().isIn(['not started' ,'in progress', 'complete' , 'back-log']),
         (req,res)=>{
 
             const failedValidation = validationResult(req);
@@ -432,8 +432,8 @@ function  makeTaskRoute(db)
             }
 
 
-            let ID = req.params.id;
-            let newStat = req.params.status;
+            let ID = req.body.id;
+            let newStat = req.body.status;
             TaskManagerService.updateTaskStatus(db,ID, newStat)
             .then(ans=>{
               if(ans === "Success"){
@@ -458,16 +458,30 @@ function  makeTaskRoute(db)
 
 
 
-    router.patch('/updateTaskAssignee/:id/:assignee',(req,res,next)=>{
+    /**
+     * @api {patch}  /updateTaskAssignee'
+     * @apiName  update task Assignee
+     * @apiDescription This endpoint updates the assignee of the task matching the passed in ID
+     * @apiGroup Task
+     * @apiParam  {String} [id] task ID
+     * @apiParam  {object} [Assignee] '{email:"" , role:""}'
+     * @apiSuccess (200) {object}  message : "The task updated successfully"
+     */
+    router.patch('/updateTaskAssignee',
+        body('id').exists().notEmpty().isMongoId(),
+        body('assignee').exists().notEmpty(),
 
-        let ID = req.params.id;
-        let assignee =req.params.assignee;
-        if(assignee === undefined || assignee ===""){
-            res.send({
-                message: "The assignee name provided is not valid."
-            })
-        }
+        (req,res)=>{
+            const failedValidation = validationResult(req);
+            if(!failedValidation.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid parameters",
+                    data: failedValidation
+                })
+            }
 
+            let ID = req.body.id;
+            let assignee =req.body.assignee;
 
         TaskManagerService.updateTaskAssignee(db,ID, assignee)
             .then(ans=>{
