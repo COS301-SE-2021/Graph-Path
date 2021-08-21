@@ -130,7 +130,8 @@ function makeProjectRoute(db) {
      * @apiGroup Project
      * @apiSuccess (200) {List} list of Project objects
      */
-    router.get('/listProjects', (req, res) => {
+    router.get('/listProjects',
+        (req, res) => {
 
         ProjectManagerService.getAllProjects(db)
             .then((ans) => {
@@ -214,7 +215,7 @@ function makeProjectRoute(db) {
      */
     router.get('/getProjectByID/:id',
         param('id').exists().notEmpty().isMongoId(),
-        (req,res,xt)=>{
+        (req,res)=>{
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
                 res.status(420).send({
@@ -258,8 +259,8 @@ function makeProjectRoute(db) {
      * @apiGroup Task
      * @apiSuccess (200) {Array}  list of possible permissions
      */
-    router.get("/AllPermissions",(req,res)=>{
-
+    router.get("/AllPermissions",
+        (req,res)=>{
 
         console.log(Permissions.getAllRolesAndPermissions())
         res.send({
@@ -272,14 +273,33 @@ function makeProjectRoute(db) {
     })
 
 
-//POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
-    router.post('/newProject', (req, res, next) => {
-        if (req === undefined || req.body === undefined) {
+    /**
+     * @api {post}  /task/newProject
+     * @apiName create new Project
+     * @apiDescription This endpoint creates a new Project
+     * @apiGroup Project
+     * @apiSuccess (200) {List} list of Project objects
+     */
+    router.post('/newProject',
+        body('projectName').exists().notEmpty().isString(),
+        body('startDate').exists().notEmpty().isDate(),
+        body('dueDate').exists().notEmpty().isDate(),
+        body('groupMembers').exists().notEmpty().isArray(),
+        (req, res) => {
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
+
+            if (req === undefined || req.body === undefined) {
             res.json({
                 message: "There was no information provided."
             });
         }
-        if (req.body.projectName === undefined) {
+            if (req.body.projectName === undefined) {
             console.log('no project name')
             res.send({
                 message: "Please specify a Project Name"
@@ -303,8 +323,7 @@ function makeProjectRoute(db) {
                     })
                 })
 
-
-        }
+            }
     });
     router.post('/addToProjectGroupMembers',(req, res, next)=>{
         let ID = req.body.id;
