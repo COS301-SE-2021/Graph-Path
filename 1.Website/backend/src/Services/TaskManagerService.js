@@ -158,7 +158,7 @@ async function updateTaskAssignee(dbController, id, assignee){
             $set:{assignee:assignee}
         })
             .then(ans=>{
-                if(ans.modifiedCount > 0){
+                if(ans.modifiedCount >= 0){
                     resolve("Success");
                 }else{
                     resolve("Could not update the task");
