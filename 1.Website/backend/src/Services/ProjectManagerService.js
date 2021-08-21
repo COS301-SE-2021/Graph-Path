@@ -3,8 +3,9 @@ const ObjectId = require('mongodb').ObjectID;
 const Permissions = require('../Helpers/Permissions');
 const {each} = require("mongodb/lib/operations/cursor_ops");
 //const email = require("../Helpers/SendMail");
-/////////////////////////////////////////////////////-Project-//////////////////////////////////////////////////////////////
-//***************************************************-get-**************************************************************
+
+/////////////////////////////////////////////////////-Project-////////////////////////////////////////////////////////
+//***************************************************-get-************************************************************
 async function getProjectByID(dbController, id){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
@@ -35,7 +36,7 @@ async function getAllProjects(dbController){
             .then(ans=>{
                 if(ans === null){
                     resolve("No projects");
-                }else{
+                }else {
                     resolve(ans);
                 }
             })
