@@ -8,55 +8,6 @@ const TaskManagerService = require('../../Services/TaskManagerService');
 const { body, validationResult, param,check} = require('express-validator');
 const {isIn} = require("validator");
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Task:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           description: The auto-generated id of the task
- *
- *         status:
- *           type: string
- *           description: This is the current state of the task expected states are not started, in progress, completed
- *
- *         description:
- *           type: string
- *           description: this is description of the task.
- *         project:
- *           type: string
- *           description: This is the name of the project, no two projects can have the same name.
- *         tasknr:
- *           type: int
- *           description: This is a task number to indicate the # of task.
- *         asignee:
- *           type: List[string]
- *           description: These are email addresses of the members that have been assigned to a project
- *         assigner:
- *           type: string
- *           description: The name of the person that iniaited and created the project
- *         due:
- *           type: date
- *           description: The date of when the project should be completed
- *         issued:
- *           type: date
- *           description: The date of when the project was created
- *       example:
- *         description: Help Mark with his work.
- *         status: in-progress
- *         project: Graph-Path
- *         tasknr: 1
- *         assignee: Joe
- *         assigner: Alistair
- *         due: 20/05/2021
- *         issued: 20/05/2019
- *
- */
-
-
 
 function  makeTaskRoute(db)
 {
@@ -125,7 +76,8 @@ function  makeTaskRoute(db)
      * @apiGroup Task
      * @apiSuccess (200) {Array}  an array of all the tasks in a project.
      */
-    router.get('/getAllTasks',(req, res)=> {
+    router.get('/getAllTasks',
+        (req, res)=> {
 
         TaskManagerService.getAllTasks(db)
             .then((ans)=>{
@@ -351,8 +303,6 @@ function  makeTaskRoute(db)
     })
 
 
-//PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     /**
      * @api {patch}  /updateTaskDescription'
@@ -551,42 +501,59 @@ function  makeTaskRoute(db)
 
     });
 
-    router.put('/updateEverythingTask/:id',
-        // validation
-        param('id').exists(),
-        body('assignee').exists().isJSON(),
-        body('assigner').exists().isJSON(),
-        body('description').exists().isString(),
-        body('issued').isDate(),
-        body('due').isDate().isAfter('issued'),
-        body('nodeID').exists(),
+
+
+
+    /**
+     * @api {patch}  /updateEverythingTask'
+     * @apiName  update all details of a task object
+     * @apiDescription This endpoint updates all fields of the task matching the passed in ID
+     * @apiGroup Task
+     * @apiParam  {String} [id] task ID
+     * @apiParam  {object} [Assignee] '{email:"" , role:""}'
+     * @apiParam  {object} [Assigner] '{email:"" , role:""}'
+     * @apiParam  {String} [description] "description"
+     * @apiParam  {String} [issued] YYYY/MM/DD
+     * @apiParam  {String} [due] YYYY/MM/DD
+     * @apiParam  {String} [nodeID] ""
+     * @apiParam  {String} [stats] 'not started' ,'in progress', 'complete' , 'back-log'
+     * @apiParam  {String} [project] project ID
+     * @apiSuccess (200) {object}  message : "The task updated successfully"
+     */
+    router.patch('/updateEverythingTask',
+
+        body('id').exists().notEmpty(),
+        body('assignee').exists().notEmpty().isJSON(),
+        body('assigner').exists().notEmpty().isJSON(),
+        body('description').exists().notEmpty().isString(),
+        body('issued').exists().notEmpty().isDate(),
+        body('due').notEmpty().isDate(),
+        body('nodeID').exists().notEmpty(),
         body('status').exists().isIn(['not started' , 'in progress' , 'complete']),
         body('project').exists().isMongoId(),
-
-
         (req, res)=>{
 
-        const invalidFields = validationResult(req);
-        if(!invalidFields.isEmpty()){
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
             res.status(420).send({
                 message: "Bad Request. Validation failed",
                 data: invalidFields
             })
         }
 
-        let ID = req.params.id;
-        let assignee = req.body.assignee;
-        let assigner = req.body.assigner;
-        let description = req.body.description;
-        let issued = req.body.issued;
-        let due = req.body.due;
-        let nodeID = req.body.nodeID;
-        let tasknr = req.body.tasknr;
-        let status = req.body.status;
-        let project = req.body.project;
+            let ID = req.body.id;
+            let assignee = req.body.assignee;
+            let assigner = req.body.assigner;
+            let description = req.body.description;
+            let issued = req.body.issued;
+            let due = req.body.due;
+            let nodeID = req.body.nodeID;
+            let tasknr = req.body.tasknr;
+            let status = req.body.status;
+            let project = req.body.project;
 
-        TaskManagerService.updateEverythingTask(db,ID, assignee, assigner, description, issued, due, nodeID, tasknr, status, project)
-            .then((ans)=>{
+            TaskManagerService.updateEverythingTask(db,ID, assignee, assigner, description, issued, due, nodeID, tasknr, status, project)
+                .then((ans)=>{
                 if(ans == null){
                     res.send({
                         message:"The task was not updated."
@@ -601,12 +568,12 @@ function  makeTaskRoute(db)
                     })
                 }
             })
-            .catch((err)=>{
-                res.status(500).send({
+                .catch((err)=>{
+                    res.status(500).send({
                     message: "Server error: Nothing was updated, make sure the provided ID is correct and valid.",
                     err:err
                 })
-            })
+                })
 
     });
 
