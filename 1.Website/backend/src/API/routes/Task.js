@@ -56,59 +56,49 @@ const {isIn} = require("validator");
  *
  */
 
-/**@swagger
- * tags:
- *   name: Task
- *   description: This is the task managing API
- */
+
 
 function  makeTaskRoute(db)
 {
-    //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     *@swagger
-     * /task/getTaskByDescription:
-     *   get:
-     *     summary: Returns information about a task given its description as parameter
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: Json body of the task
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       404:
-     *         description: the given description does not match any task
-     *         contents:
-     *           application/json
-     *
-     *
-     *
+     * @api {get}  /task/getTasksByDescription
+     * @apiName get All tasks by Description
+     * @apiDescription This endpoint returns a list of task objects matching the given description
+     * @apiPermission authorised user
+     * @apiGroup Task
+     * @apiParam  {String} [description] Description
+     * @apiSuccess (200) {Object} mixed `User` object
      */
-    router.get('/getTaskByDescription',(req, res, next)=> {
-        let desc = req.body.description;
-        let responseObj = {
+    router.get('/getTasksByDescription',
+
+        body('description').exists().not().isEmpty().trim(),
+        (req, res)=> {
+            const failedValidations = validationResult(req);
+            if(!failedValidations.isEmpty()){
+                res.status(420).send({
+                    message: "Bad Request",
+                    data: []
+                })
+            }
+
+            let desc = req.body.description;
+            let responseObj = {
             message:"",
-            body:null
-        }
+            body:[]
+            }
 
         db.collection('Tasks').findOne({
             description:desc
         })
             .then((result)=>{
-                if (result != null)
-                {
+                if (result != null) {
                     console.log("get task by description successful")
                     responseObj.message="successful";
                     responseObj.body = result;
                     res.send(responseObj);
                 }
 
-                else
-                {
+                else {
                     console.log("get task by description failed: No task with such description")
                     responseObj.message ="failed. No task with given description";
                     responseObj.body = null;
@@ -127,85 +117,15 @@ function  makeTaskRoute(db)
 
     });
 
-    /**
-     *@swagger
-     * /task/getTaskByTasknr:
-     *   get:
-     *     summary: Returns information about a task given its unique number as parameter
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: Json body of the task
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       404:
-     *         description: the given task number does not match any task
-     *         contents:
-     *           application/json
-     *
-     *
-     *
-     */
-    router.get('/getTaskByTasknr',(req, res, next)=> {
-
-        let tsknr = req.body.tasknr;
-        let responseObj = {
-            message:"",
-            body:null
-        }
-        db.collection('Tasks').findOne({
-            tasknr:tsknr
-        })
-            .then((result)=>{
-
-                //console.log("This is result in Tasks by project: "+result);
-                if(result != null)
-                {
-                    responseObj.message = "successful";
-                    responseObj.body = result;
-                    res.send(responseObj)
-                }
-
-                else
-                {
-                    responseObj.message = "failed.No task exists with given number";
-                    res.status(404).send(responseObj);
-                }
-
-
-            })
-            .catch((err)=>{
-                console.log("Could not retrieve task by number in the project: "+err);
-                responseObj.message="failed. Error with DB:"+err;
-                res.status(500).send(responseObj)
-            });
-
-    });
 
     /**
-     *@swagger
-     * /task/getAllTasks:
-     *   get:
-     *     summary: Returns all existings tasks
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: A list of Json objects of tasks
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *
-     *
-     *
+     * @api {get} task/getAllTasks
+     * @apiName get all Tasks
+     * @apiPermission admin
+     * @apiGroup Task
+     * @apiSuccess (200) {Array}  an array of all the tasks in a project.
      */
-    router.get('/getAllTasks',(req, res, next)=> {
+    router.get('/getAllTasks',(req, res)=> {
 
         TaskManagerService.getAllTasks(db)
             .then((ans)=>{
@@ -228,34 +148,34 @@ function  makeTaskRoute(db)
             });
 
     });
-    /**
-     *@swagger
-     * /task/getAllTasksByProject:
-     *   get:
-     *     summary: Returns all tasks that belong to the given Project name as a parameter
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: An array of Json objects each representing a task
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       404:
-     *         description: the given route does not exist
-     *         contents:
-     *           application/json
-     *
-     *
-     *
-     */
-    router.get('/getAllTasksByProject/:id',(req, res, next)=> {
 
-        let ID = req.params.id;
-        TaskManagerService.getAllTasksByProject(db,ID)
-            .then((ans)=>{
+
+
+    /**
+     * @api {get}  /task/getTasksByProject
+     * @apiName get All tasks by Project ID
+     * @apiDescription This endpoint returns a list of task objects matching the given project ID
+     * @apiPermission authorised user
+     * @apiGroup Task
+     * @apiParam  {String} [id] Description
+     * @apiSuccess (200) {list} list of task objects
+     */
+    router.get('/getAllTasksByProject/:id',
+
+        param('id').exists().isMongoId(),
+        (req, res)=> {
+            const invalidValidations = validationResult(req);
+            if(!invalidValidations.isEmpty()) {
+                res.status(420).send({
+                    message : "Bad request , Invalid params",
+                    data: invalidValidations
+                })
+            }
+
+
+            let ID = req.params.id;
+            TaskManagerService.getAllTasksByProject(db,ID)
+                .then((ans)=>{
                 if(ans === "No tasks found"){
                     res.send({
                         message: "There were no tasks found."
@@ -267,7 +187,7 @@ function  makeTaskRoute(db)
                     })
                 }
             })
-            .catch((err)=>{
+                .catch((err)=>{
                 res.status(500).send({
                     message: "Server error: could not retrieve tasks.",
                     err: err
@@ -277,15 +197,26 @@ function  makeTaskRoute(db)
 
     });
 
-    router.get('/getTaskByID/:id',(req,res,next)=>{
+    /**
+     * @api {get}  /task/getTaskByID/:id
+     * @apiName get All tasks by task ID
+     * @apiDescription This endpoint returns a single task object matching the given task ID
+     * @apiGroup Task
+     * @apiParam  {String} [id] task id
+     * @apiSuccess (200) {object} mixed  'task' object
+     */
+    router.get('/getTaskByID/:id',
 
-        const ID = req.params.id ;
-        if(ID ==='' || ID === undefined)
-        {
-            res.status(400).send({
-                message:"invalid ID provided."
+        param('id').exists().not().notEmpty().contains('_n'),
+        (req,res)=>{
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+            res.status(420).send({
+                message: "Bad request , invalid id",
+                data: invalidFields
             })
-        }
+            }
+
 
         TaskManagerService.getTaskByID(db,ID)
             .then((ans)=>{
@@ -311,29 +242,20 @@ function  makeTaskRoute(db)
             })
     }) ;
 
-//POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
-     *@swagger
-     * /task/insertTask:
-     *   post:
-     *     summary: Insert a new Task
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: Insert of new task successful
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       500:
-     *         description: could not insert task
-     *         contents:
-     *           application/json
-     *
-     *
-     *
+     * @api {post}  /task/insertTask
+     * @apiName  insert new task
+     * @apiDescription This endpoint inserts a new task to the Project
+     * @apiGroup Task
+     * @apiParam  {String} [description] Description
+     * @apiParam  {String} [status] 'not started' ,'in progress', 'complete' , 'back-log'
+     * @apiParam  {String} [project] projectID
+     * @apiParam  {object} [assignee] {email: "user email address",role: "user role}
+     * @apiParam  {string} [assigner] email of assigner
+     * @apiParam  {Date} [due]  due date of task
+     * @apiParam  {Date} [issued]  issued date of task
+     * @apiSuccess (200) {list} list of task objects
      */
     router.post('/insertTask',
 
@@ -345,8 +267,6 @@ function  makeTaskRoute(db)
         body('assigner').exists(),
         body('due').isDate(),
         body('issued').isDate(),
-
-
         (req, res)=>{
 
             // check if any of the above validations failed
@@ -389,35 +309,28 @@ function  makeTaskRoute(db)
 
     });
 
-//DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     /**
-     *@swagger
-     * /task/deleteTaskByTasknr:
-     *   delete:
-     *     summary: deletes a task that has the passed in unique number as parameter
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: deletion of task successful
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       500:
-     *         description: could not insert task
-     *         contents:
-     *           application/json
-     *
-     *
-     *
+     * @api {delete}  /task/deleteTaskByID/:id
+     * @apiName  delete task by ID
+     * @apiDescription This endpoint deletes a task matching the passed in ID
+     * @apiGroup Task
+     * @apiParam  {String} [id] task ID
      */
-    router.delete('/deleteTaskByID/:id',(req, res, next)=>{
-        let ID = req.params.id ;
-        TaskManagerService.deleteTaskByID(db,ID)
-            .then((ans)=>{
+    router.delete('/deleteTaskByID/:id',
+        param('id').isMongoId(),
+        (req, res)=>{
+            const failedValidation = validationResult(req);
+            if(!failedValidation.isEmpty()){
+            res.status(420).send({
+                message: "Bad request , invalid parameters",
+                data: failedValidation
+            })
+        }
+            let ID = req.params.id ;
+            TaskManagerService.deleteTaskByID(db,ID)
+                .then((ans)=>{
                 if(ans.deletedCount >0){
                     res.send({
                         message:"The task was successfully removed."
@@ -429,7 +342,7 @@ function  makeTaskRoute(db)
                 }
 
             })
-            .catch(err=>{
+                .catch(err=>{
                 res.status(500).send({
                     message:"Server error: could not remove the task.",
                     err:err
@@ -439,42 +352,40 @@ function  makeTaskRoute(db)
 
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     /**
-     *@swagger
-     * /task/updateTaskDescription/:project/:tasknr/:description:
-     *   patch:
-     *     summary: Updates the description of the task that matches the given projectName , task number and description
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: update of task description successful
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       400:
-     *         description: The given parameters do not match any existing task
-     *         contents:
-     *           application/json
-     *
-     *
-     *
+     * @api {patch}  /updateTaskDescription'
+     * @apiName  update task description
+     * @apiDescription This endpoint updates the description of the task matching the passed in ID
+     * @apiGroup Task
+     * @apiParam  {String} [id] task ID
+     * @apiParam  {String} [description] " "
+     * @apiSuccess (200) {object}  message : "The task updated successfully"
      */
-    router.patch('/updateTaskDescription/:id/:description',(req,res,next)=>{
+    router.patch('/updateTaskDescription',
+        body('id').isMongoId(),
+        body('description').exists().notEmpty(),
 
+        (req,res)=>{
+            const failedValidation = validationResult(req);
+            if(!failedValidation.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid parameters",
+                    data: failedValidation
+                })
+            }
 
-        let id = req.params.id;
-        let newDesc = req.params.description;
-        if(newDesc === undefined || newDesc === ""){
+            let id = req.body.id;
+            let newDesc = req.body.description;
+            if(newDesc === undefined || newDesc === ""){
             res.send({
                 message:"The description can't be empty.",
                 data: []
             })
         }
-        TaskManagerService.updateTaskDescription(db,id, newDesc)
-            .then(ans=>{
+            TaskManagerService.updateTaskDescription(db,id, newDesc)
+                .then(ans=>{
                 if(ans.modifiedCount >0){
                     res.send({
                         message: "The task was updated successfully.",
@@ -487,7 +398,7 @@ function  makeTaskRoute(db)
                     })
                 }
             })
-            .catch(err=>{
+                .catch(err=>{
                 res.status(200).send({
                     message: "server error: could not update task.",
                     data:err
@@ -497,59 +408,34 @@ function  makeTaskRoute(db)
 
     });
 
+
     /**
-     *@swagger
-     * /task/updateTaskStatus/:project/:tasknr/:status:
-     *   patch:
-     *     summary: Updates the status of the task that matches the given projectName , task number and description
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: update of task status successful
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       500:
-     *         description: could not update task status due to server error
-     *         contents:
-     *           application/json
-     *       400:
-     *         description: could not update task  status . Invalid task information was given
-     *         contents:
-     *           application/json
-     *
-     *
-     *
+     * @api {patch}  /updateTaskStatus/:id/:status'
+     * @apiName  update task status
+     * @apiDescription This endpoint updates the status of the task matching the passed in ID
+     * @apiGroup Task
+     * @apiParam  {String} [id] task ID
+     * @apiParam  {String} [status] 'not started' ,'in progress', 'complete' , 'back-log'
+     * @apiSuccess (200) {object}  message : "The task updated successfully"
      */
-    router.patch('/updateTaskStatus/:id/:status',(req,res,next)=>{
+    router.patch('/updateTaskStatus/:id/:status',
+        param('id').isMongoId(),
+        param('status').exists().notEmpty().isIn(['not started' ,'in progress', 'complete' , 'back-log']),
+        (req,res)=>{
 
-        let ID = req.params.id;
-        let newStat = req.params.status;
-        let fine = false;
-        const AcceptedStatuses = ['In-progress','complete','not yet started','on hold']
-        for( let i = 0 ; i < AcceptedStatuses.length ; i++)
-        {
-
-            if(newStat === AcceptedStatuses[i])
-            {
-                 fine = true;
-
+            const failedValidation = validationResult(req);
+            if(!failedValidation.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid parameters",
+                    data: failedValidation
+                })
             }
 
-        }
-        if(fine === false){
-            res.status(400).send({
-                message: "Failed. The provided status  '\ "+newStat+" '\ is not part of the currently accepted statuses: 'In-progress','complete','not yet started','on hold'",
-                data: null
-            })
-            return;
-        }
 
-        TaskManagerService.updateTaskStatus(db,ID, newStat)
-          .then(ans=>{
+            let ID = req.params.id;
+            let newStat = req.params.status;
+            TaskManagerService.updateTaskStatus(db,ID, newStat)
+            .then(ans=>{
               if(ans === "Success"){
                   res.send({
                       message: "The task updated successfully"
@@ -560,7 +446,7 @@ function  makeTaskRoute(db)
                   })
               }
           })
-          .catch(err=>{
+            .catch(err=>{
               res.status(500).send({
                   message: "Server error: could not update the task",
                   err: err
@@ -570,106 +456,8 @@ function  makeTaskRoute(db)
 
     });
 
-    /**
-     *@swagger
-     * /task/updateTaskDueDate/:project/:tasknr/:dueDate:
-     *   patch:
-     *     summary: Updates the due date of the task that matches the given projectName , task number and new due date
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: update of task due date successful
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       400:
-     *         description: The given parameters do not match any existing task
-     *         contents:
-     *           application/json
-     *       500:
-     *         description: The task update failed due to a server error as listed in the response body
-     *         contents:
-     *           application/json
-     *
-     *
-     *
-     */
-    /*
-    router.patch('/updateTaskDueDate/:id/:dueDate/:startDate',(req,res,next)=>{
-
-        let ID = req.params.id;
-        let newDate = req.params.dueDate;
-        let beginDate =req.params.startDate;
-        if(newDate === undefined || newDate ===""){
-            res.send({
-                message: "The Due date provided is not valid."
-            })
-        }else if(beginDate === undefined || beginDate ===""){
-            res.send({
-                message: "The start date provided is not valid."
-            })
-
-        }else if(beginDate > dueDate){
-            res.send({
-                message: "The due date can not be before the start date."
-            })
-        }
 
 
-        db.updateTaskDueDate(ID, newDate)
-            .then(ans=>{
-                if(ans === "Success"){
-                    res.send({
-                        message: "The task updated successfully"
-                    })
-                }else{
-                    res.send({
-                        message: "Could not update the task."
-                    })
-                }
-            })
-            .catch(err=>{
-                res.status(500).send({
-                    message: "Server error: could not update the task",
-                    err: err
-                })
-            })
-
-    });
-
-     */
-
-
-    /**
-     *@swagger
-     * /task/updateTaskAssignee/:project/:tasknr/:Assignee:
-     *   patch:
-     *     summary: Updates the assignee of the task that matches the given projectName , task number and new due date
-     *     tags: [Task]
-     *     responses:
-     *       200:
-     *         description: update of task assignee successful
-     *         contents:
-     *           application/json
-     *         schema:
-     *           type: array
-     *           items:
-     *             $ref: '#components/schemas/Task'
-     *       400:
-     *         description: The given parameters do not match any existing task
-     *         contents:
-     *           application/json
-     *       500:
-     *         description: The task update failed due to a server error as listed in the response body
-     *         contents:
-     *           application/json
-     *
-     *
-     *
-     */
     router.patch('/updateTaskAssignee/:id/:assignee',(req,res,next)=>{
 
         let ID = req.params.id;
@@ -702,7 +490,10 @@ function  makeTaskRoute(db)
 
     });
 
-    router.patch('/updateTaskAssigner/:id/:assigner',(req,res,next)=>{
+    router.patch('/updateTaskAssigner/:id/:assigner',
+
+        (req,res,next)=>{
+
 
         let ID = req.params.id;
         let assigner =req.params.assigner;
@@ -735,15 +526,18 @@ function  makeTaskRoute(db)
     });
 
     router.put('/updateEverythingTask/:id',
+        // validation
         param('id').exists(),
         body('assignee').exists().isJSON(),
         body('assigner').exists().isJSON(),
         body('description').exists().isString(),
         body('issued').isDate(),
-        body('due').isDate(),
+        body('due').isDate().isAfter('issued'),
         body('nodeID').exists(),
         body('status').exists().isIn(['not started' , 'in progress' , 'complete']),
         body('project').exists().isMongoId(),
+
+
         (req, res)=>{
 
         const invalidFields = validationResult(req);
@@ -764,31 +558,6 @@ function  makeTaskRoute(db)
         let tasknr = req.body.tasknr;
         let status = req.body.status;
         let project = req.body.project;
-        if(description === undefined || description ===""){
-            res.send({
-                message:"The description provided is not valid."
-            })
-        }else if(nodeID === undefined || nodeID ===""){
-            res.send({
-                message:"The node ID provided is not valid."
-            })
-        }else if(ID ===undefined || ID ==="") {
-            res.send({
-                message: "The Task ID provided is not valid."
-            })
-        }else  if(project  ===undefined || project ===""){
-            res.send({
-                message: "The project ID provided is not valid."
-            })
-        }else if(status ===undefined || status ===""){
-            res.send({
-                message:"The Task status cant be empty."
-            })
-        }else if(  !((status === "complete")||(status === "In-progress")||(status === "not yet started")||(status === "on hold"))  ){
-            res.send({
-                message:"The Task status can only be one of: completed, In-progress, not yet started, on hold"
-            })
-        }
 
         TaskManagerService.updateEverythingTask(db,ID, assignee, assigner, description, issued, due, nodeID, tasknr, status, project)
             .then((ans)=>{
