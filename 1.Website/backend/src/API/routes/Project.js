@@ -206,7 +206,7 @@ function makeProjectRoute(db) {
 
 
     /**
-     * @api {get}  /task//getProjectByID/:id
+     * @api {get}  /task/getProjectByID/:id
      * @apiName list projects owned by email
      * @apiDescription This endpoint returns a list of all Projects belonging to the user mathing the passed in email
      * @apiGroup Project
@@ -251,6 +251,13 @@ function makeProjectRoute(db) {
             })
     }) ;
 
+    /**
+     * @api {get}  /task/AllPermissions
+     * @apiName list all possbile permissions
+     * @apiDescription This endpoint returns a list of all permissions that can be assigned to a role
+     * @apiGroup Task
+     * @apiSuccess (200) {Array}  list of possible permissions
+     */
     router.get("/AllPermissions",(req,res)=>{
 
 
