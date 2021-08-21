@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import App from '../components/App';
+import Header from '../components/Header';
 
 test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByTestId("tidAppHeader");
+  render(<Header />);
+  const linkElement = screen.getByTestId("tidHeader");
   expect(linkElement).toNotBeEmpty();
 });
