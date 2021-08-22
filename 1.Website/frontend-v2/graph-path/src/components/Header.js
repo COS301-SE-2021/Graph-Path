@@ -12,10 +12,16 @@ class CustomHeader extends Component{
     constructor(props){
         super(props);
         this.state={
-            show:false
+            show:false,
+            logged:false
         }
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
+    }
+    changeLogStatus=()=>{
+        this.setState({
+            logged:!this.state.logged
+        }) ;
     }
     open(){
         this.setState({ show: true})
@@ -27,7 +33,17 @@ class CustomHeader extends Component{
         return (
             <Router>
                 <div data-testid="tidHeader">
-                    <Modal   show={this.state.show} onHide={this.close} size="xs">
+                   
+                    <Divider>
+                        <Link to="/projects" className="link-btn, link-text">To ProjectManager</Link>
+                    </Divider>
+                    <Divider>
+                        <Link to="/dashboard" className="link-btn, link-text">Dashboard</Link>
+                    </Divider>
+                    <Switch>
+                        <Route path="/" exact render={()=>{
+                            return <>
+                             <Modal   show={this.state.show} onHide={this.close} size="xs">
                         <Modal.Header>
                             <Modal.Title>Sign Up</Modal.Title>
                         </Modal.Header>
@@ -37,17 +53,10 @@ class CustomHeader extends Component{
                     </Modal>
                     <Button data-testid="tidSignUpLink" onClick={this.open} id='signup-btn'>Sign Up</Button>
 
-                    <Divider>
-                        <Link to="/projects" className="link-btn, link-text">To ProjectManager</Link>
-                    </Divider>
-                    <Divider>
-                        <Link to="/dashboard" className="link-btn, link-text">Dashboard</Link>
-                    </Divider>
-                    <Switch>
-                        <Route path='/projects' render={()=>{
-                            return <>
-                                <ProjectManager />
                             </>
+                        }} />
+                        <Route path='/projects' render={()=>{
+                            return 
                         }}/>
 
                         <Route path='/dashboard' render={()=>{

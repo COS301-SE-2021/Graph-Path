@@ -3,6 +3,8 @@ import '../css/Dashboard.css'
 import {DatePicker, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css'
 import NewProject from './NewProject';
+import ProjectManager from './ProjectManager';
+import { Route, Switch } from 'react-router-dom';
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -22,7 +24,7 @@ class Dashboard extends React.Component{
     }
     render(){
         return(
-            <div className="main-container">
+            <div className="main-container" data-testid="tidDashboard">
                 <nav id="navbar"></nav>
                 <div id="content">
                     <div id="sidebar" >
@@ -43,6 +45,13 @@ class Dashboard extends React.Component{
                             </Sidenav.Body>
                         </Sidenav>
                     </div>
+                    <Switch>
+                        <Route path="/dashboard" render={()=>{
+                            return <>
+                            <ProjectManager />
+                        </>
+                        }}/>
+                    </Switch>
 
                     <div id="main-content"></div>
                 </div>
