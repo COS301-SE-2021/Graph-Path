@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        document.getElementById("acceptInvite").addEventListener("click", myFunction);
+        function myFunction(){
+            //document.getElementById("demo").innerHTML = "YOU CLICKED ME!"
+            window.location.replace("http://www.w3schools.com");
+        }
+    </script>
+    <style>
+        h1 {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1 id="Heading">Graph Path </h1>
+<h2>Hi, {{name}} welcome to graph , click the link below to log in and start making awesome projects </h2><br>
+<a href="http://localhost:9001/">Login page</a>
+</body>
+</html>
