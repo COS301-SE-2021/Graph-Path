@@ -1,0 +1,6 @@
+#projects-list{
+    display: flex;
+    direction: row;
+    justify-content: flex-start;
+    flex: row;
+}

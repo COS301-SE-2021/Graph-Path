@@ -1,6 +1,7 @@
 import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
 import {Icon, Panel,SelectPicker} from 'rsuite' ;
+import "../css/ProjectManager.css"
 
 
 const ProjectCard = ({project})=>{
@@ -35,13 +36,15 @@ class ProjectManager extends Component {
             },{
                 projectName:"T2",
                 lastDateAccessed: new Date("2021-08-22T16:00").toJSON().slice(0,17) ,
+            },{
+                projectName:"S2",
+                lastDateAccessed: new Date("2021-08-12T16:00").toJSON().slice(0,17) ,
             }]
         }
     }
 
     handleSortChange =(value)=>{
-        console.log('value',value)
-
+        // console.log('value',value )
         this.setState({
             sortValue:value
         },()=>this.sortProjects()) ;
@@ -50,7 +53,42 @@ class ProjectManager extends Component {
         //if recent? newest last aceess date comes first
         //if alphabetical ? project name is used to sort alphabetically
         //if date ? oldest project first
-        console.log('sorting...')
+        console.log('sorting...') ;
+        if (this.state.sortValue === 'recent'){
+            let newArray = this.state.projects.sort((v1,v2,)=>{
+                let date1=v1.lastDateAccessed.toLowerCase();
+                let date2 = v2.lastDateAccessed.toLowerCase();
+
+                if(date1<date2){
+                    //date1 came first, put last
+                    return 1 ;
+                }
+                if (date1>date2){
+                    return -1 ;
+                }
+                return 0 ;
+            }) ;
+            this.setState({
+                projects:newArray , 
+            }) ;
+        }
+        else if (this.state.sortValue === 'alpha'){
+            let sortedArray = this.state.projects.sort((v1,v2)=>{
+                let date1 = v1.projectName.toLowerCase() ;
+                let date2 = v2.projectName.toLowerCase() ;
+
+                if (date1<date2){
+                    return -1 ;
+                }
+                else if (date1>date2){
+                    return 1 ;
+                }
+                return 0 ;
+            })
+            this.setState({
+                projects:sortedArray
+            }) ;
+        }
     }
 
     render(){
@@ -62,10 +100,10 @@ class ProjectManager extends Component {
             Projects For uSer <br/>
             <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
             {this.state.projects.map((project)=>{
-                return <>
+                return <div id="projects-list">
                     <ProjectCard project={project} />
-                    <br/>
-                </>
+                    
+                </div>
             })}
             
         </div>)
