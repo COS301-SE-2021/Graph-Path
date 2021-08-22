@@ -4,12 +4,43 @@ const mongoose = require('mongoose') ;
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
+const userManagementSerive = require('../../Services/UserManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
 const DAGservice = require('../../Helpers/DAG');
 const { param,body, validationResult } = require('express-validator');
+const mailer = require('../../Helpers/SendMail');
+const {appendInvitesTo} = require("../../Services/UserManagerService");
 function makeProjectRoute(db) {
 
 
+    router.get("/testMail", (req,res)=>{
+        res.send({
+            message: "mail route called",
+        })
+    })
+
+    router.get("/acceptInvite", (req,res)=>{
+
+        //check if this user is valid
+        //check users invites
+        //get role of user in invite
+        //accept user invite
+        //add user to project
+        //fetch the project with ID
+        //add
+        res.send({
+            message: "mail route called",
+        })
+    })
+
+    router.get("/sendMail", (req,res)=> {
+
+        const projectOwner =  req.body.ownerName;
+        const email = req.body.email
+
+        mailer.sendInvites("test Project 1", email);
+
+    })
     router.get('/isAcyclic/:id',
         param('id').exists().notEmpty().isMongoId(),
         (req,res)=>{
