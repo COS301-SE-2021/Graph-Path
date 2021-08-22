@@ -100,7 +100,7 @@ class ProjectManager extends Component {
             <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
             <div id="projects-list">
                 {this.state.projects.map((project)=>{
-                return <ProjectCard project={project} />    
+                return <ProjectCard key={project.projectName} project={project} />    
                 
             })}
             </div>

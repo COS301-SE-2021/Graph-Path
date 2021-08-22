@@ -2,7 +2,7 @@ import {React,Component} from "react";
 import {  Form,FormGroup,FormControl,ControlLabel,Modal, Button } from 'rsuite';
 import "rsuite/dist/styles/rsuite-dark.css" ;
 import Register from './Register' ;
-import {HashRouter as Router,Link,Switch,Route, Redirect} from 'react-router-dom' ;
+import {HashRouter as Router,Switch,Route, Redirect} from 'react-router-dom' ;
 import ProjectManager from "./ProjectManager";
 import Dashboard from "./Dashboard";
 
