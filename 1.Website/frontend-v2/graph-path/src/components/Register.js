@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, FormGroup, FormControl, ControlLabel} from 'rsuite';
+import { Form, FormGroup, FormControl, ControlLabel,Schema} from 'rsuite';
 import '../css/Register.css'
 
 class Register extends React.Component{
@@ -18,7 +18,15 @@ class Register extends React.Component{
 
         }
         this.handleChange = this.handleChange.bind(this);
-
+        const {StringType} =Schema.Types;
+        const model=Schema.Model({
+                firstName: StringType().isRequired('Field cannot be left blank'),
+            lastName: StringType().isRequired('Field cannot be left blank'),
+            userName: StringType().isRequired('Field cannot be left blank'),
+            email: StringType()
+                .isEmail('Please enter a valid email address.')
+                .isRequired('Field cannot be left blank'),
+        })
 
     }
     handleChange(inputs){
@@ -27,34 +35,38 @@ class Register extends React.Component{
         });
     }
 
+
     render(){
         return (
-            <Form  formValue={this.state.formValue} onChange={this.handleChange} data-testid="form">
-                <FormGroup>
-                    <ControlLabel> FirstName</ControlLabel>
-                    <FormControl name="firstName" type="name"/>
-                </FormGroup>
+            <div >
+                <Form  formValue={this.state.formValue} onChange={this.handleChange} data-testid="form">
+                    <FormGroup>
+                        <ControlLabel> FirstName</ControlLabel>
+                        <FormControl name="firstName" type="name"/>
+                    </FormGroup>
 
-                <FormGroup>
-                    <ControlLabel> LastName</ControlLabel>
-                    <FormControl name="lastName" type="name"/>
-                </FormGroup>
+                    <FormGroup>
+                        <ControlLabel> LastName</ControlLabel>
+                        <FormControl name="lastName" type="name"/>
+                    </FormGroup>
 
-                <FormGroup>
-                    <ControlLabel> Username</ControlLabel>
-                    <FormControl name="userName"/>
-                </FormGroup>
+                    <FormGroup>
+                        <ControlLabel> Username</ControlLabel>
+                        <FormControl name="userName"/>
+                    </FormGroup>
 
-                <FormGroup>
-                    <ControlLabel> Email</ControlLabel>
-                    <FormControl name="email" type="email"/>
-                </FormGroup>
+                    <FormGroup>
+                        <ControlLabel> Email</ControlLabel>
+                        <FormControl name="email" type="email"/>
+                    </FormGroup>
 
-                <FormGroup>
-                    <ControlLabel> Password</ControlLabel>
-                    <FormControl name="password" type="password"/>
-                </FormGroup>
-            </Form>
+                    <FormGroup>
+                        <ControlLabel> Password</ControlLabel>
+                        <FormControl name="password" type="password"/>
+                    </FormGroup>
+                </Form>
+            </div>
+
         )
     }
 }
