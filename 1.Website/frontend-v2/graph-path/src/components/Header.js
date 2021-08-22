@@ -30,7 +30,7 @@ class CustomHeader extends Component{
                         <Register />
                     </Modal.Body>
                 </Modal>
-                <Button onClick={this.open}>Sign Up</Button>
+                <Button onClick={this.open} id='signup-btn'>Sign Up</Button>
             </div>
 
         )
