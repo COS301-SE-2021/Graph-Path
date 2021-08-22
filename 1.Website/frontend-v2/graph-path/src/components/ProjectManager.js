@@ -99,12 +99,12 @@ class ProjectManager extends Component {
         <div data-testid="tidProjectManager">
             Projects For uSer <br/>
             <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
-            {this.state.projects.map((project)=>{
-                return <div id="projects-list">
-                    <ProjectCard project={project} />
-                    
-                </div>
+            <div id="projects-list">
+                {this.state.projects.map((project)=>{
+                return <ProjectCard project={project} />    
+                
             })}
+            </div>
             
         </div>)
     }
