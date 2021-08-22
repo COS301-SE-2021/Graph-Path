@@ -8,7 +8,6 @@ const ProjectCard = ({project})=>{
     return (
     <div>
         <Panel  shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}
-        defaultActiveKey={1}
         >
         <Panel header="Project Card">
           <p>
