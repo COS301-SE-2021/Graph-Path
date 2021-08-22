@@ -1,7 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import Header from '../components/Header';
 import ReactDOM from 'react-dom' ;
 import React from 'react' ;
+
+afterEach(cleanup) ;
+
+
 it('renders without crashing', () => {
     render(<Header />);
     const HeaderParent = document.createElement('div');   ; 

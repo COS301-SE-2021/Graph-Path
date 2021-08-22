@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactDOM } from 'react-dom';
+import ReactDOM  from 'react-dom';
 import {screen,cleanup} from '@testing-library/react' ;
 import ProjectManager from '../components/ProjectManager';
 
@@ -17,7 +17,7 @@ it('should render with all required props',()=>{
 
 const projects = [{
     projectName:"Test 1",
-    lastDateAccessed: Date().today() ,
+    lastDateAccessed: new Date() ,
     members:[]
 }]
 
