@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, FormGroup, FormControl, ControlLabel} from 'rsuite';
+import '../css/Register.css'
 
 class Register extends React.Component{
     constructor(props){
