@@ -7,14 +7,13 @@ afterEach(cleanup) ;
 
 
 it('renders without crashing', () => {
-    render(<Header />);
     const HeaderParent = document.createElement('div');   ; 
     // React-Dom Render test
     ReactDOM.render(<Header/>,HeaderParent) ;
     
     //testing library test
     const {getByTestId} = render(<Header/>);
-    expect(getByTestId("tidHeader")).toNotBeEmpty();
+    expect(getByTestId("tidHeader")).not.toBeEmptyDOMElement();
 });
 
 it('should render a sign up link',()=>{

@@ -1,13 +1,20 @@
+import React from 'react';
 import '../css/App.css';
-import Header from './Header'
+import Header from './Header' ;
+import {HashRouter as Router} from 'react-router-dom' ;
 
-function App() {
-  return (
-    <div className="App">
-     
-        <Header />
-    </div>
-  );
+
+class App extends React.Component {
+    render(){
+    return (
+      // <Router>
+        <div className="App" data-testid="tidApp">    
+            <Header />
+        </div>
+      /* </Router> */
+      
+    );
+  }
 }
 
 export default App;
