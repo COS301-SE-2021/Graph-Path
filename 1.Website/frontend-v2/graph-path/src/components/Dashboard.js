@@ -19,7 +19,7 @@ class Dashboard extends React.Component{
     // }
 
     callCreateProj=()=>{
-        this.showModal();
+
 
     }
     render(){
@@ -36,7 +36,7 @@ class Dashboard extends React.Component{
                                     <Nav.Item icon={<Icon icon="dashboard"/>}>Dashboard</Nav.Item>
                                     <Nav.Item icon={<Icon icon="project"/>} onSelect={this.callCreateProj}>New Project</Nav.Item>
                                     <Dropdown title="Statistics" icon={<Icon icon="bar-chart"/>}>
-                                        <Dropdown.Item>Overrall</Dropdown.Item>
+                                        <Dropdown.Item>Overall</Dropdown.Item>
                                         <Dropdown.Item>Project</Dropdown.Item>
                                     </Dropdown>
 
