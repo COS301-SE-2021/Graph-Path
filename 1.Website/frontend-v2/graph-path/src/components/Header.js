@@ -4,6 +4,7 @@ import "rsuite/dist/styles/rsuite-dark.css" ;
 import Register from './Register' ;
 import {HashRouter as Router,Link,Switch,Route} from 'react-router-dom' ;
 import ProjectManager from "./ProjectManager";
+import Dashboard from "./Dashboard";
 
 
 class CustomHeader extends Component{
@@ -39,12 +40,25 @@ class CustomHeader extends Component{
                     <Divider>
                         <Link to="/projects" className="link-btn, link-text">To ProjectManager</Link>
                     </Divider>
+                    <Divider>
+                        <Link to="/dashboard" className="link-btn, link-text">Dashboard</Link>
+                    </Divider>
                     <Switch>
                         <Route path='/projects' render={()=>{
                             return <>
                                 <ProjectManager />
                             </>
                         }}/>
+
+                        <Route path='/dashboard' render={()=>{
+                            return(
+                                <>
+                                    <Dashboard/>
+                                </>
+                            )
+                        }}
+
+                        />
                     </Switch>
                 </div>
             </Router>

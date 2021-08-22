@@ -35,7 +35,7 @@ class NewProject extends React.Component{
     render(){
         return(
 
-            <Modal show={this.props.newS} onHide={this.handleClose} animation={false} backdrop="static" keyboard={false}>
+            <Modal show={this.state.show} onHide={this.handleClose} animation={false} backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
                     <Modal.Title>New Project</Modal.Title>
                 </Modal.Header>
