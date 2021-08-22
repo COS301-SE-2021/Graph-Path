@@ -25,6 +25,7 @@ class Register extends React.Component{
             formValue:inputs
         });
     }
+
     render(){
         return (
             <Form  formValue={this.state.formValue} onChange={this.handleChange} data-testid="form">
