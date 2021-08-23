@@ -27,7 +27,7 @@ class CustomHeader extends Component{
         this.open = this.open.bind(this);
     }
     changeLogStatus=()=>{
-        console.log('logged')
+        // console.log('logged')
         this.setState({
             logged:!this.state.logged
         }) ;
@@ -71,8 +71,14 @@ class CustomHeader extends Component{
                             )
                         }}
                         />
+                                          {
+                       !this.state.logged?<Redirect to="/home"/>:""
+                   }
+                  
+                  
                     
                         <Route component={NotFound} />
+
                
                     </Switch>
             </Router>

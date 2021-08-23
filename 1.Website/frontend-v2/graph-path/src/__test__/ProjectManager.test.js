@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM  from 'react-dom';
-import {screen,cleanup} from '@testing-library/react' ;
+import {render,screen,cleanup} from '@testing-library/react' ;
 import ProjectManager from '../components/ProjectManager';
 
 
@@ -12,6 +12,11 @@ it('Should render Project Manager without props',()=>{
 }) ; 
 
 it('should render with all required props',()=>{
+
+    const {getByTestId,getByText} = render(<ProjectManager />) ;
+    expect(getByText('Projects')).toBeInTheDocument() ;
+    expect(getByTestId("tidProjList")).toBeInTheDocument() ;
+    expect(getByTestId("tidProjectManager")).toBeInTheDocument();
     
 }) ; 
 

@@ -83,7 +83,7 @@ class Landing extends React.Component{
 
                    </Modal.Body>
                </Modal>
-               <button onClick={this.open} id='signup-btn'>Sign Up</button>
+               <button data-testid="tidSignUpLink" onClick={this.open} id='signup-btn'>Sign Up</button>
                
                <Button onClick={()=>this.openLog()} id='signin-btn'>Sign In</Button>
            </div>

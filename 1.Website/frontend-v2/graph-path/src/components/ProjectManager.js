@@ -114,9 +114,9 @@ class ProjectManager extends Component {
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
         return( 
         <div data-testid="tidProjectManager">
-            Projects For uSer <br/>
+           Projects <br/>
             <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
-            <div id="projects-list">
+            <div data-testid="tidProjList" id="projects-list">
                 {this.state.projects.map((project,index)=>{
                 return <ProjectCard key={`${index+1}${project.projectName}`} project={project} />    
                 

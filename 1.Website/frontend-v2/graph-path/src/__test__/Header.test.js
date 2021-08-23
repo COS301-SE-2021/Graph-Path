@@ -19,7 +19,7 @@ it('renders without crashing', () => {
 it('should render a sign up link',()=>{
     const {getByTestId} = render(<Header/>);
     expect(getByTestId('tidSignUpLink')).toHaveTextContent('Sign Up')
-    
+    expect(getByTestId('tidSignUpLink')).not.toBeDisabled() ;
 
 }) ;
 
