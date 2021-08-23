@@ -1,6 +1,6 @@
 import  React from 'react' ;
 // import { Modal, Button } from 'react-bootstrap';
-import { Modal, Button, ControlLabel, DatePicker, Form, FormControl, FormGroup, HelpBlock, Placeholder } from 'rsuite';
+import { Modal, Button, ControlLabel, DatePicker, Form, FormControl, FormGroup, HelpBlock } from 'rsuite';
 
 
 class NewProject extends React.Component{
@@ -20,7 +20,8 @@ class NewProject extends React.Component{
 
     handleClose=()=>{
         this.setState({
-            show:false
+            show:false,
+            next:false
         })
     }
 
