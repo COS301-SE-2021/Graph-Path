@@ -1,5 +1,5 @@
 import React from 'react' ;
-import '../css/Dashboard.css' ;
+// import '../css/Dashboard.css' ;
 import {DatePicker, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
@@ -35,7 +35,7 @@ class Dashboard extends React.Component{
                                         <Nav.Item icon={<Icon icon="dashboard"/>}>Dashboard</Nav.Item>
                                           <Nav.Item href="/createProject" icon={<Icon icon="project"/>}>New Project</Nav.Item>
                                         <Dropdown title="Statistics" icon={<Icon icon="bar-chart"/>}>
-                                            <Dropdown.Item><Link to="/createProject">New</Link></Dropdown.Item>
+                                            <Dropdown.Item>Overall</Dropdown.Item>
                                             <Dropdown.Item>Project</Dropdown.Item>
                                         </Dropdown>
 

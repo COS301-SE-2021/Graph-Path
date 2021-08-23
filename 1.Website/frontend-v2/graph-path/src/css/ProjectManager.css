@@ -2,7 +2,8 @@
     display: flex;
     direction: row;
     justify-content: flex-start;
-    flex: row;
+    flex: wrap;
+    flex-wrap: wrap;
 }
 #projects-list div{
     margin: 2px;

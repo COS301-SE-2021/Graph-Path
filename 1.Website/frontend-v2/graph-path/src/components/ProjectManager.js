@@ -38,6 +38,24 @@ class ProjectManager extends Component {
             },{
                 projectName:"S2",
                 lastDateAccessed: new Date("2021-08-12T16:00").toJSON().slice(0,17) ,
+            },{
+                projectName:"T1",
+                lastDateAccessed: new Date().toJSON().slice(0,17) ,
+            },{
+                projectName:"T2 2",
+                lastDateAccessed: new Date("2021-05-22T16:00").toJSON().slice(0,17) ,
+            },{
+                projectName:"S2 65",
+                lastDateAccessed: new Date("2021-06-15T16:00").toJSON().slice(0,17) ,
+            },{
+                projectName:"T56",
+                lastDateAccessed: new Date().toJSON().slice(0,17) ,
+            },{
+                projectName:"T2 3",
+                lastDateAccessed: new Date("2021-03-23T16:00").toJSON().slice(0,17) ,
+            },{
+                projectName:"S2 45",
+                lastDateAccessed: new Date("2021-08-15T16:00").toJSON().slice(0,17) ,
             }]
         }
     }
@@ -99,8 +117,8 @@ class ProjectManager extends Component {
             Projects For uSer <br/>
             <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
             <div id="projects-list">
-                {this.state.projects.map((project)=>{
-                return <ProjectCard key={project.projectName} project={project} />    
+                {this.state.projects.map((project,index)=>{
+                return <ProjectCard key={`${index+1}${project.projectName}`} project={project} />    
                 
             })}
             </div>
