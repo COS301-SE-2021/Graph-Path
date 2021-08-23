@@ -1,5 +1,5 @@
 import React from 'react' ;
-// import '../css/Dashboard.css' ;
+import '../css/Dashboard.css' ;
 import {Button, DatePicker, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
@@ -32,8 +32,8 @@ class Dashboard extends React.Component{
                             <Sidenav>
                                 <Sidenav.Body>
                                     <Nav>
-                                        <Nav.Item icon={<Icon icon="dashboard"/>}>Dashboard</Nav.Item>
-                                          <Nav.Item icon={<Icon icon="project"/>} onSelect={this.showM} > New Project</Nav.Item>
+                                        <Nav.Item id="nav-option" icon={<Icon icon="dashboard"/>}>Dashboard</Nav.Item>
+                                          <Nav.Item id="nav-option" icon={<Icon icon="project"/>} onSelect={this.showM} > New Project</Nav.Item>
                                         <Dropdown title="Statistics" icon={<Icon icon="bar-chart"/>}>
                                             <Dropdown.Item>Overall</Dropdown.Item>
                                             <Dropdown.Item>Project</Dropdown.Item>
@@ -45,16 +45,7 @@ class Dashboard extends React.Component{
                             </Sidenav>
                         </div>
 
-                        {/*  <div id="main-content"></div>*/}
-                    
-                    <Switch>
-                        <Route path="/dashboard" render={()=>{
-                            return <>
-                            <ProjectManager />
-                        </>
-                        }}/>
-
-                    </Switch>
+                        <div id="main-content"> <ProjectManager /></div>
 
                 </div>
                 </div>
