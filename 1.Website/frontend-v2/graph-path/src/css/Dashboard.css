@@ -17,19 +17,35 @@ nav{
     width: 100vw;
 }
 
+
+#side-bar-button{
+    background-color: transparent;
+    position: absolute;
+    width: 13%;
+    margin-top: 8px;
+}
+
+#side-bar-button #btn-side-bar{
+    font-size: 35px;
+}
+
+#side-bar-button #btn-side-bar:hover{
+    cursor: pointer;
+}
+
 #nav-option:hover{
     background-color: #1386d9;
 }
 
 #sidebar{
-    width: 18%;
-    margin: 16px;
+    width: 15%;
+    margin: 16px 16px 16px 0;
     background: #1a1d24;
 }
 
 #main-content{
     background: #1a1d24;
-    width: 80%;
+    width: 100%;
     margin: 16px 0 2px 0;
     padding: 16px;
      /*max-height: calc(90vh - calc(60px + 26px));*/
