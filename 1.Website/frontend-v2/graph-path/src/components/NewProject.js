@@ -7,7 +7,7 @@ class NewProject extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            show:true,
+            show:false,
             startDate: new Date(),
             dueDate: new Date(),
             next:false
