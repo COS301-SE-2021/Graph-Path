@@ -1,17 +1,8 @@
 import {React,Component} from "react";
-
-
 //import "rsuite/dist/styles/rsuite-default.css" ;
+import "rsuite/dist/styles/rsuite-dark.min.css" ;
 
-// import '../css/Header.css'
-import Login from './Login'
-import landingSnap from '../img/landing.png';
-import {  Form,FormGroup,FormControl,ControlLabel,Modal, Button, Divider } from 'rsuite';
-
-import "rsuite/dist/styles/rsuite-dark.css" ;
-import Register from './Register' ;
 import {HashRouter as Router,Switch,Route, Redirect} from 'react-router-dom' ;
-import ProjectManager from "./ProjectManager";
 import Dashboard from "./Dashboard";
 import Landing from './Landing' ;
 import NotFound from "./NotFound";

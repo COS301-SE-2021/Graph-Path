@@ -15,7 +15,6 @@ class NewProject extends React.Component{
         }
     }
     componentDidMount(){
-        console.log('confirmed')
     }
 
     handleClose=()=>{

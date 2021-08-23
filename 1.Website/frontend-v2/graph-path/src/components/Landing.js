@@ -1,10 +1,10 @@
 import React from 'react'
 import landingSnap from "../img/landing.png";
 import {Button, Modal} from "rsuite";
+import "rsuite/dist/styles/rsuite-dark.min.css"
 import Register from "./Register";
 import Login from "./Login";
-import '../css/Landing.css'
-import { withRouter, Route,HashRouter as Router, Switch, Redirect } from 'react-router-dom';
+import '../css/Landing.css';
 
 class Landing extends React.Component{
     constructor(props){
@@ -47,23 +47,29 @@ class Landing extends React.Component{
     }
 
     render(){
-        console.log('landing props',this.props, this.state) ;
-        const {location} = this.props ;
         return(
            <div>
-               <span  >
-                   <h1>About </h1>
-                   <p className="aboutText">
-                       Graph path is an interactive graph based project Management tool.
+               <div  >
+                   <h1 id="pageName">GRAPH PATH </h1>
+                   <p className="aboutText introText" >
+                       Graph path is an interactive graph based project Management tool. <br/>
                        It aims to organise tasks of a project on a interactive and user friendly graph.
-                       This system takes all the tasks of a project that needs to be done and organises them into a graph to make it easier to use and understand.
-                       The specific type of graph should be a DirectedAcyclic Graph since it would be easy to read,
+                     </p> 
+                   <img id="landing-graph" src={landingSnap} alt="Logo"/>
+                   
+                   <p className="aboutText">
+                       This system provides a way to have all the tasks of a project that needs to be done  represented as a graph.
+                        <br/><br/>
+                       
+                       The graph aims to make it easier to understand the dependencies between the task of the project.
+                       <br/><br/>
+                       The specific type of graph should be a Directed Acyclic Graph since it would be easy to read,
                        understand and it would provide a very user friendly interface to interact with.
                    </p>
-               </span>
+
+               </div>
 
 
-               <img src={landingSnap} alt="Logo"/>
                <Modal   show={this.state.show || this.state.show1} onHide={this.close} size="xs" >
                    <Modal.Header>
                        <Modal.Title>Sign Up</Modal.Title>
@@ -77,7 +83,7 @@ class Landing extends React.Component{
 
                    </Modal.Body>
                </Modal>
-               <Button onClick={this.open} id='signup-btn'>Sign Up</Button>
+               <button onClick={this.open} id='signup-btn'>Sign Up</button>
                
                <Button onClick={()=>this.openLog()} id='signin-btn'>Sign In</Button>
            </div>
@@ -85,4 +91,4 @@ class Landing extends React.Component{
     }
 }
 
-export default withRouter(Landing);
+export default Landing;
