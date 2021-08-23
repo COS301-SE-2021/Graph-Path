@@ -26,7 +26,7 @@ class Login extends React.Component{
 
     render(){
         return(
-            <Form  formValue={this.state.formValue} onChange={this.handleChange} data-testid="form">
+            <Form onSubmit={()=>this.props.login()} formValue={this.state.formValue} onChange={this.handleChange} data-testid="form">
                 <FormGroup>
                     <ControlLabel> Email</ControlLabel>
                     <FormControl name="email" type="email"/>
@@ -36,6 +36,9 @@ class Login extends React.Component{
                     <ControlLabel> Password</ControlLabel>
                     <FormControl name="password" type="password"/>
                 </FormGroup>
+                <FormGroup>
+                    <FormControl type="submit"/>
+                    </FormGroup>
             </Form>
         )
     }

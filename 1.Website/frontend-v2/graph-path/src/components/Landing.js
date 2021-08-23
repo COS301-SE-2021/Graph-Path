@@ -4,6 +4,7 @@ import {Button, Modal} from "rsuite";
 import Register from "./Register";
 import Login from "./Login";
 import '../css/Landing.css'
+import { withRouter, Route,HashRouter as Router, Switch, Redirect } from 'react-router-dom';
 
 class Landing extends React.Component{
     constructor(props){
@@ -34,13 +35,18 @@ class Landing extends React.Component{
         this.setState({ show1: true });
     }
     openLog() {
-        this.setState({ show1: false });
+        this.setState({ show1: true });
+        
     }
 
+    nextPath =(path)=>{
+        this.props.history.push(path)
+    }
 
     render(){
         return(
            <div>
+               <Router>
                <span  >
                    <p className="aboutText">
                        Graph path is an interactive graph based project Management tool.
@@ -63,18 +69,30 @@ class Landing extends React.Component{
                </Modal>
                <Button onClick={this.open} id='signup-btn'>Sign Up</Button>
 
-               <Modal   show={this.state.show1} onHide={this.closeLog} size="xs" >
-                   <Modal.Header>
-                       <Modal.Title>Sign In</Modal.Title>
-                   </Modal.Header>
-                   <Modal.Body>
-                       <Login />
-                   </Modal.Body>
-               </Modal>
-               <Button onClick={this.openLog} id='signin-btn'>Sign In</Button>
+               
+               <Button onClick={()=>this.nextPath('/signin')} id='signin-btn'>Sign In</Button>
+               <Switch>
+               <Route path='/signin' render={ ()=>{
+                                console.log('rendering...')
+
+                    return (
+                                <div>        
+                               <Modal   show={true} onHide={this.nextPath('/')} size="xs" >
+                                    <Modal.Header >
+                                        <Modal.Title>Sign In</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Login login={this.props.logInValid}/>
+                                    </Modal.Body>
+                                </Modal>
+                            </div>
+                            )
+                        }} />
+               </Switch>
+               </Router>
            </div>
         )
     }
 }
 
-export default Landing;
+export default withRouter(Landing);
