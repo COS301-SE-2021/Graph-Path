@@ -8,7 +8,6 @@ const ProjectCard = ({project})=>{
     return (
     <div>
         <Panel  shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}
-        defaultActiveKey={1}
         >
         <Panel header="Project Card">
           <p>
@@ -99,12 +98,12 @@ class ProjectManager extends Component {
         <div data-testid="tidProjectManager">
             Projects For uSer <br/>
             <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
-            {this.state.projects.map((project)=>{
-                return <div id="projects-list">
-                    <ProjectCard project={project} />
-                    
-                </div>
+            <div id="projects-list">
+                {this.state.projects.map((project)=>{
+                return <ProjectCard key={project.projectName} project={project} />    
+                
             })}
+            </div>
             
         </div>)
     }

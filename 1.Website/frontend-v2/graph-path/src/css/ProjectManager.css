@@ -4,3 +4,6 @@
     justify-content: flex-start;
     flex: row;
 }
+#projects-list div{
+    margin: 2px;
+}

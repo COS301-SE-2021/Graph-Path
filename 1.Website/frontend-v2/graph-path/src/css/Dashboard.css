@@ -1,0 +1,34 @@
+.main-container{
+    background: green;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+#content{
+    display: flex;
+    min-height: 92vh;
+    background: black;
+}
+
+nav{
+    background: pink;
+    height: 60px;
+    display: block;
+    width: 80vw;
+}
+
+#sidebar{
+    width: 20%;
+    margin: 16px;
+    background: #262121;
+}
+
+#main-content{
+    background: #aaa;
+    width: 80%;
+    margin: 16px;
+    padding: 16px;
+    /* max-height: calc(90vh - calc(60px + 26px)); */
+    max-height: 90vh;
+    overflow-y: scroll;
+}
