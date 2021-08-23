@@ -1,5 +1,13 @@
 import {React,Component} from "react";
-import {  Form,FormGroup,FormControl,ControlLabel,Modal, Button } from 'rsuite';
+
+
+//import "rsuite/dist/styles/rsuite-default.css" ;
+
+import '../css/Header.css'
+import Login from './Login'
+import landingSnap from '../img/landing.png';
+import {  Form,FormGroup,FormControl,ControlLabel,Modal, Button, Divider } from 'rsuite';
+
 import "rsuite/dist/styles/rsuite-dark.css" ;
 import Register from './Register' ;
 import {HashRouter as Router,Switch,Route, Redirect} from 'react-router-dom' ;
@@ -7,14 +15,20 @@ import ProjectManager from "./ProjectManager";
 import Dashboard from "./Dashboard";
 
 
+
 class CustomHeader extends Component{
 
     constructor(props){
         super(props);
         this.state={
+
+            show1:false,
+            show2:false,
+
             show:false,
             openSignin:false,
             logged:false
+
         }
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
@@ -26,10 +40,10 @@ class CustomHeader extends Component{
         }) ;
     }
     open(){
-        this.setState({ show: true})
+        this.setState({ show1: true,show2:false})
     }
     close(){
-        this.setState({show: false})
+        this.setState({show1: false})
     }
     signInMododal = ()=>{
         this.setState({
@@ -40,6 +54,30 @@ class CustomHeader extends Component{
     render(){
         return (
             <Router>
+            <div>
+                <img src={landingSnap} alt="Logo"/>
+                <Modal   show={this.state.show1} onHide={this.close} size="xs" >
+                    <Modal.Header>
+                        <Modal.Title>Sign Up</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Register />
+                    </Modal.Body>
+                </Modal>
+                <Button onClick={this.open} id='signup-btn'>Sign Up</Button>
+
+                <Modal   show={this.state.show2} onHide={this.close} size="xs">
+                    <Modal.Header>
+                        <Modal.Title>Sign In</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Login />
+                    </Modal.Body>
+                </Modal>
+                <Button onClick={this.open} id='signin-btn'>Sign In</Button>
+            </div>
+
+
                 <div data-testid="tidHeader">
                    
                     <Switch>
@@ -81,6 +119,16 @@ class CustomHeader extends Component{
                     <Button data-testid="tidSignUpLink" onClick={this.open} id='signup-btn'>Sign Up</Button>
                     <Button data-testid="tidSignUpLink" onClick={this.signInMododal}>Sign In</Button>
 
+
+
+                    <Divider>
+                        <Link to="/projects" className="link-btn, link-text">To ProjectManager</Link>
+                    </Divider>
+                    <Switch>
+                        <Route path='/projects' render={()=>{
+                            return <>
+                                <ProjectManager />
+
                             {
                                 this.state.logged?<Redirect to="/dashboard" />:""
                             }
@@ -100,6 +148,7 @@ class CustomHeader extends Component{
                             return (
                                 <>
                                
+
                             </>
                             )
                         }} />
