@@ -19,12 +19,14 @@ class Landing extends React.Component{
         this.open = this.open.bind(this);
 
         this.closeLog = this.close.bind(this);
-        this.openLog = this.open.bind(this);
 }
 
 //Deal with Register
     close() {
-        this.setState({ show: false });
+        this.setState({ 
+            show: false,
+            show1:false });
+        
     }
     open() {
         this.setState({ show: true });
@@ -32,9 +34,10 @@ class Landing extends React.Component{
 
     //Deal with Login
     closeLog() {
-        this.setState({ show1: true });
+        this.setState({ show1: false });
     }
-    openLog() {
+    openLog=()=> {
+        console.log('openig login')
         this.setState({ show1: true });
         
     }
@@ -44,9 +47,10 @@ class Landing extends React.Component{
     }
 
     render(){
+        console.log('landing props',this.props, this.state) ;
+        const {location} = this.props ;
         return(
            <div>
-               <Router>
                <span  >
                    <h1>About </h1>
                    <p className="aboutText">
@@ -60,37 +64,22 @@ class Landing extends React.Component{
 
 
                <img src={landingSnap} alt="Logo"/>
-               <Modal   show={this.state.show} onHide={this.close} size="xs" >
+               <Modal   show={this.state.show || this.state.show1} onHide={this.close} size="xs" >
                    <Modal.Header>
                        <Modal.Title>Sign Up</Modal.Title>
                    </Modal.Header>
                    <Modal.Body>
-                       <Register />
+                       {
+                           this.state.show ? 
+                            <Register />
+                       :<Login login={this.props.logInvalid}/>
+                       }
+
                    </Modal.Body>
                </Modal>
                <Button onClick={this.open} id='signup-btn'>Sign Up</Button>
-
                
-               <Button onClick={()=>this.nextPath('/signin')} id='signin-btn'>Sign In</Button>
-               <Switch>
-               <Route path='/signin' render={ ()=>{
-                                console.log('rendering...')
-
-                    return (
-                                <div>        
-                               <Modal   show={true} onHide={this.nextPath('/')} size="xs" >
-                                    <Modal.Header >
-                                        <Modal.Title>Sign In</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <Login login={this.props.logInValid}/>
-                                    </Modal.Body>
-                                </Modal>
-                            </div>
-                            )
-                        }} />
-               </Switch>
-               </Router>
+               <Button onClick={()=>this.openLog()} id='signin-btn'>Sign In</Button>
            </div>
         )
     }
