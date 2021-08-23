@@ -48,6 +48,7 @@ class Landing extends React.Component{
            <div>
                <Router>
                <span  >
+                   <h1>About </h1>
                    <p className="aboutText">
                        Graph path is an interactive graph based project Management tool.
                        It aims to organise tasks of a project on a interactive and user friendly graph.
