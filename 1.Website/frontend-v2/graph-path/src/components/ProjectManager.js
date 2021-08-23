@@ -2,6 +2,7 @@ import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
 import {Icon, Panel,SelectPicker} from 'rsuite' ;
 import "../css/ProjectManager.css"
+import { Link } from "react-router-dom";
 
 
 const ProjectCard = ({project})=>{
@@ -17,6 +18,7 @@ const ProjectCard = ({project})=>{
               Last Editted: {project.lastDateAccessed}
           </h6>
           <Icon icon='info' onClick={()=>console.log('clicked')}/>
+          <Link to="/project">Open</Link>
         </Panel>
       </Panel>
       </div>
