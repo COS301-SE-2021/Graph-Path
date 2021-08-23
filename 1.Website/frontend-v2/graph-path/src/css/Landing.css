@@ -1,0 +1,59 @@
+p.aboutText{
+    color: white;
+    text-transform: uppercase;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20em;
+    height:100%
+
+}
+
+span{
+    display:inline;
+}
+
+#signup-btn {
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    color: black;
+    font-size: 16px;
+    padding: 16px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+    text-align: center;
+}
+
+#signup-btn:hover {
+    background-color: black;
+    color: white;
+}
+
+#signin-btn {
+    position: absolute;
+    top: 60%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    color: black;
+    font-size: 16px;
+    padding: 16px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+    text-align: center;
+}
+
+#signin-btn:hover {
+    background-color: black;
+    color: white;
+}
+
+#registerScreen{
+    background-color:#001122;
+}
