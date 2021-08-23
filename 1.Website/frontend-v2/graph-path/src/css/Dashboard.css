@@ -11,16 +11,16 @@
 }
 
 nav{
-    background: pink;
+    background: #1a1d24;
     height: 60px;
     display: block;
-    width: 80vw;
+    width: 100vw;
 }
 
 #sidebar{
     width: 20%;
     margin: 16px;
-    background: #262121;
+    background: #1a1d24;
 }
 
 #main-content{
