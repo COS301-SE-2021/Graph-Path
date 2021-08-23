@@ -14,6 +14,7 @@ import {HashRouter as Router,Switch,Route, Redirect} from 'react-router-dom' ;
 import ProjectManager from "./ProjectManager";
 import Dashboard from "./Dashboard";
 import Landing from './Landing' ;
+import NotFound from "./NotFound";
 
 
 
@@ -57,14 +58,14 @@ class CustomHeader extends Component{
             <div data-testid="tidHeader">
                 <Router>
 
-                   {
-                       !this.state.logged?<Redirect to="/home"/>:""
-                   }
+                  
                     <Switch>
-                        <Route path="/home" exact render={()=>{
+                        <Route path="/home" render={()=>{
                             return <>
                             <Landing logInvalid={this.changeLogStatus} />
-                    
+                            {
+                       this.state.logged?<Redirect to="/dashboard"/>:""
+                   }
                             </> 
                         }} />
                        
@@ -72,26 +73,15 @@ class CustomHeader extends Component{
                             return(
                                 <>
                                     <Dashboard/>
+                                    {
+                       !this.state.logged?<Redirect to="/home"/>:""
+                   }
                                 </>
                             )
                         }}
                         />
-                        <Route path='/signin' render={ ()=>{
-                                console.log('rendering...')
-
-                    return (
-                                <div>        
-                               <Modal   show={this.state.openSignin} onHide={this.closeLog} size="xs" >
-                                    <Modal.Header>
-                                        <Modal.Title>Sign In</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <Login login={this.changeLogStatus}/>
-                                    </Modal.Body>
-                                </Modal>
-                            </div>
-                            )
-                        }} />
+                    
+                        <Route component={NotFound} />
                
                     </Switch>
             </Router>
