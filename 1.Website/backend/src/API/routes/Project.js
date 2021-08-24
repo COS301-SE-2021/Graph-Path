@@ -1,37 +1,40 @@
+require('dotenv').config({path:'../../.env'})
 const express = require('express');
 const Permissions = require('../../Helpers/Permissions');
 const mongoose = require('mongoose') ;
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
-const userManagementSerive = require('../../Services/UserManagerService');
+const userManagementService = require('../../Services/UserManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
 const DAGservice = require('../../Helpers/DAG');
 const { param,body, validationResult } = require('express-validator');
 const mailer = require('../../Helpers/SendMail');
-const {appendInvitesTo} = require("../../Services/UserManagerService");
+const authentication = require('../../Helpers/Authentication');
+const authorisation =  require('../../Helpers/Authorisation');
+const { auth, requiresAuth } = require('express-openid-connect');
+const jwt = require("jsonwebtoken");
 function makeProjectRoute(db) {
 
 
-    router.get("/testMail", (req,res)=>{
-        res.send({
-            message: "mail route called",
-        })
-    })
+    router.get('/requestToken',
+        (req,res)=>{
+            // Authentication Uuser
 
-    router.get("/acceptInvite", (req,res)=>{
+            authentication.generateToken(req,res,db)
+                .then((token)=>{
+                    res.send({
+                        message3: token
+                    })
+                })
+                .catch(err=>{
+                    res.send({
+                        message: "token creation failed"
+                    })
+                });
 
-        //check if this user is valid
-        //check users invites
-        //get role of user in invite
-        //accept user invite
-        //add user to project
-        //fetch the project with ID
-        //add
-        res.send({
-            message: "mail route called",
+
         })
-    })
 
     router.get("/sendMail", (req,res)=> {
 
@@ -41,6 +44,7 @@ function makeProjectRoute(db) {
         mailer.sendInvites("test Project 1", email);
 
     })
+
     router.get('/isAcyclic/:id',
         param('id').exists().notEmpty().isMongoId(),
         (req,res)=>{
@@ -52,34 +56,45 @@ function makeProjectRoute(db) {
                 })
             }
 
-        const ProjectId = req.params.id;
-        ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
-            const Graph = project.graph;
+            const ProjectId = req.params.id;
+            ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
+                const Graph = project.graph;
 
-            if(DAGservice.isAcyclic(Graph))
-            {
-                res.send({
-                    message: "Graph is DAG",
-                    data: []
-                })
-            }
+                if(DAGservice.isAcyclic(Graph))
+                {
+                    res.send({
+                        message: "Graph is DAG",
+                        data: []
+                    })
+                }
 
-            else
-            {
-                res.send({
-                    message:"Graph is not DAG",
-                    data: []
-                })
-            }
-
-
+                else
+                {
+                    res.send({
+                        message:"Graph is not DAG",
+                        data: []
+                    })
+                }
 
 
+
+
+            })
         })
+
+    router.get("/deleteTask",
+        authentication.authenticateToken,
+        authorisation.AuthoriseDeleteTask,
+        param('email').exists().isEmail(),
+        (req,res)=>{
+
+
     })
 
 
     router.get('/convertToKanbanBoard/:id',
+        authentication.authenticateToken,
+
         param('id').exists().notEmpty().isMongoId(),
         (req,res)=>{
             const failedValidation = validationResult(req);
@@ -356,6 +371,7 @@ function makeProjectRoute(db) {
 
             }
     });
+
     router.post('/addToProjectGroupMembers',(req, res, next)=>{
         let ID = req.body.id;
         let memberObjects = req.body.groupMembers;
