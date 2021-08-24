@@ -383,7 +383,7 @@ function makeProjectRoute(db) {
         authorisation.AuthoriseAddMembers,
         body('email').exists().notEmpty().isEmail(),
         body('projectID').exists().notEmpty().isMongoId(),
-        (req, res, next)=>{
+        (req, res)=>{
         let ID = req.body.id;
         let memberObjects = req.body.groupMembers;
        //  let memberObjects = [{
@@ -416,8 +416,6 @@ function makeProjectRoute(db) {
 
     });
 
-//DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     router.delete('/deleteProject/:id',
         authentication.authenticateToken,
@@ -448,23 +446,20 @@ function makeProjectRoute(db) {
         })
 })
 
-//PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
+
     router.patch('/updateProjectGraph',
         authentication.authenticateToken,
         authorisation.AuthoriseUpdateGraph,
         body('projectID').exists().notEmpty().isMongoId(),
         body('email').exists().notEmpty().isEmail(),
+        (req, res, )=>{
+            let ID = req.body.projectID;
+            let grph = req.body.graph;
+            let grph2 = JSON.parse(grph);
 
-    (req, res, next)=>{
-    let ID = req.body.projectID;
-    let grph = req.body.graph;
-    let grph2 = JSON.parse(grph);
-    //console.log("type of graph: "+ typeof grph);
-   // console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
-    //console.log("grph.edges[0].id: "+grph2.edges[0].id);
 
-    ProjectManagerService.updateProjectGraph(db,ID,grph2 )
-    .then(ans=>{
+            ProjectManagerService.updateProjectGraph(db,ID,grph2 )
+            .then(ans=>{
             if(ans.modifiedCount === 0){
                 res.send({
                     message: "Could not update the graph."
@@ -475,50 +470,24 @@ function makeProjectRoute(db) {
                 })
             }
         })
-    .catch((err)=>{
+            .catch((err)=>{
        res.status(500).send({
            message: "Could not update the project graph."
        })
      })
 });
 
-    router.patch('/addToProjectGroupMembers/:id/:memberObject',(req, res, next)=>{
-    let ID = req.params.id;
-    let mail = req.params.memberObject;
-    //console.log("mail:",mail);
-    ProjectManagerService.addNewProjectMember(db,ID, mail)
 
-        .then(ans=>{
-            if(ans.modifiedCount >0){
-                res.send({
-                    message: "Member added successfully."
-                })
-            }else if(ans === "Invalid project id"){
-                res.send({
-                    message: "Invalid project id provided."
-                })
-            }else if(ans === "Invalid memberObject"){
-                res.send({
-                    message: "Invalid member object provided."
-                })
-            }else{
-                res.send({
-                    message: "Could not add member."
-                })
-            }
-        })
-    .catch((err)=>{
-        res.status(500).send({
-            message: "An error has occurred."
-        })
-     })
-});
-
-    router.patch('/removeProjectMember/:id/:email',(req, res, next)=>{
-        let ID = req.params.id;
-        let mail = req.params.email;
-        ProjectManagerService.removeProjectMember(db,ID, mail)
-            .then(ans=>{
+    router.patch('/removeProjectMember/:id/:email',
+        authentication.authenticateToken,
+        authorisation.AuthoriseRemoveMembers,
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('email').exists().notEmpty().isEmail(),
+        (req, res)=>{
+            let ID = req.body.projectID;
+            let mail = req.body.email;
+            ProjectManagerService.removeProjectMember(db,ID, mail)
+                .then(ans=>{
                 if(ans.modifiedCount >0){
                     res.send({
                         message: "Member removed successfully."
@@ -529,7 +498,7 @@ function makeProjectRoute(db) {
                     })
                 }
             })
-            .catch((err)=>{
+                .catch((err)=>{
                 res.status(500).send({
                     message: "Server error: could not remove member.",
                     err: err
