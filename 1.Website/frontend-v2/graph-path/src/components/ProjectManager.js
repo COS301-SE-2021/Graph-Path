@@ -10,16 +10,16 @@ const ProjectCard = ({project,link})=>{
 
     return (
     <div>
-        <Panel  shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}
+        <Panel  shaded bordered bodyFill={false} style={{ display: 'inline-block', width: 240 }}
         >
         <Panel header="Project Card">
           <p>
-            <small>Project Name:{project.projectName} </small>
+            <small>Project Name:<h6>{project.projectName}</h6> </small>
           </p>
           <h6>
               Last Editted: {project.lastDateAccessed}
           </h6>
-          <Icon icon='info' onClick={()=>console.log('clicked')}/>
+          <Icon icon='info' onClick={()=>console.log('clicked')}/> <br/>
           <Link to={`${link}`}>Open</Link>
         </Panel>
       </Panel>
@@ -35,6 +35,11 @@ const ProjectCard = ({project,link})=>{
 *   Project Manager is also able to 
 *       1. Edit the name of the project. 
 *       2. Attach Members to the project. 
+*       3. Show Graph for each project
+*       4. 
+*
+*
+*
 */
 
 class ProjectManager extends Component {
@@ -72,6 +77,14 @@ class ProjectManager extends Component {
                 lastDateAccessed: new Date("2021-08-15T16:00").toJSON().slice(0,17) ,
             }]
         }
+    }
+
+    viewProjectsFromAPI=()=>{
+
+    }
+
+    updateLastAcessed = ()=>{
+        
     }
 
     deleteProject = () =>{
@@ -131,7 +144,7 @@ class ProjectManager extends Component {
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
         const {match} = this.props ;
-        console.log('PR MGR',match)
+        console.log('PR MGR',this.props.api)
         return( 
         <div data-testid="tidProjectManager">
            <Switch>
@@ -159,7 +172,18 @@ class ProjectManager extends Component {
 }
 
 ProjectManager.propTypes = {
+    user :PropTypes.objectOf({
+        email:PropTypes.string
+    }),
+    api:PropTypes.string
 
+}
+
+ProjectManager.defaultProps = {
+    user: {
+        email : 'ntpnaane@gmail.com' 
+    } ,
+    api:'http://localhost:9001'
 }
 
 export default withRouter(ProjectManager) ; 

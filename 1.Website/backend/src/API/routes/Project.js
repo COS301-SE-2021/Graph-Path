@@ -1,17 +1,56 @@
 const express = require('express');
 const Permissions = require('../../Helpers/Permissions');
 const mongoose = require('mongoose') ;
-const {route} = require("express/lib/router");
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
+const userManagementSerive = require('../../Services/UserManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
 const DAGservice = require('../../Helpers/DAG');
-
+const { param,body, validationResult } = require('express-validator');
+const mailer = require('../../Helpers/SendMail');
+const {appendInvitesTo} = require("../../Services/UserManagerService");
 function makeProjectRoute(db) {
-//GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    router.get('/isAcyclic/:id',(req,res)=>{
+
+    router.get("/testMail", (req,res)=>{
+        res.send({
+            message: "mail route called",
+        })
+    })
+
+    router.get("/acceptInvite", (req,res)=>{
+
+        //check if this user is valid
+        //check users invites
+        //get role of user in invite
+        //accept user invite
+        //add user to project
+        //fetch the project with ID
+        //add
+        res.send({
+            message: "mail route called",
+        })
+    })
+
+    router.get("/sendMail", (req,res)=> {
+
+        const projectOwner =  req.body.ownerName;
+        const email = req.body.email
+
+        mailer.sendInvites("test Project 1", email);
+
+    })
+    router.get('/isAcyclic/:id',
+        param('id').exists().notEmpty().isMongoId(),
+        (req,res)=>{
+            const failedValidation = validationResult(req);
+            if(!failedValidation.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid parameters",
+                    data: failedValidation
+                })
+            }
 
         const ProjectId = req.params.id;
         ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
@@ -38,15 +77,25 @@ function makeProjectRoute(db) {
 
         })
     })
-    router.get('/convertToKanbanBoard/:id',(req,res)=>{
+
+
+    router.get('/convertToKanbanBoard/:id',
+        param('id').exists().notEmpty().isMongoId(),
+        (req,res)=>{
+            const failedValidation = validationResult(req);
+            if(!failedValidation.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid parameters",
+                    data: failedValidation
+                })
+            }
+
 
         const ProjectId = req.params.id;
         kanbanBoard.getProjectGraph(db,ProjectId)
-
             .then((project)=>{
 
                 kanbanBoard.updateNodesID(db ,project).then(()=>{})
-
                 let projectNodes = kanbanBoard.getNodes(project);
                 if(projectNodes.length === 0)
                 {
@@ -104,28 +153,16 @@ function makeProjectRoute(db) {
 
 
     })
-    router.get('/find', (req, res, next) => {
 
-
-        db.collection('Projects').findOne({})
-            .then((ans) => {
-                console.log('success', ans);
-                res.send({
-                    data: ans
-                });
-            }, (ans) => {
-                console.log('rejected', ans);
-                res.send({
-                    data: ans
-                });
-            })
-            .catch(err => {
-                console.log('from db req', err)
-            })
-
-    });
-
-    router.get('/list', (req, res, next) => {
+    /**
+     * @api {get}  /task/listProjects
+     * @apiName list of Projects
+     * @apiDescription This endpoint returns a list of all Projects
+     * @apiGroup Project
+     * @apiSuccess (200) {List} list of Project objects
+     */
+    router.get('/listProjects',
+        (req, res) => {
 
         ProjectManagerService.getAllProjects(db)
             .then((ans) => {
@@ -150,13 +187,28 @@ function makeProjectRoute(db) {
 
     })
 
-    router.get('/getAllProjectsByUserEmail/:email', (req, res, next) => {
 
-        // console.log('received request ', req.params, 'servicing.....');
-        let mail=req.params.email;
+    /**
+     * @api {get}  /task/getAllProjectsByUserEmail/:email
+     * @apiName list projects owned by email
+     * @apiDescription This endpoint returns a list of all Projects belonging to the user mathing the passed in email
+     * @apiGroup Project
+     * @apiSuccess (200) {List} list of Project objects
+     */
+    router.get('/getAllProjectsByUserEmail/:email',
+        param('email').exists().notEmpty().isEmail(),
+        (req, res) => {
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
 
-        ProjectManagerService.getAllProjectsByUserEmail(db,mail)
-            .then(ans=>{
+            let mail=req.params.email;
+            ProjectManagerService.getAllProjectsByUserEmail(db,mail)
+                .then(ans=>{
 
                 if (ans ==="No matched projects")
                 {
@@ -174,7 +226,7 @@ function makeProjectRoute(db) {
                     })
                 }
             })
-            .catch(err => {
+                .catch(err => {
                 res.status(500).send({
                     message: "Server error. Could not retrieve projects.",
                     data: null
@@ -184,17 +236,28 @@ function makeProjectRoute(db) {
 
     })
 
-    router.get('/getProjectByID/:id',(req,res,next)=>{
 
-        let ID = req.params.id ;
-        if(ID ==='' || ID === undefined)
-        {
-            res.status(400).send({
-                message:"Invalid ID provided."
-            })
-        }
-        ProjectManagerService.getProjectByID(db,ID)
-            .then(ans=>{
+    /**
+     * @api {get}  /task/getProjectByID/:id
+     * @apiName list projects owned by email
+     * @apiDescription This endpoint returns a list of all Projects belonging to the user mathing the passed in email
+     * @apiGroup Project
+     * @apiSuccess (200) {List} list of Project objects
+     */
+    router.get('/getProjectByID/:id',
+        param('id').exists().notEmpty().isMongoId(),
+        (req,res)=>{
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
+
+            const ID = req.params.id;
+            ProjectManagerService.getProjectByID(db,ID)
+                .then(ans=>{
                 if(ans === "No project"){
                     res.send({
                         message: "No project with this ID"
@@ -212,7 +275,7 @@ function makeProjectRoute(db) {
                 }
 
             })
-            .catch(err=>{
+                .catch(err=>{
                 res.status(500).send({
                     message: "Server error: Could not retrieve the project, make sure your ID is valid and correct.",
                     err:err
@@ -220,8 +283,15 @@ function makeProjectRoute(db) {
             })
     }) ;
 
-    router.get("/AllPermissions",(req,res)=>{
-
+    /**
+     * @api {get}  /task/AllPermissions
+     * @apiName list all possbile permissions
+     * @apiDescription This endpoint returns a list of all permissions that can be assigned to a role
+     * @apiGroup Task
+     * @apiSuccess (200) {Array}  list of possible permissions
+     */
+    router.get("/AllPermissions",
+        (req,res)=>{
 
         console.log(Permissions.getAllRolesAndPermissions())
         res.send({
@@ -234,14 +304,33 @@ function makeProjectRoute(db) {
     })
 
 
-//POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
-    router.post('/newProject',  (req, res, next) => {
-        if (req === undefined || req.body === undefined) {
+    /**
+     * @api {post}  /task/newProject
+     * @apiName create new Project
+     * @apiDescription This endpoint creates a new Project
+     * @apiGroup Project
+     * @apiSuccess (200) {List} list of Project objects
+     */
+    router.post('/newProject',
+        body('projectName').exists().notEmpty().isString(),
+        body('startDate').exists().notEmpty().isDate(),
+        body('dueDate').exists().notEmpty().isDate(),
+        body('groupMembers').exists().notEmpty().isArray(),
+        (req, res) => {
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
+
+            if (req === undefined || req.body === undefined) {
             res.json({
                 message: "There was no information provided."
             });
         }
-        if (req.body.projectName === undefined) {
+            if (req.body.projectName === undefined) {
             console.log('no project name')
             res.send({
                 message: "Please specify a Project Name"
@@ -265,8 +354,7 @@ function makeProjectRoute(db) {
                     })
                 })
 
-
-        }
+            }
     });
     router.post('/addToProjectGroupMembers',(req, res, next)=>{
         let ID = req.body.id;
@@ -303,23 +391,6 @@ function makeProjectRoute(db) {
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * 
- * /deleteProject/:
- *   delete:
- *     summary: Deletes the project owner is deleting using the name
- *     tags: [Books]
- *     parameters:
- *       projectName: The name of the project 
- *       owner: The email address of the owner of project
- *     responses:
- *       200:
- *         description: The list of the books
- *         content:
- *           application/json:
- *      400:
- *          description:The body is not complete.
- */
 
 router.delete('/deleteProject/:id',(req,res)=>{
     let ID = req.params.id;
