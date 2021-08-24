@@ -2,8 +2,8 @@ import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
 import {Icon, Panel,SelectPicker} from 'rsuite' ;
 import "../css/ProjectManager.css"
-import { Link } from "react-router-dom";
-
+import { Link ,Route ,Switch} from "react-router-dom";
+import GraphPath from "./Graph";
 
 const ProjectCard = ({project})=>{
     return (
@@ -24,6 +24,16 @@ const ProjectCard = ({project})=>{
       </div>
     )
 }
+
+/*
+*   A component that will make async request to peer server for all projects of the logged user, provided in the props   
+*   @Component ProjectManager aims to make a list of projects organised in a recently accessed order. When the project opened
+*   by default it opens the graph in the specified project. When the project is opened, it should show the graph that will 
+*   take up most of the screen.
+*   Project Manager is also able to 
+*       1. Edit the name of the project. 
+*       2. Attach Members to the project. 
+*/
 
 class ProjectManager extends Component {
 
@@ -60,6 +70,10 @@ class ProjectManager extends Component {
                 lastDateAccessed: new Date("2021-08-15T16:00").toJSON().slice(0,17) ,
             }]
         }
+    }
+
+    deleteProject = () =>{
+        //make request for deleting project.
     }
 
     handleSortChange =(value)=>{
@@ -124,6 +138,8 @@ class ProjectManager extends Component {
                 
             })}
             </div>
+
+            <Route path="/project" component={GraphPath}/>
             
         </div>)
     }
