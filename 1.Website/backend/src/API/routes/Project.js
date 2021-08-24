@@ -1,11 +1,9 @@
 require('dotenv').config({path:'../../.env'})
 const express = require('express');
-const Permissions = require('../../Helpers/Permissions');
 const mongoose = require('mongoose') ;
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
-const userManagementService = require('../../Services/UserManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
 const DAGservice = require('../../Helpers/DAG');
 const { param,body, validationResult } = require('express-validator');
@@ -13,7 +11,6 @@ const mailer = require('../../Helpers/SendMail');
 const authentication = require('./Middleware/Authentication');
 const authorisation =  require('./Middleware/Authorisation');
 const { auth, requiresAuth } = require('express-openid-connect');
-const jwt = require("jsonwebtoken");
 function makeProjectRoute(db) {
 
 
@@ -36,7 +33,8 @@ function makeProjectRoute(db) {
 
         })
 
-    router.get("/sendMail", (req,res)=> {
+    router.get("/sendMail",
+        (req,res)=> {
 
         const projectOwner =  req.body.ownerName;
         const email = req.body.email
@@ -527,7 +525,7 @@ function makeProjectRoute(db) {
 });
 
 
-    router.patch('/updateProjectOwner/:id/:email',
+    router.patch('/updateProjectOwner',
         authentication.authenticateToken,
         authorisation.AuthoriseUpdateProjectOwner,
         body('email').exists().notEmpty().isEmail(),
