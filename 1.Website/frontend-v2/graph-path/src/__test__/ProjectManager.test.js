@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM  from 'react-dom';
+import { HashRouter as Router } from 'react-router';
 import {render,screen,cleanup} from '@testing-library/react' ;
 import ProjectManager from '../components/ProjectManager';
 
@@ -8,7 +9,7 @@ afterEach(cleanup);
 
 const testDiv = document.createElement("div") ;
 it('Should render Project Manager without props',()=>{
-    ReactDOM.render(<ProjectManager/>,testDiv) ;
+    ReactDOM.render(<Router><ProjectManager/></Router>,testDiv) ;
 }) ; 
 
 it('should render with all required props',()=>{
