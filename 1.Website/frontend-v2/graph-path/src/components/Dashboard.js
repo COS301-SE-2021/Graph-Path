@@ -3,7 +3,7 @@ import '../css/Dashboard.css' ;
 import {Button, DatePicker, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
-import {HashRouter as Router,Link,Switch,Route, withRouter} from 'react-router-dom' ;
+import {HashRouter as Router,Link,Switch,Route, withRouter, Redirect} from 'react-router-dom' ;
 import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/md'
 import NotFound from "./NotFound";
@@ -15,7 +15,8 @@ class Dashboard extends React.Component{
         super(props);
         this.state={
             show:true,
-            showSideBar: true
+            showSideBar: true,
+            redirect:true
         }
     }
 
@@ -35,6 +36,12 @@ class Dashboard extends React.Component{
 
     profileModalRef=(obj)=>{
         this.showProfile = obj && obj.handleShow;
+    }
+    changeRedirect = (link)=>{
+        this.setState({
+            redirect:!this.state.redirect 
+        }) ; 
+        return <Redirect to={link} />
     }
 
     showP=()=>{
@@ -75,7 +82,8 @@ class Dashboard extends React.Component{
                                     <Sidenav collapsible id="side-nav">
                                         <Sidenav.Body>
                                             <Nav>
-                                                <Nav.Item id="nav-option"
+                                                <Nav.Item onClick={(e)=>this.changeRedirect(`${match.url}/manager`)}
+                                                         id="nav-option"
                                                           icon={<Icon icon="dashboard"/>}
                                                           componentClass={Link}
                                                            to="/dashboard" >Dashboard</Nav.Item>
@@ -106,9 +114,12 @@ class Dashboard extends React.Component{
                                 <Route path={`${match.path}/modal`} exact>
                                     <Modal />
                                 </Route>
-                                <Route path={`${match.path}/`}>
+                                <Route path={`${match.path}/manager`}>
                                     <ProjectManager />
                                 </Route>
+                            {
+                                this.state.redirect?this.changeRedirect(`${match.url}/manager`):""
+                            }
                                 
                             </Switch>
 
