@@ -6,6 +6,7 @@ import {HashRouter as Router,Switch,Route, Redirect} from 'react-router-dom' ;
 import Dashboard from "./Dashboard";
 import Landing from './Landing' ;
 import NotFound from "./NotFound";
+import GraphPath from "./Graph";
 
 
 
@@ -76,7 +77,7 @@ class CustomHeader extends Component{
                    }
                   
                   
-                    
+                    <Route path="/project" component={GraphPath}/>
                         <Route component={NotFound} />
 
                
