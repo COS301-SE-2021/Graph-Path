@@ -10,8 +10,8 @@ const kanbanBoard = require('../../Helpers/kanbanBoard');
 const DAGservice = require('../../Helpers/DAG');
 const { param,body, validationResult } = require('express-validator');
 const mailer = require('../../Helpers/SendMail');
-const authentication = require('../../Helpers/Authentication');
-const authorisation =  require('../../Helpers/Authorisation');
+const authentication = require('./Middleware/Authentication');
+const authorisation =  require('./Middleware/Authorisation');
 const { auth, requiresAuth } = require('express-openid-connect');
 const jwt = require("jsonwebtoken");
 function makeProjectRoute(db) {

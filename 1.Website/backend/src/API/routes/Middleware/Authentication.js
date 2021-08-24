@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const userManagementService = require("../Services/UserManagerService");
-const ProjectManagerService = require("../Services/ProjectManagerService");
+const userManagementService = require("../../../Services/UserManagerService");
+const ProjectManagerService = require("../../../Services/ProjectManagerService");
 require('dotenv').config();
 
 function authenticateToken(req,res,next)
