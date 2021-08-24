@@ -9,7 +9,7 @@ const makeProjectRoute = require('./API/routes/Project');
 const makeNodeRoute = require('./API/routes/Node')
 const makeGraphRoute = require("./API/routes/graph");
 const Home = require('./API/routes/Home');
-
+const { auth, requiresAuth } = require('express-openid-connect');
 
 /*
     function MakeApp() makes  an app with a passed in Database.
@@ -22,6 +22,8 @@ function makeApp(InjectedDB)
 {
 
     const DB = InjectedDB;
+
+    
 
     //----------------------middleware------------------------
     app.use(cors());
