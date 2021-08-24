@@ -5,48 +5,59 @@ import "rsuite/dist/styles/rsuite-dark.min.css"
 import Register from "./Register";
 import Login from "./Login";
 import '../css/Landing.css';
+import {useAuth0} from '@auth0/auth0-react';
+import JSONPretty from 'react-json-pretty';
+import Dashboard from "./Dashboard";
+import Header from "./Header";
 
-class Landing extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={
-
-            show:false,
-            show1:false
-
-        }
-        this.close = this.close.bind(this);
-        this.open = this.open.bind(this);
-
-        this.closeLog = this.close.bind(this);
-}
+const Landing=()=> {
+    // constructor(props){
+    //     super(props);
+    //     this.state={
+    //
+    //         show:false,
+    //         show1:false
+    //
+    //     }
+//         this.close = this.close.bind(this);
+//         this.open = this.open.bind(this);
+//
+//         this.closeLog = this.close.bind(this);
+// }
 
 //Deal with Register
-    close() {
-        this.setState({ 
-            show: false,
-            show1:false });
-        
-    }
-    open() {
-        this.setState({ show: true });
-    }
+//     close() {
+//         this.setState({
+//             show: false,
+//             show1:false });
+//
+//     }
+//     open() {
+//         this.setState({ show: true });
+//     }
+//
+//     //Deal with Login
+//     closeLog() {
+//         this.setState({ show1: false });
+//     }
+//     openLog=()=> {
+//         console.log('openig login')
+//         this.setState({ show1: true });
+//
+//     }
+//
+//     nextPath =(path)=>{
+//         this.props.history.push(path)
+//
+//     }
 
-    //Deal with Login
-    closeLog() {
-        this.setState({ show1: false });
-    }
-    openLog=()=> {
-        console.log('openig login')
-        this.setState({ show1: true });
-        
-    }
 
-    nextPath =(path)=>{
-        this.props.history.push(path)
-    }
 
-    render(){
+    // render(){
+        const {loginWithRedirect} = useAuth0();
+        const {user, isAuthenticated} = useAuth0();
+        const {logout} = useAuth0();
+
         return(
            <div>
                <div  >
@@ -70,25 +81,45 @@ class Landing extends React.Component{
                </div>
 
 
-               <Modal   show={this.state.show || this.state.show1} onHide={this.close} size="xs" >
-                   <Modal.Header>
-                       <Modal.Title>Sign Up</Modal.Title>
-                   </Modal.Header>
-                   <Modal.Body>
-                       {
-                           this.state.show ? 
-                            <Register />
-                       :<Login login={this.props.logInvalid}/>
-                       }
+               {/*<Modal   show={this.state.show || this.state.show1} onHide={this.close} size="xs" >*/}
+               {/*    <Modal.Header>*/}
+               {/*        <Modal.Title>Sign Up</Modal.Title>*/}
+               {/*    </Modal.Header>*/}
+               {/*    <Modal.Body>*/}
+               {/*        {*/}
+               {/*            this.state.show ? */}
+               {/*             <Register />*/}
+               {/*        :<Login login={this.props.logInvalid}/>*/}
+               {/*        }*/}
 
-                   </Modal.Body>
-               </Modal>
-               <button data-testid="tidSignUpLink" onClick={this.open} id='signup-btn'>Sign Up</button>
+               {/*    </Modal.Body>*/}
+               {/*</Modal>*/}
+               {/*<button data-testid="tidSignUpLink" onClick={this.open} id='signup-btn'>Sign Up</button>*/}
                
-               <Button onClick={()=>this.openLog()} id='signin-btn'>Sign In</Button>
+               {/*<Button onClick={()=>this.openLog()} id='signin-btn'>Sign In</Button>*/}
+
+               <Button onClick={()=>loginWithRedirect()} id='signin-btn'>Sign In or Sign Up</Button>
+               <Button onClick={()=>logout()} id='signup-btn'>Logout</Button>
+
+               {isAuthenticated && user.email_verified && (
+                   <JSONPretty data={user} />
+                    //this.props.logInvalid
+                   // <Header />
+               )
+               }
+
+               {/*{*/}
+               {/*    user.email_verified === false ?*/}
+               {/*        <>*/}
+               {/*            {alert(user.email+" is not verified, verify email to sign in")}*/}
+               {/*        </>:*/}
+               {/*        ""*/}
+               {/*}*/}
+               {console.log(user)}
+
            </div>
-        )
-    }
+        );
+    // }
 }
 
 export default Landing;

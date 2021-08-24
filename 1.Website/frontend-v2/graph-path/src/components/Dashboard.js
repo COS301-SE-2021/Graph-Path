@@ -9,6 +9,7 @@ import * as IoIcons from 'react-icons/md'
 import NotFound from "./NotFound";
 import Modal from "./Modal";
 import Profile from "./Profile";
+import Logout from "./Logout";
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -68,9 +69,11 @@ class Dashboard extends React.Component{
                         </div>
                         <Button onClick={this.showP}>Profile</Button>
 
-                        <div id="power-off-div">
-                            <FaIcons.FaPowerOff id="power-off-icon" />
-                        </div>
+                        {/*<div id="power-off-div">*/}
+                        {/*    <FaIcons.FaPowerOff id="power-off-icon" />*/}
+                        {/*</div>*/}
+
+                        <Logout/>
 
 
                     </nav>
