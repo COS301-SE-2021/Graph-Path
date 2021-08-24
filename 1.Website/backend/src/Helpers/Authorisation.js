@@ -25,8 +25,21 @@ function AuthoriseDeleteTask(req,res,next)
 
 
 function AuthoriseKanbanBoard(req,res,next){
+    console.log("checking permission to convert project as kanbad board")
+    const userProjects = req.user.projects;
+    const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
+    if( userProject){
+            console.log("permitted to delete tasks")
+            next()
+
+    } else {
+        res.status(403).send({
+            message: "Not authorised to access current project"
+        })
+    }
 
 }
 module.exports = {
-    AuthoriseDeleteTask
+    AuthoriseDeleteTask,
+    AuthoriseKanbanBoard,
 }

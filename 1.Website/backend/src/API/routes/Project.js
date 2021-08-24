@@ -94,7 +94,7 @@ function makeProjectRoute(db) {
 
     router.get('/convertToKanbanBoard/:id',
         authentication.authenticateToken,
-
+        authorisation.AuthoriseKanbanBoard,
         param('id').exists().notEmpty().isMongoId(),
         (req,res)=>{
             const failedValidation = validationResult(req);
