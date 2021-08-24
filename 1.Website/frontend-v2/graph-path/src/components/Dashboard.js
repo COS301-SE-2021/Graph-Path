@@ -8,6 +8,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/md'
 import NotFound from "./NotFound";
 import Modal from "./Modal";
+import Profile from "./Profile";
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -31,12 +32,22 @@ class Dashboard extends React.Component{
     showM=()=>{
         this.showModal();
     }
+
+    profileModalRef=(obj)=>{
+        this.showProfile = obj && obj.handleShow;
+    }
+
+    showP=()=>{
+        this.showProfile();
+    }
+
     render(){
         return(
              <Router>
             
                 <div className="main-container">
                     <NewProject ref={this.newProjectModalRef} />
+                    <Profile ref={this.profileModalRef} />
                     <nav id="navbar"  >
                         <div id="side-bar-button">
                             {
@@ -46,6 +57,7 @@ class Dashboard extends React.Component{
                                 <FaIcons.FaBars id="btn-side-bar" onClick={this.handleSideBar} />
                             }
                         </div>
+                        <Button onClick={this.showP}>Profile</Button>
 
                         <div id="power-off-div">
                             <FaIcons.FaPowerOff id="power-off-icon" />
