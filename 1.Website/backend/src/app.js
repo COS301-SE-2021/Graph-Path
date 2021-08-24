@@ -2,7 +2,7 @@ const express = require('express') ;
 const app = express();
 const cors = require('cors') ;
 const path = require('path') ;
-
+//apidoc -i /Users/kagisodiagengmonareng/IdeaProjects/Graph-Path/1.Website/backend/src/API/routes -o apidoc/
 const makeUserRoute = require('./API/routes/User');
 const makeTaskRoute = require('./API/routes/Task');
 const makeProjectRoute = require('./API/routes/Project');

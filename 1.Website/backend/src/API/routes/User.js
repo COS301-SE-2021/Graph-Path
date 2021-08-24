@@ -4,6 +4,8 @@ const mongoose = require('mongoose') ;
 const ObjectId = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
 const UserManagerService = require('../../Services/UserManagerService');
+const { body, validationResult, param,check} = require('express-validator');
+const {isIn} = require("validator");
 
 
  function makeUserRoute (db)
@@ -11,7 +13,13 @@ const UserManagerService = require('../../Services/UserManagerService');
 
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+     /**
+      * @api {get}  /getAllUsers'
+      * @apiName  get all users
+      * @apiDescription This endpoint retrieves all user objects
+      * @apiGroup User
+      * @apiSuccess (200) {object}  message : "The users retrieved successfully"
+      */
      router.get('/listOfAllUsers', (req, res, next) => {
 
          UserManagerService.getAllUsers(db)
@@ -38,8 +46,24 @@ const UserManagerService = require('../../Services/UserManagerService');
 
      })
 
-     router.get('/listOfAllUsersExceptYourself/:email', (req, res, next) => {
-
+     /**
+      * @api {get}  /listOfAllUsersExceptYourself'
+      * @apiName  get all other users
+      * @apiDescription This endpoint gets all other users a user object
+      * @apiGroup User
+      * @apiParam  {String} [email] "email"
+      * @apiSuccess (200) {object}  message : "The user created successfully"
+      */
+     router.get('/listOfAllUsersExceptYourself/:email',
+         param('email').exists().notEmpty(),
+         (req, res, next) => {
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
 
          let mail= req.params.email;
          UserManagerService.getAllOtherUsers(db,mail)
@@ -73,8 +97,24 @@ const UserManagerService = require('../../Services/UserManagerService');
 
      })
 
-     router.get('/getUserByID/:id',(req,res,next)=>{
-
+     /**
+      * @api {get}  /getUserById'
+      * @apiName  retrieve user object
+      * @apiDescription This endpoint retrieves a user object based on ID
+      * @apiGroup User
+      * @apiParam  {String} [id] user ID
+      * @apiSuccess (200) {object}  message : "The user retrieved successfully"
+      */
+     router.get('/getUserByID/:id',
+         param('id').exists().notEmpty().isMongoId(),
+         (req,res,next)=>{
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
          const ID = req.params.id ;
          if(ID ==='' || ID === undefined)
          {
@@ -109,9 +149,26 @@ const UserManagerService = require('../../Services/UserManagerService');
      }) ;
 
 //POST ENDPOINTS////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-     router.post('/login/',async (req,res,next)=>{
-
+     /**
+      * @api {post}  /login'
+      * @apiName  login a user
+      * @apiDescription This endpoint logs in a user object
+      * @apiGroup User
+      * @apiParam  {String} [email] "email"
+      * @apiParam  {String} [password] ''
+      * @apiSuccess (200) {object}  message : "The user logged in successfully"
+      */
+     router.post('/login/',
+         body('email').exists().notEmpty(),
+         body('password').exists().notEmpty(),
+         async (req,res,next)=>{
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
          const emailParam = req.body.email;
          const GivenPassword = req.body.password;
 
@@ -180,7 +237,38 @@ const UserManagerService = require('../../Services/UserManagerService');
 
      }) ;
 
-     router.post('/newUser',(req,res)=>{
+     /**
+      * @api {post}  /newUser'
+      * @apiName  create new user object
+      * @apiDescription This endpoint creates a user object
+      * @apiGroup User
+      * @apiParam  {String} [id] user ID
+      * @apiParam  {String} [firstName] "firstName"
+      * @apiParam  {String} [lastName] "lastName"
+      * @apiParam  {String} [username] "username"
+      * @apiParam  {String} [email] "email"
+      * @apiParam  {String} [notification] "Notification"
+      * @apiParam  {String} [type] "type"
+      * @apiParam  {String} [password] ''
+      * @apiSuccess (200) {object}  message : "The user created successfully"
+      */
+     router.post('/newUser',
+         body('notification').exists().notEmpty().isString(),
+         body('email').exists().notEmpty(),
+         body('firstName').exists().notEmpty().isString(),
+         body('lastName').exists().notEmpty().isString(),
+         body('userName').exists().notEmpty().isString(),
+         body('password').exists().notEmpty(),
+         body('type').exists().notEmpty().isString(),
+         (req,res)=>{
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
+
          if (req === undefined || req.body === undefined || req === null ){
              res.json({
                  message:"There is no user to insert."
@@ -216,7 +304,24 @@ const UserManagerService = require('../../Services/UserManagerService');
 
 
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
-    router.delete('/deleteUserByID/:id',(req,res, next)=>{
+     /**
+      * @api {delete}  /deleteUserByID'
+      * @apiName  removes an user object based on its id
+      * @apiDescription This endpoint removes the user matching the passed in ID
+      * @apiGroup User
+      * @apiParam  {String} [id] user ID
+      * @apiSuccess (200) {object}  message : "The user removed successfully"
+      */
+     router.delete('/deleteUserByID/:id',
+        param('id').exists().notEmpty().isMongoId(),
+        (req,res, next)=>{
+            const failedValidation = validationResult(req);
+            if(!failedValidation.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid parameters",
+                    data: failedValidation
+                })
+            }
        let id = req.params.id;
         UserManagerService.removeUserByID(db,id)
             .then((ans)=>{
@@ -242,7 +347,16 @@ const UserManagerService = require('../../Services/UserManagerService');
             });
     });
 
-     router.delete('/deleteUserByEmail/:email',(req,res, next)=>{
+     router.delete('/deleteUserByEmail/:email',
+         param('email').exists().notEmpty(),
+         (req,res, next)=>{
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
 
          let mail = req.params.email;
          if(mail ==="" || mail === undefined){
@@ -275,7 +389,27 @@ const UserManagerService = require('../../Services/UserManagerService');
      });
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
-     router.patch('/updateUserUsername/:email/:username',(req, res, next)=>{
+     /**
+      * @api {patch}  /updateUserUsername'
+      * @apiName  changes username of a user object
+      * @apiDescription This endpoint updates username field of the user matching the passed in email
+      * @apiGroup User
+      * @apiParam  {String} [email] "email"
+      * @apiParam  {String} [username] "username"
+      * @apiSuccess (200) {object}  message : "The user updated successfully"
+      */
+     router.patch('/updateUserUsername/:email/:username',
+         param('email').exists().notEmpty(),
+         param('username').exists().notEmpty().isString(),
+         (req, res, next)=>{
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
+
          let mail = req.params.email;
          let usrnme = req.params.username;
 
@@ -298,7 +432,26 @@ const UserManagerService = require('../../Services/UserManagerService');
           })
      });
 
-     router.patch('/updateUserPassword/:email/:password',(req, res, next)=>{
+     /**
+      * @api {patch}  /updateUserPassword'
+      * @apiName  changes password of a user object
+      * @apiDescription This endpoint updates the password field of the user matching the passed in email
+      * @apiGroup User
+      * @apiParam  {String} [email] "email"
+      * @apiParam  {String} [password] ''
+      * @apiSuccess (200) {object}  message : "The user updated successfully"
+      */
+     router.patch('/updateUserPassword/:email/:password',
+         param('email').exists().notEmpty(),
+         param('password').exists().notEmpty(),
+         (req, res, next)=>{
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
          let mail = req.params.email;
          let psw = req.params.password;
 
@@ -322,7 +475,28 @@ const UserManagerService = require('../../Services/UserManagerService');
              })
      });
 
-     router.patch('/updateUserUsernameAndPassword/:email/:username/:password',(req, res, next)=>{
+     /**
+      * @api {patch}  /updateUserUsernameAndPassword'
+      * @apiName  changes username and password of a user object
+      * @apiDescription This endpoint updates username and password fields of the user matching the passed in email
+      * @apiGroup User
+      * @apiParam  {String} [email] "email"
+      * @apiParam  {String} [username] "username"
+      * @apiParam  {String} [password] ''
+      * @apiSuccess (200) {object}  message : "The user updated successfully"
+      */
+     router.patch('/updateUserUsernameAndPassword/:email/:username/:password',
+         param('email').exists().notEmpty(),
+         param('username').exists().notEmpty().isString(),
+         param('password').exists().notEmpty(),
+         (req, res, next)=>{
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
          let mail = req.params.email;
          let usrnme = req.params.username;
          let psw = req.params.password;
@@ -347,8 +521,38 @@ const UserManagerService = require('../../Services/UserManagerService');
 
      });
 
-
-     router.put('/updateEverythingUser/:id',(req, res, next)=>{
+     /**
+      * @api {put}  /updateEverythingUser'
+      * @apiName  update all details of a user object
+      * @apiDescription This endpoint updates all fields of the user matching the passed in ID
+      * @apiGroup User
+      * @apiParam  {String} [id] user ID
+      * @apiParam  {String} [firstName] "firstName"
+      * @apiParam  {String} [lastName] "lastName"
+      * @apiParam  {String} [username] "username"
+      * @apiParam  {String} [email] "email"
+      * @apiParam  {String} [notification] "Notification"
+      * @apiParam  {String} [type] "type"
+      * @apiParam  {String} [password] ''
+      * @apiSuccess (200) {object}  message : "The user updated successfully"
+      */
+     router.put('/updateEverythingUser/:id',
+         param('id').exists().notEmpty().isMongoId(),
+         body('firstName').exists().notEmpty().isString(),
+         body('lastName').exists().notEmpty().isString(),
+         body('username').exists().notEmpty().isString(),
+         body('email').exists().notEmpty(),
+         body('notification').exists().notEmpty().isString(),
+         body('type').exists().notEmpty().isString(),
+         body('password').exists().notEmpty(),
+         (req, res, next)=>{
+             const failedValidation = validationResult(req);
+             if(!failedValidation.isEmpty()){
+                 res.status(420).send({
+                     message: "Bad request , invalid parameters",
+                     data: failedValidation
+                 })
+             }
          let ID = req.params.id;
          let mail = req.body.email;
          let lastName = req.body.lastName;
