@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const userManagementService = require("../../../Services/UserManagerService");
 const ProjectManagerService = require("../../../Services/ProjectManagerService");
-require('dotenv').config();
+require('dotenv').config({path:'../../../.env'});
 
 function authenticateToken(req,res,next)
 {
