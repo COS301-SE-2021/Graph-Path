@@ -303,11 +303,11 @@ function makeProjectRoute(db) {
 
 
     /**
-     * @api {post}  /task/newProject
-     * @apiName create new Project
-     * @apiDescription This endpoint creates a new Project
+     * @api {post}
+     * @apiName
+     * @apiDescription
      * @apiGroup Project
-     * @apiSuccess (200) {List} list of Project objects
+     * @apiSuccess (200)
      */
     router.post('/newProject',
         body('projectName').exists().notEmpty().isString(),
@@ -355,6 +355,14 @@ function makeProjectRoute(db) {
             }
     });
 
+
+    /**
+     * @api {post}
+     * @apiName
+     * @apiDescription
+     * @apiGroup Project
+     * @apiSuccess (200)
+     */
     router.post('/addToProjectGroupMembers',
         authentication.authenticateToken,
         authorisation.AuthoriseAddMembers,
@@ -393,13 +401,19 @@ function makeProjectRoute(db) {
 
     });
 
-
+    /**
+     * @api {post}
+     * @apiName
+     * @apiDescription
+     * @apiGroup Project
+     * @apiSuccess (200)
+     */
     router.delete('/deleteProject',
         authentication.authenticateToken,
         authorisation.AuthoriseDeleteProject,
         body('email').exists().notEmpty().isEmail(),
         body('projectID').exists().notEmpty().isMongoId(),
-    (req,res)=>{
+        (req,res)=>{
         let ID = req.body.projectID;
 
         ProjectManagerService.removeProjectByID(db,ID)
@@ -420,9 +434,15 @@ function makeProjectRoute(db) {
                 message:"Could not remove project."
             })
         })
-})
+});
 
-
+    /**
+     * @api {post}
+     * @apiName
+     * @apiDescription
+     * @apiGroup Project
+     * @apiSuccess (200)
+     */
     router.patch('/updateProjectGraph',
         authentication.authenticateToken,
         authorisation.AuthoriseUpdateGraph,
@@ -453,7 +473,13 @@ function makeProjectRoute(db) {
      })
 });
 
-
+    /**
+     * @api {post}
+     * @apiName
+     * @apiDescription
+     * @apiGroup Project
+     * @apiSuccess (200)
+     */
     router.patch('/removeProjectMember',
         authentication.authenticateToken,
         authorisation.AuthoriseRemoveMembers,
@@ -482,7 +508,13 @@ function makeProjectRoute(db) {
             })
     });
 
-
+    /**
+     * @api {post}
+     * @apiName
+     * @apiDescription
+     * @apiGroup Project
+     * @apiSuccess (200)
+     */
     router.put('/updateEverythingProject',
         authentication.authenticateToken,
         authorisation.AuthoriseUpdateAllProject,
@@ -524,7 +556,13 @@ function makeProjectRoute(db) {
         })
 });
 
-
+    /**
+     * @api {post}
+     * @apiName
+     * @apiDescription
+     * @apiGroup Project
+     * @apiSuccess (200)
+     */
     router.patch('/updateProjectOwner',
         authentication.authenticateToken,
         authorisation.AuthoriseUpdateProjectOwner,
@@ -560,8 +598,6 @@ function makeProjectRoute(db) {
         })
 
 });
-
-
 
 
 
