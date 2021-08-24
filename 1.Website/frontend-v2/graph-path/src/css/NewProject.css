@@ -1,0 +1,26 @@
+#permission-div{
+    background-color: transparent;
+}
+
+#role-div{
+    min-height: 30vh;
+    max-width: 15vw;
+    /*background-color: pink;*/
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+#can-do-div{
+    max-width: 15vw;
+    max-height: 30vh;
+    /*background-color: blue;*/
+    border: 1px solid grey;
+    border-radius: 5px;
+
+}
+
+#check-list{
+    max-width: 15vw;
+    max-height: 19vh;
+    overflow-y: scroll;
+}
