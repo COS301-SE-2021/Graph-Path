@@ -3,8 +3,10 @@
 //delete project
 //update graph
 //remove members
-function AuthoriseDeleteTask(req,res,next)
-{
+//update all project
+//update projectOwner
+
+function AuthoriseDeleteTask(req,res,next) {
     console.log("checking permission to delete tasks")
     const userProjects = req.user.projects;
     const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
@@ -27,7 +29,6 @@ function AuthoriseDeleteTask(req,res,next)
         })
     }
 }
-
 
 function AuthoriseKanbanBoard(req,res,next){
     console.log("checking permission to convert project as kanbad board")
@@ -132,9 +133,9 @@ function AuthoriseRemoveMembers(req,res,next){
             next()
 
         } else{
-            console.log("reomve project authorization failed")
+            console.log("remove  project members authorization failed")
             res.status(403).send({
-                message: "Unauthorised to unauthorised to remove members",
+                message: "Unauthorised to remove members",
             })
         }
     } else {
@@ -144,6 +145,59 @@ function AuthoriseRemoveMembers(req,res,next){
     }
 
 }
+
+function AuthoriseUpdateAllProject(req,res,next){
+    console.log("checking permission to update everything in a project")
+    const userProjects = req.user.projects;
+    const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
+    if( userProject){
+        console.log(userProject[0])
+        const permissions = userProject[0].permissions;
+        if(permissions.includes("update all project")){
+            console.log("permitted to update all project")
+            next()
+
+        } else{
+            console.log(" project update ALl authorization failed")
+            res.status(403).send({
+                message: "Unauthorised to update All project",
+            })
+        }
+    } else {
+        res.status(403).send({
+            message: "Not authorised to access current project"
+        })
+    }
+
+
+}
+
+function AuthoriseUpdateProjectOwner(res,req,next){
+    console.log("checking permission to everything in a task")
+    const userProjects = req.user.projects;
+    const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
+    if( userProject){
+        console.log(userProject[0])
+        const permissions = userProject[0].permissions;
+        if(permissions.includes("update project owner")){
+            console.log("permitted to update projectOwner")
+            next()
+
+        } else{
+            console.log("update project owner  authorization failed")
+            res.status(403).send({
+                message: "Unauthorised to update project owner",
+            })
+        }
+    } else {
+        res.status(403).send({
+            message: "Not authorised to access current project"
+        })
+    }
+
+
+
+}
 module.exports = {
     AuthoriseDeleteTask,
     AuthoriseKanbanBoard,
@@ -151,4 +205,6 @@ module.exports = {
     AuthoriseDeleteProject,
     AuthoriseUpdateGraph,
     AuthoriseRemoveMembers,
+    AuthoriseUpdateAllProject,
+    AuthoriseUpdateProjectOwner,
 }
