@@ -91,8 +91,14 @@ function makeProjectRoute(db) {
 
     })
 
-
-    router.get('/convertToKanbanBoard/:id',
+    /**
+     * @api {get}  /task/convertToKanbanBoard
+     * @apiName return as given project as datasourse for kanban
+     * @apiDescription This endpoint creates a datasourse for a kanban board
+     * @apiGroup Project
+     * @apiSuccess (200) {object} datasourse for kanban
+     */
+    router.get('/convertToKanbanBoard',
         authentication.authenticateToken,
         authorisation.AuthoriseKanbanBoard,
         param('id').exists().notEmpty().isMongoId(),
@@ -106,7 +112,7 @@ function makeProjectRoute(db) {
             }
 
 
-        const ProjectId = req.params.id;
+        const ProjectId = req.body.projectID;
         kanbanBoard.getProjectGraph(db,ProjectId)
             .then((project)=>{
 
@@ -372,7 +378,10 @@ function makeProjectRoute(db) {
             }
     });
 
-    router.post('/addToProjectGroupMembers',(req, res, next)=>{
+    router.post('/addToProjectGroupMembers',
+        authentication.authenticateToken,
+        authorisation.AuthoriseAddMembers,
+        (req, res, next)=>{
         let ID = req.body.id;
         let memberObjects = req.body.groupMembers;
        //  let memberObjects = [{
@@ -408,7 +417,11 @@ function makeProjectRoute(db) {
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-router.delete('/deleteProject/:id',(req,res)=>{
+router.delete('/deleteProject/:id',
+    authentication.authenticateToken,
+    authorisation.AuthoriseDeleteProject,
+    body('projectID').exists().notEmpty().isMongoId(),
+    (req,res)=>{
     let ID = req.params.id;
 
         // console.log(projectName,owner); 
