@@ -2,10 +2,12 @@ import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
 import {Icon, Panel,SelectPicker} from 'rsuite' ;
 import "../css/ProjectManager.css"
-import { Link ,Route ,Switch} from "react-router-dom";
+import { Link ,Route ,Switch,useRouteMatch, withRouter} from "react-router-dom";
 import GraphPath from "./Graph";
 
-const ProjectCard = ({project})=>{
+const ProjectCard = ({project,link})=>{
+    console.log('PR CArd',link)
+
     return (
     <div>
         <Panel  shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}
@@ -18,7 +20,7 @@ const ProjectCard = ({project})=>{
               Last Editted: {project.lastDateAccessed}
           </h6>
           <Icon icon='info' onClick={()=>console.log('clicked')}/>
-          <Link to="/project">Open</Link>
+          <Link to={`${link}`}>Open</Link>
         </Panel>
       </Panel>
       </div>
@@ -128,18 +130,29 @@ class ProjectManager extends Component {
 
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
+        const {match} = this.props ;
+        console.log('PR MGR',match)
         return( 
         <div data-testid="tidProjectManager">
-           Projects <br/>
-            <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
-            <div data-testid="tidProjList" id="projects-list">
-                {this.state.projects.map((project,index)=>{
-                return <ProjectCard key={`${index+1}${project.projectName}`} project={project} />    
-                
-            })}
-            </div>
+           <Switch>
+                <Route path={`${match.path}/project`} render={()=>{
+                    return <GraphPath />}}/>
+                <Route >
+                    <div>
+                    Projects <br/>
+                    <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
+                        <div data-testid="tidProjList" id="projects-list">
+                            {this.state.projects.map((project,index)=>{
+                            return <ProjectCard key={`${index+1}${project.projectName}`} project={project} link={`${match.url}/project`} />    
+                            
+                        })}
+                        
+                        </div>
+            
+                    </div>
+                </Route>
+            </Switch>
 
-            <Route path="/project" component={GraphPath}/>
             
         </div>)
     }
@@ -149,4 +162,4 @@ ProjectManager.propTypes = {
 
 }
 
-export default ProjectManager ; 
+export default withRouter(ProjectManager) ; 

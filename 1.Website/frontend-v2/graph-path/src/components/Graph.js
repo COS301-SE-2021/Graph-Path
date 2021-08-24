@@ -33,6 +33,8 @@ class GraphPath extends Component{
               var { nodes, edges } = event;
             }
           };
+          console.log('rendering graph') ;
+
           return (
             <Graph
               graph={graph}

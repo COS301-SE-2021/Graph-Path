@@ -52,12 +52,13 @@ class CustomHeader extends Component{
 
                   
                     <Switch>
+            
                         <Route exact path="/" render={()=>{
                             return <>
                             <Landing logInvalid={this.changeLogStatus} />
                             {
-                       this.state.logged?<Redirect to="/dashboard"/>:<Redirect to="/"/>
-                   }
+                                this.state.logged?<Redirect to="/dashboard"/>:<Redirect to="/"/>
+                            }
                             </> 
                         }} />
                        
@@ -66,8 +67,8 @@ class CustomHeader extends Component{
                                 <>
                                     <Dashboard/>
                                     {
-                       !this.state.logged?<Redirect to="/home"/>:""
-                   }
+                                        !this.state.logged?<Redirect to="/home"/>:""
+                                    }
                                 </>
                             )
                         }}

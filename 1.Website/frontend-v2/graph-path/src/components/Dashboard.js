@@ -3,7 +3,7 @@ import '../css/Dashboard.css' ;
 import {Button, DatePicker, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
-import {HashRouter as Router,Link,Switch,Route} from 'react-router-dom' ;
+import {HashRouter as Router,Link,Switch,Route, withRouter} from 'react-router-dom' ;
 import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/md'
 import NotFound from "./NotFound";
@@ -32,8 +32,10 @@ class Dashboard extends React.Component{
         this.showModal();
     }
     render(){
+        console.log(this.props) ; 
+        const {match} =this.props ;
         return(
-             <Router>
+            //  <Router>
             
                 <div className="main-container">
                     <NewProject ref={this.newProjectModalRef} />
@@ -64,7 +66,12 @@ class Dashboard extends React.Component{
                                                 <Nav.Item id="nav-option"
                                                           icon={<Icon icon="dashboard"/>}
                                                           componentClass={Link}
-                                                           to="/modal" >Dashboard</Nav.Item>
+                                                           to="/dashboard" >Dashboard</Nav.Item>
+                                                           
+                                                <Nav.Item id="nav-option"
+                                                          icon={<Icon icon="info"/>}
+                                                          componentClass={Link}
+                                                           to={`${match.url}/modal`} >Modal</Nav.Item>
 
                                                 <Nav.Item id="nav-option" icon={<Icon icon="project"/>}
                                                           onSelect={this.showM}> New Project</Nav.Item>
@@ -84,22 +91,22 @@ class Dashboard extends React.Component{
                         {/*main content div contains all other pages*/}
                         <div id="main-content">
                             <Switch>
-                                <Route path="/dashboard">
-                                    <ProjectManager />
-                                </Route>
-                                <Route path="/modal" exact>
+                                <Route path={`${match.path}/modal`} exact>
                                     <Modal />
                                 </Route>
-
+                                <Route path={`${match.path}/`}>
+                                    <ProjectManager />
+                                </Route>
+                                
                             </Switch>
 
                         </div>
 
                 </div>
-                </div>
-             </Router>
+            </div>
+            //  </Router>
         )
     }
 }
 
-export default Dashboard ;
+export default withRouter(Dashboard) ;
