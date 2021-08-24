@@ -23,7 +23,7 @@ function makeApp(InjectedDB)
 
     const DB = InjectedDB;
 
-    
+
 
     //----------------------middleware------------------------
     app.use(cors());
