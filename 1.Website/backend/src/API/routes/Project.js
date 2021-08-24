@@ -381,6 +381,8 @@ function makeProjectRoute(db) {
     router.post('/addToProjectGroupMembers',
         authentication.authenticateToken,
         authorisation.AuthoriseAddMembers,
+        body('email').exists().notEmpty().isEmail(),
+        body('projectID').exists().notEmpty().isMongoId(),
         (req, res, next)=>{
         let ID = req.body.id;
         let memberObjects = req.body.groupMembers;
@@ -417,12 +419,13 @@ function makeProjectRoute(db) {
 //DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-router.delete('/deleteProject/:id',
-    authentication.authenticateToken,
-    authorisation.AuthoriseDeleteProject,
-    body('projectID').exists().notEmpty().isMongoId(),
+    router.delete('/deleteProject/:id',
+        authentication.authenticateToken,
+        authorisation.AuthoriseDeleteProject,
+        body('email').exists().notEmpty().isEmail(),
+        body('projectID').exists().notEmpty().isMongoId(),
     (req,res)=>{
-    let ID = req.params.id;
+    let ID = req.body.projectID;
 
         // console.log(projectName,owner); 
     ProjectManagerService.removeProjectByID(db,ID)
@@ -446,9 +449,15 @@ router.delete('/deleteProject/:id',
 })
 
 //PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
-router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
-    let ID = req.params.id;
-    let grph = req.params.graph;
+    router.patch('/updateProjectGraph',
+        authentication.authenticateToken,
+        authorisation.AuthoriseUpdateGraph,
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('email').exists().notEmpty().isEmail(),
+
+    (req, res, next)=>{
+    let ID = req.body.projectID;
+    let grph = req.body.graph;
     let grph2 = JSON.parse(grph);
     //console.log("type of graph: "+ typeof grph);
    // console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
@@ -473,7 +482,7 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
      })
 });
 
-router.patch('/addToProjectGroupMembers/:id/:memberObject',(req, res, next)=>{
+    router.patch('/addToProjectGroupMembers/:id/:memberObject',(req, res, next)=>{
     let ID = req.params.id;
     let mail = req.params.memberObject;
     //console.log("mail:",mail);
@@ -530,7 +539,7 @@ router.patch('/addToProjectGroupMembers/:id/:memberObject',(req, res, next)=>{
 
 
 //PUT ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-router.put('/updateEverythingProject/:id',(req,res)=>{
+    router.put('/updateEverythingProject/:id',(req,res)=>{
     const ID = req.params.id;
     let pname = req.body.projectName;
     let ddate = req.body.dueDate;
@@ -591,7 +600,7 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
         })
 });
 
-router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
+    router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
     let projId = req.params.id;
     let eml = req.params.email;
     db.collection('Projects').updateOne({
@@ -624,7 +633,7 @@ router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
     // })
 });
 
-router.patch('/updateProjectOwner/:id/:email',(req,res)=>{
+    router.patch('/updateProjectOwner/:id/:email',(req,res)=>{
     let ID = req.params.id;
     let mail = req.params.email;
     if(ID=== undefined || ID == null){
@@ -663,7 +672,7 @@ router.patch('/updateProjectOwner/:id/:email',(req,res)=>{
 
 });
 
-router.put('/updateProjectGraph',(req,res)=>{
+    router.put('/updateProjectGraph',(req,res)=>{
     const project = req.body.projectName ;
     const graph = req.body.graph ;
     const projId = req.body.projId ;

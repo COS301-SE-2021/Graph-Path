@@ -1,5 +1,7 @@
 //delete tasks
 //add members
+//delete project
+//update graph
 function AuthoriseDeleteTask(req,res,next)
 {
     console.log("checking permission to delete tasks")
@@ -91,9 +93,35 @@ function AuthoriseDeleteProject(req,res,next){
     }
 
 }
+
+function AuthoriseUpdateGraph(req,res,next){
+    console.log("checking permission to update projectGraph")
+    const userProjects = req.user.projects;
+    const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
+    if( userProject){
+        console.log(userProject[0])
+        const permissions = userProject[0].permissions;
+        if(permissions.includes("update graph")){
+            console.log("permitted to update projectGraph")
+            next()
+
+        } else{
+            console.log("update project graph authorization failed")
+            res.status(403).send({
+                message: "Unauthorised to unauthorised to update graph",
+            })
+        }
+    } else {
+        res.status(403).send({
+            message: "Not authorised to access current project"
+        })
+    }
+
+}
 module.exports = {
     AuthoriseDeleteTask,
     AuthoriseKanbanBoard,
     AuthoriseAddMembers,
-    AuthoriseDeleteProject
+    AuthoriseDeleteProject,
+    AuthoriseUpdateGraph,
 }
