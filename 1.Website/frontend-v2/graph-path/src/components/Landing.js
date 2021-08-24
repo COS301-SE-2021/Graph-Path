@@ -10,7 +10,7 @@ import JSONPretty from 'react-json-pretty';
 import Dashboard from "./Dashboard";
 import Header from "./Header";
 
-const Landing=()=> {
+const Landing=(props)=> {
     // constructor(props){
     //     super(props);
     //     this.state={
@@ -103,7 +103,7 @@ const Landing=()=> {
 
                {isAuthenticated && user.email_verified && (
                    <JSONPretty data={user} />
-                    //this.props.logInvalid
+                   // props.logInvalid
                    // <Header />
                )
                }
