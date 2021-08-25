@@ -4,8 +4,8 @@ import {Button, DatePicker, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
 import {HashRouter as Router,Link,Switch,Route} from 'react-router-dom' ;
-import * as FaIcons from 'react-icons/fa';
-import * as IoIcons from 'react-icons/md'
+//import * as FaIcons from 'react-icons/fa';
+//import * as IoIcons from 'react-icons/md'
 
 class Dashboard extends React.Component{
     constructor(props){
@@ -38,10 +38,12 @@ class Dashboard extends React.Component{
                     <nav id="navbar"  >
                         <div id="side-bar-button">
                             {
-                                this.state.showSideBar === true ?
+                               /* this.state.showSideBar === true ?
                                     <IoIcons.MdClose id="btn-side-bar" onClick={this.handleSideBar} />
                                     :
                                 <FaIcons.FaBars id="btn-side-bar" onClick={this.handleSideBar} />
+
+                                */
                             }
                         </div>
 
