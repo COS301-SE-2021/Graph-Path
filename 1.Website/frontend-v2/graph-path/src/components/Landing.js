@@ -11,8 +11,9 @@ function Landing({logInvalid}) {
 
         const {user, isAuthenticated, isLoading} = useAuth0();
         console.log("props", logInvalid)
+        
 
-        if(isLoading) return <Loader speed="fast" content="Fast" />
+        if(isLoading) return <Loader speed="fast" content="Loading" />
 
 
         return(
@@ -51,7 +52,7 @@ function Landing({logInvalid}) {
                    isAuthenticated && user.email_verified && (
                        <>
                         {/*<JSONPretty data={user} />*/}
-                           <Button onClick={logInvalid} id='signin-btn'>Proceed</Button>
+                           <Button onClick={()=>logInvalid(user)} id='signin-btn'>Proceed</Button>
 
                        </>
                    )

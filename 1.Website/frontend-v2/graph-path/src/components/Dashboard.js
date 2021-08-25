@@ -50,8 +50,7 @@ class Dashboard extends React.Component{
     }
 
     render(){
-        console.log(this.props) ; 
-        const {match} =this.props ;
+        const {match} =this.props ; 
         return(
             //  <Router>
             
@@ -114,7 +113,7 @@ class Dashboard extends React.Component{
                                     <Modal />
                                 </Route>
                                 <Route path={`${match.path}/manager`}>
-                                    <ProjectManager />
+                                    <ProjectManager user={this.props.authUser}/>
                                 </Route>
                             {
                                 this.state.redirect?this.changeRedirect(`${match.url}/manager`):""

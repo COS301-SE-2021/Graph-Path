@@ -21,16 +21,18 @@ class CustomHeader extends Component{
 
             show:false,
             openSignin:false,
-            logged:false
+            logged:false,
+            loggedUser:{}
 
         }
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
     }
-    changeLogStatus=()=>{
+    changeLogStatus=(user)=>{
         // console.log('logged')
         this.setState({
-            logged:!this.state.logged
+            logged:!this.state.logged,
+            loggedUser:user 
         }) ;
     }
     open(){
@@ -65,7 +67,7 @@ class CustomHeader extends Component{
                         <Route path='/dashboard' render={()=>{
                             return(
                                 <>
-                                    <Dashboard/>
+                                    <Dashboard authUser={this.state.loggedUser}/>
                                     {
                                         !this.state.logged?<Redirect to="/home"/>:""
                                     }
