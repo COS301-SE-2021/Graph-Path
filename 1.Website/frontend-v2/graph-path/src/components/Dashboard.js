@@ -58,7 +58,7 @@ class Dashboard extends React.Component{
                 <div className="main-container">
                     <NewProject ref={this.newProjectModalRef} />
                     <Profile ref={this.profileModalRef} />
-                    <nav id="navbar"  >
+                    <nav id="nav bar"  >
                         <div id="side-bar-button">
                             {
                                 this.state.showSideBar === true ?
@@ -68,10 +68,6 @@ class Dashboard extends React.Component{
                             }
                         </div>
                         <Button onClick={this.showP}>Profile</Button>
-
-                        {/*<div id="power-off-div">*/}
-                        {/*    <FaIcons.FaPowerOff id="power-off-icon" />*/}
-                        {/*</div>*/}
 
                         <Logout/>
 
