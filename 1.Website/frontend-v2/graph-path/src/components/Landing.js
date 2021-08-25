@@ -57,6 +57,9 @@ function Landing({logInvalid}) {
                    )
 
                }
+               {
+                //    isAuthenticated ? logInvalid():""
+               }
 
                {console.log(user)}
 
