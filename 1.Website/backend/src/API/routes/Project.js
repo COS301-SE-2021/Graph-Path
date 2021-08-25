@@ -1,39 +1,40 @@
+require('dotenv').config({path:'../../.env'})
 const express = require('express');
-const Permissions = require('../../Helpers/Permissions');
 const mongoose = require('mongoose') ;
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
-const userManagementSerive = require('../../Services/UserManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
 const DAGservice = require('../../Helpers/DAG');
 const { param,body, validationResult } = require('express-validator');
 const mailer = require('../../Helpers/SendMail');
-const {appendInvitesTo} = require("../../Services/UserManagerService");
+const authentication = require('./Middleware/Authentication');
+const authorisation =  require('./Middleware/Authorisation');
+const { auth, requiresAuth } = require('express-openid-connect');
 function makeProjectRoute(db) {
 
 
-    router.get("/testMail", (req,res)=>{
-        res.send({
-            message: "mail route called",
+    router.get('/requestToken',
+        (req,res)=>{
+            // Authentication Uuser
+
+            authentication.generateToken(req,res,db)
+                .then((token)=>{
+                    res.send({
+                        message3: token
+                    })
+                })
+                .catch(err=>{
+                    res.send({
+                        message: "token creation failed"
+                    })
+                });
+
+
         })
-    })
 
-    router.get("/acceptInvite", (req,res)=>{
-
-        //check if this user is valid
-        //check users invites
-        //get role of user in invite
-        //accept user invite
-        //add user to project
-        //fetch the project with ID
-        //add
-        res.send({
-            message: "mail route called",
-        })
-    })
-
-    router.get("/sendMail", (req,res)=> {
+    router.get("/sendMail",
+        (req,res)=> {
 
         const projectOwner =  req.body.ownerName;
         const email = req.body.email
@@ -41,6 +42,7 @@ function makeProjectRoute(db) {
         mailer.sendInvites("test Project 1", email);
 
     })
+
     router.get('/isAcyclic/:id',
         param('id').exists().notEmpty().isMongoId(),
         (req,res)=>{
@@ -52,34 +54,50 @@ function makeProjectRoute(db) {
                 })
             }
 
-        const ProjectId = req.params.id;
-        ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
-            const Graph = project.graph;
+            const ProjectId = req.params.id;
+            ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
+                const Graph = project.graph;
 
-            if(DAGservice.isAcyclic(Graph))
-            {
-                res.send({
-                    message: "Graph is DAG",
-                    data: []
-                })
-            }
+                if(DAGservice.isAcyclic(Graph))
+                {
+                    res.send({
+                        message: "Graph is DAG",
+                        data: []
+                    })
+                }
 
-            else
-            {
-                res.send({
-                    message:"Graph is not DAG",
-                    data: []
-                })
-            }
-
-
+                else
+                {
+                    res.send({
+                        message:"Graph is not DAG",
+                        data: []
+                    })
+                }
 
 
+
+
+            })
         })
+
+    router.get("/deleteTask",
+        authentication.authenticateToken,
+        authorisation.AuthoriseDeleteTask,
+        param('email').exists().isEmail(),
+        (req,res)=>{
+
     })
 
-
-    router.get('/convertToKanbanBoard/:id',
+    /**
+     * @api {get}  /task/convertToKanbanBoard
+     * @apiName return as given project as datasourse for kanban
+     * @apiDescription This endpoint creates a datasourse for a kanban board
+     * @apiGroup Project
+     * @apiSuccess (200) {object} datasourse for kanban
+     */
+    router.get('/convertToKanbanBoard',
+        authentication.authenticateToken,
+        authorisation.AuthoriseKanbanBoard,
         param('id').exists().notEmpty().isMongoId(),
         (req,res)=>{
             const failedValidation = validationResult(req);
@@ -91,7 +109,7 @@ function makeProjectRoute(db) {
             }
 
 
-        const ProjectId = req.params.id;
+        const ProjectId = req.body.projectID;
         kanbanBoard.getProjectGraph(db,ProjectId)
             .then((project)=>{
 
@@ -283,26 +301,6 @@ function makeProjectRoute(db) {
             })
     }) ;
 
-    /**
-     * @api {get}  /task/AllPermissions
-     * @apiName list all possbile permissions
-     * @apiDescription This endpoint returns a list of all permissions that can be assigned to a role
-     * @apiGroup Task
-     * @apiSuccess (200) {Array}  list of possible permissions
-     */
-    router.get("/AllPermissions",
-        (req,res)=>{
-
-        console.log(Permissions.getAllRolesAndPermissions())
-        res.send({
-            message:"successful",
-            data: {
-                roles : Permissions.getAllRoles(),
-                rolePermissions: Permissions.getAllRolesAndPermissions(),
-            }
-        })
-    })
-
 
     /**
      * @api {post}  /task/newProject
@@ -356,7 +354,13 @@ function makeProjectRoute(db) {
 
             }
     });
-    router.post('/addToProjectGroupMembers',(req, res, next)=>{
+
+    router.post('/addToProjectGroupMembers',
+        authentication.authenticateToken,
+        authorisation.AuthoriseAddMembers,
+        body('email').exists().notEmpty().isEmail(),
+        body('projectID').exists().notEmpty().isMongoId(),
+        (req, res)=>{
         let ID = req.body.id;
         let memberObjects = req.body.groupMembers;
        //  let memberObjects = [{
@@ -389,15 +393,17 @@ function makeProjectRoute(db) {
 
     });
 
-//DELETE ENDPOINTS//////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    router.delete('/deleteProject',
+        authentication.authenticateToken,
+        authorisation.AuthoriseDeleteProject,
+        body('email').exists().notEmpty().isEmail(),
+        body('projectID').exists().notEmpty().isMongoId(),
+    (req,res)=>{
+        let ID = req.body.projectID;
 
-router.delete('/deleteProject/:id',(req,res)=>{
-    let ID = req.params.id;
-
-        // console.log(projectName,owner); 
-    ProjectManagerService.removeProjectByID(db,ID)
-        .then(ans =>{
+        ProjectManagerService.removeProjectByID(db,ID)
+            .then(ans =>{
             if(ans === null){
                 res.send({
                     message: "Couldn't remove project."
@@ -409,24 +415,27 @@ router.delete('/deleteProject/:id',(req,res)=>{
             }
 
         })
-        .catch(err=>{
+            .catch(err=>{
             res.status(500).send({
                 message:"Could not remove project."
             })
         })
 })
 
-//PATCH ENDPOINTS///////////////////////////////////////////////////////////////////////////////////////////////////////
-router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
-    let ID = req.params.id;
-    let grph = req.params.graph;
-    let grph2 = JSON.parse(grph);
-    //console.log("type of graph: "+ typeof grph);
-   // console.log("grph.nodes[0].id: "+grph2.nodes[0].id);
-    //console.log("grph.edges[0].id: "+grph2.edges[0].id);
 
-    ProjectManagerService.updateProjectGraph(db,ID,grph2 )
-    .then(ans=>{
+    router.patch('/updateProjectGraph',
+        authentication.authenticateToken,
+        authorisation.AuthoriseUpdateGraph,
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('email').exists().notEmpty().isEmail(),
+        (req, res, )=>{
+            let ID = req.body.projectID;
+            let grph = req.body.graph;
+            let grph2 = JSON.parse(grph);
+
+
+            ProjectManagerService.updateProjectGraph(db,ID,grph2 )
+            .then(ans=>{
             if(ans.modifiedCount === 0){
                 res.send({
                     message: "Could not update the graph."
@@ -437,50 +446,24 @@ router.patch('/updateProjectGraph/:id/:graph',(req, res, next)=>{
                 })
             }
         })
-    .catch((err)=>{
+            .catch((err)=>{
        res.status(500).send({
            message: "Could not update the project graph."
        })
      })
 });
 
-router.patch('/addToProjectGroupMembers/:id/:memberObject',(req, res, next)=>{
-    let ID = req.params.id;
-    let mail = req.params.memberObject;
-    //console.log("mail:",mail);
-    ProjectManagerService.addNewProjectMember(db,ID, mail)
 
-        .then(ans=>{
-            if(ans.modifiedCount >0){
-                res.send({
-                    message: "Member added successfully."
-                })
-            }else if(ans === "Invalid project id"){
-                res.send({
-                    message: "Invalid project id provided."
-                })
-            }else if(ans === "Invalid memberObject"){
-                res.send({
-                    message: "Invalid member object provided."
-                })
-            }else{
-                res.send({
-                    message: "Could not add member."
-                })
-            }
-        })
-    .catch((err)=>{
-        res.status(500).send({
-            message: "An error has occurred."
-        })
-     })
-});
-
-    router.patch('/removeProjectMember/:id/:email',(req, res, next)=>{
-        let ID = req.params.id;
-        let mail = req.params.email;
-        ProjectManagerService.removeProjectMember(db,ID, mail)
-            .then(ans=>{
+    router.patch('/removeProjectMember',
+        authentication.authenticateToken,
+        authorisation.AuthoriseRemoveMembers,
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('email').exists().notEmpty().isEmail(),
+        (req, res)=>{
+            let ID = req.body.projectID;
+            let mail = req.body.email;
+            ProjectManagerService.removeProjectMember(db,ID, mail)
+                .then(ans=>{
                 if(ans.modifiedCount >0){
                     res.send({
                         message: "Member removed successfully."
@@ -491,7 +474,7 @@ router.patch('/addToProjectGroupMembers/:id/:memberObject',(req, res, next)=>{
                     })
                 }
             })
-            .catch((err)=>{
+                .catch((err)=>{
                 res.status(500).send({
                     message: "Server error: could not remove member.",
                     err: err
@@ -500,49 +483,28 @@ router.patch('/addToProjectGroupMembers/:id/:memberObject',(req, res, next)=>{
     });
 
 
-//PUT ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-router.put('/updateEverythingProject/:id',(req,res)=>{
-    const ID = req.params.id;
-    let pname = req.body.projectName;
-    let ddate = req.body.dueDate;
-    let sdate = req.body.startDate;
-    let owner = req.body.owner;
-    let graph = req.body.graph;
-   // let graph2 = JSON.parse(graph);
-    let groupMembers = req.body.groupMembers;
+    router.put('/updateEverythingProject',
+        authentication.authenticateToken,
+        authorisation.AuthoriseUpdateAllProject,
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('projectName').exists().notEmpty(),
+        body('dueDate').exists().notEmpty().isDate(),
+        body('startDate').exists().notEmpty().isDate(),
+        body('owner').exists().notEmpty(),
+        body('graph').exists().notEmpty(),
+        body('email').exists().notEmpty().isEmail(),
+        (req,res)=>{
+            const ID = req.body.projectID;
+            let pname = req.body.projectName;
+            let ddate = req.body.dueDate;
+            let sdate = req.body.startDate;
+            let owner = req.body.owner;
+            let graph = req.body.graph;
+            let groupMembers = req.body.groupMembers;
 
-    if(ID===undefined || ID == null){
-        res.send({
-            message: "The provided ID is invalid."
-        })
-    }else if(pname===undefined || pname == null){
-        res.send({
-            message: "The provided project name is invalid."
-        })
-    }else if(ddate===undefined || ddate == null){
-        res.send({
-            message: "The provided due date is invalid."
-        })
-    }else if(sdate===undefined || sdate == null){
-        res.send({
-            message: "The provided starting date is invalid."
-        })
-    }else if(owner===undefined || owner == null){
-        res.send({
-            message: "The provided owner is invalid."
-        })
-    }else if(graph===undefined || graph == null){
-        res.send({
-            message: "The provided graph is invalid."
-        })
-    }else if(groupMembers===undefined || groupMembers == null){
-        res.send({
-            message: "The provided groupmembers is invalid."
-        })
-    }
 
-    ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
-        .then(ans=>{
+            ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
+            .then(ans=>{
             if(ans.modifiedCount > 0){
                 res.send({
                     message: "The project was updated."
@@ -554,7 +516,7 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
             }
 
         })
-        .catch(err=>{
+            .catch(err=>{
             res.status(500).send({
                 message: "Server error: Could not update the project.",
                 err: err
@@ -562,54 +524,19 @@ router.put('/updateEverythingProject/:id',(req,res)=>{
         })
 });
 
-router.patch('/addToProjectGroupManagers/:id/:email',(req, res, next)=>{
-    let projId = req.params.id;
-    let eml = req.params.email;
-    db.collection('Projects').updateOne({
-        "_id": ObjectId(projId)
-    },{
 
-            $push: {
-                "groupManagers": eml
-            }
+    router.patch('/updateProjectOwner',
+        authentication.authenticateToken,
+        authorisation.AuthoriseUpdateProjectOwner,
+        body('email').exists().notEmpty().isEmail(),
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('newOwnerEmail').exists().notEmpty().isEmail(),
+        (req,res)=>{
+            let ID = req.body.projectID;
+            let mail = req.body.newOwnerEmail;
 
-    },true,(err,result)=>{
-
-        if(err){
-            console.log("Could not update the project graph: "+err);
-            res.send({
-                message:"found",
-                data:projects//.json()
-            }) ;
-        }
-        else{
-            res.send({
-                message: "success"
-               // data: result['ops']
-            });
-        }
-
-    })
-    //.catch((err)=>{
-    //    console.log("Could not update the task description: "+err);
-    // })
-});
-
-router.patch('/updateProjectOwner/:id/:email',(req,res)=>{
-    let ID = req.params.id;
-    let mail = req.params.email;
-    if(ID=== undefined || ID == null){
-        res.send({
-            message: "The ID provided was not valid"
-        })
-    }else if(mail ===undefined || mail == null){
-        res.send({
-            message: "The email address provided is not valid."
-        })
-    }
-
-    ProjectManagerService.updateProjectOwner(db,ID,mail)
-        .then(ans=>{
+            ProjectManagerService.updateProjectOwner(db,ID,mail)
+            .then(ans=>{
             if(ans == null || undefined){
                 res.send({
                     message: "Could not update the project."
@@ -625,7 +552,7 @@ router.patch('/updateProjectOwner/:id/:email',(req,res)=>{
             }
 
         })
-        .catch(err=>{
+            .catch(err=>{
             res.status(500).send({
                 message: "Server error: Could not update the project.",
                 err: err
@@ -634,45 +561,6 @@ router.patch('/updateProjectOwner/:id/:email',(req,res)=>{
 
 });
 
-router.put('/updateProjectGraph',(req,res)=>{
-    const project = req.body.projectName ;
-    const graph = req.body.graph ;
-    const projId = req.body.projId ;
-
-    console.log('PUT ../',project,'body: ',graph,projId) ; 
-    if (graph === undefined || graph.nodes === undefined){
-        return res.status(400).send({
-            message:"Invalid Graph structure"
-        })
-    }
-
-    db.collection('Projects').updateOne({
-        projectName:project,
-        "_id": ObjectId(projId)
-    },
-    {
-        $set:{"graph":graph}
-    },true,(err,ans)=>{
-        if (err){
-            console.log('error',err)
-            return res.status(500).send({
-                message:err
-            }) ; 
-        }
-        console.log(ans.result.nModified + " document(s) updated");
-        if (ans.result.nModified > 0){
-            res.status(201).send({
-                message:"Update Successful",
-                data:graph
-            })
-        }
-        else{
-            res.send({
-                message:`Project ${project}, not found`
-            }) ;
-        }
-    }) ; 
-})
 
 
 
