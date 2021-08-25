@@ -1,12 +1,11 @@
 import React from 'react' ;
 import '../css/Dashboard.css' ;
-import {Button, DatePicker, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
+import {Button, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
-import {HashRouter as Router,Link,Switch,Route, withRouter, Redirect} from 'react-router-dom' ;
+import { Link,Switch,Route, withRouter, Redirect} from 'react-router-dom' ;
 import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/md'
-import NotFound from "./NotFound";
 import Modal from "./Modal";
 import Profile from "./Profile";
 import Logout from "./Logout";
@@ -81,19 +80,21 @@ class Dashboard extends React.Component{
                                     <Sidenav collapsible id="side-nav">
                                         <Sidenav.Body>
                                             <Nav>
-                                                <Nav.Item onClick={(e)=>this.changeRedirect(`${match.url}/manager`)}
+                                                <Nav.Item onClick={()=>this.changeRedirect(`${match.url}/manager`)}
                                                          id="nav-option"
                                                           icon={<Icon icon="dashboard"/>}
                                                           componentClass={Link}
                                                            to="/dashboard" >Dashboard</Nav.Item>
-                                                           
-                                                <Nav.Item id="nav-option"
-                                                          icon={<Icon icon="info"/>}
-                                                          componentClass={Link}
-                                                           to={`${match.url}/modal`} >Modal</Nav.Item>
+
 
                                                 <Nav.Item id="nav-option" icon={<Icon icon="project"/>}
                                                           onSelect={this.showM}> New Project</Nav.Item>
+
+                                                <Nav.Item id="nav-option"
+                                                          icon={<Icon icon="calendar"/>}
+                                                          componentClass={Link}
+                                                          to={`${match.url}/modal`} >Calendar</Nav.Item>
+
                                                 <Dropdown title="Statistics" icon={<Icon icon="bar-chart"/>}>
                                                     <Dropdown.Item>Overall</Dropdown.Item>
                                                     <Dropdown.Item>Project</Dropdown.Item>

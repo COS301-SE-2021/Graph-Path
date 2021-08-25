@@ -12,7 +12,7 @@ function Landing({logInvalid}) {
         const {user, isAuthenticated, isLoading} = useAuth0();
         console.log("props", logInvalid)
 
-        if(isLoading) return <Loader speed="fast" content="Fast" />
+        if(isLoading) return <Loader speed="fast" />
 
 
         return(

@@ -50,6 +50,10 @@ nav{
     cursor: pointer;
 }
 
+#nav-option{
+    text-align: left !important;
+}
+
 #nav-option:hover{
     background-color: #1386d9;
 }
