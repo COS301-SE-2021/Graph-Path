@@ -1,52 +1,21 @@
 import React from 'react'
 import landingSnap from "../img/landing.png";
-import {Button, Modal} from "rsuite";
+import {Button, Loader, Modal} from "rsuite";
 import "rsuite/dist/styles/rsuite-dark.min.css"
-import Register from "./Register";
-import Login from "./Login";
 import '../css/Landing.css';
+import {useAuth0} from '@auth0/auth0-react';
+import JSONPretty from 'react-json-pretty';
+import LoginBtn from "./LoginBtn";
 
-class Landing extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={
+function Landing({logInvalid}) {
 
-            show:false,
-            show1:false
-
-        }
-        this.close = this.close.bind(this);
-        this.open = this.open.bind(this);
-
-        this.closeLog = this.close.bind(this);
-}
-
-//Deal with Register
-    close() {
-        this.setState({ 
-            show: false,
-            show1:false });
+        const {user, isAuthenticated, isLoading} = useAuth0();
+        console.log("props", logInvalid)
         
-    }
-    open() {
-        this.setState({ show: true });
-    }
 
-    //Deal with Login
-    closeLog() {
-        this.setState({ show1: false });
-    }
-    openLog=()=> {
-        console.log('openig login')
-        this.setState({ show1: true });
-        
-    }
+        if(isLoading) return <Loader speed="fast" content="Loading" />
 
-    nextPath =(path)=>{
-        this.props.history.push(path)
-    }
 
-    render(){
         return(
            <div>
                <div  >
@@ -70,25 +39,33 @@ class Landing extends React.Component{
                </div>
 
 
-               <Modal   show={this.state.show || this.state.show1} onHide={this.close} size="xs" >
-                   <Modal.Header>
-                       <Modal.Title>Sign Up</Modal.Title>
-                   </Modal.Header>
-                   <Modal.Body>
-                       {
-                           this.state.show ? 
-                            <Register />
-                       :<Login login={this.props.logInvalid}/>
-                       }
 
-                   </Modal.Body>
-               </Modal>
-               <button data-testid="tidSignUpLink" onClick={this.open} id='signup-btn'>Sign Up</button>
-               
-               <Button onClick={()=>this.openLog()} id='signin-btn'>Sign In</Button>
+               {
+                   !isAuthenticated && (
+                       <LoginBtn/>
+                   )
+               }
+
+
+
+               {
+                   isAuthenticated && user.email_verified && (
+                       <>
+                        {/*<JSONPretty data={user} />*/}
+                           <Button onClick={()=>logInvalid(user)} id='signin-btn'>Proceed</Button>
+
+                       </>
+                   )
+
+               }
+               {
+                //    isAuthenticated ? logInvalid():""
+               }
+
+               {console.log(user)}
+
            </div>
-        )
-    }
+        );
 }
 
 export default Landing;

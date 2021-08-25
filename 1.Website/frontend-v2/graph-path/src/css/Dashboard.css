@@ -33,6 +33,27 @@ nav{
     cursor: pointer;
 }
 
+#power-off-div{
+    background-color: transparent;
+    position: absolute;
+    margin-left: 1450px;
+    width: 13px;
+    margin-top: 10px;
+}
+
+#power-off-div #power-off-icon{
+    font-size: 25px;
+}
+
+#power-off-icon:hover{
+    /*background-color: #990001;*/
+    cursor: pointer;
+}
+
+#nav-option{
+    text-align: left !important;
+}
+
 #nav-option:hover{
     background-color: #1386d9;
 }

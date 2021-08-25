@@ -37,7 +37,7 @@ jobs:
      - image: cimg/node:16.4.0
     steps:
      - checkout
-     - run: cd 1.Website/frontend && npm install  --legacy-peer-deps && npm test && npm run build && ls -la
+     - run: cd 1.Website/frontend-v2/graph-path && npm install  --legacy-peer-deps && npm test && npm run build && ls -la
     #  - run: ls 
     #  - run: 
     #     name: Install front Dependencies

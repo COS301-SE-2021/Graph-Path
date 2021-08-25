@@ -1,18 +1,28 @@
 import React from 'react' ;
 import '../css/Dashboard.css' ;
-import {Button, DatePicker, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
+import {Button, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
+
 import {HashRouter as Router,Link,Switch,Route} from 'react-router-dom' ;
 //import * as FaIcons from 'react-icons/fa';
 //import * as IoIcons from 'react-icons/md'
+
+import { Link,Switch,Route, withRouter, Redirect} from 'react-router-dom' ;
+import * as FaIcons from 'react-icons/fa';
+import * as IoIcons from 'react-icons/md'
+import Modal from "./Modal";
+import Profile from "./Profile";
+import Logout from "./Logout";
+
 
 class Dashboard extends React.Component{
     constructor(props){
         super(props);
         this.state={
             show:true,
-            showSideBar: true
+            showSideBar: true,
+            redirect:true
         }
     }
 
@@ -29,13 +39,30 @@ class Dashboard extends React.Component{
     showM=()=>{
         this.showModal();
     }
+
+    profileModalRef=(obj)=>{
+        this.showProfile = obj && obj.handleShow;
+    }
+    changeRedirect = (link)=>{
+        this.setState({
+            redirect:!this.state.redirect 
+        }) ; 
+        return <Redirect to={link} />
+    }
+
+    showP=()=>{
+        this.showProfile();
+    }
+
     render(){
+        const {match} =this.props ; 
         return(
-            // <Router>
+            //  <Router>
             
                 <div className="main-container">
-                    <NewProject ref={this.newProjectModalRef}></NewProject>
-                    <nav id="navbar"  >
+                    <NewProject ref={this.newProjectModalRef} />
+                    <Profile ref={this.profileModalRef} />
+                    <nav id="nav bar"  >
                         <div id="side-bar-button">
                             {
                                /* this.state.showSideBar === true ?
@@ -46,6 +73,9 @@ class Dashboard extends React.Component{
                                 */
                             }
                         </div>
+                        <Button onClick={this.showP}>Profile</Button>
+
+                        <Logout/>
 
 
                     </nav>
@@ -53,35 +83,60 @@ class Dashboard extends React.Component{
                         {
                             this.state.showSideBar === true ?
 
-                            <div id="sidebar">
-                                <Sidenav id="side-nav">
-                                    <Sidenav.Body>
-                                        <Nav>
-                                            <Nav.Item id="nav-option"
-                                                      icon={<Icon icon="dashboard"/>}>Dashboard</Nav.Item>
-                                            <Nav.Item id="nav-option" icon={<Icon icon="project"/>}
-                                                      onSelect={this.showM}> New Project</Nav.Item>
-                                            <Dropdown title="Statistics" icon={<Icon icon="bar-chart"/>}>
-                                                <Dropdown.Item>Overall</Dropdown.Item>
-                                                <Dropdown.Item>Project</Dropdown.Item>
-                                            </Dropdown>
+                                <div id="sidebar">
+                                    <Sidenav collapsible id="side-nav">
+                                        <Sidenav.Body>
+                                            <Nav>
+                                                <Nav.Item onClick={()=>this.changeRedirect(`${match.url}/manager`)}
+                                                         id="nav-option"
+                                                          icon={<Icon icon="dashboard"/>}
+                                                          componentClass={Link}
+                                                           to="/dashboard" >Dashboard</Nav.Item>
 
-                                        </Nav>
 
-                                    </Sidenav.Body>
-                                </Sidenav>
-                            </div>
+                                                <Nav.Item id="nav-option" icon={<Icon icon="project"/>}
+                                                          onSelect={this.showM}> New Project</Nav.Item>
+
+                                                <Nav.Item id="nav-option"
+                                                          icon={<Icon icon="calendar"/>}
+                                                          componentClass={Link}
+                                                          to={`${match.url}/modal`} >Calendar</Nav.Item>
+
+                                                <Dropdown title="Statistics" icon={<Icon icon="bar-chart"/>}>
+                                                    <Dropdown.Item>Overall</Dropdown.Item>
+                                                    <Dropdown.Item>Project</Dropdown.Item>
+                                                </Dropdown>
+
+                                            </Nav>
+
+                                        </Sidenav.Body>
+                                    </Sidenav>
+                                </div>
                                 :
                                 <></>
                         }
+                        {/*main content div contains all other pages*/}
+                        <div id="main-content">
+                            <Switch>
+                                <Route path={`${match.path}/modal`} exact>
+                                    <Modal />
+                                </Route>
+                                <Route path={`${match.path}/manager`}>
+                                    <ProjectManager user={this.props.authUser}/>
+                                </Route>
+                            {
+                                this.state.redirect?this.changeRedirect(`${match.url}/manager`):""
+                            }
+                                
+                            </Switch>
 
-                        <div id="main-content"> <ProjectManager /></div>
+                        </div>
 
                 </div>
-                </div>
-            // </Router>
+            </div>
+            //  </Router>
         )
     }
 }
 
-export default Dashboard ;
+export default withRouter(Dashboard) ;

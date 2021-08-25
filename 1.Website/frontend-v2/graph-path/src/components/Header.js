@@ -6,6 +6,7 @@ import {HashRouter as Router,Switch,Route, Redirect} from 'react-router-dom' ;
 import Dashboard from "./Dashboard";
 import Landing from './Landing' ;
 import NotFound from "./NotFound";
+import GraphPath from "./Graph";
 
 
 
@@ -20,16 +21,18 @@ class CustomHeader extends Component{
 
             show:false,
             openSignin:false,
-            logged:false
+            logged:false,
+            loggedUser:{}
 
         }
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
     }
-    changeLogStatus=()=>{
+    changeLogStatus=(user)=>{
         // console.log('logged')
         this.setState({
-            logged:!this.state.logged
+            logged:!this.state.logged,
+            loggedUser:user 
         }) ;
     }
     open(){
@@ -51,33 +54,33 @@ class CustomHeader extends Component{
 
                   
                     <Switch>
-                        <Route path="/home" render={()=>{
+            
+                        <Route exact path="/" render={()=>{
                             return <>
                             <Landing logInvalid={this.changeLogStatus} />
                             {
-                       this.state.logged?<Redirect to="/dashboard"/>:""
-                   }
+                                this.state.logged?<Redirect to="/dashboard"/>:<Redirect to="/"/>
+                            }
                             </> 
                         }} />
                        
                         <Route path='/dashboard' render={()=>{
                             return(
                                 <>
-                                    <Dashboard/>
+                                    <Dashboard authUser={this.state.loggedUser}/>
                                     {
-                       !this.state.logged?<Redirect to="/home"/>:""
-                   }
+                                        !this.state.logged?<Redirect to="/home"/>:""
+                                    }
                                 </>
                             )
                         }}
                         />
-                                          {
-                       !this.state.logged?<Redirect to="/home"/>:""
-                   }
+                    {
+                       !this.state.logged?<Redirect to="/"/>:""
+                    }
                   
-                  
-                    
-                        <Route component={NotFound} />
+                                      
+                    <Route component={NotFound} />
 
                
                     </Switch>

@@ -1,27 +1,45 @@
 import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
-import {Icon, Panel,SelectPicker} from 'rsuite' ;
+import {Icon, Panel,SelectPicker, Loader} from 'rsuite' ;
 import "../css/ProjectManager.css"
+import { Link ,Route ,Switch, withRouter} from "react-router-dom";
+import GraphPath from "./Graph";
+import axios from 'axios' ;
+import Project from "./Project";
 
+const ProjectCard = ({selectProject,project,link})=>{
+    console.log('PR CArd',link)
 
-const ProjectCard = ({project})=>{
     return (
     <div>
-        <Panel  shaded bordered bodyFill style={{ display: 'inline-block', width: 240 }}
+        <Panel  shaded bordered bodyFill={false} style={{ display: 'inline-block', width: 240 }}
         >
         <Panel header="Project Card">
-          <p>
-            <small>Project Name:{project.projectName} </small>
-          </p>
+          <div>
+            <small>Project Name:<h6>{project.projectName}</h6> </small>
+          </div>
           <h6>
               Last Editted: {project.lastDateAccessed}
           </h6>
-          <Icon icon='info' onClick={()=>console.log('clicked')}/>
+          <Icon icon='info' onClick={()=>console.log('clicked')}/> <br/>
+          <Link onClick={()=>selectProject(project)} to={`${link}`}>Open</Link>
         </Panel>
       </Panel>
       </div>
     )
 }
+
+/*
+*   A component that will make async request to peer server for all projects of the logged user, provided in the props   
+*   @Component ProjectManager aims to make a list of projects organised in a recently accessed order. When the project opened
+*   by default it opens the graph in the specified project. When the project is opened, it should show the graph that will 
+*   take up most of the screen.
+*   Project Manager lists all the projects and requests the peer server for meta data about the projects.
+*   It provides a function for the child component to save the project changes including the graph
+*
+*
+*
+*/
 
 class ProjectManager extends Component {
 
@@ -29,7 +47,9 @@ class ProjectManager extends Component {
         super(props) ;
         this.state = {
             sortValue:'recent',
-            projects:[{
+            loading:false,
+            currentProject:{},
+            projects:[],def:[{
                 projectName:"T1",
                 lastDateAccessed: new Date().toJSON().slice(0,17) ,
             },{
@@ -59,6 +79,49 @@ class ProjectManager extends Component {
             }]
         }
     }
+    componentDidMount(){
+        this.viewProjectsFromAPI() ;
+    }
+
+    viewProjectsFromAPI=()=>{
+        this.setState({
+            loading:true 
+        }) ;
+
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`)
+        .then((res)=>{
+            console.log('Success',res) ;
+            if (res.data.data !== undefined){
+                this.setState({
+                    projects :res.data.data ,
+                    loading:false                                        
+                        
+                }) ;
+            }
+            else{
+                this.setState({
+                    loading:false                    
+                }) ;
+                alert('No projects')
+            }
+
+        })
+        .catch((err)=>{
+            
+            this.setState({
+                loading:false                                        
+            }) ;
+            console.log('Error or Rejected',err)
+        })
+    }
+
+    updateLastAcessed = ()=>{
+       
+    }
+
+    deleteProject = () =>{
+        //make request for deleting project.
+    }
 
     handleSortChange =(value)=>{
         // console.log('value',value )
@@ -70,7 +133,7 @@ class ProjectManager extends Component {
         //if recent? newest last aceess date comes first
         //if alphabetical ? project name is used to sort alphabetically
         //if date ? oldest project first
-        console.log('sorting...') ;
+        // console.log('sorting...') ;
         if (this.state.sortValue === 'recent'){
             let newArray = this.state.projects.sort((v1,v2,)=>{
                 let date1=v1.lastDateAccessed.toLowerCase();
@@ -108,27 +171,67 @@ class ProjectManager extends Component {
         }
     }
 
+    selectCurrentProject=(project)=>{
+        this.setState({
+            currentProject:project
+        }) ;
+    }
+
     render(){
 
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
-        return( 
-        <div data-testid="tidProjectManager">
-           Projects <br/>
-            <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
-            <div data-testid="tidProjList" id="projects-list">
-                {this.state.projects.map((project,index)=>{
-                return <ProjectCard key={`${index+1}${project.projectName}`} project={project} />    
-                
-            })}
-            </div>
-            
-        </div>)
+        const {match} = this.props ;
+        if (this.state.loading){
+            return <Loader backdrop={false} speed={'slow'} size={'lg'} />
+        }
+        else{
+            return( 
+                <div data-testid="tidProjectManager">
+                   <Switch>
+                        <Route path={`${match.path}/project`} render={()=>{
+                            return <Project project={this.state.currentProject} />
+                        }}/>
+                        <Route >
+                            <div>
+                            Projects <br/>
+                            <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
+                            <div data-testid="tidProjList" id="projects-list">
+                                {
+                                this.state.projects.length > 0?
+                                this.state.projects.map((project,index)=>{
+                                return <ProjectCard key={`${index+1}${project.projectName}`} project={project} link={`${match.url}/project`} selectProject={this.selectCurrentProject} />    
+                            })
+                            :<div>
+                                <h1>No Projects found please refresh</h1>
+                            </div>
+                                            
+                        }
+                            
+                                </div>
+                    
+                            </div>
+                        </Route>
+                    </Switch>
+        
+                    
+                </div>)
+        }
+        
     }
 }
 
 ProjectManager.propTypes = {
+    user :PropTypes.object,
+    api:PropTypes.string
 
 }
 
-export default ProjectManager ; 
+ProjectManager.defaultProps = {
+    user: {
+        email : 'ntpnaane@gmail.com' 
+    } ,
+    api:'http://localhost:9001'
+}
+
+export default withRouter(ProjectManager) ; 
