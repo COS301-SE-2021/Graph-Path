@@ -18,22 +18,19 @@ span{
 
 #signup-btn {
     position: absolute;
-    top: 70%;
-    left: 80%;
+    margin-top: 2%;
+    /*left: 80%;*/
+    margin-left: 40%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
-    background-color: #f1f1f1;
-    color: black;
-    font-size: 16px;
-    padding: 16px 30px;
+    color: white;
     border: none;
     cursor: pointer;
-    border-radius: 12px;
     text-align: center;
 }
 
 #signup-btn:hover {
-    background-color: black;
+    background-color: #1386d9;
     color: white;
 }
 
