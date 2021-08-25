@@ -2,8 +2,9 @@ import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
 import {Icon, Panel,SelectPicker} from 'rsuite' ;
 import "../css/ProjectManager.css"
-import { Link ,Route ,Switch,useRouteMatch, withRouter} from "react-router-dom";
+import { Link ,Route ,Switch, withRouter} from "react-router-dom";
 import GraphPath from "./Graph";
+import axios from 'axios' ;
 
 const ProjectCard = ({project,link})=>{
     console.log('PR CArd',link)
@@ -78,13 +79,31 @@ class ProjectManager extends Component {
             }]
         }
     }
+    componentDidMount(){
+        this.viewProjectsFromAPI() ;
+    }
 
     viewProjectsFromAPI=()=>{
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`)
+        .then((res)=>{
+            console.log('Success',res) ;
+            if (res.data.data !== undefined){
+                this.setState({
+                    projects :res.data.data
+                }) ;
+            }
+            else{
+                alert('No projects')
+            }
 
+        })
+        .catch((err)=>{
+            console.log('Error or Rejected',err)
+        })
     }
 
     updateLastAcessed = ()=>{
-        
+       
     }
 
     deleteProject = () =>{

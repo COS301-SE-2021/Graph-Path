@@ -8,9 +8,8 @@ import '../css/Landing.css';
 import {useAuth0} from '@auth0/auth0-react';
 import JSONPretty from 'react-json-pretty';
 import Dashboard from "./Dashboard";
-import Header from "./Header";
-
-const Landing=(props)=> {
+import { Redirect } from 'react-router';
+const Landing=({logInvalid})=> {
     // constructor(props){
     //     super(props);
     //     this.state={
@@ -57,6 +56,8 @@ const Landing=(props)=> {
         const {loginWithRedirect} = useAuth0();
         const {user, isAuthenticated} = useAuth0();
         const {logout} = useAuth0();
+        console.log('ope',logInvalid)
+
 
         return(
            <div>
@@ -103,9 +104,13 @@ const Landing=(props)=> {
 
                {isAuthenticated && user.email_verified && (
                    <JSONPretty data={user} />
+                   
                    // props.logInvalid
                    // <Header />
                )
+               }
+               {
+                   isAuthenticated ? logInvalid():""
                }
 
                {/*{*/}
