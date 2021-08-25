@@ -1,16 +1,14 @@
 p.aboutText{
     color: white;
     text-transform: uppercase;
-    margin-left: auto;
-    margin-right: auto;
-    width: 20em;
-    height:100% ;
     font-size: larger;
+    margin-top: 9%;
+    margin-left: 9%;
 }
 p.introText{
-    width: 100%;   
+    width: 90%;
     padding: 10px;
-    font-size: 3em;
+    font-size: 2em;
 }
 span{
     display:inline;
@@ -36,8 +34,8 @@ span{
 
 #signin-btn {
     position: absolute;
-    top: 80%;
-    left: 80%;
+    top: 60%;
+    left: 76%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     background-color: #f1f1f1;
@@ -52,7 +50,7 @@ span{
 }
 
 #signin-btn:hover {
-    background-color: black;
+    background-color: #0c3b5c;
     color: white;
 }
 
@@ -69,5 +67,36 @@ span{
 }
 
 #pageName{
-    color: #169DE0;
+    /*color: #169DE0;*/
+    color: white;
+    margin-top: 7%;
+}
+
+#main-div{
+    background: #0c3b5c;
+    width: 100%;
+    display: flex;
+
+}
+
+#left-div{
+    background-color: #0c3b5c;
+    max-width: 50vw;
+    min-height: 100vh;
+    flex-grow: 1;
+    border-radius: 0 0 0 0 ;
+
+}
+
+#right-div{
+    background-color: #001122;
+    max-width: 50vw;
+    min-height: 100vh;
+    flex-grow: 1;
+    border-radius: 0 0 0 100% ;
+}
+
+#graph-picture{
+    width: 600px;
+    margin-top: 10%;
 }
