@@ -53,7 +53,7 @@ function AuthoriseAddMembers(req,res,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("add members")){
+        if(permissions.includes("add members") || permissions.includes("owner") ){
             console.log("permitted to add members")
             next()
 

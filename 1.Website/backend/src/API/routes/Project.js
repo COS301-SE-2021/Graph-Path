@@ -86,6 +86,10 @@ function makeProjectRoute(db) {
         param('email').exists().isEmail(),
         (req,res)=>{
 
+        res.send({
+            message: "token still works"
+        })
+
     })
 
     /**
@@ -209,7 +213,8 @@ function makeProjectRoute(db) {
     /**
      * @api {get}  /task/getAllProjectsByUserEmail/:email
      * @apiName list projects owned by email
-     * @apiDescription This endpoint returns a list of all Projects belonging to the user mathing the passed in email
+     * @apiDescription This endpoint returns a list of all Projects belonging to the user
+     *                 mathing the passed in email
      * @apiGroup Project
      * @apiSuccess (200) {List} list of Project objects
      */
@@ -258,7 +263,8 @@ function makeProjectRoute(db) {
     /**
      * @api {get}  /task/getProjectByID/:id
      * @apiName list projects owned by email
-     * @apiDescription This endpoint returns a list of all Projects belonging to the user mathing the passed in email
+     * @apiDescription This endpoint returns a list of all Projects belonging to the user
+     *                 mathing the passed in email
      * @apiGroup Project
      * @apiSuccess (200) {List} list of Project objects
      */
@@ -370,26 +376,31 @@ function makeProjectRoute(db) {
         body('projectID').exists().notEmpty().isMongoId(),
         (req, res)=>{
         let ID = req.body.id;
-        let memberObjects = req.body.groupMembers;
-       //  let memberObjects = [{
-       //          "email": "demo3@gmail.com",
-       //          "role": "owner"
-       //      },
-       //      {
-       //          "email": "ntpnaane@gmail.com",
-       //          "role": "Project Manager",
-       //          "label": "Godiragetse Naane"
-       //      },
-       //      {
-       //          "email": "kage@gmail.com",
-       //          "role": "Developer",
-       //          "label": "Kagiso Monareng"
-       //      }]
+        //let memberObjects = req.body.groupMembers;
+         let memberObjects = [{
+                 "email": "demo3@gmail.com",
+                 "role": "owner"
+             },
+             {
+                 "email": "ntpnaane@gmail.com",
+                 "role": "Project Manager",
+                 "label": "Godiragetse Naane"
+             },
+             {
+                 "email": "kage@gmail.com",
+                 "role": "Developer",
+                 "label": "Kagiso Monareng"
+             }]
 
         ProjectManagerService.addNewProjectMember(db,ID,memberObjects)
             .then((ans)=>{
 
-               res.send(ans)
+                const projectName = "";
+                const projectOwner ="";
+                const projectDueDate ="";
+                const recipients ="";
+                //mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients)
+                res.send(ans)
             })
             .catch((err)=>{
                 res.send({
