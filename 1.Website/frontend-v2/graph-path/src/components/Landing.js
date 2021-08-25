@@ -46,7 +46,7 @@ function Landing({logInvalid}) {
 
                         }
                         {
-                                //    isAuthenticated ? logInvalid():""
+                                    isAuthenticated ? logInvalid():""
                         }
 
                 </div>
