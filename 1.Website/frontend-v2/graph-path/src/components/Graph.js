@@ -4,7 +4,7 @@ import  PropTypes  from "prop-types";
 import { Link , withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
-import {Whisper, Popover, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox} from 'rsuite' ;
+import { Popover,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon} from 'rsuite' ;
 import ModalHeader from "rsuite/lib/Modal/ModalHeader";
 class GraphPath extends Component{
   graphManager = null ;
@@ -15,7 +15,8 @@ class GraphPath extends Component{
       currGrah:{} ,
       showTask:false,
       nodeName:'',
-      critical:false
+      critical:false,
+      showNode:false
     }
   }
   componentDidMount(){
@@ -38,6 +39,11 @@ class GraphPath extends Component{
          delete this.graphManager  
         // }) ;
     }
+  }
+  showNodeForm = ()=>{
+    this.setState({
+      showNode:!this.state.showNode
+    }) ;
   }
 
   showTaskModal=()=>{
@@ -75,6 +81,15 @@ class GraphPath extends Component{
     }
   }
 
+  removeNode =(id)=>{
+    let result = this.graphManager.removeNode(id) ;
+    if (result){
+      this.setState({
+        currGrah: this.graphManager.getGraph() 
+      })
+    }
+  }
+
   cleanUpAfterNodeAddition = ()=>{
     this.setState({
       nodeName:'',
@@ -97,38 +112,54 @@ class GraphPath extends Component{
           const events = {
             select: function(event) {
               var { nodes, edges } = event;
-            } ,
+            } , 
+            externalRemove (value){this.removeNode(value)},
             click:function(event){
-              console.log('clicked',event,'alt',event.event.srcEvent.altKey)
-              
-            }
-          };
-          const speaker =  (
-            <Popover title="Title">
-              <p>ADD NODE TO GRAPH</p>
-              <Form onSubmit={this.addNewNode} data-testid="form">
-                <FormGroup>
-                    <ControlLabel> Node Name</ControlLabel>
-                    <FormControl name="node" type="text" onChange={this.handleChange} />
-                </FormGroup>
+              console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
+              const nodesAffected = event.nodes ;
+              const edgesAffected = event.edges ;
+              if (event.event.srcEvent.altKey){
+                //delete node or edge
+                if (nodesAffected.length>0){
+                  let curr = nodesAffected.pop() ;
+    console.log('rm node',this)
 
-                <FormGroup>
-                  <Checkbox checked={this.state.critical} onChange={this.handleCritical}>
-                    Critical Node ?
-                  </Checkbox>
-                </FormGroup>
-                <FormGroup>
-                    <FormControl type="submit"/>
-                    </FormGroup>
-            </Form>
-            </Popover>
-          );
+                  // this.externalRemove(curr) ;
+
+                }
+              }
+              else if (event.event.srcEvent.ctrlKey){
+                //add edge between node
+              }
+              else{
+                //view task information
+              }
+              
+            } , 
+          };
           
 
           if (this.graphManager !== null){
             const graph = this.state.currGrah;
-            console.log('rendering graph', graph) ;
+            const speaker = (
+            <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
+        
+          <Form onSubmit={this.addNewNode} data-testid="form">
+            <FormGroup>
+                <ControlLabel> Node Name</ControlLabel>
+                <FormControl name="node" type="text" value={this.state.nodeName} onChange={this.handleChange} />
+            </FormGroup>
 
+            <FormGroup>
+              <Checkbox checked={this.state.critical} onChange={this.handleCritical}>
+                Critical Node ?
+              </Checkbox>
+            </FormGroup>
+            <FormGroup>
+                <FormControl type="submit"/>
+                </FormGroup>
+        </Form>
+        </Popover>)
             return (
               <div >
                 {/* <Link to="">Add Node</Link> */}
@@ -144,10 +175,11 @@ class GraphPath extends Component{
                </Modal>
               <h3>{this.props.projectName}</h3>
               <div id="graphbox">
-              <Whisper placement={'autoVertical'} trigger={'click'} speaker={speaker} >
-                  <Button >Add Node</Button>
-                </Whisper>
-              <Graph 
+              <Whisper speaker={speaker} placement={'autoVertical'} trigger={'active'}>
+                <Button >Add Node</Button>
+              </Whisper>
+              
+              <Graph key={JSON.stringify(graph)}
                   graph={graph}
                   options={options}
                   events={events}

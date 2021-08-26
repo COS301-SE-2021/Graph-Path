@@ -372,7 +372,7 @@ class GraphManager{
         var curr = this.graph ; 
         var obj = {
             label:fromTask.label , // give it lable fromTask
-            size:300,
+            // size:300,
             critical:fromTask.critical
         }; 
         // if there was already a node?
@@ -400,7 +400,7 @@ class GraphManager{
         else{
             // add node with edge depending on self
             obj["id"]= `n1` ;
-            obj["color"] = '#ff0000' ; //start is red
+            obj["color"] = '#0000ff' ; //start is red
             obj["x"] = 0 ; 
             obj["y"] = 0 ;
 
