@@ -6,7 +6,6 @@ import {HashRouter as Router,Switch,Route, Redirect} from 'react-router-dom' ;
 import Dashboard from "./Dashboard";
 import Landing from './Landing' ;
 import NotFound from "./NotFound";
-import GraphPath from "./Graph";
 
 
 
@@ -59,7 +58,7 @@ class CustomHeader extends Component{
                             return <>
                             <Landing logInvalid={this.changeLogStatus} />
                             {
-                                this.state.logged?<Redirect to="/dashboard"/>:<Redirect to="/"/>
+                                this.state.logged?<Redirect to="/dashboard"/>:""
                             }
                             </> 
                         }} />
@@ -69,7 +68,7 @@ class CustomHeader extends Component{
                                 <>
                                     <Dashboard authUser={this.state.loggedUser}/>
                                     {
-                                        !this.state.logged?<Redirect to="/home"/>:""
+                                        !this.state.logged?<Redirect to="/"/>:""
                                     }
                                 </>
                             )
