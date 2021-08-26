@@ -3,10 +3,6 @@ import '../css/Dashboard.css' ;
 import {Button, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
 import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
-
-//import * as FaIcons from 'react-icons/fa';
-//import * as IoIcons from 'react-icons/md'
-
 import { Link,Switch,Route, withRouter, Redirect} from 'react-router-dom' ;
 import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/md'
@@ -64,12 +60,12 @@ class Dashboard extends React.Component{
                     <nav id="nav bar"  >
                         <div id="side-bar-button">
                             {
-                               /* this.state.showSideBar === true ?
+                                this.state.showSideBar === true ?
                                     <IoIcons.MdClose id="btn-side-bar" onClick={this.handleSideBar} />
                                     :
                                 <FaIcons.FaBars id="btn-side-bar" onClick={this.handleSideBar} />
 
-                                */
+                                
                             }
                         </div>
                         <Button onClick={this.showP}>Profile</Button>
