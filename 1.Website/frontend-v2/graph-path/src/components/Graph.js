@@ -1,7 +1,7 @@
 import {React,Component} from "react";
 import Graph from 'react-graph-vis' ; 
 import  PropTypes  from "prop-types";
-import { Link } from "react-router-dom";
+import { Link , withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
 import {Whisper, Popover, Button,Row,Col,Panel} from 'rsuite' ;
@@ -59,7 +59,8 @@ class GraphPath extends Component{
               <p>This is a default Popover </p>
               <p>Content</p>
               <p>
-                <a>link</a>
+                {/* <a>link</a> */}
+                <Link to={`${this.props.match.url}/edit`}>TEST</Link>
               </p>
             </Popover>
           );
@@ -78,7 +79,7 @@ class GraphPath extends Component{
               
               <div id="graphbox">
 
-                <Graph key={JSON.stringify(graph)}
+                <Graph 
                   graph={graph}
                   options={options}
                   events={events}
@@ -122,7 +123,7 @@ GraphPath.propTypes = {
 
 }
 
-export default GraphPath ;
+export default withRouter(GraphPath) ;
 // let graph2 = {
 //             nodes: [
 //               { id: 1, label: "Node 1", title: "node 1 tootip text" },
