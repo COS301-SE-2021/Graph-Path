@@ -6,28 +6,7 @@ import { Link ,Route ,Switch, withRouter} from "react-router-dom";
 import GraphPath from "./Graph";
 import axios from 'axios' ;
 import Project from "./Project";
-
-const ProjectCard = ({selectProject,project,link})=>{
-    console.log('PR CArd',link)
-
-    return (
-    <div>
-        <Panel  shaded bordered bodyFill={false} style={{ display: 'inline-block', width: 240 }}
-        >
-        <Panel header="Project Card">
-          <div>
-            <small>Project Name:<h6>{project.projectName}</h6> </small>
-          </div>
-          <h6>
-              Last Editted: {project.lastDateAccessed}
-          </h6>
-          <Icon icon='info' onClick={()=>console.log('clicked')}/> <br/>
-          <Link onClick={()=>selectProject(project)} to={`${link}`}>Open</Link>
-        </Panel>
-      </Panel>
-      </div>
-    )
-}
+import ProjectCard from './Reusable/ProjectCard' ;
 
 /*
 *   A component that will make async request to peer server for all projects of the logged user, provided in the props   
@@ -119,8 +98,47 @@ class ProjectManager extends Component {
        
     }
 
-    deleteProject = () =>{
-        //make request for deleting project.
+
+    deleteProject=(project)=>{
+    //make request for deleting project.
+        if(project === undefined){
+            alert('Can\'t delete Project. Project Invalid') ;
+        }
+        else{
+           
+            this.setState({
+                loading:true,
+                // linkNumber:-1
+            }) ;
+            console.log('B4 del',project)
+            axios.delete(`${this.props.api}/project/deleteProject/${project._id}`)
+            .then((res)=>{
+                if (res.status >=400){
+                    throw res ;
+                }
+                if(res.data.message === undefined){
+                    alert('Network Error') ;
+                    this.setState({
+                        loading:false
+                    }) ;
+                }
+                else{
+                    this.setState({
+                        answer:res.data.message
+                    })//,()=>this.showPopUP()) ;
+                    ;
+                    this.viewProjectsFromAPI() ;
+                }
+            })
+            .catch(err=>{
+                console.log("error",err)
+                this.setState({
+                    loading:false
+                }) ;
+            }) ;
+            
+        
+        }
     }
 
     handleSortChange =(value)=>{
@@ -200,7 +218,11 @@ class ProjectManager extends Component {
                                 {
                                 this.state.projects.length > 0?
                                 this.state.projects.map((project,index)=>{
-                                return <ProjectCard key={`${index+1}${project.projectName}`} project={project} link={`${match.url}/project`} selectProject={this.selectCurrentProject} />    
+                                return <ProjectCard key={`${index+1}${project.projectName}`} 
+                                project={project} 
+                                link={`${match.url}/project`} 
+                                selectProject={this.selectCurrentProject}
+                                deleteProject={this.deleteProject} />    
                             })
                             :<div>
                                 <h1>No Projects found please refresh</h1>

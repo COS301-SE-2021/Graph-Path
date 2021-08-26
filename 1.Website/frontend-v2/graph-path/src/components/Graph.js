@@ -4,21 +4,27 @@ import  PropTypes  from "prop-types";
 import { Link , withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
-import {Whisper, Popover, Button,Row,Col,Panel} from 'rsuite' ;
+import {Whisper, Popover, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox} from 'rsuite' ;
+import ModalHeader from "rsuite/lib/Modal/ModalHeader";
 class GraphPath extends Component{
+  graphManager = null ;
   
   constructor(props){
     super(props) ;
     this.state ={
-      graphManager : null 
+      currGrah:{} ,
+      showTask:false,
+      nodeName:'',
+      critical:false
     }
   }
   componentDidMount(){
     const {graph} = this.props
 
     if (graph !== undefined ){
+      this.graphManager = new GraphManager(graph)
       this.setState({
-        graphManager: new GraphManager(graph)
+        currGrah: this.graphManager.getGraph() 
       })  ;
     }
     else{
@@ -26,13 +32,56 @@ class GraphPath extends Component{
     }
   }
   componentWillUnmount(){
-    if (this.state.graphManager !== null){
+    if (this.graphManager !== null){
         
-        this.setState({
-          graphManager : delete this.state.graphManager  
-        }) ;
+        // this.setState({
+         delete this.graphManager  
+        // }) ;
     }
   }
+
+  showTaskModal=()=>{
+    this.setState({
+      showTask:!this.state.showTask
+    }) ;
+  }
+
+  handleChange =(value)=>{
+    this.setState({
+      nodeName:value
+    }) ;
+  }
+  handleCritical = (value)=>{
+    this.setState({
+      critical:!this.state.critical
+    }) ;
+  }
+
+  addNewNode = ()=>{
+    const name = {
+      label:this.state.nodeName ,
+      critical:this.state.critical 
+    }
+      
+    if (!name.label.toString().trim().length) {
+        alert('Cannot Submit Empty Name')
+    }
+    else{
+        this.graphManager.addNode(name) ;
+        this.setState({
+          currGrah: this.graphManager.getGraph() 
+        },()=>  this.cleanUpAfterNodeAddition() )  ;
+      
+    }
+  }
+
+  cleanUpAfterNodeAddition = ()=>{
+    this.setState({
+      nodeName:'',
+      critical:false
+    }) ;
+  }
+
   render(){
 
           const options = {
@@ -56,30 +105,49 @@ class GraphPath extends Component{
           };
           const speaker =  (
             <Popover title="Title">
-              <p>This is a default Popover </p>
-              <p>Content</p>
-              <p>
-                {/* <a>link</a> */}
-                <Link to={`${this.props.match.url}/edit`}>TEST</Link>
-              </p>
+              <p>ADD NODE TO GRAPH</p>
+              <Form onSubmit={this.addNewNode} data-testid="form">
+                <FormGroup>
+                    <ControlLabel> Node Name</ControlLabel>
+                    <FormControl name="node" type="text" onChange={this.handleChange} />
+                </FormGroup>
+
+                <FormGroup>
+                  <Checkbox checked={this.state.critical} onChange={this.handleCritical}>
+                    Critical Node ?
+                  </Checkbox>
+                </FormGroup>
+                <FormGroup>
+                    <FormControl type="submit"/>
+                    </FormGroup>
+            </Form>
             </Popover>
           );
           
 
-          if (this.state.graphManager !== null){
-            const graph = this.state.graphManager.getGraph() ;
+          if (this.graphManager !== null){
+            const graph = this.state.currGrah;
             console.log('rendering graph', graph) ;
 
             return (
               <div >
-                <Link to="">Add Node</Link>
-                <Whisper placement={'top'} trigger={'click'} speaker={speaker} >
-                  <Button>Add Node</Button>
-                </Whisper>
-              
+                {/* <Link to="">Add Node</Link> */}
+               <Modal show={this.state.showTask} backdrop={true}>
+                 <ModalHeader>
+                   <Modal.Title>
+                     Provided tasks
+                   </Modal.Title>
+                   <Modal.Body>
+                      Task 7
+                   </Modal.Body>
+                 </ModalHeader>
+               </Modal>
+              <h3>{this.props.projectName}</h3>
               <div id="graphbox">
-
-                <Graph 
+              <Whisper placement={'autoVertical'} trigger={'click'} speaker={speaker} >
+                  <Button >Add Node</Button>
+                </Whisper>
+              <Graph 
                   graph={graph}
                   options={options}
                   events={events}
@@ -89,21 +157,6 @@ class GraphPath extends Component{
                   }}
               />
               </div>
-              <Row>
-              <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-
-              </Row>
               </div>
   
             )
@@ -119,7 +172,8 @@ class GraphPath extends Component{
 
 GraphPath.propTypes = {
   graph:PropTypes.object.isRequired , 
-  task:PropTypes.array
+  task:PropTypes.array,
+  projectName:PropTypes.string
 
 }
 
@@ -137,4 +191,19 @@ export default withRouter(GraphPath) ;
 //               { from: 2, to: 5 }
 //             ]
 //           };
+  /* <Row>
+              <Col>
+                <Panel bordered bodyFill header="Task"/>
+                </Col>
+                <Col>
+                <Panel bordered bodyFill header="Task"/>
+                </Col>
+                <Col>
+                <Panel bordered bodyFill header="Task"/>
+                </Col>
+                <Col>
+                <Panel bordered bodyFill header="Task"/>
+                </Col>
+
+              </Row> */
         

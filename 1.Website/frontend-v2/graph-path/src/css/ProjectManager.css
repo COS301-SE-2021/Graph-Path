@@ -16,3 +16,10 @@
     position: relative;
     clear: both;
 }
+
+.rs-panel-heading{
+    color: #34c3ff ; 
+    font-weight: bolder;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+}

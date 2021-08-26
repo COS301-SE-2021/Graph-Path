@@ -4,6 +4,7 @@ import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import GraphPath from './Graph';
 import GraphManager from './Helpers/GraphManager';
 import axios from 'axios';
+import { Nav } from 'rsuite';
 
 /*
 *   Project provides a view to the graph of the project
@@ -84,13 +85,22 @@ class Project extends Component {
         else{
             return (
                 <div data-testid="tidProjectView">
-                    EDIT|VIEW GRAPH|ADD MEMBERS
-                    <Link to={`${match.url}/edit`}>EDIT Project</Link>
-                    <Link to={`${match.url}`}>VIEW GRAPH</Link>
+                    {/* EDIT|VIEW GRAPH|ADD MEMBERS */}
+                    <Nav id="projectNav" pullRight vertical>
+                        <Nav.Item
+                            componentClass={Link}
+                            to={`${match.url}/edit`}>EDIT Project
+
+                        </Nav.Item>
+                        <Nav.Item
+                        componentClass={Link}
+                        to={`${match.url}`}>VIEW GRAPH
+                        </Nav.Item>
+                    </Nav>
 
                     <Switch>
                         <Route exact path={`${match.path}`} render={()=>{
-                            return <GraphPath  graph={project.graph}/>
+                            return <GraphPath projectName={project.projectName} graph={project.graph}/>
     
                         }} />
                         <Route path={`${match.path}/edit`} render={()=>{
