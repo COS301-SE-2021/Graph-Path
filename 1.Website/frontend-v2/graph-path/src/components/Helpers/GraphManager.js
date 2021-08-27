@@ -49,7 +49,7 @@ class GraphManager{
             y['color'] ='#080' ;
             this.graph.edges[index] = y ;
           
-            if ( edge.source=== x){
+            if ( edge.from=== x){
               return y ;
             }
             else{
@@ -58,7 +58,7 @@ class GraphManager{
           }) ;
 
           edgesFiltered.forEach((y)=>{
-            this.addAdjacencyEdge(x,y.target) ;
+            this.addAdjacencyEdge(x,y.to) ;
           }) 
           
           
@@ -153,8 +153,8 @@ class GraphManager{
         if (path.length){
           //edit the color to red
           const colorEdges = this.graph.edges.map((value)=>{
-            var del = path.indexOf(value.target) ;
-            if (value.source === start){
+            var del = path.indexOf(value.to) ;
+            if (value.from === start){
               if (del>=0){
                 path = path.splice(del,1) ;
                 let newE = {...value} ; 
@@ -259,11 +259,10 @@ class GraphManager{
         nodes:[...this.graph.nodes] ,
         edges:[...this.graph.edges]
       } 
-      const copy = Object.assign({},this.graph) ;
       let edgeId = 1;
       let edgeAlreadyInGraph = false ;
       let allIds = this.graph.edges.map((value)=>{
-        if (value.source === src && value.target ===tgt ){
+        if (value.from === src && value.to ===tgt ){
           edgeAlreadyInGraph = true ;
         }
         return value.id ;
@@ -280,19 +279,18 @@ class GraphManager{
   
         var edg = {
               id:`e${edgeId}`, // give edge an id
-              source:src, 
-              target:tgt,
+              from:src, 
+              to:tgt,
               label:`${ src} to ${tgt}` ,
               color:'#080',
-              size:1,
+              size:3,
           }
-          edg["read_cam0:size"] = 4
           
-          // this.graph.edges.push(edg) ; 
-          copy.edges.push(edg) ;
+          this.graph.edges.push(edg) ; 
   
-        if (!isAcyclic(copy)){     
-          this.graph = oldGraph ;
+        if (!isAcyclic(this.graph)){   
+          this.graph.edges.pop() ; 
+          
           //cyclic edge
           return 0 ;
         }
@@ -325,10 +323,10 @@ class GraphManager{
         newGraph.nodes = newNodes ;
         if (this.graph.edges.length>0){
           var newEdges = this.graph.edges.filter((edge)=>{
-            if (edge.source === id ){
+            if (edge.from === id ){
               return false
             }
-            else if ( edge.target === id){
+            else if ( edge.to === id){
               return false ;
             }
             return true ;

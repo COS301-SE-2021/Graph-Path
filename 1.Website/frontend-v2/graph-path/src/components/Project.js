@@ -100,7 +100,7 @@ class Project extends Component {
 
                     <Switch>
                         <Route exact path={`${match.path}`} render={()=>{
-                            return <GraphPath projectName={project.projectName} graph={project.graph}/>
+                            return <GraphPath project={project} graph={project.graph}/>
     
                         }} />
                         <Route path={`${match.path}/edit`} render={()=>{

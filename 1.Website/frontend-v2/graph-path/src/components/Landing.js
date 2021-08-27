@@ -11,7 +11,7 @@ import Graph_Picture from "../img/graph_2.svg";
 function Landing({logInvalid}) {
 
         const {user, isAuthenticated, isLoading} = useAuth0();
-        console.log("props", logInvalid)
+        // console.log("props", logInvalid)
         
 
         if(isLoading) return <Loader speed="fast" content="Loading" />
