@@ -205,7 +205,7 @@ class ProjectManager extends Component {
         }
         else{
             return( 
-                <div data-testid="tidProjectManager">
+                <div data-testid="tidProjectManager" id="projectManager">
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
                             return <Project project={this.state.currentProject} />

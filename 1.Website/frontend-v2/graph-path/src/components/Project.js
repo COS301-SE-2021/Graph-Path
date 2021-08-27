@@ -2,9 +2,9 @@ import {React,Component} from 'react' ;
 import PropTypes from 'prop-types';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import GraphPath from './Graph';
-import GraphManager from './Helpers/GraphManager';
 import axios from 'axios';
 import { Nav } from 'rsuite';
+import '../css/Common.css'
 
 /*
 *   Project provides a view to the graph of the project
@@ -19,9 +19,6 @@ import { Nav } from 'rsuite';
 *
 *
 *
-*
-
-
 
 
 */
@@ -84,7 +81,7 @@ class Project extends Component {
         }
         else{
             return (
-                <div data-testid="tidProjectView">
+                <div data-testid="tidProjectView" id="projectView">
                     {/* EDIT|VIEW GRAPH|ADD MEMBERS */}
                     <Nav id="projectNav" pullRight vertical>
                         <Nav.Item

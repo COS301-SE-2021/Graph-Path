@@ -87,7 +87,8 @@ class GraphPath extends Component{
     }
       
     if (!name.label.toString().trim().length) {
-        alert('Cannot Submit Empty Name')
+        // alert('Cannot Submit Empty Name')
+        PopUpMessage('Cannot Submit Empty Name','error')
     }
     else{
         this.graphManager.addNode(name) ;
@@ -106,7 +107,8 @@ class GraphPath extends Component{
     }
     else{
       if (this.state.source === id){
-        alert('Cannot make edge to self')
+        // alert('Cannot make edge to self')
+        PopUpMessage('Cannot make edge to self','error')
       }
       else{  
         this.setState({
@@ -121,10 +123,13 @@ class GraphPath extends Component{
 
     }
     else if (addedEdge === 0 ){
-      alert('Edge Makes graph Cyclic')
+      // alert('Edge Makes graph Cyclic')
+      PopUpMessage('Edge Makes graph Cyclic','error')
+
     }
     else{
-      alert('Edge Exists')
+      // alert('Edge Exists')
+      PopUpMessage('Edge Exists','warning')
     }
       }
       //save the information
