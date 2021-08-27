@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import GraphPath from './Graph';
 import axios from 'axios';
-import { Nav } from 'rsuite';
+import { Icon, Nav } from 'rsuite';
 import '../css/Common.css'
 
 /*
@@ -84,14 +84,16 @@ class Project extends Component {
                 <div data-testid="tidProjectView" id="projectView">
                     {/* EDIT|VIEW GRAPH|ADD MEMBERS */}
                     <Nav id="projectNav" pullRight vertical>
-                        <Nav.Item
+                        <Nav.Item 
+                            icon={<Icon icon={'pencil'}/>}
                             componentClass={Link}
                             to={`${match.url}/edit`}>EDIT Project
 
                         </Nav.Item>
                         <Nav.Item
-                        componentClass={Link}
-                        to={`${match.url}`}>VIEW GRAPH
+                            icon={<Icon icon={'views-authorize'}/>}
+                            componentClass={Link}
+                            to={`${match.url}`}>VIEW GRAPH
                         </Nav.Item>
                     </Nav>
 

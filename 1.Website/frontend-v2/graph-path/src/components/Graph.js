@@ -300,7 +300,7 @@ saveProjectGraph=(projectId)=>{
             edges: {
               color: "#ff0000"
             },
-            height: "500px" ,
+            // height: "500px" ,
           };
           
           const events = {} ;
@@ -381,7 +381,7 @@ saveProjectGraph=(projectId)=>{
                    </Modal.Body>
                  </ModalHeader>
                </Modal>
-              <h3>{this.props.project.projectName}</h3>
+               <h3>{this.props.project.projectName}</h3>
               <div id="graphbox">
                 <div>
                 <Whisper speaker={speaker} placement={'autoVertical'} trigger={'active'}>
