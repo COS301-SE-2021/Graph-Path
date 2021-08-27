@@ -1,7 +1,11 @@
 #projectView{
     position: relative;
 }
-
+.rs-nav-item>.rs-nav-item-content{
+    color:#34c3ff;
+}
 #projectNav{
+    width: 10%;
     float: right;
+    background-color: rgba(29 ,26 ,36,0.1 ) ;
 }

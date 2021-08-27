@@ -116,9 +116,10 @@ class Dashboard extends React.Component{
                                 <Route path={`${match.path}/modal`} exact>
                                     <Modal />
                                 </Route>
-                                <Route path={`${match.path}/manager`}>
-                                    <ProjectManager user={this.props.authUser}/>
-                                </Route>
+                                <Route path={`${match.path}/manager`} render={()=>{
+                                    return <ProjectManager user={this.props.authUser}/> 
+                                }} />
+                                    
                             {
                                 this.state.redirect?this.changeRedirect(`${match.url}/manager`):""
                             }
