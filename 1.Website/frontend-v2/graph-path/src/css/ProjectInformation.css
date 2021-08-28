@@ -1,0 +1,19 @@
+#project-name h3{
+    text-align: center;
+}
+
+#can-do-div{
+    max-width: 15vw;
+    max-height: 30vh;
+    /*background-color: blue;*/
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-top: 3%;
+    margin-left: 10%;
+}
+
+#check-list{
+    max-width: 15vw;
+    max-height: 19vh;
+    overflow-y: scroll;
+}
