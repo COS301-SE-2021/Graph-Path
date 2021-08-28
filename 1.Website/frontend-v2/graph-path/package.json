@@ -1,6 +1,7 @@
 {
   "name": "graph-path",
   "version": "0.1.0",
+  "homepage":".",
   "private": true,
   "dependencies": {
     "@syncfusion/ej2-react-buttons": "^19.2.55",
