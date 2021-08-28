@@ -611,6 +611,44 @@ function makeProjectRoute(db) {
 });
 
 
+    /**
+     * @api {post} /updateProjectAccessData
+     * @apiName update project access date
+     * @apiDescription  This endpoint updates the last time a user accessed a project.
+     * @apiGroup Project
+     * @apiSuccess (200) {object}  message : "The project updated successfully"
+     */
+    router.post('/updateProjectAccessData',
+        authentication.authenticateToken,
+        authorisation.AuthoriseUpdateProjectAccessData,
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('lastDateAccessed').exists().notEmpty().isDate(),
+        (req,res)=>{
+            const ID = req.body.projectID;
+            let lastDate = req.body.lastDateAccessed;
+
+
+            ProjectManagerService.updateProjectAccessData(db,ID,lastDate)
+                .then(ans=>{
+                    if(ans.modifiedCount > 0){
+                        res.send({
+                            message: "The project was updated."
+                        })
+                    }else{
+                        res.send({
+                            message: "The project was not updated."
+                        })
+                    }
+
+                })
+                .catch(err=>{
+                    res.status(500).send({
+                        message: "Server error: Could not update the project.",
+                        err: err
+                    })
+                })
+        });
+
 
  return router;
 }
