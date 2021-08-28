@@ -10,17 +10,3 @@
     border-radius: 5px;
 }
 
-#can-do-div{
-    max-width: 15vw;
-    max-height: 30vh;
-    /*background-color: blue;*/
-    border: 1px solid grey;
-    border-radius: 5px;
-
-}
-
-#check-list{
-    max-width: 15vw;
-    max-height: 19vh;
-    overflow-y: scroll;
-}
