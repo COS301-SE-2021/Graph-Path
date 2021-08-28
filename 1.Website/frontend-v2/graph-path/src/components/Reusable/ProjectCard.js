@@ -7,11 +7,11 @@ import { Link } from 'react-router-dom';
 * ProjectCard is used to display the minimal description about the project
 * It Provides the following
 *   1. A display of the projectName on the header.
-*   2. A link to open the project - the path is provided in the props
+*   2. A link to open the project - the path is provided in the props as well as the function to tell the parent the chosen project
 *   3. An information box that allows for 
-*     3.1 Deletion of project
-*     3.2 Shows the description of project
-*     3.3 Editing the project
+*     3.1 Deletion of project - it receives the function to do so in the props 
+*     3.2 Shows the description of project - the project object is received through props
+*     3.3 Editing the project - to save it receives the prop function to make the request.
 *
 *
 *

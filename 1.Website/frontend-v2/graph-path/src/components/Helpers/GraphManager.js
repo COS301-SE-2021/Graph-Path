@@ -255,10 +255,7 @@ class GraphManager{
     }
 
     addEdge=(src,tgt)=>{
-      const oldGraph = {
-        nodes:[...this.graph.nodes] ,
-        edges:[...this.graph.edges]
-      } 
+     
       let edgeId = 1;
       let edgeAlreadyInGraph = false ;
       let allIds = this.graph.edges.map((value)=>{
@@ -386,14 +383,14 @@ class GraphManager{
 
             obj["id"]= `n${nodeId}` ;
             obj["color"] = '#0000ff' ; //following nodes are blue
-            if (len % 2 === 0){
-                obj["x"] = 15*len ; 
-                obj["y"] = 15*len ;
-            }
-            else{
-                obj["x"] = -15*len ; 
-                obj["y"] = -15*len ;
-            }
+            // if (len % 2 === 0){
+            //     obj["x"] = 15*len ; 
+            //     obj["y"] = 15*len ;
+            // }
+            // else{
+            //     obj["x"] = -15*len ; 
+            //     obj["y"] = -15*len ;
+            // }
         }
         else{
             // add node with edge depending on self

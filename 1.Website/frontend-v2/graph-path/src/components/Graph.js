@@ -75,6 +75,7 @@ class GraphPath extends Component{
   }
   
   updateGraph=()=>{
+    
     this.setState({
       currGraph: this.graphManager.getGraph() 
     }) ;
@@ -114,6 +115,7 @@ class GraphPath extends Component{
         this.setState({
           target:id
         }) ; 
+        this.graphManager.setGraph(this.state.currGraph) ;
         let addedEdge = this.graphManager.addEdge(this.state.source,this.state.target) ;
         console.log('adding edge',addedEdge) ;
 
@@ -244,8 +246,8 @@ saveProjectGraph=(projectId)=>{
         const minimalEdges = this.state.currGraph.edges.map((edge)=>{
             return {
                 id: edge.id,
-                from: edge.source,
-                to: edge.target,
+                from: edge.from,
+                to: edge.to,
                 label: edge.label,
                 color: edge.color,
                 size: edge.size,
@@ -283,7 +285,7 @@ saveProjectGraph=(projectId)=>{
         })
     }
     else{//no difference
-        console.log('Node Project',this.props, this.state.currGraph) ;
+        console.log('Node Project',this.props, this.graphManager) ;
         alert('no change in graph')
     }
 
@@ -295,12 +297,38 @@ saveProjectGraph=(projectId)=>{
 
           const options = {
             layout: {
-              hierarchical:false
+              randomSeed: undefined,
+              improvedLayout:true,
+              clusterThreshold: 150,
+              // hierarchical: {
+              //   enabled:false,
+              //   levelSeparation: 150,
+              //   nodeSpacing: 100,
+              //   treeSpacing: 200,
+              //   blockShifting: true,
+              //   edgeMinimization: true,
+              //   parentCentralization: true,
+              //   direction: 'UD',        // UD, DU, LR, RL
+              //   sortMethod: 'hubsize',  // hubsize, directed
+              //   shakeTowards: 'leaves'  // roots, leaves
+              // }
             },
             edges: {
-              color: "#ff0000"
+              color: "#ff0000" , 
+              
             },
-            // height: "500px" ,
+            physics:{
+              enabled:true ,
+              // forceAtlas2Based: {
+              //   theta: 1,
+              //   gravitationalConstant: -50,
+              //   centralGravity: 0.01,
+              //   springConstant: 0.08,
+              //   springLength: 100,
+              //   damping: 0.4,
+              //   avoidOverlap: 0
+              // }
+            }
           };
           
           const events = {} ;
@@ -311,6 +339,7 @@ saveProjectGraph=(projectId)=>{
           events.externalRemoveNode = this.removeNode ;
           events.externalRemoveEdge = this.removeEdge ;
           events.externalCreateEdge = this.createEdgeBetweenNode
+          events.viewTaskInfo = this.showTaskModal ;
           events.click = function(event){
               console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
               const nodesAffected = event.nodes ;
@@ -338,6 +367,7 @@ saveProjectGraph=(projectId)=>{
               }
               else{
                 //view task information
+                events.viewTaskInfo() ;
               }
               
           }  
@@ -371,8 +401,8 @@ saveProjectGraph=(projectId)=>{
                   this.state.loading && (<Loader backdrop speed={'fast'} size={'lg'}/>)
                 }
                 
-               <Modal show={this.state.showTask} backdrop={true}>
-                 <ModalHeader>
+               <Modal show={this.state.showTask} backdrop={'static'} >
+                 <ModalHeader onHide={this.showTaskModal}>
                    <Modal.Title>
                      Provided tasks
                    </Modal.Title>
@@ -383,8 +413,8 @@ saveProjectGraph=(projectId)=>{
                </Modal>
                <h3>{this.props.project.projectName}</h3>
               <div id="graphbox">
-                <div>
-                <Whisper speaker={speaker} placement={'autoVertical'} trigger={'active'}>
+                <div id="graph-nav">
+                <Whisper speaker={speaker} placement={'leftStart'} trigger={'active'}>
                 <Button >Add Node</Button>
               </Whisper>
               <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>

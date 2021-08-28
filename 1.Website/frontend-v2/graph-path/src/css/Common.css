@@ -5,7 +5,7 @@
     color:#34c3ff;
 }
 #projectNav{
-    width: 10%;
+    max-width: 10%;
     float: right;
     background-color: rgba(29 ,26 ,36,0.1 ) ;
 }

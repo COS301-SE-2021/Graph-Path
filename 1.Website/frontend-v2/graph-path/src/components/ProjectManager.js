@@ -28,34 +28,7 @@ class ProjectManager extends Component {
             sortValue:'recent',
             loading:false,
             currentProject:{},
-            projects:[],def:[{
-                projectName:"T1",
-                lastDateAccessed: new Date().toJSON().slice(0,17) ,
-            },{
-                projectName:"T2",
-                lastDateAccessed: new Date("2021-08-22T16:00").toJSON().slice(0,17) ,
-            },{
-                projectName:"S2",
-                lastDateAccessed: new Date("2021-08-12T16:00").toJSON().slice(0,17) ,
-            },{
-                projectName:"T1",
-                lastDateAccessed: new Date().toJSON().slice(0,17) ,
-            },{
-                projectName:"T2 2",
-                lastDateAccessed: new Date("2021-05-22T16:00").toJSON().slice(0,17) ,
-            },{
-                projectName:"S2 65",
-                lastDateAccessed: new Date("2021-06-15T16:00").toJSON().slice(0,17) ,
-            },{
-                projectName:"T56",
-                lastDateAccessed: new Date().toJSON().slice(0,17) ,
-            },{
-                projectName:"T2 3",
-                lastDateAccessed: new Date("2021-03-23T16:00").toJSON().slice(0,17) ,
-            },{
-                projectName:"S2 45",
-                lastDateAccessed: new Date("2021-08-15T16:00").toJSON().slice(0,17) ,
-            }]
+            projects:[],
         }
     }
     componentDidMount(){
@@ -94,7 +67,36 @@ class ProjectManager extends Component {
         })
     }
 
-    updateLastAcessed = ()=>{
+    selectCurrentProject=(project)=>{
+        this.setState({
+            currentProject:project
+        })//,()=>this.updateLastAcessed(project)) ;
+        
+    }
+
+    updateLastAcessed = (project)=>{
+       //check if date on project is not over minutes .
+       //if it is update the project. If not ? don't update.
+       let accessedProject = {
+           lastDateAccessed : new Date().toJSON().slice(0,19) ,
+           projId: project["_id"] 
+       } 
+       console.log('B4 update',accessedProject)
+       axios.put(`${this.props.api}/project/updateProjectAccessDate`,accessedProject)
+       .then((res)=>{
+           console.log('comms for accessdate',res) ;
+           if (res.data.data){
+               this.viewProjectsFromAPI() ;
+           }
+           else{
+               console.log('Did not update access date successfully') ;
+           }
+       })
+       .catch((err)=>{
+           console.log('Comm Error',err) ;
+       }) ;
+
+
        
     }
 
@@ -189,11 +191,6 @@ class ProjectManager extends Component {
         }
     }
 
-    selectCurrentProject=(project)=>{
-        this.setState({
-            currentProject:project
-        }) ;
-    }
 
     render(){
 
@@ -257,3 +254,32 @@ ProjectManager.defaultProps = {
 }
 
 export default withRouter(ProjectManager) ; 
+
+// def:[{
+//     projectName:"T1",
+//     lastDateAccessed: new Date().toJSON().slice(0,17) ,
+// },{
+//     projectName:"T2",
+//     lastDateAccessed: new Date("2021-08-22T16:00").toJSON().slice(0,17) ,
+// },{
+//     projectName:"S2",
+//     lastDateAccessed: new Date("2021-08-12T16:00").toJSON().slice(0,17) ,
+// },{
+//     projectName:"T1",
+//     lastDateAccessed: new Date().toJSON().slice(0,17) ,
+// },{
+//     projectName:"T2 2",
+//     lastDateAccessed: new Date("2021-05-22T16:00").toJSON().slice(0,17) ,
+// },{
+//     projectName:"S2 65",
+//     lastDateAccessed: new Date("2021-06-15T16:00").toJSON().slice(0,17) ,
+// },{
+//     projectName:"T56",
+//     lastDateAccessed: new Date().toJSON().slice(0,17) ,
+// },{
+//     projectName:"T2 3",
+//     lastDateAccessed: new Date("2021-03-23T16:00").toJSON().slice(0,17) ,
+// },{
+//     projectName:"S2 45",
+//     lastDateAccessed: new Date("2021-08-15T16:00").toJSON().slice(0,17) ,
+// }]
