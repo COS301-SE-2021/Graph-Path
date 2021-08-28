@@ -56,7 +56,7 @@ class Dashboard extends React.Component{
             
                 <div className="main-container">
                     <NewProject ref={this.newProjectModalRef} />
-                    <Profile ref={this.profileModalRef} />
+                    <Profile user={this.props.authUser} ref={this.profileModalRef} />
                     <nav id="nav bar"  >
                         <div id="side-bar-button">
                             {
