@@ -198,6 +198,35 @@ function AuthoriseUpdateProjectOwner(res,req,next){
 
 
 }
+
+
+function AuthoriseUpdateProjectAccessData(res,req,next){
+    console.log("checking permission to everything in a project")
+    const userProjects = req.user.projects;
+    const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
+    if( userProject){
+        console.log(userProject[0])
+        const permissions = userProject[0].permissions;
+        if(permissions.includes("update project lastDateAccessed")){
+            console.log("permitted to update project lastDateAccessed")
+            next()
+
+        } else{
+            console.log("update project lastDateAccessed authorization failed")
+            res.status(403).send({
+                message: "Unauthorised to update project lastDateAccessed",
+            })
+        }
+    } else {
+        res.status(403).send({
+            message: "Not authorised to access current project"
+        })
+    }
+
+
+
+}
+
 module.exports = {
     AuthoriseDeleteTask,
     AuthoriseKanbanBoard,
@@ -207,4 +236,5 @@ module.exports = {
     AuthoriseRemoveMembers,
     AuthoriseUpdateAllProject,
     AuthoriseUpdateProjectOwner,
+    AuthoriseUpdateProjectAccessData,
 }
