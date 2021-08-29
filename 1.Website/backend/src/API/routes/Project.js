@@ -37,10 +37,13 @@ function makeProjectRoute(db) {
     router.get("/sendMail",
         (req,res)=> {
 
-        const projectOwner =  req.body.ownerName;
-        const email = req.body.email
-
-        mailer.sendInvites("test Project 1", email);
+        const projectOwner =  req.body.email;
+        const email = req.body.email;
+        const projectName = "test new project";
+        const projectDueDate = "1998/10/25";
+        const projectDescription = " this is the project and tells us what the project is about";
+        //mailer.sendInvites("test Project 1", email);
+        //mailer.newProject(projectName,projectOwner,projectDueDate,projectDescription)
 
     })
 
@@ -338,24 +341,21 @@ function makeProjectRoute(db) {
                     projectName: req.body.projectName,
                     startDate :req.body.startDate,
                     dueDate : req.body.dueDate,
-                    groupMembers : [{
-                        "email": req.body.email,
-                        "role": "owner",
-                        "permissions": ['owner'],
-                    }],
+                    groupMembers :[],
                     graph: {},
                     lastAccessed: new Date(),
 
                 };
 
-            ProjectManagerService.insertProject(db,data)
-                .then(ans=>{
-                    res.send({
-                        message:"The Project has been created.",
-                        data: data
-                    })
+                ProjectManagerService.insertProject(db,data)
+                    .then(ans=>{
+
+                        res.send({
+                            message:"The Project has been created.",
+                            data: data
+                        })
                 })
-                .catch(err=>{
+                    .catch(err=>{
                     res.status(500).send({
                         message: "The project was not created."
                     })

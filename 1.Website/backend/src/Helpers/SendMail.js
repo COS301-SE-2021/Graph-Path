@@ -192,6 +192,66 @@ function sendInvites(ProjectName , projectOwner , projectDueDate, recipients)
 
 }
 
+function newProject(ProjectName,projectOwner,projectDueDate ,description){
+    console.log("Attempting to send new project email notification...");
+    const username = process.env.MAIL_USERNAME;
+    const password = process.env.MAIL_PASSWORD;
+    let subject="new Project creation";
+    let body  = "You you have successfully created a new project\n";
+    let viewPath = "./Notifications/views/";
+    let templateName = 'CreationOfProject';
+
+    let transporter = nodemailer.createTransport({
+        service: "hotmail",
+        auth:{
+            user: username,
+            pass: password
+        },
+        template: templateName
+    });
+
+    transporter.use('compile',hbs({
+        viewEngine:{
+            partialsDir:path.resolve(__dirname,viewPath),
+            defaultLayout:""
+        },
+        viewPath: path.resolve(__dirname,viewPath),
+        extName:".hbs"
+    }));
+
+    const options = {
+        from : username,
+        to : projectOwner,
+        subject : subject,
+        text: body,
+        template:templateName,
+        context: {
+            projectName: ProjectName,
+            owner: projectOwner,
+            dueDate: projectDueDate,
+            projectDescription: description,
+        },
+        attachments:  [{
+            filename: 'graphPathLogo.png',
+            path: __dirname +'/Notifications/views/images/graphPathLogo.png',
+            cid: 'graphPathLogo'
+        }]
+    };
+
+    transporter.sendMail(options)
+        .then((result)=>{
+
+            console.log("successfully sent new project creation notification")
+        })
+        .catch((error)=>{
+            console.log("failed to send new project creation notification:")
+            console.log(error)
+        })
+
+
+
+
+}
 
 
 
@@ -248,6 +308,7 @@ function NewAccountCreation(userEmail , userName)
 
 module.exports = {
     sendInvites,
+    newProject,
 }
 
 
