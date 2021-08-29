@@ -24,7 +24,8 @@ function getPermissions(role)
         case "Project Manager":
              Permissions = [
                 'edit',
-                'view'
+                'view',
+                 'add members'
             ];
             return Permissions
             break;

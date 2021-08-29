@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const ObjectId = require('mongodb').ObjectID;
 const Permissions = require('../Helpers/Permissions');
 const {each} = require("mongodb/lib/operations/cursor_ops");
+const {reject} = require("bcrypt/promises");
+const {Promise} = require("mongoose");
 //const email = require("../Helpers/SendMail");
 
 /////////////////////////////////////////////////////-Project-////////////////////////////////////////////////////////
@@ -74,7 +76,7 @@ async function getAllProjectsByUserEmail(dbController,mail){
                                 console.log("Match found");
                                 const obj = {
                                     role: GroupMembers[x].role,
-                                    permissions: Permissions.getPermissions(GroupMembers[x].role),
+                                    permissions: GroupMembers[x].permissions,
                                     ...Projects[i],
 
                                 }
@@ -210,17 +212,54 @@ async function updateProjectGraph(dbController,id, graphObject){
 }
 
 async function addNewProjectMember(dbController, id, newMembers){
+    const db = dbController.getConnectionInstance();
+   return await new Promise((resolve,reject)=>{
+        getProjectByID(dbController,id).then((project)=>{
 
+            let members = project.groupMembers;
+
+            for(let i =0 ; i < newMembers.length; i++){
+                if(!members.some(member => member.email === newMembers[i].email)){
+                    members.push(newMembers[i])
+                }
+            }
+
+            db.collection('Projects').findOneAndUpdate({
+                "_id":ObjectId(id)
+                }, {
+                $set:{groupMembers: members}
+                }, {
+                returnNewDocument: true }
+            ).then(result=>{
+                console.log("updated group members");
+                resolve(result.value);
+
+
+            })
+                .catch(err=>{
+                    console.log("failed to update",err);
+                    reject(err)
+                })
+
+        }).catch((err)=>{
+            console.log(err);
+            reject("update failed")
+        })
+    })
+
+
+    /*
     const db = dbController.getConnectionInstance();
     let  project = null;
     await new Promise((resolve, reject)=>{
         db.collection('Projects').findOne({
             "_id": ObjectId(id)
         })
-            .then((ans)=>{
-                if(ans !==null){
+            .then((project)=>{
 
-                    project = ans;
+                if(project !==null){
+                    console.log("test break");
+                    //project = ans;
                     resolve();
                 }else{
                     throw "Project with given ID does not exist";
@@ -284,7 +323,7 @@ async function addNewProjectMember(dbController, id, newMembers){
     }
 
 
-
+*/
 }
 
 
@@ -426,6 +465,27 @@ async function updateEverythingProject(dbController, id, pname, ddate, sdate, ow
 
 }
 
+async function updateProjectAccessData(dbController, id, lastDate){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject)=>{
+
+        db.collection('Projects').updateOne({
+            "_id":ObjectId(id)
+        },{
+            $set: {
+                lastDateAccessed: lastDate
+            }
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+
+}
+
 module.exports = {
     //project
     insertProject,
@@ -438,6 +498,7 @@ module.exports = {
     updateEverythingProject,
     removeProjectMember,
     editMemberRole,
-    updateProjectOwner
+    updateProjectOwner,
+    updateProjectAccessData
 
 }
