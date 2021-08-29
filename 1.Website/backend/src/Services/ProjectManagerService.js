@@ -465,6 +465,27 @@ async function updateEverythingProject(dbController, id, pname, ddate, sdate, ow
 
 }
 
+async function updateProjectAccessData(dbController, id, lastDate){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject)=>{
+
+        db.collection('Projects').updateOne({
+            "_id":ObjectId(id)
+        },{
+            $set: {
+                lastDateAccessed: lastDate
+            }
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+
+}
+
 module.exports = {
     //project
     insertProject,
@@ -477,6 +498,7 @@ module.exports = {
     updateEverythingProject,
     removeProjectMember,
     editMemberRole,
-    updateProjectOwner
+    updateProjectOwner,
+    updateProjectAccessData
 
 }

@@ -32,7 +32,7 @@ const {isIn} = require("validator");
 
          })
      /**
-      * @api {get}  /getAllUsers'
+      * @api {get}  /listOfAllUsers'
       * @apiName  get all users
       * @apiDescription This endpoint retrieves all user objects
       * @apiGroup User
