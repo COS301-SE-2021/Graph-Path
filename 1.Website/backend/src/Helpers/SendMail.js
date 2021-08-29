@@ -136,13 +136,13 @@ transporter.use('compile',hbs({
 }))
 
 
-function sendInvites(projectName ,recipients)
+function sendInvites(ProjectName , projectOwner , projectDueDate, recipients)
 {
 
     const username = process.env.MAIL_USERNAME;
     const password = process.env.MAIL_PASSWORD;
     let subject="Graph path new project invite";
-    let body  = "You Have been added to new Project\n";
+    let body  = "You Have been invited to a project\n";
     let viewPath = "./Notifications/views/";
     let templateName = 'inviteToProject';
 
@@ -169,14 +169,18 @@ function sendInvites(projectName ,recipients)
         text: body,
         template:'inviteToProject',
         context: {
-            name: Rname,
-            token: recipients,
-            projectID: newProjectID,
-            ownerID: newProjectOWner,
-        }
+            projectName: ProjectName,
+            owner: projectOwner,
+            dueDate: projectDueDate,
+        },
+        attachments:  [{
+            filename: 'graphPathLogo.png',
+            path: __dirname +'/Notifications/views/images/graphPathLogo.png',
+            cid: 'graphPathLogo'
+        }]
     };
 
-    console.log(username,password)
+    //console.log(username,password)
     transporter.sendMail(options)
         .then((result)=>{
 
@@ -187,6 +191,8 @@ function sendInvites(projectName ,recipients)
         })
 
 }
+
+
 
 
 function NewAccountCreation(userEmail , userName)
