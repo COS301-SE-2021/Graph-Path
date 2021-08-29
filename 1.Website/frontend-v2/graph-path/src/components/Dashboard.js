@@ -79,7 +79,7 @@ class Dashboard extends React.Component{
                             this.state.showSideBar === true ?
 
                                 <div id="sidebar">
-                                    <Sidenav collapsible={true} id="side-nav">
+                                    <Sidenav collapsible={"true"} id="side-nav">
                                         <Sidenav.Body>
                                             <Nav>
                                                 <Nav.Item onClick={()=>this.changeRedirect(`${match.url}/manager`)}

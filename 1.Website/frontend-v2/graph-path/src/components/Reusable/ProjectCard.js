@@ -60,7 +60,7 @@ class ProjectCard extends Component {
             <small>Due Date: <h6>{project.dueDate}</h6> </small>
           </div>
           <h6>
-              Last Editted: {project.lastDateAccessed}
+              Last Editted: {project.lastAccessed}
           </h6>
           <Whisper trigger={'click'} placement={'autoVertical'} speaker={projectInfo}>
           <Icon icon='info' onClick={()=>console.log('clicked')}/>

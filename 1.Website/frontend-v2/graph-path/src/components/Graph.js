@@ -1,6 +1,6 @@
 import {React,Component} from "react";
 import Graph from 'react-graph-vis' ; 
-import  PropTypes  from "prop-types";
+import  PropTypes, { string }  from "prop-types";
 import { Link , withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
@@ -8,6 +8,7 @@ import { Popover,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal,
 import ModalHeader from "rsuite/lib/Modal/ModalHeader";
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
+import Task from "./Task";
 
 class GraphPath extends Component{
   graphManager = null ;
@@ -24,7 +25,9 @@ class GraphPath extends Component{
       showMsg:false,
       answer:'',
       source:'from',
-      target:'to'
+      target:'to',
+      taskList:[], 
+      nodeTasks:[]
     }
   }
   componentDidMount(){
@@ -42,24 +45,68 @@ class GraphPath extends Component{
     else{
         console.log('No Graph Object Mounted')
     }
+    this.viewAllTasksForProject() ;
+    
+
   }
   componentWillUnmount(){
+    let semiUpdate = this.props.project ;
     if (this.graphManager !== null){
-        
+        semiUpdate.graph = this.graphManager.getGraph() ;
         // this.setState({
          delete this.graphManager  
         // }) ;
     }
+    //update parent
+    this.props.updateParent(semiUpdate) ;
+    console.log('update parent',semiUpdate)
+    
   }
+  viewAllTasksForProject = ()=>{
+    if (this.props.project !== undefined){
+        const projectId = this.props.project._id ;
+        axios.get(`${this.props.api}/task/getAllTasksByProject/${projectId}`)
+        .then((res)=>{
+            console.log('Tasklist',res) ;
+            if (res.data.data !== undefined){
+                this.setState({
+                    taskList:res.data.data ,
+                    loading:false 
+                }) ;
+            }
+            else{
+                this.setState({
+                    loading:false 
+                }) ;
+            }
+        })
+        .catch((err)=>{
+            console.log('Error',err)
+            this.setState({
+                loading:false 
+            }) ;
+
+        })
+    }
+
+}
   showNodeForm = ()=>{
     this.setState({
       showNode:!this.state.showNode
     }) ;
   }
 
-  showTaskModal=()=>{
+  showTaskModal=(nodeId)=>{
+    let filter = this.state.nodeTasks ;
+    if (typeof nodeId === 'string' && this.props.project !== undefined){
+      filter= this.state.taskList.filter((value)=>
+      value.nodeID === `${this.props.project._id}_${nodeId}`) ;
+      
+    }
+
     this.setState({
-      showTask:!this.state.showTask
+      showTask:!this.state.showTask ,
+      nodeTasks:filter 
     }) ;
   }
 
@@ -171,6 +218,7 @@ class GraphPath extends Component{
     source:'from',
     target:'to'})
   }
+
   cleanUpAfterNodeAddition = ()=>{
     this.setState({
       nodeName:'',
@@ -315,10 +363,10 @@ saveProjectGraph=(projectId)=>{
             },
             edges: {
               color: "#ff0000" , 
-              
+              physics:false 
             },
             physics:{
-              enabled:true ,
+              enabled:false ,
               // forceAtlas2Based: {
               //   theta: 1,
               //   gravitationalConstant: -50,
@@ -367,7 +415,11 @@ saveProjectGraph=(projectId)=>{
               }
               else{
                 //view task information
-                events.viewTaskInfo() ;
+                if (nodesAffected.length>0){
+                  let node = nodesAffected[0];
+                  events.viewTaskInfo(node) ;
+
+                }
               }
               
           }  
@@ -401,15 +453,16 @@ saveProjectGraph=(projectId)=>{
                   this.state.loading && (<Loader backdrop speed={'fast'} size={'lg'}/>)
                 }
                 
-               <Modal show={this.state.showTask} backdrop={'static'} >
-                 <ModalHeader onHide={this.showTaskModal}>
+               <Modal keyboard={true} show={this.state.showTask}
+               overflow={true} backdrop={true} onHide={this.showTaskModal}>
+                 <ModalHeader closeButton={false} >
                    <Modal.Title>
                      Provided tasks
                    </Modal.Title>
-                   <Modal.Body>
-                      Task 7
-                   </Modal.Body>
                  </ModalHeader>
+                   <Modal.Body>
+                     <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={(task)=>console.log('Inside modal from task',task)}/>
+                   </Modal.Body>
                </Modal>
                <h3>{this.props.project.projectName}</h3>
               <div id="graphbox">
@@ -427,6 +480,7 @@ saveProjectGraph=(projectId)=>{
                   getNetwork={network => {
                     //  if you want access to vis.js network api you can set the state in a parent component using this property
                     // console.log('net',network)
+                    network.stabilize(2000);
                   }}
               />
               </div>
@@ -449,9 +503,10 @@ GraphPath.defaultProps = {
 
 GraphPath.propTypes = {
   graph:PropTypes.object.isRequired , 
-  task:PropTypes.array,
+  // task:PropTypes.array,
   project:PropTypes.object,
-  api:PropTypes.string
+  api:PropTypes.string , 
+  updateParent: PropTypes.func.isRequired
 }
 
 export default withRouter(GraphPath) ;
