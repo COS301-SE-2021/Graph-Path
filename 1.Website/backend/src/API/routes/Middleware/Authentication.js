@@ -18,9 +18,6 @@ function authenticateToken(req,res,next)
         next();
     } )
 
-
-
-
 }
 
 
@@ -37,10 +34,12 @@ async function generateToken(req,res,db){
                         username : result.username,
                         email    : result.email
                     }
+
                     ProjectManagerService.getAllProjectsByUserEmail(db ,email).then((projects)=>{
                         const ProjectsAndPerms = []
                         if(projects !=="No matched projects"){
                             for( let i = 0 ; i < projects.length ; i ++){
+
                                 ProjectsAndPerms.push({
                                     projectID : projects[i]._id,
                                     permissions : projects[i].permissions,
@@ -67,16 +66,21 @@ async function generateToken(req,res,db){
 }
 
 
-async function test(req,res,next){
+async function updateToken(req,res,next){
 
+    console.log("AuthenticatingToken")
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
-    console.log("Hello from middleware test")
-    req.body.customeVariable = "test test"
+    console.log(jwt.decode(token))
+    //res.send();
+
 
 }
 
 module.exports = {
     authenticateToken,
     generateToken,
-    test
+    updateToken,
+
 }

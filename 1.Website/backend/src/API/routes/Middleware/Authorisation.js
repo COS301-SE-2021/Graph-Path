@@ -50,8 +50,8 @@ function AuthoriseAddMembers(req,res,next){
     console.log("checking permission to add members")
     const userProjects = req.user.projects;
     const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
-    if( userProject){
-        console.log(userProject[0])
+    if( userProject.length !==0 ){
+        //console.log(userProject)
         const permissions = userProject[0].permissions;
         if(permissions.includes("add members") || permissions.includes("owner") ){
             console.log("permitted to add members")

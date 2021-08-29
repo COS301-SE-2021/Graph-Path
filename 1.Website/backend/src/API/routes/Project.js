@@ -15,6 +15,7 @@ function makeProjectRoute(db) {
 
 
     router.get('/requestToken',
+
         (req,res)=>{
             // Authentication Uuser
 
@@ -316,10 +317,11 @@ function makeProjectRoute(db) {
      * @apiSuccess (200)
      */
     router.post('/newProject',
+        authentication.authenticateToken,
         body('projectName').exists().notEmpty().isString(),
         body('startDate').exists().notEmpty().isDate(),
         body('dueDate').exists().notEmpty().isDate(),
-        body('groupMembers').exists().notEmpty().isArray(),
+        body('email').exists().notEmpty(),
         (req, res) => {
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
@@ -329,27 +331,28 @@ function makeProjectRoute(db) {
                 })
             }
 
-            if (req === undefined || req.body === undefined) {
-            res.json({
-                message: "There was no information provided."
-            });
-        }
-            if (req.body.projectName === undefined) {
-            console.log('no project name')
-            res.send({
-                message: "Please specify a Project Name"
-            })
+            else {
+                let data ={
+                    _id:  new mongoose.mongo.ObjectID(),
+                    projectOwner: req.body.email,
+                    projectName: req.body.projectName,
+                    startDate :req.body.startDate,
+                    dueDate : req.body.dueDate,
+                    groupMembers : [{
+                        "email": req.body.email,
+                        "role": "owner",
+                        "permissions": ['owner'],
+                    }],
+                    graph: {},
+                    lastAccessed: new Date(),
 
+                };
 
-        } else {
-            let data = req.body;
-            const id = new mongoose.mongo.ObjectID();
-            data["_id"] = id;
             ProjectManagerService.insertProject(db,data)
                 .then(ans=>{
                     res.send({
                         message:"The Project has been created.",
-                        data: id
+                        data: data
                     })
                 })
                 .catch(err=>{
@@ -375,39 +378,49 @@ function makeProjectRoute(db) {
         body('email').exists().notEmpty().isEmail(),
         body('projectID').exists().notEmpty().isMongoId(),
         (req, res)=>{
-        let ID = req.body.id;
-        //let memberObjects = req.body.groupMembers;
-         let memberObjects = [{
-                 "email": "demo3@gmail.com",
-                 "role": "owner"
-             },
+
+
+
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
+            let ID = req.body.projectID;
+            let memberObjects = req.body.groupMembers;
+            /*let memberObjects = [
              {
-                 "email": "ntpnaane@gmail.com",
-                 "role": "Project Manager",
-                 "label": "Godiragetse Naane"
-             },
-             {
-                 "email": "kage@gmail.com",
+                 "email": "u17049106@tuks.co.za",
                  "role": "Developer",
-                 "label": "Kagiso Monareng"
-             }]
+                 "permissions" : ['edit,view,delete task, add members']
+             }] */
 
-        ProjectManagerService.addNewProjectMember(db,ID,memberObjects)
-            .then((ans)=>{
+            let MemberEmails = [];
+            for (const memberKey in memberObjects) {
 
-                const projectName = "";
-                const projectOwner ="";
-                const projectDueDate ="";
-                const recipients ="";
-                //mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients)
-                res.send(ans)
-            })
-            .catch((err)=>{
+                MemberEmails.push(memberObjects[memberKey].email);
+            }
+
+            ProjectManagerService.addNewProjectMember(db,ID,memberObjects)
+                .then((project)=>{
+                const projectName = project.projectName;
+                const projectOwner =project.owner;
+                const projectDueDate =project.dueDate;
+                const recipients =MemberEmails ;
+                //mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients);
                 res.send({
-                    message: "unsuccessful. Server Error",
+                    message:"successfully added members"
+                })
+            })
+                .catch(err=>{
+                res.send({
+                    message: "failed to add members",
                     data: err
                 })
             })
+
 
 
     });
