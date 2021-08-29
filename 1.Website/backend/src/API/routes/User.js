@@ -13,14 +13,15 @@ const {isIn} = require("validator");
 {
 
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
-     router.get('/requestToken',
+     router.post('/requestToken',
          (req,res)=>{
              // Authentication User
              authentication.generateToken(req,res,db)
                  .then((token)=>{
                      res.setHeader("Authorization","Bearer "+token.toString())
                      res.send({
-                         message3: "Token generated in response header"
+                         message3: "Token generated in response header",
+                         data:token
                      })
                  })
                  .catch(err=>{

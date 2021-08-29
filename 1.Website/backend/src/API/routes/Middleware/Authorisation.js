@@ -89,6 +89,8 @@ function AuthoriseDeleteProject(req,res,next){
             })
         }
     } else {
+        console.log("delete project authorization failed")
+
         res.status(403).send({
             message: "Not authorised to access current project"
         })

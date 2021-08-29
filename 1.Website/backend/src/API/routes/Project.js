@@ -433,7 +433,8 @@ function makeProjectRoute(db) {
 
         })
                 .catch(err=>{
-            res.status(500).send({
+                    console.log('this why',err)
+            res.send({
                 message:"Could not remove project."
             })
         })

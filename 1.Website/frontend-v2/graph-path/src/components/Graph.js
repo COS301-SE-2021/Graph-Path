@@ -366,7 +366,7 @@ saveProjectGraph=(projectId)=>{
               physics:false 
             },
             physics:{
-              enabled:false ,
+              enabled:true ,
               // forceAtlas2Based: {
               //   theta: 1,
               //   gravitationalConstant: -50,
