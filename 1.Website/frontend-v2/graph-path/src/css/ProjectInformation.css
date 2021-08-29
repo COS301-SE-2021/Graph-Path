@@ -39,9 +39,49 @@
     text-align: left !important;
 }
 
+#btn-form{
+    width: 100px;
+    padding: 8px;
+    margin-left: 5%;
+    margin-top: 3%;
+}
+
 #second-div{
     background-color: transparent;
-    margin-left: 30%;
-    margin-top: 45px;
+    margin-right: 15%;
+    margin-top: 100px;
     position: relative;
+}
+
+#second-div #btn-info{
+    margin-top: 5%;
+    padding: 10px;
+}
+
+.profileForm input[type="text"], input[type="date"]{
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid #f3dfdf;
+    height: 40px;
+    padding-left: 4px;
+    color: darkgrey;
+    font-size: 14px;
+    outline: none;
+}
+
+.profileForm {
+    background-color: transparent;
+    margin-left: 20%;
+    width: 50%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid grey;
+    padding: 20px;
+    position: relative;
+}
+
+.profileForm label{
+    float: left;
+    font-weight: bold;
 }

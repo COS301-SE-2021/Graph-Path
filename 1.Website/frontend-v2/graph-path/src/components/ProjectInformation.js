@@ -10,7 +10,7 @@ import {
     Form,
     FormControl,
     FormGroup, HelpBlock,
-    Modal
+    Modal, Placeholder
 } from "rsuite";
 
 function Paragraph() {
@@ -31,7 +31,8 @@ class ProjectInformation extends React.Component{
         super(props);
         this.state ={
             show:false,
-            showModal:false
+            showModal:false,
+            disabled: true
         }
     }
 
@@ -47,37 +48,62 @@ class ProjectInformation extends React.Component{
         })
     }
 
+    enableEdit = () => {
+        this.setState({
+            disabled: !this.state.disabled
+        })
+    }
+
 
     render() {
         const project = this.props.project;
+        {console.log("proj",project)}
         return(
             <div id="main-div">
                 <div id="project-name"><h3>{project.projectName}</h3></div>
                 <div id="project-information">
-                    <Form layout="horizontal">
-                        <FormGroup>
-                            <ControlLabel>Project Name</ControlLabel>
-                            <FormControl name="projectName" />
-                        </FormGroup>
-                        <FormGroup>
-                            <ControlLabel>Project Owner</ControlLabel>
-                            <FormControl name="projectOwner"  />
-                        </FormGroup>
-                        <FormGroup>
-                            <ControlLabel>Start Date</ControlLabel>
-                            <DatePicker name="dueDate" oneTap />
-                        </FormGroup>
-                        <FormGroup>
-                            <ControlLabel>Due Date</ControlLabel>
-                            <DatePicker name="dueDate" oneTap />
-                        </FormGroup>
-                        <FormGroup>
-                            <ButtonToolbar>
-                                <Button appearance="primary">Update</Button>
-                                <Button appearance="default">Cancel</Button>
-                            </ButtonToolbar>
-                        </FormGroup>
-                    </Form>
+                    <div className="info">
+                        <form className="profileForm" onSubmit={this.onSubmit} >
+                            <label>Project Name</label>
+                            <input defaultValue={project.projectName}
+                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   onChange={this.change}
+                                   type='text'    />
+
+
+                            <label>Project Owner</label>
+                            <input value={project.owner}
+                                   disabled
+                                   type='text'/>
+
+
+                            <label>Start Date</label>
+                            <input type="date"
+                                   name="startDate"
+                                   defaultValue={project.startDate}
+                                   onChange={this.change}
+                                   disabled = {(this.state.disabled) ? "disabled" : ""} />
+
+                            <label>Due Date</label>
+                            <input defaultValue={project.dueDate}
+                                   type='date'
+                                   name="dueDate"
+                                   onChange={this.change}
+                                   disabled = {(this.state.disabled) ? "disabled" : ""}/>
+                            {
+                                this.state.disabled ? <Button id="btn-form" disabled = {(this.state.disabled) ? "" : "disabled"}
+                                                              onClick={this.enableEdit}>Edit</Button>
+                                    :
+
+                                    <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
+                                            onClick={this.enableEdit}>Update</Button>
+                            }
+
+                            <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
+                                    onClick={this.enableEdit}>Cancel</Button>
+
+                        </form>
+                    </div>
 
                 </div>
                 <div id="second-div">
@@ -90,9 +116,25 @@ class ProjectInformation extends React.Component{
                     >
                         <Drawer.Header>
                             <Drawer.Title>Project Members</Drawer.Title>
+                            <Divider/>
                         </Drawer.Header>
                         <Drawer.Body>
-                            <Paragraph />
+                            {project.groupMembers.map((value,index)=>{
+                                return (
+                                    <div key={index} id="memberDiv">
+                                        { value.email !== project.owner ?
+                                            <>
+                                                <p>Email: {value.email}
+                                                </p>
+                                            </> : <>
+                                                Owner: {value.email}
+                                            </>
+                                        }
+
+
+                                    </div>
+                                )
+                            })}
                         </Drawer.Body>
                     </Drawer>
 
@@ -140,8 +182,8 @@ class ProjectInformation extends React.Component{
                     </Modal>
 
 
-                    <Button onClick={this.handleViewMembers}>View Members</Button>
-                    <Button onClick={this.handleAddMembers}>Add Members</Button>
+                    <Button id="btn-info" onClick={this.handleViewMembers}>View Members</Button>
+                    <Button id="btn-info" onClick={this.handleAddMembers}>Add Members</Button>
 
 
                 </div>
