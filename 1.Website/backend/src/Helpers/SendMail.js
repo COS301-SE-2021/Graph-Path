@@ -138,7 +138,7 @@ transporter.use('compile',hbs({
 
 function sendInvites(ProjectName , projectOwner , projectDueDate, recipients)
 {
-
+    console.log("attempting to send project invite email notification...");
     const username = process.env.MAIL_USERNAME;
     const password = process.env.MAIL_PASSWORD;
     let subject="Graph path new project invite";
@@ -180,14 +180,15 @@ function sendInvites(ProjectName , projectOwner , projectDueDate, recipients)
         }]
     };
 
-    //console.log(username,password)
+
     transporter.sendMail(options)
         .then((result)=>{
 
-            console.log("success")
+            console.log("successfully sent project invite email notification");
         })
         .catch((error)=>{
-            console.log("error", error)
+            console.log("failed to send project invite email notification:");
+            console.log( error);
         })
 
 }
@@ -253,16 +254,14 @@ function newProject(ProjectName,projectOwner,projectDueDate ,description){
 
 }
 
-
-
-function NewAccountCreation(userEmail , userName)
-{
+function newAccount(email){
+    console.log("attempting to send new Account email notification...")
     const username = process.env.MAIL_USERNAME;
     const password = process.env.MAIL_PASSWORD;
-    let subject="Graph path new project invite";
-    let body  = "You Have been added to new Project\n";
+    let subject="Graph Path account";
+    let body  = "You have successfully signed up for graph path\n";
     let viewPath = "./Notifications/views/";
-    let templateName = 'NewAccount';
+    let templateName = 'newAccount';
 
     let transporter = nodemailer.createTransport({
         service: "hotmail",
@@ -280,27 +279,34 @@ function NewAccountCreation(userEmail , userName)
         viewPath: path.resolve(__dirname,viewPath),
         extName:".hbs"
     }))
+
     const options = {
         from : username,
-        to : userEmail,
+        to : email,
         subject : subject,
         text: body,
-        template:'NewAccount',
-        context: {
-            name: userName,
-        }
+        template:'newAccount',
+        attachments:  [{
+            filename: 'graphPathLogo.png',
+            path: __dirname +'/Notifications/views/images/graphPathLogo.png',
+            cid: 'graphPathLogo'
+        }]
     };
 
-    console.log(username,password)
     transporter.sendMail(options)
         .then((result)=>{
 
-            console.log("success")
+            console.log("successfully sent new account email notification");
         })
         .catch((error)=>{
-            console.log("error", error)
+            console.log("failed to send new account email notification:");
+            console.log( error);
         })
+
+
 }
+
+
 
 //sendNotification("New project",'u17049106@tuks.co.za');
 
@@ -309,6 +315,7 @@ function NewAccountCreation(userEmail , userName)
 module.exports = {
     sendInvites,
     newProject,
+    newAccount,
 }
 
 

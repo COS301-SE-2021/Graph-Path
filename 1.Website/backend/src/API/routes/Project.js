@@ -42,8 +42,10 @@ function makeProjectRoute(db) {
         const projectName = "test new project";
         const projectDueDate = "1998/10/25";
         const projectDescription = " this is the project and tells us what the project is about";
+        mailer.newAccount(email);
         //mailer.sendInvites("test Project 1", email);
         //mailer.newProject(projectName,projectOwner,projectDueDate,projectDescription)
+
 
     })
 
@@ -322,6 +324,7 @@ function makeProjectRoute(db) {
     router.post('/newProject',
         authentication.authenticateToken,
         body('projectName').exists().notEmpty().isString(),
+        body('description').exists().notEmpty().isString,
         body('startDate').exists().notEmpty().isDate(),
         body('dueDate').exists().notEmpty().isDate(),
         body('email').exists().notEmpty(),
@@ -339,8 +342,10 @@ function makeProjectRoute(db) {
                     _id:  new mongoose.mongo.ObjectID(),
                     projectOwner: req.body.email,
                     projectName: req.body.projectName,
+                    projectDescription: req.body.description,
                     startDate :req.body.startDate,
                     dueDate : req.body.dueDate,
+                    status: "not started",
                     groupMembers :[],
                     graph: {},
                     lastAccessed: new Date(),
@@ -349,7 +354,7 @@ function makeProjectRoute(db) {
 
                 ProjectManagerService.insertProject(db,data)
                     .then(ans=>{
-
+                        //mailer.newProject(data.projectName,data.projectOwner,data.dueDate,data.description)
                         res.send({
                             message:"The Project has been created.",
                             data: data
