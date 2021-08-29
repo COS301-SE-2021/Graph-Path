@@ -15,16 +15,17 @@ const {isIn} = require("validator");
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
      router.get('/requestToken',
          (req,res)=>{
-             // Authentication Uuser
+             // Authentication User
              authentication.generateToken(req,res,db)
                  .then((token)=>{
+                     res.setHeader("Authorization","Bearer "+token.toString())
                      res.send({
-                         message3: token
+                         message3: "Token generated in response header"
                      })
                  })
                  .catch(err=>{
                      res.send({
-                         message: "token creation failed"
+                         message: "token generation failed"
                      })
                  });
 
