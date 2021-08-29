@@ -5,6 +5,7 @@ const ObjectId = require('mongodb').ObjectID;
 const bcrypt = require('bcrypt');
 const UserManagerService = require('../../Services/UserManagerService');
 const { body, validationResult, param,check} = require('express-validator');
+const authentication = require('./Middleware/Authentication');
 const {isIn} = require("validator");
 
 
@@ -12,7 +13,23 @@ const {isIn} = require("validator");
 {
 
 //GET ENDPOINTS/////////////////////////////////////////////////////////////////////////////////////////////////////////
+     router.get('/requestToken',
+         (req,res)=>{
+             // Authentication Uuser
+             authentication.generateToken(req,res,db)
+                 .then((token)=>{
+                     res.send({
+                         message3: token
+                     })
+                 })
+                 .catch(err=>{
+                     res.send({
+                         message: "token creation failed"
+                     })
+                 });
 
+
+         })
      /**
       * @api {get}  /getAllUsers'
       * @apiName  get all users
@@ -162,6 +179,8 @@ const {isIn} = require("validator");
          body('email').exists().notEmpty(),
          body('password').exists().notEmpty(),
          async (req,res,next)=>{
+            // check if user is validated by auth0
+             //genereate token for user
              const failedValidation = validationResult(req);
              if(!failedValidation.isEmpty()){
                  res.status(420).send({
@@ -236,6 +255,8 @@ const {isIn} = require("validator");
 
 
      }) ;
+
+
 
      /**
       * @api {post}  /newUser'
@@ -537,6 +558,7 @@ const {isIn} = require("validator");
       * @apiSuccess (200) {object}  message : "The user updated successfully"
       */
      router.put('/updateEverythingUser/:id',
+         authentication.authenticateToken,
          param('id').exists().notEmpty().isMongoId(),
          body('firstName').exists().notEmpty().isString(),
          body('lastName').exists().notEmpty().isString(),
@@ -545,7 +567,7 @@ const {isIn} = require("validator");
          body('notification').exists().notEmpty().isString(),
          body('type').exists().notEmpty().isString(),
          body('password').exists().notEmpty(),
-         (req, res, next)=>{
+         (req, res)=>{
              const failedValidation = validationResult(req);
              if(!failedValidation.isEmpty()){
                  res.status(420).send({

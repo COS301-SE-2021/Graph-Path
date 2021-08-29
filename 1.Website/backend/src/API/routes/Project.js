@@ -15,7 +15,6 @@ function makeProjectRoute(db) {
 
 
     router.get('/requestToken',
-
         (req,res)=>{
             // Authentication Uuser
 
@@ -190,6 +189,7 @@ function makeProjectRoute(db) {
      * @apiSuccess (200) {List} list of Project objects
      */
     router.get('/listProjects',
+        authentication.authenticateToken,
         (req, res) => {
 
         ProjectManagerService.getAllProjects(db)
@@ -225,6 +225,7 @@ function makeProjectRoute(db) {
      * @apiSuccess (200) {List} list of Project objects
      */
     router.get('/getAllProjectsByUserEmail/:email',
+        authentication.authenticateToken,
         param('email').exists().notEmpty().isEmail(),
         (req, res) => {
             const invalidFields = validationResult(req);
@@ -275,6 +276,7 @@ function makeProjectRoute(db) {
      * @apiSuccess (200) {List} list of Project objects
      */
     router.get('/getProjectByID/:id',
+        authentication.authenticateToken,
         param('id').exists().notEmpty().isMongoId(),
         (req,res)=>{
             const invalidFields = validationResult(req);
@@ -443,10 +445,17 @@ function makeProjectRoute(db) {
         body('email').exists().notEmpty().isEmail(),
         body('projectID').exists().notEmpty().isMongoId(),
         (req,res)=>{
-        let ID = req.body.projectID;
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
 
-        ProjectManagerService.removeProjectByID(db,ID)
-            .then(ans =>{
+            let ID = req.body.projectID;
+            ProjectManagerService.removeProjectByID(db,ID)
+                .then(ans =>{
             if(ans === null){
                 res.send({
                     message: "Couldn't remove project."
@@ -458,7 +467,7 @@ function makeProjectRoute(db) {
             }
 
         })
-            .catch(err=>{
+                .catch(err=>{
             res.status(500).send({
                 message:"Could not remove project."
             })
@@ -478,6 +487,13 @@ function makeProjectRoute(db) {
         body('projectID').exists().notEmpty().isMongoId(),
         body('email').exists().notEmpty().isEmail(),
         (req, res, )=>{
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
             let ID = req.body.projectID;
             let grph = req.body.graph;
             let grph2 = JSON.parse(grph);
@@ -515,6 +531,13 @@ function makeProjectRoute(db) {
         body('projectID').exists().notEmpty().isMongoId(),
         body('email').exists().notEmpty().isEmail(),
         (req, res)=>{
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
             let ID = req.body.projectID;
             let mail = req.body.email;
             ProjectManagerService.removeProjectMember(db,ID, mail)
@@ -555,6 +578,13 @@ function makeProjectRoute(db) {
         body('graph').exists().notEmpty(),
         body('email').exists().notEmpty().isEmail(),
         (req,res)=>{
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            }
             const ID = req.body.projectID;
             let pname = req.body.projectName;
             let ddate = req.body.dueDate;
