@@ -1,7 +1,14 @@
 #div-form{
     background-color: transparent;
-    margin-left: 220px;
+    margin-left: 100px;
 
+}
+
+#logo-pics{
+    width: 15%;
+    height: 15%;
+    margin-top: 5%;
+    margin-right: 6%;
 }
 
 #picture-div{

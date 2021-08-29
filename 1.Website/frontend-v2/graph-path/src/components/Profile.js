@@ -12,11 +12,13 @@ import {
     HelpBlock
 } from "rsuite";
 import '../css/Profile.css'
+import Logo from "../img/Logo3.png";
 class Profile extends React.Component{
     constructor(props) {
         super(props);
         this.state ={
-            show:false
+            show:false,
+            disabled: true
         }
     }
 
@@ -32,8 +34,15 @@ class Profile extends React.Component{
         })
     }
 
+    enableEdit = () => {
+        this.setState({
+            disabled: !this.state.disabled
+        })
+    }
+
     render() {
         const picture = this.props.user.picture;
+        const user = this.props.user;
         return(
             <>
                 <Drawer full placement={"top"} backdrop={"static"} show={this.state.show} onHide={this.handleClose}>
@@ -49,30 +58,36 @@ class Profile extends React.Component{
 
                         </div>
                         <div id="div-form">
-                            <Form layout="horizontal">
-                                <FormGroup>
-                                    <ControlLabel>Username</ControlLabel>
-                                    <FormControl name="name" />
-                                    <HelpBlock>Required</HelpBlock>
-                                </FormGroup>
-                                <FormGroup>
-                                    <ControlLabel>Email</ControlLabel>
-                                    <FormControl name="email" type="email" />
-                                    <HelpBlock tooltip>Required</HelpBlock>
-                                </FormGroup>
-                                <FormGroup>
-                                    <ControlLabel>Password</ControlLabel>
-                                    <FormControl name="password" type="password" />
-                                </FormGroup>
-                                <FormGroup>
-                                    <ButtonToolbar>
-                                        <Button appearance="primary">Submit</Button>
-                                        <Button appearance="default">Cancel</Button>
-                                    </ButtonToolbar>
-                                </FormGroup>
-                            </Form>
+                            <form className="profileForm" onSubmit={this.onSubmit} >
+                                <label>Username</label>
+                                <input defaultValue={user.username}
+                                       disabled = {(this.state.disabled) ? "disabled" : ""}
+                                       onChange={this.change}
+                                       type='text'    />
+
+
+                                <label>Email</label>
+                                <input value={user.email}
+                                       disabled
+                                       type='text'/>
+
+
+                                <label>Password</label>
+                                <input
+                                       type='text'
+                                       name="dueDate"
+                                       onChange={this.change}
+                                       disabled = {(this.state.disabled) ? "disabled" : ""}/>
+
+                                <Button disabled = {(this.state.disabled) ? "" : "disabled"}
+                                        onClick={this.enableEdit}>Edit</Button>
+                                <Button disabled = {(this.state.disabled) ? "disabled" : ""}
+                                        onClick={this.enableEdit}>Cancel</Button>
+
+                            </form>
 
                         </div>
+                        <img id="logo-pics" src={Logo}/>
                     </Drawer.Body>
                 </Drawer>
             </>
