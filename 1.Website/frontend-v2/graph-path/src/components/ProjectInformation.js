@@ -1,9 +1,9 @@
 import React from 'react' ;
 import '../css/ProjectInformation.css'
 import {
-    Button,
+    Button, ButtonToolbar,
     Checkbox,
-    ControlLabel,
+    ControlLabel, DatePicker,
     Divider,
     Drawer,
     FlexboxGrid,
@@ -54,7 +54,30 @@ class ProjectInformation extends React.Component{
             <div id="main-div">
                 <div id="project-name"><h3>{project.projectName}</h3></div>
                 <div id="project-information">
-
+                    <Form layout="horizontal">
+                        <FormGroup>
+                            <ControlLabel>Project Name</ControlLabel>
+                            <FormControl name="projectName" />
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Project Owner</ControlLabel>
+                            <FormControl name="projectOwner"  />
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Start Date</ControlLabel>
+                            <DatePicker name="dueDate" oneTap />
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Due Date</ControlLabel>
+                            <DatePicker name="dueDate" oneTap />
+                        </FormGroup>
+                        <FormGroup>
+                            <ButtonToolbar>
+                                <Button appearance="primary">Update</Button>
+                                <Button appearance="default">Cancel</Button>
+                            </ButtonToolbar>
+                        </FormGroup>
+                    </Form>
 
                 </div>
                 <div id="second-div">
@@ -116,12 +139,12 @@ class ProjectInformation extends React.Component{
                         </Modal.Footer>
                     </Modal>
 
+
                     <Button onClick={this.handleViewMembers}>View Members</Button>
                     <Button onClick={this.handleAddMembers}>Add Members</Button>
 
 
                 </div>
-
             </div>
         )
     }

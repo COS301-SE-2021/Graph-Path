@@ -1,5 +1,19 @@
+#main-div{
+    min-height: 50vh;
+    background-color: transparent !important;
+    position: relative;
+}
+
 #project-name h3{
-    text-align: center;
+    text-align: center !important;
+}
+
+#project-name{
+    background-color: transparent;
+    min-width: 20vw;
+    max-height: 5vh;
+    margin-left: 37%;
+    position: absolute;
 }
 
 #can-do-div{
@@ -16,4 +30,18 @@
     max-width: 15vw;
     max-height: 19vh;
     overflow-y: scroll;
+}
+
+#project-information{
+    background-color: transparent;
+    min-height: 40vh;
+    margin-top: 45px;
+    text-align: left !important;
+}
+
+#second-div{
+    background-color: transparent;
+    margin-left: 30%;
+    margin-top: 45px;
+    position: relative;
 }
