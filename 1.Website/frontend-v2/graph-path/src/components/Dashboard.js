@@ -9,6 +9,7 @@ import * as IoIcons from 'react-icons/md'
 import Modal from "./Modal";
 import Profile from "./Profile";
 import Logout from "./Logout";
+import Logo from "../img/Logo3.png";
 
 
 class Dashboard extends React.Component{
@@ -56,7 +57,7 @@ class Dashboard extends React.Component{
             
                 <div className="main-container">
                     <NewProject ref={this.newProjectModalRef} />
-                    <Profile ref={this.profileModalRef} />
+                    <Profile user={this.props.authUser} ref={this.profileModalRef} />
                     <nav id="nav bar"  >
                         <div id="side-bar-button">
                             {
@@ -68,9 +69,13 @@ class Dashboard extends React.Component{
                                 
                             }
                         </div>
-                        <Button onClick={this.showP}>Profile</Button>
+                        <img id="logo-pic" src={Logo}/>
 
-                        <Logout/>
+
+                            <Button id="profile-btn" onClick={this.showP}>Profile</Button>
+                            <Logout/>
+
+
 
 
                     </nav>
@@ -97,9 +102,9 @@ class Dashboard extends React.Component{
                                                           componentClass={Link}
                                                           to={`${match.url}/modal`} >Calendar</Nav.Item>
 
-                                                <Dropdown title="Statistics" icon={<Icon icon="bar-chart"/>}>
-                                                    <Dropdown.Item>Overall</Dropdown.Item>
-                                                    <Dropdown.Item>Project</Dropdown.Item>
+                                                <Dropdown id="nav-option" title="Statistics" icon={<Icon icon="bar-chart"/>}>
+                                                    <Dropdown.Item id="nav-option">Overall</Dropdown.Item>
+                                                    <Dropdown.Item id="nav-option">Project</Dropdown.Item>
                                                 </Dropdown>
 
                                             </Nav>

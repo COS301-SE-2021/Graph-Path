@@ -5,6 +5,7 @@ import GraphPath from './Graph';
 import axios from 'axios';
 import { Icon, Nav, Navbar, Sidebar, Sidenav } from 'rsuite';
 import '../css/Common.css'
+import ProjectInformation from "./ProjectInformation";
 
 /*
 *   Project provides a view to the graph of the project
@@ -79,11 +80,7 @@ class Project extends Component {
     
                         }} />
                         <Route path={`${match.path}/edit`} render={()=>{
-                            return <>
-                          <h1>
-                          PROJECT : {project.projectName}
-                              </h1> 
-                            </>
+                           return <ProjectInformation project={project} />
                         }} 
                         />
                     </Switch>

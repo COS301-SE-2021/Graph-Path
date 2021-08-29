@@ -1,11 +1,24 @@
 import React from 'react' ;
-import {Divider, Drawer} from "rsuite";
-
+import {
+    Avatar,
+    Button,
+    ButtonToolbar,
+    ControlLabel,
+    Divider,
+    Drawer,
+    Form,
+    FormControl,
+    FormGroup,
+    HelpBlock
+} from "rsuite";
+import '../css/Profile.css'
+import Logo from "../img/Logo3.png";
 class Profile extends React.Component{
     constructor(props) {
         super(props);
         this.state ={
-            show:false
+            show:false,
+            disabled: true
         }
     }
 
@@ -21,7 +34,15 @@ class Profile extends React.Component{
         })
     }
 
+    enableEdit = () => {
+        this.setState({
+            disabled: !this.state.disabled
+        })
+    }
+
     render() {
+        const picture = this.props.user.picture;
+        const user = this.props.user;
         return(
             <>
                 <Drawer full placement={"top"} backdrop={"static"} show={this.state.show} onHide={this.handleClose}>
@@ -29,7 +50,45 @@ class Profile extends React.Component{
                         <Drawer.Title>Profile</Drawer.Title>
                         <Divider/>
                     </Drawer.Header>
-                    <Drawer.Body></Drawer.Body>
+                    <Drawer.Body id="body-div">
+                        <div id="picture-div">
+                            <img src={picture} />
+                            <Divider/>
+                            <h6>{this.props.user.name}</h6>
+
+                        </div>
+                        <div id="div-form">
+                            <form className="profileForm" onSubmit={this.onSubmit} >
+                                <label>Username</label>
+                                <input defaultValue={user.username}
+                                       disabled = {(this.state.disabled) ? "disabled" : ""}
+                                       onChange={this.change}
+                                       type='text'    />
+
+
+                                <label>Email</label>
+                                <input value={user.email}
+                                       disabled
+                                       type='text'/>
+
+
+                                <label>Password</label>
+                                <input
+                                       type='text'
+                                       name="dueDate"
+                                       onChange={this.change}
+                                       disabled = {(this.state.disabled) ? "disabled" : ""}/>
+
+                                <Button disabled = {(this.state.disabled) ? "" : "disabled"}
+                                        onClick={this.enableEdit}>Edit</Button>
+                                <Button disabled = {(this.state.disabled) ? "disabled" : ""}
+                                        onClick={this.enableEdit}>Cancel</Button>
+
+                            </form>
+
+                        </div>
+                        <img id="logo-pics" src={Logo}/>
+                    </Drawer.Body>
                 </Drawer>
             </>
         )

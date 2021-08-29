@@ -91,3 +91,21 @@ nav{
 ::-webkit-scrollbar-thumb:hover {
     background: #05436c;
 }
+
+#logo-pic{
+    width: 130px;
+    margin-top: 10px;
+}
+
+#profile-btn{
+
+    position: absolute;
+    margin-top: 2%;
+    margin-left: 35%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
