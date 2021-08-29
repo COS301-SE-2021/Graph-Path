@@ -41,49 +41,14 @@ function makeProjectRoute(db) {
         const projectName = "test new project";
         const projectDueDate = "1998/10/25";
         const projectDescription = " this is the project and tells us what the project is about";
-        mailer.newAccount(email);
+       // mailer.newAccount(email);
         //mailer.sendInvites("test Project 1", email);
         //mailer.newProject(projectName,projectOwner,projectDueDate,projectDescription)
 
 
     })
 
-    router.get('/isAcyclic/:id',
-        param('id').exists().notEmpty().isMongoId(),
-        (req,res)=>{
-            const failedValidation = validationResult(req);
-            if(!failedValidation.isEmpty()){
-                res.status(420).send({
-                    message: "Bad request , invalid parameters",
-                    data: failedValidation
-                })
-            }
 
-            const ProjectId = req.params.id;
-            ProjectManagerService.getProjectByID(db,ProjectId).then((project)=>{
-                const Graph = project.graph;
-
-                if(DAGservice.isAcyclic(Graph))
-                {
-                    res.send({
-                        message: "Graph is DAG",
-                        data: []
-                    })
-                }
-
-                else
-                {
-                    res.send({
-                        message:"Graph is not DAG",
-                        data: []
-                    })
-                }
-
-
-
-
-            })
-        })
 
     router.get("/deleteTask",
         authentication.authenticateToken,
