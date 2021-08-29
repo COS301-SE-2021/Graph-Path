@@ -32,42 +32,11 @@ class Project extends Component {
             taskList : []
         }
     }
-    componentDidMount(){
-        this.viewAllTasksForProject() ;
-    }
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
         this.setState = (state,callback)=>{
             return;
         };
-    }
-    viewAllTasksForProject = ()=>{
-        if (this.props.project !== undefined){
-            const projectId = this.props.project._id ;
-            axios.get(`${this.props.api}/task/getAllTasksByProject/${projectId}`)
-            .then((res)=>{
-                console.log('Tasklist',res) ;
-                if (res.data.data !== undefined){
-                    this.setState({
-                        taskList:res.data.data ,
-                        loading:false 
-                    }) ;
-                }
-                else{
-                    this.setState({
-                        loading:false 
-                    }) ;
-                }
-            })
-            .catch((err)=>{
-                console.log('Error',err)
-                this.setState({
-                    loading:false 
-                }) ;
-
-            })
-        }
-
     }
 
     render(){
@@ -87,12 +56,14 @@ class Project extends Component {
                         <Sidenav.Body>
                         <Nav pullRight vertical>
                         <Nav.Item 
+                            title="Edit Project"
                             icon={<Icon icon={'pencil'}/>}
                             componentClass={Link}
                             to={`${match.url}/edit`}>EDIT Project
 
                         </Nav.Item>
                         <Nav.Item
+                            title="View Graph"
                             icon={<Icon icon={'views-authorize'}/>}
                             componentClass={Link}
                             to={`${match.url}`}>VIEW GRAPH
@@ -104,7 +75,7 @@ class Project extends Component {
 
                     <Switch>
                         <Route exact path={`${match.path}`} render={()=>{
-                            return <GraphPath project={project} graph={project.graph}/>
+                            return <GraphPath updateParent={this.props.selectProject} project={project} graph={project.graph}/>
     
                         }} />
                         <Route path={`${match.path}/edit`} render={()=>{
@@ -128,7 +99,8 @@ Project.defaultProps = {
 
 Project.propTypes = {
     project : PropTypes.object.isRequired,
-    api:PropTypes.string
+    api:PropTypes.string, 
+    selectProject:PropTypes.func.isRequired
 }
 
 export default withRouter(Project) ;

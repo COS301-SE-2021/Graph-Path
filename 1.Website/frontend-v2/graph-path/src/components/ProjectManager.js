@@ -2,8 +2,7 @@ import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
 import {Icon, Panel,SelectPicker, Loader} from 'rsuite' ;
 import "../css/ProjectManager.css"
-import { Link ,Route ,Switch, withRouter} from "react-router-dom";
-import GraphPath from "./Graph";
+import { Route ,Switch, withRouter} from "react-router-dom";
 import axios from 'axios' ;
 import Project from "./Project";
 import ProjectCard from './Reusable/ProjectCard' ;
@@ -205,7 +204,8 @@ class ProjectManager extends Component {
                 <div data-testid="tidProjectManager" id="projectManager">
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
-                            return <Project project={this.state.currentProject} />
+                                return <Project  project={this.state.currentProject} 
+                                selectProject={this.selectCurrentProject}/>
                         }}/>
                         <Route >
                             <div>
