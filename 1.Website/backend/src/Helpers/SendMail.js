@@ -198,7 +198,7 @@ function newProject(ProjectName,projectOwner,projectDueDate ,description){
     const username = process.env.MAIL_USERNAME;
     const password = process.env.MAIL_PASSWORD;
     let subject="new Project creation";
-    let body  = "You you have successfully created a new project\n";
+    let body  = "You have successfully created a new project\n";
     let viewPath = "./Notifications/views/";
     let templateName = 'CreationOfProject';
 
@@ -311,7 +311,7 @@ function projectCompletion(projectName , projectOwner , projectDueDate,recipient
     const username = process.env.MAIL_USERNAME;
     const password = process.env.MAIL_PASSWORD;
     let subject="new Project creation";
-    let body  = "You you have successfully created a new project\n";
+    let body  = "project "+projectName+" is complete\n";
     let viewPath = "./Notifications/views/";
     let templateName = 'CompletionOfProject';
 
@@ -364,6 +364,65 @@ function projectCompletion(projectName , projectOwner , projectDueDate,recipient
 
 }
 
+function taskAssignment(projectName , projectOwner , projectDueDate,Description,recipients){
+    console.log("Attempting to send task assignment  email notification...");
+    const username = process.env.MAIL_USERNAME;
+    const password = process.env.MAIL_PASSWORD;
+    let subject="new Project creation";
+    let body  = "You have been assigned to a task\n";
+    let viewPath = "./Notifications/views/";
+    let templateName = 'AssignedToTask';
+
+    let transporter = nodemailer.createTransport({
+        service: "hotmail",
+        auth:{
+            user: username,
+            pass: password
+        },
+        template: templateName
+    });
+
+    transporter.use('compile',hbs({
+        viewEngine:{
+            partialsDir:path.resolve(__dirname,viewPath),
+            defaultLayout:""
+        },
+        viewPath: path.resolve(__dirname,viewPath),
+        extName:".hbs"
+    }));
+
+    const options = {
+        from : username,
+        to : recipients,
+        subject : subject,
+        text: body,
+        template:templateName,
+        context: {
+            projectName: projectName,
+            owner: projectOwner,
+            dueDate: projectDueDate,
+            description: Description
+        },
+        attachments:  [{
+            filename: 'graphPathLogo.png',
+            path: __dirname +'/Notifications/views/images/graphPathLogo.png',
+            cid: 'graphPathLogo'
+        }]
+    };
+
+    transporter.sendMail(options)
+        .then((result)=>{
+
+            console.log("successfully sent task assignment email notification");
+        })
+        .catch((error)=>{
+            console.log("failed to send task assignment email notification:");
+            console.log( error);
+        })
+
+
+}
+
 //sendNotification("New project",'u17049106@tuks.co.za');
 
 //sendInvites("test Project 1", 'u17049106@tuks.co.za');
@@ -373,6 +432,7 @@ module.exports = {
     newProject,
     newAccount,
     projectCompletion,
+    taskAssignment,
 }
 
 
