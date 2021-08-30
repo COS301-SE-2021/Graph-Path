@@ -9,7 +9,7 @@ import * as IoIcons from 'react-icons/md'
 import Modal from "./Modal";
 import Profile from "./Profile";
 import Logout from "./Logout";
-import Logo from "../img/Logo3.png";
+import Logo from "../img/Logo4.png";
 
 
 class Dashboard extends React.Component{
