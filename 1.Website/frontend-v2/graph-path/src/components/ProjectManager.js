@@ -41,7 +41,7 @@ class ProjectManager extends Component {
 
         axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
             headers:{
-                authorization:`Bearer ${this.props.user.token}` 
+                authorization: this.props.user.token 
             }
         })
         .then((res)=>{

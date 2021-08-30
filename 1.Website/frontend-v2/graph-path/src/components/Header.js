@@ -42,8 +42,8 @@ class CustomHeader extends Component{
                 
                 let authUser = {...user} ;
                 // logInvalid(user)
-                if (res.data.data){
-                    authUser['token'] = res.data.data
+                if (res.headers.authorization){
+                    authUser['token'] =res.headers.authorization ;
                     console.log('Authed',authUser) ;
                     this.setState({
                         logged:!this.state.logged,
