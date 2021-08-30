@@ -21,8 +21,7 @@ const {isIn} = require("validator");
                      res.setHeader("Authorization","Bearer "+token.toString())
                      res.send({
                          message3: "Token generated in response header",
-                         data:token
-                     })
+                     }) ;
                  })
                  .catch(err=>{
                      res.send({
