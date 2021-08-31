@@ -27,7 +27,8 @@ class GraphPath extends Component{
       source:'from',
       target:'to',
       taskList:[], 
-      nodeTasks:[]
+      nodeTasks:[],
+      currNodeID:'',
     }
   }
   componentDidMount(){
@@ -98,16 +99,27 @@ class GraphPath extends Component{
 
   showTaskModal=(nodeId)=>{
     let filter = this.state.nodeTasks ;
-    if (typeof nodeId === 'string' && this.props.project !== undefined){
+
+    if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
       filter= this.state.taskList.filter((value)=>
       value.nodeID === `${this.props.project._id}_${nodeId}`) ;
       
+      this.setState({
+        showTask:!this.state.showTask ,
+        nodeTasks:filter,
+        currNodeID:nodeId
+      },()=>{
+        console.log('after',this.state.nodeTasks)
+      }) ;      
+    }
+    else{
+      
+      this.setState({
+        showTask:!this.state.showTask ,
+        nodeId:''
+      }) ;
     }
 
-    this.setState({
-      showTask:!this.state.showTask ,
-      nodeTasks:filter 
-    }) ;
   }
 
   handleChange =(value)=>{
@@ -343,7 +355,31 @@ saveProjectGraph=(projectId)=>{
 
 }
 
+  saveNodeTask=(nodePreInfo)=>{
+    let nodeTask ={...nodePreInfo} ;
+    const {project} =this.props ;
+    nodeTask.project = project._id ;
+    nodeTask.nodeID = `${project._id}_${this.state.currNodeID}` ;
+    nodeTask.assigner =[{
+      email:`${this.props.user.email}`,
+      role:`${this.props.project.role}`
+    }] ;
+    nodeTask.assignee = [] ;
+    console.log('saving',nodeTask)
 
+    axios.post(`${this.props.api}/task/insertTask`,nodeTask)
+    .then((res)=>{
+      console.log('saving task',res) ;
+    })
+    .catch((err)=>{
+      if (err.response){
+        console.log(err.response) ;
+      }
+      else{
+        console.log('Some error',err)
+      }
+    })
+  }
 
   render(){
 
@@ -468,7 +504,7 @@ saveProjectGraph=(projectId)=>{
                    </Modal.Title>
                  </ModalHeader>
                    <Modal.Body>
-                     <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={(task)=>console.log('Inside modal from task',task)}/>
+                     <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={this.saveNodeTask}/>
                    </Modal.Body>
                </Modal>
                <h3>{this.props.project.projectName}</h3>

@@ -22,7 +22,12 @@ class NewProject extends React.Component{
             show:false,
             startDate: new Date(),
             dueDate: new Date(),
-            next:false
+            next:false,
+            formValues:{
+                name:'',
+                dueDate: new Date(),
+
+            }
 
         }
     }
@@ -59,7 +64,7 @@ class NewProject extends React.Component{
                     {/*{*/}
                     {/*    this.state.next === false ?*/}
 
-                            <Form>
+                            <Form formValue={this.state.formValues}>
                                 <FormGroup>
                                     <ControlLabel>Project Name</ControlLabel>
                                     <FormControl name="projectName" placeholder="Project Name" />
