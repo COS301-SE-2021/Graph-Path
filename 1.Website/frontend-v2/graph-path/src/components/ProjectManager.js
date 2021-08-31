@@ -216,7 +216,7 @@ class ProjectManager extends Component {
                 <div data-testid="tidProjectManager" id="projectManager">
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
-                                return <Project  project={this.state.currentProject} 
+                                return <Project  user={this.props.user} project={this.state.currentProject} 
                                 selectProject={this.selectCurrentProject}/>
                         }}/>
                         <Route >
