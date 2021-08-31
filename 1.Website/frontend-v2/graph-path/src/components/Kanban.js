@@ -3,13 +3,15 @@ import '../css/App.css';
 import '../css/Kanban.css';
 import { KanbanComponent, ColumnsDirective, ColumnDirective } from '@syncfusion/ej2-react-kanban';
 import axios from 'axios';
+import PropTypes from 'prop-types' ;
 
 
 class Kanban extends React.Component {
 
 
     constructor(props) {
-        super(...arguments);
+        super(props) ;
+        // super(...arguments);
        //this.data = extend([], MockData, null, true);
        // super(props);
        //  this.data=new DataManager({
@@ -34,7 +36,11 @@ class Kanban extends React.Component {
    }
 
    firstSearch =()=>{
-     axios(`http://localhost:9001/project/getAllProjectsByUserEmail/lbmuhali@gmail.com/`)
+     axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/lbmuhali@gmail.com`,{
+         headers:{
+             authorization: this.props.user.token
+         }
+     })
            //.then(res=>res.json())
            .then((res)=> {
                if (res.data !== undefined){
@@ -60,6 +66,7 @@ class Kanban extends React.Component {
     secondSearch =()=>{
           axios(`http://localhost:9001/task/getAllTasks`)
                 .then((res)=>{
+                    console.log('2nd',res)
                     if (res.data !== undefined )
                     {
 
@@ -70,13 +77,10 @@ class Kanban extends React.Component {
                     console.log('error in initialization',err)
                 })
 
-
-
-
     }
 
 sortProject=()=>{
-    let projects=[]
+
     if(this.state.task3.length > 0 && this.state.task2.length>0){
       let temp=this.state.task3.filter((project)=>{
           let i=this.state.task2.find(el=>el._id===project.project)
@@ -139,6 +143,16 @@ sortProject=()=>{
 
     }
 }
+
+Kanban.defaultProps = {
+    api:'http://localhost:9001'
+}
+
+Kanban.propTypes = {
+    user: PropTypes.object, 
+    api: PropTypes.string
+}
+
 export default Kanban;
 
 
