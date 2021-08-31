@@ -118,7 +118,7 @@ class ProjectManager extends Component {
             console.log('B4 del',project)
             axios.delete(`${this.props.api}/project/deleteProject`,{
                 headers:{
-                    authorization:`Bearer ${this.props.user.token}`
+                    authorization:this.props.user.token
                 } ,
                 data:{
                     email:this.props.user.email,
