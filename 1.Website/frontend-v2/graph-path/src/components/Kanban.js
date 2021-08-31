@@ -104,6 +104,9 @@ sortProject=()=>{
 
 }
 
+    handler =(event)=>{
+        console.log(event.data)
+    }
 
 
 
@@ -123,7 +126,8 @@ sortProject=()=>{
                         <KanbanComponent id="kanban"  keyField="status"
                                                           dataSource={this.state.test} cardSettings={{contentField: "description", headerField: "_id"}}
                                                           swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
-
+                                                    cardClick={this.handler}
+                                                    // drag={(prps)=>console.log(prps)}
                                 >
                                     <ColumnsDirective>
                                         <ColumnDirective headerText="Not Started" keyField="not started"/>
