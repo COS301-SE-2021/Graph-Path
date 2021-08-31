@@ -19,7 +19,7 @@ function Landing({logInvalid}) {
 
         return(
 
-            <div id="main-div">
+            <div id="main-div-landing">
                 <div id="left-div">
                         <img id="graph-picture" src={Graph_Picture} alt="graph-picture"/>
                 </div>
@@ -30,21 +30,25 @@ function Landing({logInvalid}) {
                                 It aims to organise tasks of a project on a interactive and user friendly graph.
                         </p>
 
-                        {
-                                !isAuthenticated && (
-                                    <LoginBtn/>
-                                )
-                        }
-                        {
-                                isAuthenticated && user.email_verified && (
-                                    <>
-                                            {/*<JSONPretty data={user} />*/}
-                                            <Button onClick={()=>logInvalid(user)} id='signin-btn'>Proceed</Button>
+                        <div id="landing-btn">
+                                {
+                                        !isAuthenticated && (
+                                            <LoginBtn/>
+                                        )
+                                }
+                                {
+                                        isAuthenticated && user.email_verified && (
+                                            <>
+                                                    {/*<JSONPretty data={user} />*/}
+                                                    <Button onClick={()=>logInvalid(user)} id='signin-btn'>Proceed</Button>
 
-                                    </>
-                                )
+                                            </>
+                                        )
 
-                        }
+                                }
+                        </div>
+
+
 
                 </div>
 
