@@ -19,7 +19,9 @@ class Dashboard extends React.Component{
         this.state={
             show:true,
             showSideBar: true,
-            redirect:true
+            redirect:true,
+            createResponse:'',
+            
         }
     }
 
@@ -29,15 +31,9 @@ class Dashboard extends React.Component{
         })
     }
 
-    newProjectModalRef=(obj)=>{
-        this.showModal = obj && obj.handleShow;
-    }
-
-    showM=()=>{
-        this.showModal();
-    }
-
     profileModalRef=(obj)=>{
+        console.log('ref0',obj) ;
+
         this.showProfile = obj && obj.handleShow;
     }
     changeRedirect = (link)=>{
@@ -51,13 +47,17 @@ class Dashboard extends React.Component{
         this.showProfile();
     }
 
+    reloadProjectsInManager=(obj)=>{
+        console.log('ref',obj) ;
+        
+    }
+
     render(){
         const {match} =this.props ; 
         return(
-            //  <Router>
-            
+            //  <Router>            
                 <div className="main-container">
-                    <NewProject ref={this.newProjectModalRef} />
+                    {/* {this.reloadProjectsInManager()} */}
                     <Profile user={this.props.authUser} ref={this.profileModalRef} />
                     <nav id="nav bar"  >
                         <div id="side-bar-button">
@@ -77,8 +77,6 @@ class Dashboard extends React.Component{
                             <Logout/>
 
 
-
-
                     </nav>
                     <div id="content">
                         {
@@ -94,9 +92,6 @@ class Dashboard extends React.Component{
                                                           componentClass={Link}
                                                            to="/dashboard" >Dashboard</Nav.Item>
 
-
-                                                <Nav.Item id="nav-option" icon={<Icon icon="project"/>}
-                                                          onSelect={this.showM}> New Project</Nav.Item>
 
                                                 <Nav.Item id="nav-option"
                                                           icon={<Icon icon="calendar"/>}
@@ -128,7 +123,7 @@ class Dashboard extends React.Component{
                                     <Modal />
                                 </Route>
                                 <Route path={`${match.path}/manager`} render={()=>{
-                                    return <ProjectManager user={this.props.authUser}/> 
+                                    return <ProjectManager user={this.props.authUser} ref={this.reloadProjectsInManager}/> 
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
                                     return <Kanban user={this.props.authUser}/> }}/>
