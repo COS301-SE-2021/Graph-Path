@@ -16,6 +16,10 @@
     position: absolute;
 }
 
+#btn-info{
+    margin-left: 2%;
+}
+
 #can-do-div{
     max-width: 15vw;
     max-height: 30vh;
@@ -84,4 +88,43 @@
 .profileForm label{
     float: left;
     font-weight: bold;
+}
+
+#remove-icon{
+    font-size: 20px;
+    margin-left: 80%;
+    /*position: absolute;*/
+    margin-top: 8%;
+}
+
+#remove-icon:hover{
+    color: red;
+    cursor: pointer;
+}
+
+#add-icon{
+    margin-left: 45%;
+    font-size: 25px;
+}
+
+#add-icon:hover{
+    color: #05436c;
+    cursor: pointer;
+}
+
+#change-icon{
+    position: absolute;
+    font-size: 20px;
+    margin-left: 80%;
+
+    /*background-color: yellow;*/
+}
+
+#change-icon:hover{
+    color: #05436c;
+    cursor: pointer;
+}
+
+#email-p{
+    /*position: absolute;*/
 }
