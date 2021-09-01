@@ -9,9 +9,10 @@ import {
     FlexboxGrid,
     Form,
     FormControl,
-    FormGroup, HelpBlock,
+    FormGroup, HelpBlock, Icon,
     Modal, Placeholder
 } from "rsuite";
+import axios from "axios";
 
 function Paragraph() {
     return null;
@@ -32,7 +33,14 @@ class ProjectInformation extends React.Component{
         this.state ={
             show:false,
             showModal:false,
-            disabled: true
+            disabled: true,
+            projName:'',
+            projectOwner:'',
+            startD: '',
+            dueD:'',
+            api:'http://localhost:9001',
+            answer:'',
+            editMember:false
         }
     }
 
@@ -44,13 +52,157 @@ class ProjectInformation extends React.Component{
 
     handleAddMembers = () =>{
         this.setState({
-            showModal: !this.state.showModal
+            showModal: !this.state.showModal,
+        })
+    }
+
+    addMemberModal=()=>{
+        this.setState({
+            showModal: true,
+            editMember: false
         })
     }
 
     enableEdit = () => {
         this.setState({
             disabled: !this.state.disabled
+        })
+    }
+
+    onSubmit = (e)=>{
+        e.preventDefault();
+        console.log("submitted",this.state)
+
+        const data = {
+            projectName:'',
+            dueDate: '',
+            startDate: '',
+            owner: this.props.project.owner,
+            graph: this.props.project.graph,
+            groupMembers: this.props.project.groupMembers
+        }
+
+        // console.log("props",this.props.project.projectToDisplay)
+        if(this.state.empty === true){
+
+        }else{
+            if(this.state.projName === ''){
+                data.projectName = this.props.project.projectName; //no change
+            }else{
+                data.projectName = this.state.projName; //change
+            }
+
+            if(this.state.startD === ''){
+                data.startDate = this.props.project.startDate;
+            }else{
+                data.startDate = this.state.startD;
+            }
+
+            if(this.state.dueD === ''){
+                data.dueDate = this.props.project.dueDate;
+            }else{
+                data.dueDate = this.state.dueD;
+            }
+            this.sendData(data);
+            console.log("data",data)
+            this.setState({
+                disable: true
+            })
+
+        }
+
+    }
+
+    sendData = (data)=>{
+        console.log("token",this.props.user)
+        try{
+            axios.put(`${this.state.api}/project/updateEverythingProject/`,data,{
+                headers:{
+                    authorization:this.props.user.token
+                }
+            })
+            .then((response)=>{
+                console.log('update project response',response.data)
+                    // if(response.status === 400){
+                    //     throw Error(response.statusText);
+                    // }
+
+                    const res = response.data;
+
+                    this.setState({
+                        answer: res.message
+                    },()=>{
+                        if (this.state.answer !== undefined) {
+                            //alert(`Username or Password changed `)
+                            //this.props.updateUser(data)
+
+                        } else {
+                            alert(`Something went wrong please update again `)
+                        }
+                    })
+                },(response)=>{
+                    console.log('rejected', response);
+                    alert('Server Error, Please try again later');
+                })
+        }catch (error){
+            console.log(error)
+        }
+    }
+
+    removeMember = (email)=>{
+        console.log("email",email)
+        const data ={
+            projectID: this.props.project._id,
+            email: email
+        }
+        try{
+            axios.patch(`${this.state.api}/project/removeProjectMember/`,data,{
+                headers:{
+                    authorization:this.props.user.token
+                }
+            })
+                .then((response)=>{
+                    if(response.status === 400){
+                        throw Error(response.statusText);
+                    }
+
+                    const res = response.data;
+
+                    this.setState({
+                        answer:res.message
+                    },()=>{
+                        if(this.state.answer !== undefined){
+                            // this.setState({
+                            //     popUpText: email+" has been removed from the project."
+                            // });
+                            // this.showPopUP()
+                        }else{
+                            alert("something went wrong please remove again")
+                        }
+                    })
+                },(response)=>{
+                    console.log('rejected',response);
+                    alert('Server Error, Please try again later')
+                })
+                .then(()=>{
+                    //instant update
+                })
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    handleEditRole=()=>{
+        this.setState({
+            editMember: true,
+            showModal: true
+        })
+    }
+
+    handleCloseEdit=()=>{
+        this.setState({
+            editMember: false,
+            showModal: false
         })
     }
 
@@ -68,7 +220,9 @@ class ProjectInformation extends React.Component{
                             <input defaultValue={project.projectName}
                                    disabled = {(this.state.disabled) ? "disabled" : ""}
                                    onChange={this.change}
-                                   type='text'    />
+                                   type='text'
+                                   name = "projName"
+                            />
 
 
                             <label>Project Owner</label>
@@ -79,7 +233,7 @@ class ProjectInformation extends React.Component{
 
                             <label>Start Date</label>
                             <input type="date"
-                                   name="startDate"
+                                   name="startD"
                                    defaultValue={project.startDate}
                                    onChange={this.change}
                                    disabled = {(this.state.disabled) ? "disabled" : ""} />
@@ -87,7 +241,7 @@ class ProjectInformation extends React.Component{
                             <label>Due Date</label>
                             <input defaultValue={project.dueDate}
                                    type='date'
-                                   name="dueDate"
+                                   name="dueD"
                                    onChange={this.change}
                                    disabled = {(this.state.disabled) ? "disabled" : ""}/>
                             {
@@ -95,8 +249,9 @@ class ProjectInformation extends React.Component{
                                                               onClick={this.enableEdit}>Edit</Button>
                                     :
 
-                                    <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
-                                            onClick={this.enableEdit}>Update</Button>
+                                    // <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
+                                    //         onClick={this.enableEdit}>Update</Button>
+                                    <input className="rs-btn rs-btn-default" id="btn-form" type="submit" value="Update"/>
                             }
 
                             <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
@@ -119,15 +274,21 @@ class ProjectInformation extends React.Component{
                             <Divider/>
                         </Drawer.Header>
                         <Drawer.Body>
-                            {project.groupMembers.map((value,index)=>{
+                            {
+                                project.groupMembers.map((value,index)=>{
                                 return (
                                     <div key={index} id="memberDiv">
                                         { value.email !== project.owner ?
                                             <>
-                                                <p>Email: {value.email}
-                                                </p>
+                                                <div>
+                                                    <p id="email-p">Email: {value.email}</p>
+                                                    <Icon id="change-icon" icon="pencil-square" onClick={this.handleEditRole} />
+                                                    <Icon id="remove-icon" icon="user-times" onClick={()=>this.removeMember(value.email)}/>
+                                                </div>
+                                                <Divider/>
                                             </> : <>
                                                 Owner: {value.email}
+                                                <Divider/>
                                             </>
                                         }
 
@@ -135,13 +296,24 @@ class ProjectInformation extends React.Component{
                                     </div>
                                 )
                             })}
+                            <Icon onClick={this.addMemberModal} id="add-icon" icon={"user-plus"}/>
                         </Drawer.Body>
                     </Drawer>
 
                     {/*To Add Members*/}
-                    <Modal backdrop={"static"} show={this.state.showModal} onHide={this.handleAddMembers}>
+                    <Modal backdrop={"static"} show={this.state.showModal} onHide={this.handleCloseEdit}>
                         <Modal.Header>
-                            <Modal.Title style={{textAlign:"center"}}>Add/Invite Members</Modal.Title>
+                            {
+                                this.state.editMember === false ?
+                                    <>
+                                        <Modal.Title style={{textAlign:"center"}}>Add/Invite Members</Modal.Title>
+                                    </>
+                                    :
+                                    <>
+                                        <Modal.Title style={{textAlign:"center"}}>Change Permissions</Modal.Title>
+                                    </>
+                            }
+
                         </Modal.Header>
                         <Modal.Body>
 
@@ -150,9 +322,23 @@ class ProjectInformation extends React.Component{
 
                                     <Form>
                                         <FormGroup>
-                                            <ControlLabel>Email</ControlLabel>
-                                            <FormControl name="memberName" placeholder="Member Email" />
-                                            <HelpBlock tooltip>Required</HelpBlock>
+                                            {
+                                                this.state.editMember === false ?
+                                                    <>
+
+                                                    <ControlLabel>Email</ControlLabel>
+                                                    <FormControl name="memberName" placeholder="Member Email" />
+                                                <HelpBlock tooltip>Required</HelpBlock>
+                                                    </>
+                                                :
+                                                    <>
+
+                                                        {/*<h6>email owner</h6>*/}
+                                                        {console.log("project-email",project.email)}
+
+                                                    </>
+                                            }
+
 
                                             <FlexboxGrid.Item id="can-do-div" colspan={24} md={6} >Permissions
                                                 <Divider/>
@@ -175,9 +361,21 @@ class ProjectInformation extends React.Component{
                                 </FlexboxGrid>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={this.handleAddMembers}>
-                                Send Invite
-                            </Button>
+                            {
+                                this.state.editMember == false ?
+                                    <>
+                                        <Button variant="secondary" onClick={this.handleAddMembers}>
+                                            Send Invite
+                                        </Button>
+                                    </>
+                                    :
+                                    <>
+                                        <Button variant="secondary" onClick={this.handleCloseEdit}>
+                                            Update
+                                        </Button>
+                                    </>
+                            }
+
                         </Modal.Footer>
                     </Modal>
 
