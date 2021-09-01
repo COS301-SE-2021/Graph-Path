@@ -1,11 +1,12 @@
 import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
-import {Icon, Panel,SelectPicker, Loader} from 'rsuite' ;
+import {Icon, Panel,SelectPicker, Loader, Button} from 'rsuite' ;
 import "../css/ProjectManager.css"
 import { Route ,Switch, withRouter} from "react-router-dom";
 import axios from 'axios' ;
 import Project from "./Project";
 import ProjectCard from './Reusable/ProjectCard' ;
+import NewProject from "./NewProject";
 
 /*
 *   A component that will make async request to peer server for all projects of the logged user, provided in the props   
@@ -160,6 +161,7 @@ class ProjectManager extends Component {
             sortValue:value
         },()=>this.sortProjects()) ;
     }
+
     sortProjects = ()=>{
         //if recent? newest last aceess date comes first
         //if alphabetical ? project name is used to sort alphabetically
@@ -202,8 +204,53 @@ class ProjectManager extends Component {
         }
     }
 
+    newProjectModalRef=(obj)=>{
+        this.showModal = obj && obj.handleShow;
+    }
 
+    showM=()=>{
+        this.showModal();
+    }
+
+    createProject =(project)=>{
+       
+        // console.log('b4 api',fullProject) ;
+        // axios.post(`${this.props.api}/project/newProject`,fullProject,{
+        // })
+
+        // fetch(`${this.props.api}/project/newProject`,{
+        //     method:'POST',
+        //     body:fullProject,
+         
+        // })
+        // .then((res)=>{
+        // console.log('api',res) ;
+
+        // })
+        // .catch((err)=>{
+        //     for (let key of Object.keys(err)){
+        //         console.log(key,': ',err[key])
+
+        //     }
+        //     console.log(err)
+        // })
+
+
+    }
+
+    
     render(){
+        let fullProject = {}
+        fullProject.owner = this.props.user.email ;
+        fullProject.graph = {} ;
+        fullProject.groupMembers = [{
+            email:this.props.user.email,
+            role:"owner",
+            label:this.props.user.name === undefined ?this.props.user.email :this.props.user.name,
+            permissions:[
+                "owner"
+            ]
+        }]
 
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
@@ -214,6 +261,8 @@ class ProjectManager extends Component {
         else{
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
+                    <NewProject ref={this.newProjectModalRef} token={this.props.user.token} api={this.props.api}  preInfo={fullProject}/>
+
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
                                 return <Project  user={this.props.user} project={this.state.currentProject} 
@@ -222,6 +271,10 @@ class ProjectManager extends Component {
                         <Route >
                             <div>
                             Projects <br/>
+                            <Button onClick={this.showM}>
+                                <Icon icon={'plus-circle'} title={"New Project"}/>
+                            </Button>
+
                             <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
                             <div data-testid="tidProjList" id="projects-list">
                                 {
