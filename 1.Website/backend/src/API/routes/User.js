@@ -116,7 +116,7 @@ const {isIn} = require("validator");
      })
 
      /**
-      * @api {get}  /getUserById'
+      * @api {get}  /getUserByID'
       * @apiName  retrieve user object
       * @apiDescription This endpoint retrieves a user object based on ID
       * @apiGroup User
