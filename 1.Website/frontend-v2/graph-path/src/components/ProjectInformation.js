@@ -73,33 +73,29 @@ class ProjectInformation extends React.Component{
         e.preventDefault();
         console.log("submitted",this.state)
 
-        const data = {
-            projectName:'',
-            dueDate: '',
-            startDate: '',
-            owner: this.props.project.owner,
-            graph: this.props.project.graph,
-            groupMembers: this.props.project.groupMembers
-        }
+        const data = Object.assign( this.props.project,{
+            projectID: this.props.project._id
+
+        })
 
         // console.log("props",this.props.project.projectToDisplay)
-        if(this.state.empty === true){
-
-        }else{
+        // if(this.state.empty === true){
+        //
+        // }else{
             if(this.state.projName === ''){
-                data.projectName = this.props.project.projectName; //no change
+                // data.projectName = this.props.project.projectName; //no change
             }else{
                 data.projectName = this.state.projName; //change
             }
 
             if(this.state.startD === ''){
-                data.startDate = this.props.project.startDate;
+                // data.startDate = this.props.project.startDate;
             }else{
                 data.startDate = this.state.startD;
             }
 
             if(this.state.dueD === ''){
-                data.dueDate = this.props.project.dueDate;
+                // data.dueDate = this.props.project.dueDate;
             }else{
                 data.dueDate = this.state.dueD;
             }
@@ -109,7 +105,7 @@ class ProjectInformation extends React.Component{
                 disable: true
             })
 
-        }
+        // }
 
     }
 
@@ -206,6 +202,12 @@ class ProjectInformation extends React.Component{
         })
     }
 
+    change = (e)=>{
+        e.preventDefault();
+        const {name,value} = e.target;
+        this.setState({ [name]: value })
+
+    }
 
     render() {
         const project = this.props.project;
