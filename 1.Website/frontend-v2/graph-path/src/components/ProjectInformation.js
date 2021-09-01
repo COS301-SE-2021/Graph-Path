@@ -218,7 +218,7 @@ class ProjectInformation extends React.Component{
     updateRole=()=>{
         this.props.project.groupMembers.map((value,index)=>{
             value.email === this.state.memberRole ?
-                this.props.project.groupMembers[index].permissions = this.state.value
+                this.props.project.groupMembers[index].permissions = [...this.props.project.groupMembers[index].permissions,...this.state.value]
                 :
                 <></>
         })
