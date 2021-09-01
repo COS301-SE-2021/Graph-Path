@@ -2,7 +2,7 @@ import React from 'react' ;
 import '../css/ProjectInformation.css'
 import {
     Button, ButtonToolbar,
-    Checkbox,
+    Checkbox, CheckboxGroup,
     ControlLabel, DatePicker,
     Divider,
     Drawer,
@@ -40,7 +40,9 @@ class ProjectInformation extends React.Component{
             dueD:'',
             api:'http://localhost:9001',
             answer:'',
-            editMember:false
+            editMember:false,
+            value:[],
+            memberRole:""
         }
     }
 
@@ -145,6 +147,9 @@ class ProjectInformation extends React.Component{
                     alert('Server Error, Please try again later');
                 })
         }catch (error){
+            if(error.response.data){
+                console.log(error.response.data)
+            }
             console.log(error)
         }
     }
@@ -192,17 +197,36 @@ class ProjectInformation extends React.Component{
         }
     }
 
-    handleEditRole=()=>{
+    handleEditRole=(email)=>{
         this.setState({
             editMember: true,
-            showModal: true
+            showModal: true,
+            memberRole:email
         })
+
+        console.log("edit role",email)
     }
 
     handleCloseEdit=()=>{
         this.setState({
             editMember: false,
-            showModal: false
+            showModal: false,
+            value:[]
+        })
+    }
+
+    updateRole=()=>{
+        this.props.project.groupMembers.map((value,index)=>{
+            value.email === this.state.memberRole ?
+                this.props.project.groupMembers[index].permissions = this.state.value
+                :
+                <></>
+        })
+
+        this.setState({
+            editMember: false,
+            showModal: false,
+            value:[]
         })
     }
 
@@ -282,7 +306,7 @@ class ProjectInformation extends React.Component{
                                             <>
                                                 <div>
                                                     <p id="email-p">Email: {value.email}</p>
-                                                    <Icon id="change-icon" icon="pencil-square" onClick={this.handleEditRole} />
+                                                    <Icon id="change-icon" icon="pencil-square" onClick={()=>this.handleEditRole(value.email)} />
                                                     <Icon id="remove-icon" icon="user-times" onClick={()=>this.removeMember(value.email)}/>
                                                 </div>
                                                 <Divider/>
@@ -343,15 +367,25 @@ class ProjectInformation extends React.Component{
                                             <FlexboxGrid.Item id="can-do-div" colspan={24} md={6} >Permissions
                                                 <Divider/>
                                                 <div id="check-list">
-                                                    <Checkbox>View Graph</Checkbox>
-                                                    <Checkbox>Add Node</Checkbox>
-                                                    <Checkbox>Add Task</Checkbox>
-                                                    <Checkbox>Update Project Information</Checkbox>
-                                                    <Checkbox>Delete Project</Checkbox>
-                                                    <Checkbox>Delete Node</Checkbox>
-                                                    <Checkbox>Remove Members</Checkbox>
-                                                    <Checkbox>Add Members</Checkbox>
-                                                    <Checkbox>Change Task Status</Checkbox>
+                                                    <CheckboxGroup
+                                                        name="checkboxList"
+                                                        value={this.state.value}
+                                                        onChange={value => {
+                                                            console.log("permission",value)
+                                                            this.setState({
+                                                                value
+                                                            })
+                                                        }}
+                                                    >
+                                                        <Checkbox value="update project owner" >Change Project Owner</Checkbox>
+                                                        <Checkbox value="update graph" >Update Graph</Checkbox>
+                                                        <Checkbox value="update all project" >Update Project Information</Checkbox>
+                                                        <Checkbox value="delete project">Delete Project</Checkbox>
+                                                        <Checkbox value="delete task">Delete Task</Checkbox>
+                                                        <Checkbox value="remove members">Remove Members</Checkbox>
+                                                        <Checkbox value="add members">Add Members</Checkbox>
+                                                    </CheckboxGroup>
+
                                                 </div>
                                             </FlexboxGrid.Item>
                                         </FormGroup>
@@ -370,7 +404,7 @@ class ProjectInformation extends React.Component{
                                     </>
                                     :
                                     <>
-                                        <Button variant="secondary" onClick={this.handleCloseEdit}>
+                                        <Button variant="secondary" onClick={this.updateRole}>
                                             Update
                                         </Button>
                                     </>
