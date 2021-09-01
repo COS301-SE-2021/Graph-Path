@@ -12,6 +12,7 @@ import {
     FormGroup, HelpBlock,
     Modal, Placeholder
 } from "rsuite";
+import axios from "axios";
 
 function Paragraph() {
     return null;
@@ -32,7 +33,13 @@ class ProjectInformation extends React.Component{
         this.state ={
             show:false,
             showModal:false,
-            disabled: true
+            disabled: true,
+            projName:'',
+            projectOwner:'',
+            startD: '',
+            dueD:'',
+            api:'http://localhost:9001',
+            answer:'',
         }
     }
 
@@ -54,6 +61,86 @@ class ProjectInformation extends React.Component{
         })
     }
 
+    onSubmit = (e)=>{
+        e.preventDefault();
+        console.log("submitted",this.state)
+
+        const data = {
+            projectName:'',
+            dueDate: '',
+            startDate: '',
+            owner: this.props.project.owner,
+            graph: this.props.project.graph,
+            groupMembers: this.props.project.groupMembers
+        }
+
+        // console.log("props",this.props.project.projectToDisplay)
+        if(this.state.empty === true){
+
+        }else{
+            if(this.state.projName === ''){
+                data.projectName = this.props.project.projectName; //no change
+            }else{
+                data.projectName = this.state.projName; //change
+            }
+
+            if(this.state.startD === ''){
+                data.startDate = this.props.project.startDate;
+            }else{
+                data.startDate = this.state.startD;
+            }
+
+            if(this.state.dueD === ''){
+                data.dueDate = this.props.project.dueDate;
+            }else{
+                data.dueDate = this.state.dueD;
+            }
+            this.sendData(data);
+            console.log("data",data)
+            this.setState({
+                disable: true
+            })
+
+        }
+
+    }
+
+    sendData = (data)=>{
+        console.log("token",this.props.user)
+        try{
+            axios.put(`${this.state.api}/project/updateEverythingProject/`,data,{
+                headers:{
+                    authorization:this.props.user.token
+                }
+            })
+            .then((response)=>{
+                console.log('update project response',response.data)
+                    // if(response.status === 400){
+                    //     throw Error(response.statusText);
+                    // }
+
+                    const res = response.data;
+
+                    this.setState({
+                        answer: res.message
+                    },()=>{
+                        if (this.state.answer !== undefined) {
+                            //alert(`Username or Password changed `)
+                            //this.props.updateUser(data)
+
+                        } else {
+                            alert(`Something went wrong please update again `)
+                        }
+                    })
+                },(response)=>{
+                    console.log('rejected', response);
+                    alert('Server Error, Please try again later');
+                })
+        }catch (error){
+            console.log(error)
+        }
+    }
+
 
     render() {
         const project = this.props.project;
@@ -68,7 +155,9 @@ class ProjectInformation extends React.Component{
                             <input defaultValue={project.projectName}
                                    disabled = {(this.state.disabled) ? "disabled" : ""}
                                    onChange={this.change}
-                                   type='text'    />
+                                   type='text'
+                                   name = "projName"
+                            />
 
 
                             <label>Project Owner</label>
@@ -79,7 +168,7 @@ class ProjectInformation extends React.Component{
 
                             <label>Start Date</label>
                             <input type="date"
-                                   name="startDate"
+                                   name="startD"
                                    defaultValue={project.startDate}
                                    onChange={this.change}
                                    disabled = {(this.state.disabled) ? "disabled" : ""} />
@@ -87,7 +176,7 @@ class ProjectInformation extends React.Component{
                             <label>Due Date</label>
                             <input defaultValue={project.dueDate}
                                    type='date'
-                                   name="dueDate"
+                                   name="dueD"
                                    onChange={this.change}
                                    disabled = {(this.state.disabled) ? "disabled" : ""}/>
                             {
@@ -95,8 +184,9 @@ class ProjectInformation extends React.Component{
                                                               onClick={this.enableEdit}>Edit</Button>
                                     :
 
-                                    <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
-                                            onClick={this.enableEdit}>Update</Button>
+                                    // <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
+                                    //         onClick={this.enableEdit}>Update</Button>
+                                    <input className="rs-btn rs-btn-default" id="btn-form" type="submit" value="Update"/>
                             }
 
                             <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
