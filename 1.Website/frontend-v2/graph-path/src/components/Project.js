@@ -80,7 +80,7 @@ class Project extends Component {
     
                         }} />
                         <Route path={`${match.path}/edit`} render={()=>{
-                           return <ProjectInformation project={project} />
+                           return <ProjectInformation project={project}  user={this.props.user}/>
                         }} 
                         />
                     </Switch>
