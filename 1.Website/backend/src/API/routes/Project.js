@@ -289,13 +289,14 @@ function makeProjectRoute(db) {
      * @apiSuccess (200)
      */
     router.post('/newProject',
-        authentication.authenticateToken,
         body('projectName').exists().notEmpty().isString(),
-        body('description').exists().notEmpty().isString,
+        body('description').exists().notEmpty().isString(),
         body('startDate').exists().notEmpty().isDate(),
         body('dueDate').exists().notEmpty().isDate(),
         body('email').exists().notEmpty(),
-        (req, res) => {
+        authentication.authenticateToken,
+        (req, res,next) => {
+            console.log("Project break line")
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
                 res.status(420).send({
@@ -305,6 +306,12 @@ function makeProjectRoute(db) {
             }
 
             else {
+
+                let ownerMemberObject = {
+                    email:req.body.email,
+                    permissions: ['owner']
+                }
+
                 let data ={
                     _id:  new mongoose.mongo.ObjectID(),
                     projectOwner: req.body.email,
@@ -313,7 +320,7 @@ function makeProjectRoute(db) {
                     startDate :req.body.startDate,
                     dueDate : req.body.dueDate,
                     status: "not started",
-                    groupMembers :[],
+                    groupMembers :[ownerMemberObject],
                     graph: {},
                     lastAccessed: new Date(),
 
