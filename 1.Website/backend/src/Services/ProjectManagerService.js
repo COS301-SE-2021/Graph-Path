@@ -221,7 +221,11 @@ async function addNewProjectMember(dbController, id, newMembers){
 
             for(let i =0 ; i < newMembers.length; i++){
                 if(!members.some(member => member.email === newMembers[i].email)){
-                    members.push(newMembers[i])
+                    members.push(newMembers[i]);
+
+                }
+                else{
+                    console.log("Member '"+newMembers[i].email+"' already exists ,not added");
                 }
             }
 
@@ -232,7 +236,7 @@ async function addNewProjectMember(dbController, id, newMembers){
                 }, {
                 returnNewDocument: true }
             ).then(result=>{
-                console.log("updated group members");
+                console.log("updated group members of this project");
                 resolve(result.value);
 
 

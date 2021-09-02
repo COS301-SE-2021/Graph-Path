@@ -375,8 +375,6 @@ function makeProjectRoute(db) {
         body('projectID').exists().notEmpty().isMongoId(),
         (req, res)=>{
 
-
-
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
                 res.status(420).send({
@@ -399,6 +397,7 @@ function makeProjectRoute(db) {
                 MemberEmails.push(memberObjects[memberKey].email);
             }
 
+            console.log("attempting to add new members...")
             ProjectManagerService.addNewProjectMember(db,ID,memberObjects)
                 .then((project)=>{
                 const projectName = project.projectName;
@@ -406,6 +405,8 @@ function makeProjectRoute(db) {
                 const projectDueDate =project.dueDate;
                 const recipients =MemberEmails ;
                 //mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients);
+
+                    console.log("successfully added new members...")
                 res.send({
                     message:"successfully added members"
                 })
