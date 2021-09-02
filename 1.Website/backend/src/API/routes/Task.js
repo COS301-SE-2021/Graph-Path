@@ -226,7 +226,6 @@ function  makeTaskRoute(db)
         authorisation.AuthoriseAddTask,
         (req, res)=>{
 
-            // check if any of the above validations failed
             const validationFails = validationResult(req);
             if(!validationFails.isEmpty()){
                 res.send({
@@ -249,18 +248,12 @@ function  makeTaskRoute(db)
                 nodeID: req.body.projectID+"_"+req.body.nodeID
             }
 
-            let data = req.body;
-            const id = new mongoose.mongo.ObjectID() ;
-            data["_id"] = id ;
+
 
             console.log("Attempting to insert a new task...")
         TaskManagerService.insertTask(db,TaskObject)
             .then((ans)=>{
-                if(ans ==="Task object empty"){
-                    res.send({
-                        message: "Not enough task information provided."
-                    })
-                }else if(ans.insertedCount > 0){
+                if(ans.insertedCount > 0){
                     console.log("Successfully added new task");
                     res.send({
                         message:"The task was saved successfully.",
@@ -275,6 +268,7 @@ function  makeTaskRoute(db)
 
             })
             .catch(err=>{
+                console.log("failed to add new task due to server error...");
                 res.status(500).send({
                     message:"Server error: could not create task.",
                     err:err
