@@ -244,15 +244,14 @@ function  makeTaskRoute(db)
                 Assigner:req.body.assigner,
                 due:req.body.due,
                 issued:req.body.due,
-                assigner:req.body.assigner,
                 nodeID: req.body.projectID+"_"+req.body.nodeID
             }
 
 
 
             console.log("Attempting to insert a new task...")
-        TaskManagerService.insertTask(db,TaskObject)
-            .then((ans)=>{
+            TaskManagerService.insertTask(db,TaskObject)
+                .then((ans)=>{
                 if(ans.insertedCount > 0){
                     console.log("Successfully added new task");
                     res.send({
@@ -267,7 +266,7 @@ function  makeTaskRoute(db)
                 }
 
             })
-            .catch(err=>{
+                .catch(err=>{
                 console.log("failed to add new task due to server error...");
                 res.status(500).send({
                     message:"Server error: could not create task.",
