@@ -325,16 +325,33 @@ function makeProjectRoute(db) {
 
                 };
 
+                console.log("attempting to add new project...")
                 ProjectManagerService.insertProject(db,data)
                     .then(ans=>{
                         //mailer.newProject(data.projectName,data.projectOwner,data.dueDate,data.description)
-                        res.send({
-                            message:"The Project has been created.",
-                            data: data
-                        })
+                        console.log("successfully added new project.");
+                        console.log("attempting to update token...");
+                        authentication.generateToken(req,res,db)
+                            .then((token)=>{
+                                console.log("successfully updated token...check your headers");
+                                res.setHeader("authorization",token);
+                                res.send({
+                                    message:"The Project has been created.",
+                                    newToken: token,
+                                    data: ans,
+                                })
+                            })
+                            .catch(err=>{
+
+                                console.log("failed to add new project.");
+                                res.send({
+                                    message: "failed to update token after project creation"
+                                })
+                            })
+
                 })
                     .catch(err=>{
-                    res.status(500).send({
+                    res.send({
                         message: "The project was not created."
                     })
                 })
@@ -458,7 +475,9 @@ function makeProjectRoute(db) {
         authorisation.AuthoriseUpdateGraph,
         body('projectID').exists().notEmpty().isMongoId(),
         body('email').exists().notEmpty().isEmail(),
+        body('graph').exists().notEmpty().isObject(),
         (req, res, )=>{
+
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
                 res.status(420).send({
@@ -469,7 +488,6 @@ function makeProjectRoute(db) {
             let ID = req.body.projectID;
             let grph = req.body.graph;
             let grph2 = JSON.parse(grph);
-
 
             ProjectManagerService.updateProjectGraph(db,ID,grph2 )
             .then(ans=>{
@@ -543,12 +561,13 @@ function makeProjectRoute(db) {
         authentication.authenticateToken,
         authorisation.AuthoriseUpdateAllProject,
         body('projectID').exists().notEmpty().isMongoId(),
+        body('email').exists().notEmpty().isEmail(),
         body('projectName').exists().notEmpty(),
         body('dueDate').exists().notEmpty().isDate(),
         body('startDate').exists().notEmpty().isDate(),
         body('owner').exists().notEmpty(),
         body('graph').exists().notEmpty(),
-        body('email').exists().notEmpty().isEmail(),
+
         (req,res)=>{
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
@@ -564,6 +583,8 @@ function makeProjectRoute(db) {
             let owner = req.body.owner;
             let graph = req.body.graph;
             let groupMembers = req.body.groupMembers;
+
+
 
 
             ProjectManagerService.updateEverythingProject(db,ID,pname,ddate,sdate,owner, graph, groupMembers)
