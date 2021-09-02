@@ -209,7 +209,7 @@ class ProjectManager extends Component {
     }
 
     showM=()=>{
-        this.showModal();
+        this.handleShow();
     }
 
     createProject =(project)=>{
@@ -261,7 +261,7 @@ class ProjectManager extends Component {
         else{
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
-                    <NewProject ref={this.newProjectModalRef} user={this.props.user} api={this.props.api} />
+                    <NewProject ref={this.newProjectModalRef} refresh={this.viewProjectsFromAPI} api={this.props.api} />
 
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
