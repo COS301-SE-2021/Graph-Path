@@ -130,14 +130,14 @@ class NewProject extends React.Component{
         let due = new Date() ;
         due.setFullYear(due.getFullYear()+2)
         const projectModel =Schema.Model({
-            projectName: StringType().minLength(2,'Name should have more than 2 letters')
+            projectName: StringType().minLength(2,'Project name should have more than 2 letters')
                 .isRequired('This field is required.') ,
             startDate:DateType().min(new Date(due.getFullYear()-2,due.getMonth(),due.getDate()-1),'The start date cannot be set to a date that has passed.')
                 .isRequired('This field is required.') ,
             dueDate:DateType().range(new Date(),due,'The due date cannot be set to a date more than 24 months from now or a passed date.')
                 .isRequired('This field is required.') ,
         })
-        return(
+        return( 
             <>
             <Modal backdrop={"static"} show={this.state.show} onHide={this.handleClose}>
                 <Modal.Header>
