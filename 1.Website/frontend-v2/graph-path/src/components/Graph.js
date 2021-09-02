@@ -317,10 +317,13 @@ saveProjectGraph=(projectId)=>{
             nodes:minimalNodes,
             edges:minimalEdges
         }
-        const data = { ...this.props.project}  ;
+        const data = {} ; //{ ...this.props.project}  ;
         data.graph = minimalGraph
         data.projectID = projectId ;
-        axios.put(`${this.props.api}/project/updateEverythingProject`,data,{
+        data.email = this.props.user.email ; 
+        console.log('b4',data)
+
+        axios.patch(`${this.props.api}/project/updateProjectGraph`,data,{
           headers:{
             authorization:this.props.user.token
           }

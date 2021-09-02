@@ -60,7 +60,7 @@ class Task extends React.Component {
         let dueDate = new Date() ;
         dueDate.setFullYear(dueDate.getFullYear()+1)
         const taskModel =Schema.Model({
-            description: StringType().minLength(5,'Please a more details on the description')
+            description: StringType().minLength(5,'Please add more details on the description')
                 .isRequired('This field is required.') ,
             issued:DateType().min(new Date(dueDate.getFullYear()-1,dueDate.getMonth(),dueDate.getDate()-1),'The issued date cannot be set to a date that has passed.')
                 .isRequired('This field is required.') ,
