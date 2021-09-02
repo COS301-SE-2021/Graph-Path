@@ -77,7 +77,9 @@ class ProjectInformation extends React.Component{
         console.log("submitted",this.state)
 
         const data = Object.assign( this.props.project,{
-            projectID: this.props.project._id
+            projectID: this.props.project.projectID,
+            owner: this.props.project.projectOwner,
+            email: this.props.user.email
 
         })
 
@@ -109,7 +111,7 @@ class ProjectInformation extends React.Component{
                 data.dueDate = this.state.dueD;
             }
             this.sendData(data);
-            console.log("data",data)
+            console.log("data send",data)
             this.setState({
                 disable: true
             })
