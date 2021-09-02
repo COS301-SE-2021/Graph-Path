@@ -13,7 +13,7 @@ function AuthoriseDeleteTask(req,res,next) {
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("delete task")){
+        if(permissions.includes("delete task") || permissions.includes("owner") ){
             console.log("permitted to delete tasks")
             next()
 
@@ -78,7 +78,7 @@ function AuthoriseDeleteProject(req,res,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("delete project")){
+        if(permissions.includes("delete project") || permissions.includes("owner")){
             console.log("permitted to delete project")
             next()
 
@@ -103,7 +103,7 @@ function AuthoriseUpdateGraph(req,res,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("update graph")){
+        if(permissions.includes("update graph") || permissions.includes("owner")){
             console.log("permitted to update projectGraph")
             next()
 
@@ -128,7 +128,7 @@ function AuthoriseRemoveMembers(req,res,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("remove members")){
+        if(permissions.includes("remove members") || permissions.includes("owner")){
             console.log("permitted to remove members")
             next()
 
@@ -153,7 +153,7 @@ function AuthoriseUpdateAllProject(req,res,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("update all project")){
+        if(permissions.includes("update all project") || permissions.includes("owner")){
             console.log("permitted to update all project")
             next()
 
@@ -179,7 +179,7 @@ function AuthoriseUpdateProjectOwner(res,req,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("update project owner")){
+        if(permissions.includes("update project owner") || permissions.includes("owner")){
             console.log("permitted to update projectOwner")
             next()
 
@@ -207,7 +207,7 @@ function AuthoriseUpdateProjectAccessData(res,req,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("update project lastDateAccessed")){
+        if(permissions.includes("update project lastDateAccessed") || permissions.includes("owner")){
             console.log("permitted to update project lastDateAccessed")
             next()
 
