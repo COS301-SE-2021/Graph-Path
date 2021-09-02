@@ -7,6 +7,7 @@ import Dashboard from "./Dashboard";
 import Landing from './Landing' ;
 import NotFound from "./NotFound";
 import axios from "axios";
+import { connect} from 'react-redux' ;
 
 
 
@@ -45,6 +46,7 @@ class CustomHeader extends Component{
                 if (res.headers.authorization){
                     authUser['token'] =res.headers.authorization ;
                     console.log('Authed',authUser) ;
+                    this.props.createUser(authUser);
                     this.setState({
                         logged:!this.state.logged,
                         loggedUser:authUser , 
@@ -74,6 +76,7 @@ class CustomHeader extends Component{
         
     }
     render(){
+        // console.log('current',this.props)
         return (
             <div data-testid="tidHeader">
                 <Router>
@@ -117,5 +120,23 @@ class CustomHeader extends Component{
     }
 }
 
+function createUser(user){
+    // console.log('action',user)
+    return {
+      type:'CREATE_USER',
+      payload:user
+    }
+}
 
-export default CustomHeader ;
+function mapStateToProps(state){
+    return {
+        loggedUser:state.loggedUser
+    } ;
+  }
+  
+
+const mapDispatchToProps = {
+    createUser
+  }
+
+export default connect(mapStateToProps,mapDispatchToProps)(CustomHeader) ;

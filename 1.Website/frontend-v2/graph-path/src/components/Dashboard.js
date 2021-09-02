@@ -11,6 +11,7 @@ import Profile from "./Profile";
 import Logout from "./Logout";
 import Logo from "../img/Logo4.png";
 import Kanban from './Kanban';
+import { connect} from 'react-redux' ;
 
 
 class Dashboard extends React.Component{
@@ -44,6 +45,7 @@ class Dashboard extends React.Component{
     }
 
     showP=()=>{
+        
         this.showProfile();
     }
 
@@ -54,6 +56,8 @@ class Dashboard extends React.Component{
 
     render(){
         const {match} =this.props ; 
+        console.log('dash',this.props)
+
         return(
             //  <Router>            
                 <div className="main-container">
@@ -142,5 +146,24 @@ class Dashboard extends React.Component{
         )
     }
 }
+function updateUserToken(token){
+    return {
+      type:'UPDATE_TOKEN' ,
+      payload: {
+        token:token
+      }
+    }
+  }
 
-export default withRouter(Dashboard) ;
+function mapStateToProps(state){
+    return {
+        loggedUser:state.loggedUser
+    } ;
+  }
+  
+
+const mapDispatchToProps = {
+    updateUserToken,
+  }
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(Dashboard)) ;
