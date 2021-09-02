@@ -63,7 +63,7 @@ function makeProjectRoute(db) {
     })
 
     /**
-     * @api {get}  /task/convertToKanbanBoard
+     * @api {get}  /project/convertToKanbanBoard
      * @apiName return as given project as datasourse for kanban
      * @apiDescription This endpoint creates a datasourse for a kanban board
      * @apiGroup Project
@@ -147,7 +147,7 @@ function makeProjectRoute(db) {
     })
 
     /**
-     * @api {get}  /task/listProjects
+     * @api {get}  /project/listProjects
      * @apiName list of Projects
      * @apiDescription This endpoint returns a list of all Projects
      * @apiGroup Project
@@ -182,7 +182,7 @@ function makeProjectRoute(db) {
 
 
     /**
-     * @api {get}  /task/getAllProjectsByUserEmail/:email
+     * @api {get}  /project/getAllProjectsByUserEmail/:email
      * @apiName list projects owned by email
      * @apiDescription This endpoint returns a list of all Projects belonging to the user
      *                 mathing the passed in email
@@ -233,7 +233,7 @@ function makeProjectRoute(db) {
 
 
     /**
-     * @api {get}  /task/getProjectByID/:id
+     * @api {get}  /project/getProjectByID/:id
      * @apiName list projects owned by email
      * @apiDescription This endpoint returns a list of all Projects belonging to the user
      *                 mathing the passed in email
@@ -489,9 +489,9 @@ function makeProjectRoute(db) {
             }
             let ID = req.body.projectID;
             let grph = req.body.graph;
-            let grph2 = JSON.parse(grph);
+            //let grph2 = JSON.parse(grph);
 
-            ProjectManagerService.updateProjectGraph(db,ID,grph2 )
+            ProjectManagerService.updateProjectGraph(db,ID,grph )
             .then(ans=>{
             if(ans.modifiedCount === 0){
                 res.send({

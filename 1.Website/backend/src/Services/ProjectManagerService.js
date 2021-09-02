@@ -73,7 +73,7 @@ async function getAllProjectsByUserEmail(dbController,mail){
                         {
                             if(GroupMembers[x].email === mail)
                             {
-                                console.log("Match found");
+
                                 const obj = {
                                     role: GroupMembers[x].role,
                                     permissions: GroupMembers[x].permissions,
