@@ -13,8 +13,22 @@
 
 }
 
+#email-input{
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid grey;
+    padding: 3px;
+    margin-left: 30px;
+    outline: none;
+}
+
 #project-name h3{
     text-align: center !important;
+}
+
+#add-member-btn{
+    margin-left: 100%;
+    margin-top: 10%;
 }
 
 #project-name{
