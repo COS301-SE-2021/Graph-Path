@@ -14,9 +14,9 @@ import {
 } from "rsuite";
 import axios from "axios";
 
-function Paragraph() {
-    return null;
-}
+// function Paragraph() {
+//     return null;
+// }
 
 class ProjectInformation extends React.Component{
     /**
@@ -231,6 +231,17 @@ class ProjectInformation extends React.Component{
             showModal: false,
             value:[]
         })
+
+        const data = Object.assign( this.props.project,{
+            projectID: this.props.project._id
+
+        })
+
+        data.groupMembers = this.props.project.groupMembers;
+
+        console.log("data-gr",data)
+
+        this.sendData(data)
     }
 
     change = (e)=>{
@@ -326,7 +337,7 @@ class ProjectInformation extends React.Component{
                                 project.groupMembers.map((value,index)=>{
                                 return (
                                     <div key={index} id="memberDiv">
-                                        { value.email !== project.owner ?
+                                        { value.email !== project.projectOwner ?
                                             <>
                                                 <div>
                                                     <p id="email-p">Email: {value.email}</p>
