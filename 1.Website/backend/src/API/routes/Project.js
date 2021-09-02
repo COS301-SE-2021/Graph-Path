@@ -335,7 +335,7 @@ function makeProjectRoute(db) {
                         authentication.generateToken(req,res,db)
                             .then((token)=>{
                                 console.log("successfully updated token...check your headers");
-                                res.setHeader("authorization",token);
+                                res.setHeader("authorization","Bearer "+token);
                                 res.send({
                                     message:"The Project has been created.",
                                     newToken: token,
@@ -383,13 +383,13 @@ function makeProjectRoute(db) {
                 })
             }
             let ID = req.body.projectID;
-            let memberObjects = req.body.groupMembers;
-            /*let memberObjects = [
+            //let memberObjects = req.body.groupMembers;
+            let memberObjects = [
              {
                  "email": "u17049106@tuks.co.za",
                  "role": "Developer",
                  "permissions" : ['edit,view,delete task, add members']
-             }] */
+             }]
 
             let MemberEmails = [];
             for (const memberKey in memberObjects) {
@@ -437,7 +437,7 @@ function makeProjectRoute(db) {
         (req,res)=>{
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
-                res.status(420).send({
+                res.send({
                     message: "Bad request , invalid id",
                     data: invalidFields
                 })
@@ -568,7 +568,7 @@ function makeProjectRoute(db) {
         body('dueDate').exists().notEmpty().isDate(),
         body('startDate').exists().notEmpty().isDate(),
         body('owner').exists().notEmpty(),
-        body('graph').exists().notEmpty(),
+        body('graph').exists().notEmpty().isObject(),
 
         (req,res)=>{
             const invalidFields = validationResult(req);
