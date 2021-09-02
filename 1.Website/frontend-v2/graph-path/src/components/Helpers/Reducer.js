@@ -14,8 +14,10 @@ function reducer(state = initial,action){
         let auth = {
           token: action.payload.token
         }
-        let newState = Object.assign(state,auth) ;
-        return newState ;
+        let newState = Object.assign(state.loggedUser,auth) ;
+        console.log('after update',newState)
+        return {
+          loggedUser:newState} ;
       case  'CREATE_USER' :{
         return {
           loggedUser:action.payload}

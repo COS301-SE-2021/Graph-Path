@@ -2,10 +2,6 @@ import  React from 'react' ;
 import '../css/NewProject.css';
 import CustomField from './Reusable/CustomField';
 import PropTypes from 'prop-types' ;
-import axios from 'axios' ;
-import { connect} from 'react-redux' ;
-import PopUpMessage from './Reusable/PopUpMessage';
-
 import {
     Modal,
     Button,
@@ -24,14 +20,12 @@ class NewProject extends React.Component{
         let now = new Date() ;
         this.state={
             show:false,
-            startDate: new Date(),
-            dueDate: new Date(),
-            next:false,
+             next:false,
             formValue:{
                 projectName:'',
                 description:'',
-                startDate: new Date(now.getFullYear(),now.getMonth(),now.getDate()).toJSON().slice(0,10) ,
-                dueDate: new Date(now.getFullYear()+1,now.getMonth(),now.getDate()).toJSON().slice(0,10),
+                startDate: new Date(now.getFullYear(),now.getMonth(),now.getDate()),//.toJSON().slice(0,10) ,
+                dueDate: new Date(now.getFullYear()+1,now.getMonth(),now.getDate()),//.toJSON().slice(0,10),
             },
             formError:{}
         }
@@ -39,51 +33,45 @@ class NewProject extends React.Component{
     componentDidMount(){
     }
 
+    cleanUp=()=>{
+        let now = new Date() ;
+        this.setState({
+            show:false,
+            next:false,
+           formValue:{
+               projectName:'',
+               description:'',
+               startDate: new Date(now.getFullYear(),now.getMonth(),now.getDate()),//.toJSON().slice(0,10) ,
+               dueDate: new Date(now.getFullYear()+1,now.getMonth(),now.getDate()),//.toJSON().slice(0,10),
+           },
+           formError:{}
+        })
+    }
+
     handleSubmit=()=>{
         console.log('min proj',this.state.formValue)
-        let project = Object.assign(this.state.formValue,this.props.preInfo)
         const {formValue} = this.state ;
+        let updated = {...formValue} ;
+        if ( formValue.dueDate instanceof Date ){
+            updated.dueDate = formValue.dueDate.toJSON().slice(0,10) 
+            // console.log('yes Due is Date',updated)
+
+        }
+
+        if (formValue.startDate instanceof Date ){
+        // console.log('yes issued is Date')
+
+            updated.startDate = formValue.startDate.toJSON().slice(0,10) 
+        }
+        console.log('yes issued is Date',updated)
+
+        let project = Object.assign(updated,this.props.preInfo)
         if (!this.form.check()){
             console.log('Form error')
         }
         else{
-        this.sendProjectInfo(project) ;
+        this.props.sendProjectInfo(project) ; //props
         }
-    }
-
-    sendProjectInfo=(project)=>{
-
-        project.email = this.props.user.email ;
-
-        console.log('b4 api',project) ;
-
-        axios.post(`${this.props.api}/project/newProject`,project,{
-            headers:{
-                authorization:this.props.user.token,
-                'Content-Type': 'application/json;charset=UTF-8',
-                "Access-Control-Allow-Origin": "*",
-            }
-            
-        })
-        .then((res)=>{
-        console.log('api',res) ;
-            if(res.headers.authorization){
-                PopUpMessage('Project created','success')
-            }
-
-            
-        this.setState({
-            show:false,
-            next:false
-        }) ;
-        },(reject)=>console.log('rejected',reject))
-        .catch((err)=>{
-            for (let key of Object.keys(err)){
-                console.log(key,': ',err[key])
-
-            }
-            console.log('err',err)
-        })
     }
 
 
@@ -101,22 +89,8 @@ class NewProject extends React.Component{
 
     handleInfoChange=(form)=>{
         console.log('update',form) ;
-        let updated = {...form} ;
-        if ( form.dueDate instanceof Date ){
-            updated.dueDate = form.dueDate.toJSON().slice(0,10) 
-            // console.log('yes Due is Date',updated)
-
-        }
-
-        if (form.startDate instanceof Date ){
-        // console.log('yes issued is Date')
-
-            updated.startDate = form.startDate.toJSON().slice(0,10) 
-        }
-        console.log('yes issued is Date',updated)
-
         this.setState({
-            formValue:updated
+            formValue:form
         }) ;
 
     }
@@ -146,7 +120,7 @@ class NewProject extends React.Component{
 
         return( 
             <>
-            <Modal backdrop={"static"} show={this.state.show} onHide={this.handleClose}>
+            <Modal backdrop={"static"} show={this.state.show} onHide={this.cleanUp}>
                 <Modal.Header>
                     <Modal.Title>New Project</Modal.Title>
                 </Modal.Header>
@@ -203,31 +177,11 @@ class NewProject extends React.Component{
 }
 
 NewProject.propTypes = {
-    update : PropTypes.func.isRequired,
+    sendProjectInfo : PropTypes.func.isRequired,
     api:PropTypes.string.isRequired,
 }
 
-function updateUserToken(token){
-    return {
-      type:'UPDATE_TOKEN' ,
-      payload: {
-        token:token
-      }
-    }
-  }
-
-function mapStateToProps(state){
-    return {
-        loggedUser:state.loggedUser
-    } ;
-  }
-  
-
-const mapDispatchToProps = {
-    updateUserToken,
-  }
-
-export default ( NewProject ); 
+export default NewProject ; 
 
 
 // {

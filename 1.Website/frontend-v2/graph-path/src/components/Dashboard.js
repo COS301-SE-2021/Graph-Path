@@ -45,7 +45,7 @@ class Dashboard extends React.Component{
     }
 
     showP=()=>{
-        
+
         this.showProfile();
     }
 
@@ -56,7 +56,6 @@ class Dashboard extends React.Component{
 
     render(){
         const {match} =this.props ; 
-        console.log('dash',this.props)
 
         return(
             //  <Router>            
@@ -127,7 +126,7 @@ class Dashboard extends React.Component{
                                     <Modal />
                                 </Route>
                                 <Route path={`${match.path}/manager`} render={()=>{
-                                    return <ProjectManager user={this.props.authUser} ref={this.reloadProjectsInManager}/> 
+                                    return <ProjectManager /> 
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
                                     return <Kanban user={this.props.authUser}/> }}/>

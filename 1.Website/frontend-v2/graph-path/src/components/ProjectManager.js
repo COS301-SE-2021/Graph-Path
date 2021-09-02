@@ -4,6 +4,8 @@ import {Icon, Panel,SelectPicker, Loader, Button} from 'rsuite' ;
 import "../css/ProjectManager.css"
 import { Route ,Switch, withRouter} from "react-router-dom";
 import axios from 'axios' ;
+import { connect} from 'react-redux' ;
+import PopUpMessage from './Reusable/PopUpMessage';
 import Project from "./Project";
 import ProjectCard from './Reusable/ProjectCard' ;
 import NewProject from "./NewProject";
@@ -40,9 +42,9 @@ class ProjectManager extends Component {
             loading:true 
         }) ;
 
-        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.loggedUser.email}`,{
             headers:{
-                authorization: this.props.user.token 
+                authorization: this.props.loggedUser.token 
             }
         })
         .then((res)=>{
@@ -119,10 +121,10 @@ class ProjectManager extends Component {
             console.log('B4 del',project)
             axios.delete(`${this.props.api}/project/deleteProject`,{
                 headers:{
-                    authorization:this.props.user.token
+                    authorization:this.props.loggedUser.token
                 } ,
                 data:{
-                    email:this.props.user.email,
+                    email:this.props.loggedUser.email,
                     projectID:project._id
                 }
             })
@@ -209,34 +211,43 @@ class ProjectManager extends Component {
     }
 
     showM=()=>{
-        this.handleShow();
+        this.showModal();
     }
 
-    createProject =(project)=>{
-       
-        // console.log('b4 api',fullProject) ;
-        // axios.post(`${this.props.api}/project/newProject`,fullProject,{
-        // })
+    sendProjectInfo=(project)=>{
 
-        // fetch(`${this.props.api}/project/newProject`,{
-        //     method:'POST',
-        //     body:fullProject,
-         
-        // })
-        // .then((res)=>{
-        // console.log('api',res) ;
+        project.email = this.props.loggedUser.email ;
 
-        // })
-        // .catch((err)=>{
-        //     for (let key of Object.keys(err)){
-        //         console.log(key,': ',err[key])
+        console.log('b4 api',project) ;
 
-        //     }
-        //     console.log(err)
-        // })
+        axios.post(`${this.props.api}/project/newProject`,project,{
+            headers:{
+                authorization:this.props.loggedUser.token,
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+            }
+            
+        })
+        .then((res)=>{
+        console.log('api',res) ;
+            if(res.headers.authorization){
+                PopUpMessage('Project created','success')
+                this.props.updateUserToken(res.headers.authorization)
+                this.viewProjectsFromAPI() ;
+            }
+            else{
+                PopUpMessage(`${res.data.message}`,'warning')
+            }
+        },(reject)=>console.log('rejected',reject))
+        .catch((err)=>{
+            for (let key of Object.keys(err)){
+                console.log(key,': ',err[key])
 
-
+            }
+            console.log('err',err)
+        })
     }
+
 
     
     render(){
@@ -251,6 +262,8 @@ class ProjectManager extends Component {
         //         "owner"
         //     ]
         // }]
+        console.log('mgr',this.props)
+
 
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
@@ -261,11 +274,11 @@ class ProjectManager extends Component {
         else{
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
-                    <NewProject ref={this.newProjectModalRef} refresh={this.viewProjectsFromAPI} api={this.props.api} />
+                    <NewProject ref={this.newProjectModalRef} sendProjectInfo={this.sendProjectInfo} api={this.props.api} />
 
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
-                                return <Project  user={this.props.user} project={this.state.currentProject} 
+                                return <Project  user={this.props.loggedUser} project={this.state.currentProject} 
                                 selectProject={this.selectCurrentProject}/>
                         }}/>
                         <Route >
@@ -317,8 +330,27 @@ ProjectManager.defaultProps = {
     } ,
     api:'http://localhost:9001'
 }
+function updateUserToken(token){
+    return {
+      type:'UPDATE_TOKEN' ,
+      payload: {
+        token:token
+      }
+    }
+  }
 
-export default withRouter(ProjectManager) ; 
+function mapStateToProps(state){
+    return {
+        loggedUser:state.loggedUser
+    } ;
+  }
+  
+
+const mapDispatchToProps = {
+    updateUserToken,
+  }
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(ProjectManager)) ; 
 
 // def:[{
 //     projectName:"T1",
