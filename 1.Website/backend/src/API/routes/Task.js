@@ -7,6 +7,8 @@ const ObjectId = require('mongodb').ObjectID;
 const TaskManagerService = require('../../Services/TaskManagerService');
 const { body, validationResult, param,check} = require('express-validator');
 const {isIn} = require("validator");
+const authentication = require("./Middleware/Authentication");
+const authorisation = require("./Middleware/Authorisation");
 
 
 function  makeTaskRoute(db)
@@ -210,41 +212,62 @@ function  makeTaskRoute(db)
      * @apiSuccess (200) {list} list of task objects
      */
     router.post('/insertTask',
-
-        // insert Task validation
-        body('description').exists(),
-        body('status').exists().isIn(['not started' ,'in progress', 'complete' , 'back-log']),
-        body('project').exists(),
-        body('assignee').exists(),
-        body('assigner').exists(),
-        body('due').isDate(),
-        body('issued').isDate(),
+        body('description').exists().notEmpty().notEmpty().isString(),
+        body('title').exists().notEmpty().notEmpty().isString(),
+        body('status').exists().notEmpty().isIn(['not started' ,'in progress', 'complete' , 'back-log']),
+        body('projectID').exists().notEmpty(),
+        body('email').exists().notEmpty().isEmail(),
+        body('taskMembers').exists().notEmpty(),
+        body('assigner').exists().notEmpty(),
+        body('due').exists().isDate(),
+        body('issued').exists().isDate(),
+        body('nodeID').exists().notEmpty().isString(),
+        authentication.authenticateToken,
+        authorisation.AuthoriseAddTask,
         (req, res)=>{
 
             // check if any of the above validations failed
             const validationFails = validationResult(req);
             if(!validationFails.isEmpty()){
-                res.status(400).send({
-                    message: "unsuccessful",
+                res.send({
+                    message: "invalidation failed , check fields",
                     data : validationFails
                 })
             }
+
+            let TaskObject = {
+                _id: new mongoose.mongo.ObjectID(),
+                description:req.body.description,
+                title:req.body.title,
+                status:req.body.status,
+                projectID:req.body.projectID,
+                taskMembers:req.body.taskMembers,
+                Assigner:req.body.assigner,
+                due:req.body.due,
+                issued:req.body.due,
+                assigner:req.body.assigner,
+                nodeID: req.body.projectID+"_"+req.body.nodeID
+            }
+
             let data = req.body;
             const id = new mongoose.mongo.ObjectID() ;
             data["_id"] = id ;
 
-        TaskManagerService.insertTask(db,data)
+            console.log("Attempting to insert a new task...")
+        TaskManagerService.insertTask(db,TaskObject)
             .then((ans)=>{
                 if(ans ==="Task object empty"){
                     res.send({
                         message: "Not enough task information provided."
                     })
                 }else if(ans.insertedCount > 0){
+                    console.log("Successfully added new task");
                     res.send({
                         message:"The task was saved successfully.",
                         data:ans.ops
                     }) ;
                 }else{
+                    console.log("failed to add new task");
                     res.send({
                         message: "The task was not created."
                     })
