@@ -27,6 +27,7 @@ class NewProject extends React.Component{
             next:false,
             formValue:{
                 projectName:'',
+                description:'',
                 startDate: new Date(now.getFullYear(),now.getMonth(),now.getDate()).toJSON().slice(0,10) ,
                 dueDate: new Date(now.getFullYear()+1,now.getMonth(),now.getDate()).toJSON().slice(0,10),
             },
@@ -49,18 +50,14 @@ class NewProject extends React.Component{
     }
 
     sendProjectInfo=(project)=>{
+
+        project.email = this.props.user.email ;
+
         console.log('b4 api',project) ;
 
-        // fetch(`${this.props.api}/project/newProject`,{
-        //     method:'POST',
-        //     body:JSON.stringify(project),
-        //     headers:{
-        //         authorization:this.props.token
-        //     }
-        // })
         axios.post(`${this.props.api}/project/newProject`,project,{
             headers:{
-                authorization:this.props.token,
+                authorization:this.props.user.token,
                 'Content-Type': 'application/json;charset=UTF-8',
                 "Access-Control-Allow-Origin": "*",
             }
@@ -79,7 +76,7 @@ class NewProject extends React.Component{
                 console.log(key,': ',err[key])
 
             }
-            console.log(err)
+            console.log('err',err)
         })
     }
 
@@ -130,14 +127,16 @@ class NewProject extends React.Component{
         let due = new Date() ;
         due.setFullYear(due.getFullYear()+2)
         const projectModel =Schema.Model({
-            projectName: StringType().minLength(2,'Name should have more than 2 letters')
+            projectName: StringType().minLength(2,'Project name should have more than 2 letters')
                 .isRequired('This field is required.') ,
             startDate:DateType().min(new Date(due.getFullYear()-2,due.getMonth(),due.getDate()-1),'The start date cannot be set to a date that has passed.')
                 .isRequired('This field is required.') ,
             dueDate:DateType().range(new Date(),due,'The due date cannot be set to a date more than 24 months from now or a passed date.')
                 .isRequired('This field is required.') ,
+            description: StringType().minLength(5,'Please add more details on the description')
+                .isRequired('This field is required.') ,
         })
-        return(
+        return( 
             <>
             <Modal backdrop={"static"} show={this.state.show} onHide={this.handleClose}>
                 <Modal.Header>
@@ -154,6 +153,12 @@ class NewProject extends React.Component{
                         <FormGroup>
                             <ControlLabel>Project Name</ControlLabel>
                             <FormControl name="projectName" placeholder="Project Name" />
+                            <HelpBlock tooltip>Required</HelpBlock>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <ControlLabel>Description</ControlLabel>
+                            <FormControl name="description" placeholder="Task Description"  />
                             <HelpBlock tooltip>Required</HelpBlock>
                         </FormGroup>
 
@@ -190,8 +195,7 @@ class NewProject extends React.Component{
 }
 
 NewProject.propTypes = {
-    preInfo : PropTypes.object.isRequired,
-    token: PropTypes.string.isRequired,
+    user : PropTypes.object.isRequired,
     api:PropTypes.string.isRequired,
 }
 

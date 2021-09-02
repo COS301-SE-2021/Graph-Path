@@ -240,17 +240,17 @@ class ProjectManager extends Component {
 
     
     render(){
-        let fullProject = {}
-        fullProject.owner = this.props.user.email ;
-        fullProject.graph = {} ;
-        fullProject.groupMembers = [{
-            email:this.props.user.email,
-            role:"owner",
-            label:this.props.user.name === undefined ?this.props.user.email :this.props.user.name,
-            permissions:[
-                "owner"
-            ]
-        }]
+        // let fullProject = {}
+        // fullProject.owner = this.props.user.email ;
+        // fullProject.graph = {} ;
+        // fullProject.groupMembers = [{
+        //     email:this.props.user.email,
+        //     role:"owner",
+        //     label:this.props.user.name === undefined ?this.props.user.email :this.props.user.name,
+        //     permissions:[
+        //         "owner"
+        //     ]
+        // }]
 
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
@@ -261,7 +261,7 @@ class ProjectManager extends Component {
         else{
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
-                    <NewProject ref={this.newProjectModalRef} token={this.props.user.token} api={this.props.api}  preInfo={fullProject}/>
+                    <NewProject ref={this.newProjectModalRef} user={this.props.user} api={this.props.api} />
 
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
