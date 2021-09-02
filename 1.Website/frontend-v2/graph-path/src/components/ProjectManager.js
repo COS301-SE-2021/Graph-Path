@@ -1,6 +1,6 @@
 import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
-import {Icon, Panel,SelectPicker, Loader, Button} from 'rsuite' ;
+import {Icon,SelectPicker, Loader, Button} from 'rsuite' ;
 import "../css/ProjectManager.css"
 import { Route ,Switch, withRouter} from "react-router-dom";
 import axios from 'axios' ;

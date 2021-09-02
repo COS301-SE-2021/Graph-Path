@@ -2,8 +2,7 @@ import {React,Component} from 'react' ;
 import PropTypes from 'prop-types';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import GraphPath from './Graph';
-import axios from 'axios';
-import { Icon, Nav, Navbar, Sidebar, Sidenav } from 'rsuite';
+import { Icon, Nav, Sidebar, Sidenav } from 'rsuite';
 import '../css/Common.css'
 import ProjectInformation from "./ProjectInformation";
 

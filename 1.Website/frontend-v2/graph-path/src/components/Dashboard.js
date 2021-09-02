@@ -1,7 +1,6 @@
 import React from 'react' ;
 import '../css/Dashboard.css' ;
 import {Button, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
-import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
 import { Link,Switch,Route, withRouter, Redirect} from 'react-router-dom' ;
 import * as FaIcons from 'react-icons/fa';
