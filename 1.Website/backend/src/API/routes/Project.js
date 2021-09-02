@@ -383,13 +383,7 @@ function makeProjectRoute(db) {
                 })
             }
             let ID = req.body.projectID;
-            //let memberObjects = req.body.groupMembers;
-            let memberObjects = [
-             {
-                 "email": "u17049106@tuks.co.za",
-                 "role": "Developer",
-                 "permissions" : ['edit,view,delete task, add members']
-             }]
+            let memberObjects = req.body.groupMembers;
 
             let MemberEmails = [];
             for (const memberKey in memberObjects) {
