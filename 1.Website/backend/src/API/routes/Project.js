@@ -296,7 +296,6 @@ function makeProjectRoute(db) {
         body('email').exists().notEmpty(),
         authentication.authenticateToken,
         (req, res,next) => {
-            console.log("Project break line")
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
                 res.send({
@@ -553,7 +552,7 @@ function makeProjectRoute(db) {
         (req,res)=>{
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
-                res.status(420).send({
+                res.send({
                     message: "Bad request , invalid id",
                     data: invalidFields
                 })
@@ -581,7 +580,7 @@ function makeProjectRoute(db) {
 
         })
             .catch(err=>{
-            res.status(500).send({
+            res.send({
                 message: "Server error: Could not update the project.",
                 err: err
             })
