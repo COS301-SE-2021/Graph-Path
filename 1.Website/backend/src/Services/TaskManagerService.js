@@ -63,11 +63,9 @@ async function getAllTasksByProject(dbController, id){
 async function insertTask(dbController, taskObject){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
-        if(taskObject==null){
-            resolve("Task object empty");
-        }
         db.collection('Tasks').insertOne(taskObject)
             .then((ans)=>{
+
                 resolve(ans);
             })
             .catch(err=>{
