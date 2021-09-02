@@ -155,7 +155,7 @@ function AuthoriseUpdateAllProject(req,res,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("update all project") || permissions.includes("owner")){
+        if(permissions.includes("update graph") || permissions.includes("owner")){
             console.log("permitted to update all project")
             next()
 
@@ -175,7 +175,7 @@ function AuthoriseUpdateAllProject(req,res,next){
 }
 
 function AuthoriseUpdateProjectOwner(res,req,next){
-    console.log("checking permission to everything in a task")
+    console.log("checking permission to update project Owner")
     const userProjects = req.user.projects;
     const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
     if( userProject){
@@ -201,7 +201,32 @@ function AuthoriseUpdateProjectOwner(res,req,next){
 
 }
 
+function AuthoriseAddTask(res,req,next){
+    console.log("checking permission to add a task")
+    const userProjects = req.user.projects;
+    const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
+    if( userProject){
+        console.log(userProject[0])
+        const permissions = userProject[0].permissions;
+        if(permissions.includes("add task") || permissions.includes("owner")){
+            console.log("permitted to add task")
+            next()
 
+        } else{
+            console.log("add task authorization failed")
+            res.status(403).send({
+                message: "Unauthorised to add task",
+            })
+        }
+    } else {
+        res.status(403).send({
+            message: "Not authorised to access current project"
+        })
+    }
+
+
+
+}
 function AuthoriseUpdateProjectAccessData(res,req,next){
     console.log("checking permission to everything in a project")
     const userProjects = req.user.projects;
@@ -231,6 +256,7 @@ function AuthoriseUpdateProjectAccessData(res,req,next){
 
 module.exports = {
     AuthoriseDeleteTask,
+    AuthoriseAddTask,
     AuthoriseKanbanBoard,
     AuthoriseAddMembers,
     AuthoriseDeleteProject,

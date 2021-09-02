@@ -5,11 +5,13 @@ const ObjectId = require('mongodb').ObjectID;
 //***************************************************-get-**************************************************************
 
 async function getAllTasks(dbController){
+    //console.log(dbController.getConnectionInstance());
     const db = dbController.getConnectionInstance(dbController);
     return await new Promise((resolve,reject)=>{
         db.collection('Tasks').find({}).toArray()
             .then(ans=>{
                 if(ans == null){
+                    console.log("No available tasks");
                     resolve("No available tasks");
                 }else{
                     resolve(ans);
@@ -61,11 +63,9 @@ async function getAllTasksByProject(dbController, id){
 async function insertTask(dbController, taskObject){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
-        if(taskObject==null){
-            resolve("Task object empty");
-        }
         db.collection('Tasks').insertOne(taskObject)
             .then((ans)=>{
+
                 resolve(ans);
             })
             .catch(err=>{
