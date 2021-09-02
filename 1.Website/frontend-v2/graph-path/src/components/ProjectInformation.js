@@ -3,13 +3,10 @@ import '../css/ProjectInformation.css'
 import {
     Button,
     Checkbox, CheckboxGroup,
-    ControlLabel,
     Divider,
     Drawer,
     FlexboxGrid,
-    Form,
-    FormControl,
-    FormGroup, HelpBlock, Icon,
+    Icon,
     Modal
 } from "rsuite";
 import axios from "axios";
@@ -42,6 +39,7 @@ class ProjectInformation extends React.Component{
             api:'http://localhost:9001',
             answer:'',
             editMember:false,
+            MemberEditEmail:'',
             value:[],
             memberName:"",
         }
@@ -260,11 +258,27 @@ class ProjectInformation extends React.Component{
     }
 
     handleEditRole=(email)=>{
+        let i = 0;
+        this.props.project.groupMembers.map((value,index)=>{
+            value.email === email ?
+                i = index
+            :
+            <></>
+                // this.setState({
+                //     value:this.props.project.groupMembers[index].permissions
+                // })
+                // :
+                // <></>
+        })
+        console.log("index",i)
         this.setState({
             editMember: true,
             showModal: true,
-            memberRole:email
+            MemberEditEmail:email,
+            value:this.props.project.groupMembers[i].permissions
         })
+
+
 
         console.log("edit role",email)
     }
@@ -279,8 +293,10 @@ class ProjectInformation extends React.Component{
 
     updateRole=()=>{
         this.props.project.groupMembers.map((value,index)=>{
-            value.email === this.state.memberRole ?
-                this.props.project.groupMembers[index].permissions = [...this.props.project.groupMembers[index].permissions,...this.state.value]
+            value.email === this.state.MemberEditEmail ?
+                this.props.project.groupMembers[index].permissions =  this.state.value //[...this.props.project.groupMembers[index].permissions,...this.state.value]
+
+                // this.props.project.groupMembers[index].permissions.map((value))
                 :
                 <></>
         })
