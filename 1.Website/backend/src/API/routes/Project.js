@@ -328,6 +328,7 @@ function makeProjectRoute(db) {
                 console.log("attempting to add new project...")
                 ProjectManagerService.insertProject(db,data)
                     .then(ans=>{
+
                         //mailer.newProject(data.projectName,data.projectOwner,data.dueDate,data.description)
                         console.log("successfully added new project.");
                         console.log("attempting to update token...");
