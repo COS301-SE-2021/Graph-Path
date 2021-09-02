@@ -31,7 +31,7 @@ class GraphPath extends Component{
     }
   }
   componentDidMount(){
-    const {graph} = this.props
+    const {graph} = this.props.project
     const graphObj = JSON.parse(JSON.stringify(graph)) ;
     // const graphObj = {...graph}
     console.log('created',graphObj)
@@ -273,7 +273,7 @@ checkSavePermissions =()=>{
 
 saveProjectGraph=(projectId)=>{
 
-    var saveGraph = this.validateGraphDifference(this.props.graph,this.state.currGraph)
+    var saveGraph = this.validateGraphDifference(this.props.project.graph,this.state.currGraph)
     if ( saveGraph){ // if its not the same graph
         // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
         //set the loader while communicating with the server
@@ -285,8 +285,8 @@ saveProjectGraph=(projectId)=>{
             return {
                 id:node.id,
                 label:node.label,
-                x:node.x,
-                y:node.y,
+                // x:node.x,
+                // y:node.y,
                 size:node.size,
                 color:node.color
             }
@@ -307,8 +307,12 @@ saveProjectGraph=(projectId)=>{
         }
         const data = { ...this.props.project}  ;
         data.graph = minimalGraph
-            
-        axios.put(`${this.props.api}/project/updateEverythingProject/${projectId}`,data)
+        data.projectID = projectId ;
+        axios.put(`${this.props.api}/project/updateEverythingProject`,data,{
+          headers:{
+            authorization:this.props.user.token
+          }
+        })
         .then((res)=>{
             console.log('update graph response',res.data)
             // if (res.data.data === undefined) {
@@ -361,12 +365,15 @@ saveProjectGraph=(projectId)=>{
               //   shakeTowards: 'leaves'  // roots, leaves
               // }
             },
+            nodes:{
+              physics:false
+            },
             edges: {
               color: "#ff0000" , 
               physics:false 
             },
-            physics:{
-              enabled:false ,
+            // physics:{
+              // enabled:true ,
               // forceAtlas2Based: {
               //   theta: 1,
               //   gravitationalConstant: -50,
@@ -376,7 +383,7 @@ saveProjectGraph=(projectId)=>{
               //   damping: 0.4,
               //   avoidOverlap: 0
               // }
-            }
+            // }
           };
           
           const events = {} ;
@@ -502,7 +509,7 @@ GraphPath.defaultProps = {
 }
 
 GraphPath.propTypes = {
-  graph:PropTypes.object.isRequired , 
+  user:PropTypes.object.isRequired , 
   // task:PropTypes.array,
   project:PropTypes.object,
   api:PropTypes.string , 

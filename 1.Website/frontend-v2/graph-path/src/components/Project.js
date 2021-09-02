@@ -76,7 +76,7 @@ class Project extends Component {
 
                     <Switch>
                         <Route exact path={`${match.path}`} render={()=>{
-                            return <GraphPath updateParent={this.props.selectProject} project={project} graph={project.graph}/>
+                            return <GraphPath updateParent={this.props.selectProject} project={project} user={this.props.user}/>
     
                         }} />
                         <Route path={`${match.path}/edit`} render={()=>{
@@ -97,7 +97,8 @@ Project.defaultProps = {
 Project.propTypes = {
     project : PropTypes.object.isRequired,
     api:PropTypes.string, 
-    selectProject:PropTypes.func.isRequired
+    selectProject:PropTypes.func.isRequired ,
+    user:PropTypes.object.isRequired
 }
 
 export default withRouter(Project) ;

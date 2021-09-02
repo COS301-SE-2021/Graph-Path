@@ -1,13 +1,12 @@
 import  React from 'react' ;
+import {Calendar} from "rsuite";
 
 
 class Modal extends React.Component{
     render() {
         return(
             <>
-            <div>
-                <h1>Hello</h1>
-            </div>
+            <Calendar bordered />
             </>
         )
     }

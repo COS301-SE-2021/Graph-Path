@@ -9,7 +9,8 @@ import * as IoIcons from 'react-icons/md'
 import Modal from "./Modal";
 import Profile from "./Profile";
 import Logout from "./Logout";
-import Logo from "../img/Logo3.png";
+import Logo from "../img/Logo4.png";
+import Kanban from './Kanban';
 
 
 class Dashboard extends React.Component{
@@ -102,6 +103,11 @@ class Dashboard extends React.Component{
                                                           componentClass={Link}
                                                           to={`${match.url}/modal`} >Calendar</Nav.Item>
 
+                                                <Nav.Item id="nav-option"
+                                                          icon={<Icon icon="todo"/>}
+                                                          componentClass={Link}
+                                                          to={`${match.url}/kanban`} >Kanban</Nav.Item>
+
                                                 <Dropdown id="nav-option" title="Statistics" icon={<Icon icon="bar-chart"/>}>
                                                     <Dropdown.Item id="nav-option">Overall</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option">Project</Dropdown.Item>
@@ -124,6 +130,8 @@ class Dashboard extends React.Component{
                                 <Route path={`${match.path}/manager`} render={()=>{
                                     return <ProjectManager user={this.props.authUser}/> 
                                 }} />
+                                <Route path={`${match.path}/kanban`} render={()=>{
+                                    return <Kanban user={this.props.authUser}/> }}/>
                                     
                             {
                                 this.state.redirect?this.changeRedirect(`${match.url}/manager`):""

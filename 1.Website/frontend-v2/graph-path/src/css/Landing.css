@@ -72,7 +72,7 @@ span{
     margin-top: 7%;
 }
 
-#main-div{
+#main-div-landing{
     background: #0c3b5c;
     width: 100%;
     display: flex;
@@ -99,4 +99,8 @@ span{
 #graph-picture{
     width: 600px;
     margin-top: 10%;
+}
+
+#landing-btn{
+    background-color: pink;
 }

@@ -39,7 +39,11 @@ class ProjectManager extends Component {
             loading:true 
         }) ;
 
-        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`)
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
+            headers:{
+                authorization: this.props.user.token 
+            }
+        })
         .then((res)=>{
             console.log('Success',res) ;
             if (res.data.data !== undefined){
@@ -112,7 +116,15 @@ class ProjectManager extends Component {
                 // linkNumber:-1
             }) ;
             console.log('B4 del',project)
-            axios.delete(`${this.props.api}/project/deleteProject/${project._id}`)
+            axios.delete(`${this.props.api}/project/deleteProject`,{
+                headers:{
+                    authorization:this.props.user.token
+                } ,
+                data:{
+                    email:this.props.user.email,
+                    projectID:project._id
+                }
+            })
             .then((res)=>{
                 if (res.status >=400){
                     throw res ;
@@ -204,7 +216,7 @@ class ProjectManager extends Component {
                 <div data-testid="tidProjectManager" id="projectManager">
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
-                                return <Project  project={this.state.currentProject} 
+                                return <Project  user={this.props.user} project={this.state.currentProject} 
                                 selectProject={this.selectCurrentProject}/>
                         }}/>
                         <Route >

@@ -92,3 +92,16 @@ class NewProject extends React.Component{
 }
 
 export default NewProject ; 
+
+
+// {
+//     "email": "ntpnaane@gmail.com",
+//     "role": "Project Manager",
+//     "label": "Godiragetse Naane",
+//     "permissions": [
+//       "edit",
+//       "view",
+//       "delete project",
+//       "add members"
+//     ]
+//   },
