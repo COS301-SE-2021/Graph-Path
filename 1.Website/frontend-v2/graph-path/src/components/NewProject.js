@@ -3,6 +3,8 @@ import '../css/NewProject.css';
 import CustomField from './Reusable/CustomField';
 import PropTypes from 'prop-types' ;
 import axios from 'axios' ;
+import { connect} from 'react-redux' ;
+import PopUpMessage from './Reusable/PopUpMessage';
 
 import {
     Modal,
@@ -65,6 +67,10 @@ class NewProject extends React.Component{
         })
         .then((res)=>{
         console.log('api',res) ;
+            if(res.headers.authorization){
+                PopUpMessage('Project created','success')
+            }
+
             
         this.setState({
             show:false,
@@ -136,6 +142,8 @@ class NewProject extends React.Component{
             description: StringType().minLength(5,'Please add more details on the description')
                 .isRequired('This field is required.') ,
         })
+        console.log('np',this.props)
+
         return( 
             <>
             <Modal backdrop={"static"} show={this.state.show} onHide={this.handleClose}>
@@ -195,11 +203,31 @@ class NewProject extends React.Component{
 }
 
 NewProject.propTypes = {
-    user : PropTypes.object.isRequired,
+    update : PropTypes.func.isRequired,
     api:PropTypes.string.isRequired,
 }
 
-export default NewProject ; 
+function updateUserToken(token){
+    return {
+      type:'UPDATE_TOKEN' ,
+      payload: {
+        token:token
+      }
+    }
+  }
+
+function mapStateToProps(state){
+    return {
+        loggedUser:state.loggedUser
+    } ;
+  }
+  
+
+const mapDispatchToProps = {
+    updateUserToken,
+  }
+
+export default ( NewProject ); 
 
 
 // {
