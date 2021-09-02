@@ -3,13 +3,10 @@ import '../css/ProjectInformation.css'
 import {
     Button,
     Checkbox, CheckboxGroup,
-    ControlLabel,
     Divider,
     Drawer,
     FlexboxGrid,
-    Form,
-    FormControl,
-    FormGroup, HelpBlock, Icon,
+    Icon,
     Modal
 } from "rsuite";
 import axios from "axios";
@@ -42,8 +39,9 @@ class ProjectInformation extends React.Component{
             api:'http://localhost:9001',
             answer:'',
             editMember:false,
+            MemberEditEmail:'',
             value:[],
-            memberRole:""
+            memberName:"",
         }
     }
 
@@ -53,10 +51,67 @@ class ProjectInformation extends React.Component{
         })
     }
 
-    handleAddMembers = () =>{
+    showAddMembers = ()=>{
         this.setState({
-            showModal: !this.state.showModal,
+            showModal: true
         })
+    }
+
+    handleAddMembers = (e) =>{
+        e.preventDefault();
+        console.log("submitted",this.state)
+
+        const data={
+            email: this.props.user.email,
+            projectID: this.props.project._id,
+            groupMembers:[{
+                email:this.state.memberName,
+                role: "Developer",
+                permissions: this.state.value
+            }]
+        }
+        // console.log("add m",this.state)
+        this.setState({
+            showModal: false,
+            value:[]
+        })
+        this.addMember(data)
+    }
+
+    addMember = (data)=>{
+        console.log("submitted sent",data)
+        try{
+            axios.post(`${this.state.api}/project/addToProjectGroupMembers/`,data,{
+                headers:{
+                    authorization:this.props.user.token
+                }
+            })
+                .then((res)=>{
+                    console.log('add member response',res.data)
+
+                    const resp = res.data;
+
+                    this.setState({
+                        answer: resp.message
+                    },()=>{
+                        if (this.state.answer !== undefined) {
+                            //alert(`Username or Password changed `)
+                            //this.props.updateUser(data)
+
+                        } else {
+                            alert(`Something went wrong please update again `)
+                        }
+                    })
+                },(response)=>{
+                    console.log('rejected', response);
+                    alert('Server Error, Please try again later');
+                })
+        }catch (error){
+            if(error.response.data){
+                console.log(error.response.data)
+            }
+            console.log(error)
+        }
     }
 
     addMemberModal=()=>{
@@ -77,7 +132,7 @@ class ProjectInformation extends React.Component{
         console.log("submitted",this.state)
 
         const data = Object.assign( this.props.project,{
-            projectID: this.props.project.projectID,
+            projectID: this.props.project._id,
             owner: this.props.project.projectOwner,
             email: this.props.user.email
 
@@ -203,11 +258,27 @@ class ProjectInformation extends React.Component{
     }
 
     handleEditRole=(email)=>{
+        let i = 0;
+        this.props.project.groupMembers.map((value,index)=>{
+            value.email === email ?
+                i = index
+            :
+            <></>
+                // this.setState({
+                //     value:this.props.project.groupMembers[index].permissions
+                // })
+                // :
+                // <></>
+        })
+        console.log("index",i)
         this.setState({
             editMember: true,
             showModal: true,
-            memberRole:email
+            MemberEditEmail:email,
+            value:this.props.project.groupMembers[i].permissions
         })
+
+
 
         console.log("edit role",email)
     }
@@ -222,8 +293,10 @@ class ProjectInformation extends React.Component{
 
     updateRole=()=>{
         this.props.project.groupMembers.map((value,index)=>{
-            value.email === this.state.memberRole ?
-                this.props.project.groupMembers[index].permissions = [...this.props.project.groupMembers[index].permissions,...this.state.value]
+            value.email === this.state.MemberEditEmail ?
+                this.props.project.groupMembers[index].permissions =  this.state.value //[...this.props.project.groupMembers[index].permissions,...this.state.value]
+
+                // this.props.project.groupMembers[index].permissions.map((value))
                 :
                 <></>
         })
@@ -235,7 +308,9 @@ class ProjectInformation extends React.Component{
         })
 
         const data = Object.assign( this.props.project,{
-            projectID: this.props.project._id
+            projectID: this.props.project._id,
+            owner: this.props.project.projectOwner,
+            email: this.props.user.email
 
         })
 
@@ -381,15 +456,14 @@ class ProjectInformation extends React.Component{
 
                                 <FlexboxGrid id="permission-div" justify="space-around">
 
-                                    <Form>
-                                        <FormGroup>
+                                    <form onSubmit={this.handleAddMembers}>
                                             {
                                                 this.state.editMember === false ?
                                                     <>
 
-                                                    <ControlLabel>Email</ControlLabel>
-                                                    <FormControl name="memberName" placeholder="Member Email" />
-                                                <HelpBlock tooltip>Required</HelpBlock>
+                                                    {/*<label>Email</label>*/}
+                                                    <input id="email-input" onChange={this.change} type="email" name="memberName" placeholder="Member Email"
+                                                    />
                                                     </>
                                                 :
                                                     <>
@@ -424,8 +498,14 @@ class ProjectInformation extends React.Component{
 
                                                 </div>
                                             </FlexboxGrid.Item>
-                                        </FormGroup>
-                                    </Form>
+                                        {
+                                            this.state.editMember === false ?
+                                            <input type="submit" className="rs-btn rs-btn-default" id="add-member-btn" value="Add Member"/>
+                                                : <></>
+
+                                        }
+
+                                    </form>
 
 
                                 </FlexboxGrid>
@@ -434,9 +514,8 @@ class ProjectInformation extends React.Component{
                             {
                                 this.state.editMember === false ?
                                     <>
-                                        <Button variant="secondary" onClick={this.handleAddMembers}>
-                                            Send Invite
-                                        </Button>
+
+
                                     </>
                                     :
                                     <>
@@ -452,7 +531,7 @@ class ProjectInformation extends React.Component{
                 </div>
                 <div id="btn-form-div">
                     <Button id="btn-info" onClick={this.handleViewMembers}>View Members</Button>
-                    <Button id="btn-info" onClick={this.handleAddMembers}>Add Members</Button>
+                    <Button id="btn-info" onClick={this.showAddMembers}>Add Members</Button>
                 </div>
             </div>
         )
