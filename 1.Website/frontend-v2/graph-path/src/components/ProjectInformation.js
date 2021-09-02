@@ -1,16 +1,16 @@
 import React from 'react' ;
 import '../css/ProjectInformation.css'
 import {
-    Button, ButtonToolbar,
+    Button,
     Checkbox, CheckboxGroup,
-    ControlLabel, DatePicker,
+    ControlLabel,
     Divider,
     Drawer,
     FlexboxGrid,
     Form,
     FormControl,
     FormGroup, HelpBlock, Icon,
-    Modal, Placeholder
+    Modal
 } from "rsuite";
 import axios from "axios";
 
@@ -38,6 +38,7 @@ class ProjectInformation extends React.Component{
             projectOwner:'',
             startD: '',
             dueD:'',
+            projDescription:'',
             api:'http://localhost:9001',
             answer:'',
             editMember:false,
@@ -88,6 +89,12 @@ class ProjectInformation extends React.Component{
                 // data.projectName = this.props.project.projectName; //no change
             }else{
                 data.projectName = this.state.projName; //change
+            }
+
+            if(this.state.projDescription === ''){
+                // data.projectName = this.props.project.projectName; //no change
+            }else{
+                data.projectDescription = this.state.projDescription; //change
             }
 
             if(this.state.startD === ''){
@@ -240,7 +247,7 @@ class ProjectInformation extends React.Component{
             <div id="main-div">
                 <div id="project-name"><h3>{project.projectName}</h3></div>
                 <div id="project-information">
-                    <div className="info">
+
                         <form className="profileForm" onSubmit={this.onSubmit} >
                             <label>Project Name</label>
                             <input defaultValue={project.projectName}
@@ -248,13 +255,24 @@ class ProjectInformation extends React.Component{
                                    onChange={this.change}
                                    type='text'
                                    name = "projName"
+                                   required
                             />
 
 
                             <label>Project Owner</label>
-                            <input value={project.owner}
+                            <input value={project.projectOwner}
                                    disabled
                                    type='text'/>
+
+
+                            <label>Project Description</label>
+                            <input defaultValue={project.projectDescription}
+                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   onChange={this.change}
+                                   name="projDescription"
+                                   type='text'
+                                   required
+                            />
 
 
                             <label>Start Date</label>
@@ -262,14 +280,18 @@ class ProjectInformation extends React.Component{
                                    name="startD"
                                    defaultValue={project.startDate}
                                    onChange={this.change}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""} />
+                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   required
+                            />
 
                             <label>Due Date</label>
                             <input defaultValue={project.dueDate}
                                    type='date'
                                    name="dueD"
                                    onChange={this.change}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}/>
+                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   required
+                            />
                             {
                                 this.state.disabled ? <Button id="btn-form" disabled = {(this.state.disabled) ? "" : "disabled"}
                                                               onClick={this.enableEdit}>Edit</Button>
@@ -284,7 +306,7 @@ class ProjectInformation extends React.Component{
                                     onClick={this.enableEdit}>Cancel</Button>
 
                         </form>
-                    </div>
+
 
                 </div>
                 <div id="second-div">
@@ -360,7 +382,6 @@ class ProjectInformation extends React.Component{
                                                     <>
 
                                                         {/*<h6>email owner</h6>*/}
-                                                        {console.log("project-email",project.email)}
 
                                                     </>
                                             }
@@ -398,7 +419,7 @@ class ProjectInformation extends React.Component{
                         </Modal.Body>
                         <Modal.Footer>
                             {
-                                this.state.editMember == false ?
+                                this.state.editMember === false ?
                                     <>
                                         <Button variant="secondary" onClick={this.handleAddMembers}>
                                             Send Invite
@@ -415,11 +436,10 @@ class ProjectInformation extends React.Component{
                         </Modal.Footer>
                     </Modal>
 
-
+                </div>
+                <div id="btn-form-div">
                     <Button id="btn-info" onClick={this.handleViewMembers}>View Members</Button>
                     <Button id="btn-info" onClick={this.handleAddMembers}>Add Members</Button>
-
-
                 </div>
             </div>
         )
