@@ -155,7 +155,7 @@ function AuthoriseUpdateAllProject(req,res,next){
     if( userProject){
         console.log(userProject[0])
         const permissions = userProject[0].permissions;
-        if(permissions.includes("update all project") || permissions.includes("owner")){
+        if(permissions.includes("update graph") || permissions.includes("owner")){
             console.log("permitted to update all project")
             next()
 

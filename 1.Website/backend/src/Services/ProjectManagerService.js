@@ -16,7 +16,10 @@ async function getProjectByID(dbController, id){
         })
             .then((ans)=>{
                 if(ans ===null){
-                    resolve("No project");
+                    resolve({
+                        message:"No project with given id",
+                        data:ans
+                    });
                 }else{
                     resolve(ans);
                 }
@@ -36,9 +39,13 @@ async function getAllProjects(dbController){
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').find({}).toArray()
             .then(ans=>{
-                if(ans === null){
-                    resolve("No projects");
+                if(ans.toString() === "[]"){
+                    resolve(
+                        {message:"No projects",
+                            data:[]
+                    });
                 }else {
+
                     resolve(ans);
                 }
             })
@@ -103,22 +110,6 @@ async function getAllProjectsByUserEmail(dbController,mail){
             })
 
 
-        /* db.collection('Projects').find({
-             "groupMembers":mail
-         }).toArray()
-             .then((ans) => {
-                 if (ans.length > 0) {
-                     resolve(ans);
-                 } else {
-                     resolve(0);
-                 }
-
-
-             })
-             .catch(err => {
-
-                 reject(err);
-             })*/
     })
 
 }
@@ -134,7 +125,10 @@ async function insertProject(dbController, projectObject){
                 resolve(ans);
             })
             .catch(err=>{
-                reject(err);
+                reject({
+                    message:"failed to add new project, project already exists",
+                    data: err
+                });
             })
     });
 }
@@ -253,82 +247,6 @@ async function addNewProjectMember(dbController, id, newMembers){
     })
 
 
-    /*
-    const db = dbController.getConnectionInstance();
-    let  project = null;
-    await new Promise((resolve, reject)=>{
-        db.collection('Projects').findOne({
-            "_id": ObjectId(id)
-        })
-            .then((project)=>{
-
-                if(project !==null){
-                    console.log("test break");
-                    //project = ans;
-                    resolve();
-                }else{
-                    throw "Project with given ID does not exist";
-                }
-
-            })
-            .catch(err=>{
-                console.log(err);
-                reject(err);
-            });
-
-    })
-    if(project !== null)
-    {
-        let Members = project.groupMembers;
-        for( let i =0 ; i < newMembers.length ; i ++)
-        {
-                //check if member already in project
-
-            Members.push(newMembers[i]);
-        }
-
-        return await new Promise((resolve,reject)=>{
-
-            db.collection('Projects').updateOne({
-                "_id":ObjectId(id)
-            },{
-                $set: {
-                    groupMembers: Members
-                }
-            })
-                .then(ans=>{
-
-                    if(ans.result.nModified >= 1)
-                    {
-
-                        project.groupMembers = Members;
-                        resolve({
-                            message: "successfully added new Members",
-                            data: project
-                        });
-                    }
-
-                    else
-                    {
-
-                        resolve({
-                            message: "Project members not updated",
-                            data: []
-                        });
-
-                    }
-                })
-                .catch(err=>{
-
-                    reject(err);
-                })
-        })
-
-
-    }
-
-
-*/
 }
 
 
