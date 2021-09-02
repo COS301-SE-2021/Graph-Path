@@ -299,7 +299,7 @@ function makeProjectRoute(db) {
             console.log("Project break line")
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
-                res.status(420).send({
+                res.send({
                     message: "Bad request , invalid id",
                     data: invalidFields
                 })
