@@ -27,6 +27,7 @@ async function generateToken(req,res,db){
     return await new Promise((resolve, reject)=>{
         userManagementService.getUserByEmail(db,email)
             .then((result)=>{
+                console.log(result)
                 if(result !== "user not found" || (result !== "ServerDB")){
                     const user = {
                         username : result.firstName,
@@ -46,6 +47,18 @@ async function generateToken(req,res,db){
 
                                 })
                             }
+                            user.projects = ProjectsAndPerms;
+                            const  accessToken = jwt.sign(user,  process.env.ACCESS_TOKEN_SECRET);
+                            resolve(accessToken)
+                            req.body.token = accessToken;
+                            console.log("JW token successfully generated");
+
+                        }else{
+                            ProjectsAndPerms.push({
+                                projectID : "",
+                                permissions : [],
+
+                            })
                             user.projects = ProjectsAndPerms;
                             const  accessToken = jwt.sign(user,  process.env.ACCESS_TOKEN_SECRET);
                             resolve(accessToken)
