@@ -417,7 +417,7 @@ function makeProjectRoute(db) {
     });
 
     /**
-     * @api {post}
+     * @api {delete}
      * @apiName
      * @apiDescription
      * @apiGroup Project
@@ -460,7 +460,7 @@ function makeProjectRoute(db) {
 });
 
     /**
-     * @api {post}
+     * @api {patch}
      * @apiName
      * @apiDescription
      * @apiGroup Project
@@ -505,7 +505,7 @@ function makeProjectRoute(db) {
 });
 
     /**
-     * @api {post}
+     * @api {patch}
      * @apiName
      * @apiDescription
      * @apiGroup Project
@@ -547,7 +547,7 @@ function makeProjectRoute(db) {
     });
 
     /**
-     * @api {post}
+     * @api {put}
      * @apiName
      * @apiDescription
      * @apiGroup Project
@@ -605,7 +605,7 @@ function makeProjectRoute(db) {
 });
 
     /**
-     * @api {post}
+     * @api {patch}
      * @apiName
      * @apiDescription
      * @apiGroup Project
