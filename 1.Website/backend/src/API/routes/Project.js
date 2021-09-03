@@ -483,9 +483,9 @@ function makeProjectRoute(db) {
             }
             let ID = req.body.projectID;
             let grph = req.body.graph;
-            //let grph2 = JSON.parse(grph);
+            let grph2 = JSON.parse(grph);
 
-            ProjectManagerService.updateProjectGraph(db,ID,grph )
+            ProjectManagerService.updateProjectGraph(db,ID,grph2 )
             .then(ans=>{
             if(ans.modifiedCount === 0){
                 res.send({
