@@ -90,8 +90,8 @@ function SetNodes(graph)
     for( let i =0 ; i < Edges.length ; i ++)
     {
 
-        let sourceID = Edges[i].from;
-        let targetID = Edges[i].to;
+        let sourceID = Edges[i].source;
+        let targetID = Edges[i].target;
         let TargetNode = getNodeByID(targetID,Nodes);
         for( let k = 0 ; k < Nodes.length ; k ++)
         {

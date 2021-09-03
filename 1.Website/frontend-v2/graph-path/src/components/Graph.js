@@ -308,8 +308,8 @@ saveProjectGraph=(projectId)=>{
         const minimalEdges = this.state.currGraph.edges.map((edge)=>{
             return {
                 id: edge.id,
-                source: edge.from,
-                target: edge.to,
+                source: edge.source,
+                target: edge.target,
                 label: edge.label,
                 color: edge.color,
                 size: edge.size,
@@ -371,11 +371,12 @@ saveProjectGraph=(projectId)=>{
     const {project} =this.props ;
     nodeTask.projectID = project._id ;
     nodeTask.nodeID = `${project._id}_${this.state.currNodeID}` ;
-    nodeTask.taskMembers =[{
+    nodeTask.assigner =[{
       email:`${this.props.loggedUser.email}`,
       permissions:['owner']
     }] ;
     nodeTask.email = this.props.loggedUser.email ;
+    nodeTask.taskMembers = []
 
     let label = this.state.currGraph.nodes.find(node=>node.id === this.state.currNodeID) ;
     if (label!== undefined){
@@ -521,7 +522,7 @@ saveProjectGraph=(projectId)=>{
           
           //start rendering
           if (this.graphManager !== null){
-            const graph = this.graphManager.getGraph();
+            const graph = this.state.currGraph;
             console.log('curr',graph)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
@@ -582,11 +583,11 @@ saveProjectGraph=(projectId)=>{
                   settings={{
                     clone: false, // do not clone the nodes
                     immutable:false,// cannot updated id of node
-                    labelSizeRatio:0.8,
+                    labelSizeRatio:1,
                     labelThreshold:0.1,
                     drawNodes:true,
                     drawEdges:true,
-                    minNodeSize:30,
+                    minNodeSize:5,
                     maxNodeSize:10,
                     minArrowSize:10,
                     drawLabels:	true,//	Determines whether or not to draw node labels.
@@ -594,6 +595,7 @@ saveProjectGraph=(projectId)=>{
                     doubleClickEnabled:false,
                     zoomMax:1,
                     autoResize:false ,
+                    autoRescale:false
                   }}    
                 onClickNode={this.clickNodeHandler}
 
