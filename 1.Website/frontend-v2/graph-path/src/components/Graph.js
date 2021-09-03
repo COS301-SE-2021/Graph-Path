@@ -1,7 +1,7 @@
 import {React,Component} from "react";
 import Graph from 'react-graph-vis' ; 
-import  PropTypes, { string }  from "prop-types";
-import { Link , withRouter} from "react-router-dom";
+import  PropTypes  from "prop-types";
+import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
 import { Popover,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader} from 'rsuite' ;
@@ -9,6 +9,7 @@ import ModalHeader from "rsuite/lib/Modal/ModalHeader";
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
 import Task from "./Task";
+import {connect} from 'react-redux'
 
 class GraphPath extends Component{
   graphManager = null ;
@@ -320,12 +321,12 @@ saveProjectGraph=(projectId)=>{
         const data = {} ; //{ ...this.props.project}  ;
         data.graph = minimalGraph
         data.projectID = projectId ;
-        data.email = this.props.user.email ; 
+        data.email = this.props.loggedUser.email ; 
         console.log('b4',data)
 
         axios.patch(`${this.props.api}/project/updateProjectGraph`,data,{
           headers:{
-            authorization:this.props.user.token
+            authorization:this.props.loggedUser.token
           }
         })
         .then((res)=>{
@@ -361,16 +362,28 @@ saveProjectGraph=(projectId)=>{
   saveNodeTask=(nodePreInfo)=>{
     let nodeTask ={...nodePreInfo} ;
     const {project} =this.props ;
-    nodeTask.project = project._id ;
+    nodeTask.projectID = project._id ;
     nodeTask.nodeID = `${project._id}_${this.state.currNodeID}` ;
     nodeTask.assigner =[{
-      email:`${this.props.user.email}`,
-      role:`${this.props.project.role}`
+      email:`${this.props.loggedUser.email}`,
+      role:`${this.props.project.role}`,
+      permissions:['owner']
     }] ;
-    nodeTask.assignee = [] ;
+    nodeTask.taskMembers = [] ;
+    nodeTask.email = this.props.loggedUser.email ;
+
+    let label = this.state.currGraph.nodes.find(node=>node.id === this.state.currNodeID) ;
+    if (label!== undefined){
+      nodeTask.title = label.label ;
+    }
+
     console.log('saving',nodeTask)
 
-    axios.post(`${this.props.api}/task/insertTask`,nodeTask)
+    axios.post(`${this.props.api}/task/insertTask`,nodeTask,{
+      headers:{
+        authorization:this.props.loggedUser.token
+      }
+    })
     .then((res)=>{
       console.log('saving task',res) ;
     })
@@ -385,6 +398,8 @@ saveProjectGraph=(projectId)=>{
   }
 
   render(){
+    console.log(' eve',this.props)
+
 
           const options = {
             layout: {
@@ -427,7 +442,7 @@ saveProjectGraph=(projectId)=>{
           
           const events = {} ;
           events.select =  function(event) {
-              var { nodes, edges } = event;
+              // var { nodes, edges } = event;
             }  ;
 
           events.externalRemoveNode = this.removeNode ;
@@ -469,7 +484,6 @@ saveProjectGraph=(projectId)=>{
               }
               
           }  
-          // console.log(' eve',events)
           
           //start rendering
           if (this.graphManager !== null){
@@ -548,14 +562,20 @@ GraphPath.defaultProps = {
 }
 
 GraphPath.propTypes = {
-  user:PropTypes.object.isRequired , 
   // task:PropTypes.array,
   project:PropTypes.object,
   api:PropTypes.string , 
   updateParent: PropTypes.func.isRequired
 }
 
-export default withRouter(GraphPath) ;
+function mapStateToProps(state){
+  return {
+      loggedUser:state.loggedUser
+  } ;
+}
+
+
+export default connect(mapStateToProps)(withRouter(GraphPath)) ;
 // let graph2 = {
 //             nodes: [
 //               { id: 1, label: "Node 1", title: "node 1 tootip text" },

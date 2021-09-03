@@ -2,7 +2,6 @@ import React from 'react' ;
 import PropTypes from 'prop-types' ;
 import {Schema,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, Row} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
-import Col from 'rsuite/lib/Carousel';
 /**
  * Task will show a list of the tasks provided for a node. 
  * It will also provide a way to add new tasks to the node

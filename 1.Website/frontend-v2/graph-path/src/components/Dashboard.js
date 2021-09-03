@@ -1,7 +1,6 @@
 import React from 'react' ;
 import '../css/Dashboard.css' ;
 import {Button, Dropdown, Icon, Nav, Sidenav} from 'rsuite';
-import NewProject from './NewProject';
 import ProjectManager from './ProjectManager';
 import { Link,Switch,Route, withRouter, Redirect} from 'react-router-dom' ;
 import * as FaIcons from 'react-icons/fa';
@@ -11,6 +10,7 @@ import Profile from "./Profile";
 import Logout from "./Logout";
 import Logo from "../img/Logo4.png";
 import Kanban from './Kanban';
+import { connect} from 'react-redux' ;
 
 
 class Dashboard extends React.Component{
@@ -44,6 +44,7 @@ class Dashboard extends React.Component{
     }
 
     showP=()=>{
+
         this.showProfile();
     }
 
@@ -54,6 +55,7 @@ class Dashboard extends React.Component{
 
     render(){
         const {match} =this.props ; 
+
         return(
             //  <Router>            
                 <div className="main-container">
@@ -123,7 +125,7 @@ class Dashboard extends React.Component{
                                     <Modal />
                                 </Route>
                                 <Route path={`${match.path}/manager`} render={()=>{
-                                    return <ProjectManager user={this.props.authUser} ref={this.reloadProjectsInManager}/> 
+                                    return <ProjectManager /> 
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
                                     return <Kanban user={this.props.authUser}/> }}/>
@@ -142,5 +144,24 @@ class Dashboard extends React.Component{
         )
     }
 }
+function updateUserToken(token){
+    return {
+      type:'UPDATE_TOKEN' ,
+      payload: {
+        token:token
+      }
+    }
+  }
 
-export default withRouter(Dashboard) ;
+function mapStateToProps(state){
+    return {
+        loggedUser:state.loggedUser
+    } ;
+  }
+  
+
+const mapDispatchToProps = {
+    updateUserToken,
+  }
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(Dashboard)) ;

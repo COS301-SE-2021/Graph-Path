@@ -23,7 +23,7 @@ class ProjectCard extends Component {
     let {selectProject,deleteProject,project,link}= this.props ;
     const projectInfo = (
       <Popover title={`Project: ${project.projectName}`}>
-        <p>Description: {project.description}</p>
+        <p>Description: {project.projectDescription}</p>
         <br/>
 
         <div>
