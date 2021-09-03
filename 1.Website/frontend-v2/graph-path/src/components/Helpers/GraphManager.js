@@ -276,8 +276,8 @@ class GraphManager{
   
         var edg = {
               id:`e${edgeId}`, // give edge an id
-              from:src, 
-              to:tgt,
+              source:src, 
+              target:tgt,
               label:`${ src} to ${tgt}` ,
               color:'#080',
               size:2,
@@ -362,14 +362,15 @@ class GraphManager{
     }
     
     addNode = (fromTask) =>{
-      console.log('Manager:addNode',fromTask) ; 
         // add the node and give it an id
         var curr = this.graph ; 
         var obj = {
             label:fromTask.label , // give it lable fromTask
-            size:40,
+            size:300,
             critical:fromTask.critical
         }; 
+      console.log('Manager:addNode',fromTask,obj) ; 
+
         // if there was already a node?
         let len = curr.nodes.length ;
         if (len>0){
@@ -383,14 +384,14 @@ class GraphManager{
 
             obj["id"]= `n${nodeId}` ;
             obj["color"] = '#0000ff' ; //following nodes are blue
-            // if (len % 2 === 0){
-            //     obj["x"] = 15*len ; 
-            //     obj["y"] = 15*len ;
-            // }
-            // else{
-            //     obj["x"] = -15*len ; 
-            //     obj["y"] = -15*len ;
-            // }
+            if (len % 2 === 0){
+                obj["x"] = 15*len ; 
+                obj["y"] = 15*len ;
+            }
+            else{
+                obj["x"] = -15*len ; 
+                obj["y"] = -15*len ;
+            }
         }
         else{
             // add node with edge depending on self

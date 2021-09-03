@@ -1,5 +1,6 @@
 import {React,Component} from "react";
-import Sigma from 'react-sigma' ; 
+import {Sigma,NodeShapes,EdgeShapes,DragNodes,RandomizeNodePositions,RelativeSize} from 'react-sigma' ; 
+// import {Graph} from 'react-graph-vis' ;
 import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
@@ -370,12 +371,10 @@ saveProjectGraph=(projectId)=>{
     const {project} =this.props ;
     nodeTask.projectID = project._id ;
     nodeTask.nodeID = `${project._id}_${this.state.currNodeID}` ;
-    nodeTask.assigner =[{
+    nodeTask.taskMembers =[{
       email:`${this.props.loggedUser.email}`,
-      role:`${this.props.project.role}`,
       permissions:['owner']
     }] ;
-    nodeTask.taskMembers = [] ;
     nodeTask.email = this.props.loggedUser.email ;
 
     let label = this.state.currGraph.nodes.find(node=>node.id === this.state.currNodeID) ;
@@ -387,7 +386,8 @@ saveProjectGraph=(projectId)=>{
 
     axios.post(`${this.props.api}/task/insertTask`,nodeTask,{
       headers:{
-        authorization:this.props.loggedUser.token
+        authorization:this.props.loggedUser.token,
+        
       }
     })
     .then((res)=>{
@@ -401,6 +401,33 @@ saveProjectGraph=(projectId)=>{
         console.log('Some error',err)
       }
     })
+  }
+
+  clickNodeHandler = (event)=>{
+    console.log(event) ; 
+    const nodeAffected = event.data.node.id ;
+    // const edgesAffected = event.edges ;
+
+    if (event.data.captor.altKey){
+      //delete node or edge
+      if (typeof nodeAffected === 'string'){
+        this.removeNode(nodeAffected) ;
+      }
+      // else if()
+    }
+    else if(event.data.captor.ctrlKey){
+       //add edge between node
+      if (typeof nodeAffected === 'string'){
+        this.createEdgeBetweenNode(nodeAffected)
+      }
+      
+    }
+    else{
+      if (typeof nodeAffected === 'string'){
+        this.showTaskModal(nodeAffected)
+      }
+    }
+
   }
 
   render(){
@@ -531,29 +558,50 @@ saveProjectGraph=(projectId)=>{
                      <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={this.saveNodeTask}/>
                    </Modal.Body>
                </Modal>
-               <h3>{this.props.project.projectName}</h3>
-              <div id="graphbox">
+              <div id="graph-info" >
+                <h3>{this.props.project.projectName}</h3>
+
                 <div id="graph-nav">
                 <Whisper speaker={speaker} placement={'leftStart'} trigger={'active'}>
                 <Button >Add Node</Button>
-                </Whisper>
+                </Whisper> &nbsp;
                 <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>
                   </div>
-                
+              </div>
+
+                <div id="graphbox">
+
                 <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
                   graph={graph}
-                  style={{position:"relative", height:"92%", width:"100%" ,  border:"double 3px black"}}
+                  style={{
+                    // position:"relative", 
+                    height:"92%", width:"100%" ,  
+                    border:"double 3px black",
+                  }}
                   settings={{
                     clone: false, // do not clone the nodes
                     immutable:false,// cannot updated id of node
-                    // labelSizeRatio:0.8,
+                    labelSizeRatio:0.8,
                     labelThreshold:0.1,
                     drawNodes:true,
                     drawEdges:true,
+                    minNodeSize:30,
+                    maxNodeSize:10,
+                   
                   }}    
+                onClickNode={this.clickNodeHandler}
+
                   // options={options}
                   // events={events}
-              ></Sigma>
+              >
+                <EdgeShapes default="arrow"/>
+                <NodeShapes default="def"/>
+                <DragNodes />
+                {/* <RandomizeNodePositions seed={20} /> */}
+                {/* <RelativeSize size={30} /> */}
+                
+              </Sigma>
+
               </div>
               </div>
   
