@@ -219,6 +219,7 @@ function AuthoriseAddTask(res,req,next){
             })
         }
     } else {
+        console.log("Unauthorised to access this project")
         res.send({
             message: "Not authorised to access current project"
         })
