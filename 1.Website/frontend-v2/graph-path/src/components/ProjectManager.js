@@ -262,7 +262,7 @@ class ProjectManager extends Component {
         //         "owner"
         //     ]
         // }]
-        console.log('mgr',this.props)
+        // console.log('mgr',this.props)
 
 
         const options = [{

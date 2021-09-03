@@ -280,7 +280,7 @@ class GraphManager{
               to:tgt,
               label:`${ src} to ${tgt}` ,
               color:'#080',
-              size:3,
+              size:2,
           }
           
           this.graph.edges.push(edg) ; 
@@ -367,7 +367,7 @@ class GraphManager{
         var curr = this.graph ; 
         var obj = {
             label:fromTask.label , // give it lable fromTask
-            // size:300,
+            size:40,
             critical:fromTask.critical
         }; 
         // if there was already a node?
