@@ -385,11 +385,11 @@ class GraphManager{
             obj["id"]= `n${nodeId}` ;
             obj["color"] = '#0000ff' ; //following nodes are blue
             if (len % 2 === 0){
-                obj["x"] = 15*len ; 
-                obj["y"] = 15*len ;
+                obj["x"] = 2*len ; 
+                obj["y"] = 2*len ;
             }
             else{
-                obj["x"] = -15*len ; 
+                obj["x"] = 2*len ; 
                 obj["y"] = -15*len ;
             }
         }

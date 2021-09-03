@@ -1,6 +1,6 @@
 import {React,Component} from "react";
-import {Sigma,NodeShapes,EdgeShapes,DragNodes,RandomizeNodePositions,RelativeSize} from 'react-sigma' ; 
-// import {Graph} from 'react-graph-vis' ;
+import {Sigma,NodeShapes,EdgeShapes,DragNodes} from 'react-sigma' ; 
+import Dagre from 'react-sigma/lib/Dagre' ;
 import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
@@ -426,9 +426,10 @@ saveProjectGraph=(projectId)=>{
       if (typeof nodeAffected === 'string'){
         this.showTaskModal(nodeAffected)
       }
-    }
 
+    }
   }
+
 
   render(){
     console.log(' gra',this.props)
@@ -520,7 +521,7 @@ saveProjectGraph=(projectId)=>{
           
           //start rendering
           if (this.graphManager !== null){
-            const graph = this.state.currGraph;
+            const graph = this.graphManager.getGraph();
             console.log('curr',graph)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
@@ -587,7 +588,12 @@ saveProjectGraph=(projectId)=>{
                     drawEdges:true,
                     minNodeSize:30,
                     maxNodeSize:10,
-                   
+                    minArrowSize:10,
+                    drawLabels:	true,//	Determines whether or not to draw node labels.
+                    drawEdgeLabels	:	true,//	Determines whether or not to draw edge labels.
+                    doubleClickEnabled:false,
+                    zoomMax:1,
+                    autoResize:false ,
                   }}    
                 onClickNode={this.clickNodeHandler}
 
@@ -597,6 +603,7 @@ saveProjectGraph=(projectId)=>{
                 <EdgeShapes default="arrow"/>
                 <NodeShapes default="def"/>
                 <DragNodes />
+                {/* <Dagre directed={false}/> */}
                 {/* <RandomizeNodePositions seed={20} /> */}
                 {/* <RelativeSize size={30} /> */}
                 
