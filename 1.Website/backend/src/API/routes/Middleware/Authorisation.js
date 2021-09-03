@@ -202,7 +202,7 @@ function AuthoriseUpdateProjectOwner(res,req,next){
 }
 
 function AuthoriseAddTask(res,req,next){
-    console.log("checking permission to add a task")
+    console.log("checking permission to add a task...")
     const userProjects = req.user.projects;
     const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
     if( userProject){
@@ -219,7 +219,7 @@ function AuthoriseAddTask(res,req,next){
             })
         }
     } else {
-        res.status(403).send({
+        res.send({
             message: "Not authorised to access current project"
         })
     }
