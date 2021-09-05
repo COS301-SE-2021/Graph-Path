@@ -124,14 +124,14 @@ function AuthoriseUpdateGraph(req,res,next){
 }
 
 function AuthoriseRemoveMembers(req,res,next){
-    console.log("checking permission to remove Members")
+    console.log("checking permission to remove Members...")
     const userProjects = req.user.projects;
     const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
     if( userProject){
-        console.log(userProject[0])
+        console.log(req)
         const permissions = userProject[0].permissions;
         if(permissions.includes("remove members") || permissions.includes("owner")){
-            console.log("permitted to remove members")
+            console.log("successfully permitted to remove members")
             next()
 
         } else{
@@ -201,9 +201,10 @@ function AuthoriseUpdateProjectOwner(res,req,next){
 
 }
 
-function AuthoriseAddTask(res,req,next){
+function AuthoriseAddTask(req,res,next){
     console.log("checking permission to add a task...")
     const userProjects = req.user.projects;
+
     const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
     if( userProject){
         console.log(userProject[0])

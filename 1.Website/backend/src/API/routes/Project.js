@@ -1,20 +1,21 @@
 require('dotenv').config({path:'../../.env'})
+const authentication = require('./Middleware/Authentication');
+const authorisation =  require('./Middleware/Authorisation');
 const express = require('express');
 const mongoose = require('mongoose') ;
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
-const DAGservice = require('../../Helpers/DAG');
 const { param,body, validationResult } = require('express-validator');
 const mailer = require('../../Helpers/SendMail');
-const authentication = require('./Middleware/Authentication');
-const authorisation =  require('./Middleware/Authorisation');
+
 const { auth, requiresAuth } = require('express-openid-connect');
 function makeProjectRoute(db) {
 
 
     router.get('/requestToken',
+
         (req,res)=>{
             // Authentication Uuser
 
@@ -321,7 +322,7 @@ function makeProjectRoute(db) {
                     status: "not started",
                     groupMembers :[ownerMemberObject],
                     graph: {},
-                    lastAccessed: new Date(),
+                    lastAccessed: new Date().toString(),
 
                 };
 
@@ -329,7 +330,7 @@ function makeProjectRoute(db) {
                 ProjectManagerService.insertProject(db,data)
                     .then(ans=>{
 
-                        //mailer.newProject(data.projectName,data.projectOwner,data.dueDate,data.description)
+                        mailer.newProject(data.projectName,data.projectOwner,data.dueDate,data.projectDescription)
                         console.log("successfully added new project.");
                         console.log("attempting to update token...");
                         authentication.generateToken(req,res,db)
@@ -344,7 +345,7 @@ function makeProjectRoute(db) {
                             })
                             .catch(err=>{
 
-                                console.log("failed to add new project.");
+                                console.log("failed to failed to update token");
                                 res.send({
                                     message: "failed to update token after project creation"
                                 })
@@ -483,9 +484,9 @@ function makeProjectRoute(db) {
             }
             let ID = req.body.projectID;
             let grph = req.body.graph;
-            //let grph2 = JSON.parse(grph);
+            let grph2 = JSON.parse(grph);
 
-            ProjectManagerService.updateProjectGraph(db,ID,grph )
+            ProjectManagerService.updateProjectGraph(db,ID,grph2 )
             .then(ans=>{
             if(ans.modifiedCount === 0){
                 res.send({

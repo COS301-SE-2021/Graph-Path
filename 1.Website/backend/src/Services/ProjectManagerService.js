@@ -115,7 +115,6 @@ async function getAllProjectsByUserEmail(dbController,mail){
 }
 //***************************************************-post-**************************************************************
 async function insertProject(dbController, projectObject){
-    console.log("insert project test");
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
         db.collection('Projects').insertOne(projectObject)
@@ -375,7 +374,8 @@ async function updateEverythingProject(dbController, id, pname, ddate, sdate, ow
                 startDate: sdate,
                 owner: own,
                 groupMembers: members,
-                graph: grph
+                graph: grph,
+                lastAccessed: new Date().toString()
             }
         })
             .then(ans=>{

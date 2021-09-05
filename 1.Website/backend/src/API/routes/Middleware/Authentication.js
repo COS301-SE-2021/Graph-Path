@@ -52,6 +52,18 @@ async function generateToken(req,res,db){
                             req.body.token = accessToken;
                             console.log("JW token successfully generated");
 
+                        }else{
+                            ProjectsAndPerms.push({
+                                projectID : "",
+                                permissions : [],
+
+                            })
+                            user.projects = ProjectsAndPerms;
+                            const  accessToken = jwt.sign(user,  process.env.ACCESS_TOKEN_SECRET);
+                            resolve(accessToken)
+                            req.body.token = accessToken;
+                            console.log("JW token successfully generated");
+
                         }
 
                     })
