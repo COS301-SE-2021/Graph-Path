@@ -10,14 +10,14 @@ import Project from "./Project";
 import ProjectCard from './Reusable/ProjectCard' ;
 import NewProject from "./NewProject";
 
-/*
+/**
 *   A component that will make async request to peer server for all projects of the logged user, provided in the props   
-*   @Component ProjectManager aims to make a list of projects organised in a recently accessed order. When the project opened
+*  	It aims to make a list of projects organised in a recently accessed order. When the project opened
 *   by default it opens the graph in the specified project. When the project is opened, it should show the graph that will 
 *   take up most of the screen.
 *   Project Manager lists all the projects and requests the peer server for meta data about the projects.
 *   It provides a function for the child component to save the project changes including the graph
-*
+*	 @class ProjectManager
 *
 *
 */
@@ -36,7 +36,13 @@ class ProjectManager extends Component {
     componentDidMount(){
         this.viewProjectsFromAPI() ;
     }
+ /**
+A method that requests for all the projects of the logged user and sets the result to Project Manager state.projects.
+When the request fails to retrieve any projects it alerts them.
+ @function 
+ @name viewProjectsFromAPI
 
+*/
     viewProjectsFromAPI=()=>{
         this.setState({
             loading:true 
@@ -105,6 +111,13 @@ class ProjectManager extends Component {
 
        
     }
+
+/**
+A function that makes a request to delete the seletected project.
+@function deleteProject
+@param {Object} project - The project object should contain projectID , email and permissions.
+
+*/
 
 
     deleteProject=(project)=>{
@@ -262,7 +275,7 @@ class ProjectManager extends Component {
         //         "owner"
         //     ]
         // }]
-        console.log('mgr',this.props)
+        // console.log('mgr',this.props)
 
 
         const options = [{

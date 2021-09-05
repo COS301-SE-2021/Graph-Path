@@ -49,7 +49,7 @@ class GraphManager{
             y['color'] ='#080' ;
             this.graph.edges[index] = y ;
           
-            if ( edge.from=== x){
+            if ( edge.source=== x){
               return y ;
             }
             else{
@@ -58,7 +58,7 @@ class GraphManager{
           }) ;
 
           edgesFiltered.forEach((y)=>{
-            this.addAdjacencyEdge(x,y.to) ;
+            this.addAdjacencyEdge(x,y.target) ;
           }) 
           
           
@@ -153,8 +153,8 @@ class GraphManager{
         if (path.length){
           //edit the color to red
           const colorEdges = this.graph.edges.map((value)=>{
-            var del = path.indexOf(value.to) ;
-            if (value.from === start){
+            var del = path.indexOf(value.target) ;
+            if (value.source === start){
               if (del>=0){
                 path = path.splice(del,1) ;
                 let newE = {...value} ; 
@@ -259,7 +259,7 @@ class GraphManager{
       let edgeId = 1;
       let edgeAlreadyInGraph = false ;
       let allIds = this.graph.edges.map((value)=>{
-        if (value.from === src && value.to ===tgt ){
+        if (value.source === src && value.target ===tgt ){
           edgeAlreadyInGraph = true ;
         }
         return value.id ;
@@ -276,11 +276,11 @@ class GraphManager{
   
         var edg = {
               id:`e${edgeId}`, // give edge an id
-              from:src, 
-              to:tgt,
+              source:src, 
+              target:tgt,
               label:`${ src} to ${tgt}` ,
               color:'#080',
-              size:3,
+              size:2,
           }
           
           this.graph.edges.push(edg) ; 
@@ -320,13 +320,16 @@ class GraphManager{
         newGraph.nodes = newNodes ;
         if (this.graph.edges.length>0){
           var newEdges = this.graph.edges.filter((edge)=>{
-            if (edge.from === id ){
+            if (edge.source === id ){
               return false
             }
-            else if ( edge.to === id){
+            else if ( edge.target === id){
               return false ;
             }
-            return true ;
+            else{
+              return true ;
+
+            }
           }) ;
           console.log('new edges',newEdges)
             newGraph.edges = newEdges ;
@@ -362,14 +365,15 @@ class GraphManager{
     }
     
     addNode = (fromTask) =>{
-      console.log('Manager:addNode',fromTask) ; 
         // add the node and give it an id
         var curr = this.graph ; 
         var obj = {
             label:fromTask.label , // give it lable fromTask
-            // size:300,
+            size:15,
             critical:fromTask.critical
         }; 
+      console.log('Manager:addNode',fromTask,obj) ; 
+
         // if there was already a node?
         let len = curr.nodes.length ;
         if (len>0){
@@ -383,14 +387,14 @@ class GraphManager{
 
             obj["id"]= `n${nodeId}` ;
             obj["color"] = '#0000ff' ; //following nodes are blue
-            // if (len % 2 === 0){
-            //     obj["x"] = 15*len ; 
-            //     obj["y"] = 15*len ;
-            // }
-            // else{
-            //     obj["x"] = -15*len ; 
-            //     obj["y"] = -15*len ;
-            // }
+            if (len % 2 === 0){
+                obj["x"] = 2*len ; 
+                obj["y"] = 2*len ;
+            }
+            else{
+                obj["x"] = 2*len ; 
+                obj["y"] = -15*len ;
+            }
         }
         else{
             // add node with edge depending on self

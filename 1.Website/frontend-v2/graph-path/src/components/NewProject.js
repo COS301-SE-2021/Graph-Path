@@ -49,7 +49,7 @@ class NewProject extends React.Component{
     }
 
     handleSubmit=()=>{
-        console.log('min proj',this.state.formValue)
+        // console.log('min proj',this.state.formValue)
         const {formValue} = this.state ;
         let updated = {...formValue} ;
         if ( formValue.dueDate instanceof Date ){
@@ -88,7 +88,7 @@ class NewProject extends React.Component{
     }
 
     handleInfoChange=(form)=>{
-        console.log('update',form) ;
+        // console.log('update',form) ;
         this.setState({
             formValue:form
         }) ;
@@ -116,7 +116,7 @@ class NewProject extends React.Component{
             description: StringType().minLength(5,'Please add more details on the description')
                 .isRequired('This field is required.') ,
         })
-        console.log('np',this.props)
+        // console.log('np',this.props)
 
         return( 
             <>

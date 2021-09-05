@@ -1,5 +1,6 @@
 import {React,Component} from "react";
-import Graph from 'react-graph-vis' ; 
+import {Sigma,NodeShapes,EdgeShapes,DragNodes} from 'react-sigma' ; 
+import Dagre from 'react-sigma/lib/Dagre' ;
 import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
@@ -286,7 +287,7 @@ checkSavePermissions =()=>{
 
 saveProjectGraph=(projectId)=>{
 
-    var saveGraph = this.validateGraphDifference(this.props.project.graph,this.state.currGraph)
+    var saveGraph =true;// this.validateGraphDifference(this.props.project.graph,this.state.currGraph)
     if ( saveGraph){ // if its not the same graph
         // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
         //set the loader while communicating with the server
@@ -298,8 +299,8 @@ saveProjectGraph=(projectId)=>{
             return {
                 id:node.id,
                 label:node.label,
-                // x:node.x,
-                // y:node.y,
+                x:node.x,
+                y:node.y,
                 size:node.size,
                 color:node.color
             }
@@ -307,8 +308,8 @@ saveProjectGraph=(projectId)=>{
         const minimalEdges = this.state.currGraph.edges.map((edge)=>{
             return {
                 id: edge.id,
-                from: edge.from,
-                to: edge.to,
+                source: edge.source,
+                target: edge.target,
                 label: edge.label,
                 color: edge.color,
                 size: edge.size,
@@ -344,12 +345,18 @@ saveProjectGraph=(projectId)=>{
             // this.viewProjectsFromAPI() ;
             PopUpMessage(res.data.message,'info')
         })
-        .catch((err)=>{
-            alert('saving failed',err)
-            console.log(err) ;
+        .catch((err)=>{ 
+          if (err.response){
+            console.log(err.response) ;
+            PopUpMessage(err.response.data.message,'error')
+          }
+          else{
+            console.log('Some error',err)
+          }
             this.setState({
                 loading:false
             }) ;
+            
         })
     }
     else{//no difference
@@ -366,11 +373,10 @@ saveProjectGraph=(projectId)=>{
     nodeTask.nodeID = `${project._id}_${this.state.currNodeID}` ;
     nodeTask.assigner =[{
       email:`${this.props.loggedUser.email}`,
-      role:`${this.props.project.role}`,
       permissions:['owner']
     }] ;
-    nodeTask.taskMembers = [] ;
     nodeTask.email = this.props.loggedUser.email ;
+    nodeTask.taskMembers = []
 
     let label = this.state.currGraph.nodes.find(node=>node.id === this.state.currNodeID) ;
     if (label!== undefined){
@@ -381,7 +387,8 @@ saveProjectGraph=(projectId)=>{
 
     axios.post(`${this.props.api}/task/insertTask`,nodeTask,{
       headers:{
-        authorization:this.props.loggedUser.token
+        authorization:this.props.loggedUser.token,
+        
       }
     })
     .then((res)=>{
@@ -397,8 +404,36 @@ saveProjectGraph=(projectId)=>{
     })
   }
 
+  clickNodeHandler = (event)=>{
+    console.log(event) ; 
+    const nodeAffected = event.data.node.id ;
+    // const edgesAffected = event.edges ;
+
+    if (event.data.captor.altKey){
+      //delete node or edge
+      if (typeof nodeAffected === 'string'){
+        this.removeNode(nodeAffected) ;
+      }
+      // else if()
+    }
+    else if(event.data.captor.ctrlKey){
+       //add edge between node
+      if (typeof nodeAffected === 'string'){
+        this.createEdgeBetweenNode(nodeAffected)
+      }
+      
+    }
+    else{
+      if (typeof nodeAffected === 'string'){
+        this.showTaskModal(nodeAffected)
+      }
+
+    }
+  }
+
+
   render(){
-    console.log(' eve',this.props)
+    console.log(' gra',this.props)
 
 
           const options = {
@@ -488,6 +523,7 @@ saveProjectGraph=(projectId)=>{
           //start rendering
           if (this.graphManager !== null){
             const graph = this.state.currGraph;
+            console.log('curr',graph)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
         
@@ -524,25 +560,57 @@ saveProjectGraph=(projectId)=>{
                      <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={this.saveNodeTask}/>
                    </Modal.Body>
                </Modal>
-               <h3>{this.props.project.projectName}</h3>
-              <div id="graphbox">
+              <div id="graph-info" >
+                <h3>{this.props.project.projectName}</h3>
+
                 <div id="graph-nav">
                 <Whisper speaker={speaker} placement={'leftStart'} trigger={'active'}>
                 <Button >Add Node</Button>
-              </Whisper>
-              <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>
-                </div>
-              
-              <Graph key={JSON.stringify(graph)}
+                </Whisper> &nbsp;
+                <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>
+                  </div>
+              </div>
+
+                <div id="graphbox">
+
+                <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
                   graph={graph}
-                  options={options}
-                  events={events}
-                  getNetwork={network => {
-                    //  if you want access to vis.js network api you can set the state in a parent component using this property
-                    // console.log('net',network)
-                    network.stabilize(2000);
+                  style={{
+                    // position:"relative", 
+                    height:"92%", width:"100%" ,  
+                    border:"double 3px black",
                   }}
-              />
+                  settings={{
+                    clone: false, // do not clone the nodes
+                    immutable:false,// cannot updated id of node
+                    labelSizeRatio:1,
+                    labelThreshold:0.1,
+                    drawNodes:true,
+                    drawEdges:true,
+                    minNodeSize:5,
+                    maxNodeSize:10,
+                    minArrowSize:10,
+                    drawLabels:	true,//	Determines whether or not to draw node labels.
+                    drawEdgeLabels	:	true,//	Determines whether or not to draw edge labels.
+                    doubleClickEnabled:false,
+                    zoomMax:1,
+                    autoResize:false ,
+                    autoRescale:false
+                  }}    
+                onClickNode={this.clickNodeHandler}
+
+                  // options={options}
+                  // events={events}
+              >
+                <EdgeShapes default="arrow"/>
+                <NodeShapes default="def"/>
+                <DragNodes />
+                {/* <Dagre directed={false}/> */}
+                {/* <RandomizeNodePositions seed={20} /> */}
+                {/* <RelativeSize size={30} /> */}
+                
+              </Sigma>
+
               </div>
               </div>
   
