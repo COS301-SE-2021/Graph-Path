@@ -45,7 +45,7 @@ async function getTaskByID(dbController, id){
 async function getAllTasksByProject(dbController, id){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
-        db.collection('Tasks').find({project:id}).toArray()
+        db.collection('Tasks').find({projectID:id}).toArray()
             .then((ans)=>{
                 if(ans == null){
                     resolve("No tasks found");
