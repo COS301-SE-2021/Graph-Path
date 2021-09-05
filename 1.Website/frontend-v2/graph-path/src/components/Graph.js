@@ -69,10 +69,15 @@ class GraphPath extends Component{
   }
   viewAllTasksForProject = ()=>{
     if (this.props.project !== undefined){
-        const projectId = this.props.project._id ;
-        axios.get(`${this.props.api}/task/getAllTasksByProject/${projectId}`)
-        .then((res)=>{
-            console.log('Tasklist',res) ;
+        
+      this.setState({
+        loading:true
+      });
+      const projectId = this.props.project._id ;
+      
+      axios.get(`${this.props.api}/task/getAllTasksByProject/${projectId}`)
+      .then((res)=>{
+          console.log('Tasklist',res) ;
             if (res.data.data !== undefined){
                 this.setState({
                     taskList:res.data.data ,
@@ -84,7 +89,7 @@ class GraphPath extends Component{
                     loading:false 
                 }) ;
             }
-        })
+      })
         .catch((err)=>{
             console.log('Error',err)
             this.setState({
@@ -92,6 +97,11 @@ class GraphPath extends Component{
             }) ;
 
         })
+    }
+    else{
+      this.setState({
+        loading:false , //if the project was loading before
+      })
     }
 
 }
@@ -384,6 +394,9 @@ saveProjectGraph=(projectId)=>{
     }
 
     console.log('saving',nodeTask)
+    this.setState({
+      loading:true
+    }) ; 
 
     axios.post(`${this.props.api}/task/insertTask`,nodeTask,{
       headers:{
@@ -393,6 +406,17 @@ saveProjectGraph=(projectId)=>{
     })
     .then((res)=>{
       console.log('saving task',res) ;
+      let taskRes = res.data ;
+      if (taskRes.data){
+        PopUpMessage('Task Saved','success')
+        this.viewAllTasksForProject() ;
+      }
+      else{
+        PopUpMessage(taskRes.message,'info')
+        this.setState({
+          loading:false
+        }) ;
+      }
     })
     .catch((err)=>{
       if (err.response){
@@ -401,7 +425,11 @@ saveProjectGraph=(projectId)=>{
       else{
         console.log('Some error',err)
       }
-    })
+      PopUpMessage('Something went wrong,please try again','info')
+      this.setState({
+        loading:false
+      })
+    }) ;
   }
 
   clickNodeHandler = (event)=>{
