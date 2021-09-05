@@ -1,14 +1,14 @@
+require('dotenv').config({path:'../../.env'})
+const authentication = require("./Middleware/Authentication");
+const authorisation = require("./Middleware/Authorisation");
 const express = require('express')
 const mongoose = require('mongoose')
 const router = express.Router();
 const mongo = require('mongodb').MongoClient;
-const assert = require('assert');
 const ObjectId = require('mongodb').ObjectID;
 const TaskManagerService = require('../../Services/TaskManagerService');
 const { body, validationResult, param,check} = require('express-validator');
-const {isIn} = require("validator");
-const authentication = require("./Middleware/Authentication");
-const authorisation = require("./Middleware/Authorisation");
+
 
 
 function  makeTaskRoute(db)
@@ -212,68 +212,66 @@ function  makeTaskRoute(db)
      * @apiSuccess (200) {list} list of task objects
      */
     router.post('/insertTask',
-        authentication.authenticateToken,
-        authorisation.AuthoriseAddTask,
         body('description').exists().notEmpty().notEmpty().isString(),
         body('title').exists().notEmpty().notEmpty().isString(),
         body('status').exists().notEmpty().isIn(['not started' ,'in progress', 'complete' , 'back-log']),
         body('projectID').exists().notEmpty(),
         body('email').exists().notEmpty().isEmail(),
-        body('taskMembers').exists().notEmpty(),
+        //body('taskMembers').exists().notEmpty(),
         body('assigner').exists().notEmpty(),
         body('due').exists().isDate(),
         body('issued').exists().isDate(),
         body('nodeID').exists().notEmpty().isString(),
-
+        authentication.authenticateToken,
+        authorisation.AuthoriseAddTask,
         (req, res)=>{
 
             const validationFails = validationResult(req);
             if(!validationFails.isEmpty()){
+                console.log("validation failed",validationFails)
                 res.send({
                     message: "invalidation failed , check fields",
                     data : validationFails
                 })
             }
-
-            let TaskObject = {
-                _id: new mongoose.mongo.ObjectID(),
-                description:req.body.description,
-                title:req.body.title,
-                status:req.body.status,
-                projectID:req.body.projectID,
-                taskMembers:req.body.taskMembers,
-                Assigner:req.body.assigner,
-                due:req.body.due,
-                issued:req.body.due,
-                nodeID: req.body.projectID+"_"+req.body.nodeID
+            else {
+                let TaskObject = {
+                    _id: new mongoose.mongo.ObjectID(),
+                    description:req.body.description,
+                    title:req.body.title,
+                    status:req.body.status,
+                    projectID:req.body.projectID,
+                    taskMembers:req.body.taskMembers,
+                    Assigner:req.body.assigner,
+                    due:req.body.due,
+                    issued:req.body.due,
+                    nodeID: req.body.projectID+"_"+req.body.nodeID
+                }
+                console.log("Attempting to insert a new task...");
+                TaskManagerService.insertTask(db,TaskObject)
+                    .then((ans)=>{
+                        console.log("Successfully added new task");
+                        res.send({
+                            message:"The task was saved successfully.",
+                            data:ans.ops
+                        })
+                    })
+                    .catch(err=>{
+                        console.log("failed to add new task due to server error...");
+                        res.status(500).send({
+                            message:"Server error: could not create task.",
+                            err:err
+                        })
+                    });
             }
 
 
 
-            console.log("Attempting to insert a new task...")
-            TaskManagerService.insertTask(db,TaskObject)
-                .then((ans)=>{
-                if(ans.insertedCount > 0){
-                    console.log("Successfully added new task");
-                    res.send({
-                        message:"The task was saved successfully.",
-                        data:ans.ops
-                    }) ;
-                }else{
-                    console.log("failed to add new task");
-                    res.send({
-                        message: "The task was not created."
-                    })
-                }
 
-            })
-                .catch(err=>{
-                console.log("failed to add new task due to server error...");
-                res.status(500).send({
-                    message:"Server error: could not create task.",
-                    err:err
-                })
-            });
+
+
+
+
 
 
     });
