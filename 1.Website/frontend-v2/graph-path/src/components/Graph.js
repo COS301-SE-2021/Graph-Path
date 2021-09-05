@@ -38,7 +38,7 @@ class GraphPath extends Component{
     const {graph} = this.props.project
     var graphObj = JSON.parse(JSON.stringify(graph)) ;
     // const graphObj = {...graph}
-    console.log('created',graphObj)
+    // console.log('created',graphObj)
 
     if (graph !== undefined ){
       this.initialGraph = graphObj ;
@@ -113,7 +113,7 @@ class GraphPath extends Component{
 
   showTaskModal=(nodeId)=>{
     let filter = this.state.nodeTasks ;
-
+    
     if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
       filter= this.state.taskList.filter((value)=>
       value.nodeID === `${this.props.project._id}_${nodeId}`) ;
@@ -192,7 +192,7 @@ class GraphPath extends Component{
 
         if (addedEdge === 1){
           this.updateGraph() ;
-          console.log('adding edge',this.graphManager.getGraph()) ;
+          // console.log('adding edge',this.graphManager.getGraph()) ;
 
         }
         else if (addedEdge === 0 ){
@@ -370,8 +370,8 @@ class GraphPath extends Component{
           })
       }
       else{//no difference
-          console.log('Node Project',this.props, this.graphManager) ;
-          alert('no change in graph')
+          // console.log('Node Project',this.props, this.graphManager) ;
+          PopUpMessage('No change to graph','warning')
       }
 
   }
@@ -405,7 +405,7 @@ class GraphPath extends Component{
       }
     })
     .then((res)=>{
-      console.log('saving task',res) ;
+      console.log('saved task',res) ;
       let taskRes = res.data ;
       if (taskRes.data){
         PopUpMessage('Task Saved','success')
@@ -513,7 +513,7 @@ class GraphPath extends Component{
           events.externalCreateEdge = this.createEdgeBetweenNode
           events.viewTaskInfo = this.showTaskModal ;
           events.click = function(event){
-              console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
+              // console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
               const nodesAffected = event.nodes ;
               const edgesAffected = event.edges ;
               if (event.event.srcEvent.altKey){
