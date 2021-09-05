@@ -17,12 +17,17 @@ import NewProject from "./NewProject";
 *   take up most of the screen.
 *   Project Manager lists all the projects and requests the peer server for meta data about the projects.
 *   It provides a function for the child component to save the project changes including the graph
-*	 @class ProjectManager
-*
+*	@component ProjectManager
+*	@returns {JSX} <ProjectManager />
 *
 */
 
 class ProjectManager extends Component {
+	/**
+	ProjectManager has a private state.
+	@constructs state
+	@memberof state#
+	*/
 
     constructor(props){
         super(props) ;
@@ -39,8 +44,7 @@ class ProjectManager extends Component {
  /**
 A method that requests for all the projects of the logged user and sets the result to Project Manager state.projects.
 When the request fails to retrieve any projects it alerts them.
- @function 
- @name viewProjectsFromAPI
+@returns {void} The method updates the state of Project
 
 */
     viewProjectsFromAPI=()=>{
@@ -114,9 +118,12 @@ When the request fails to retrieve any projects it alerts them.
 
 /**
 A function that makes a request to delete the seletected project.
-@function deleteProject
+If the user does not have the right permissions the project will not be deleted.
+The neccesary information for the request to go through follows:
 @param {Object} project - The project object should contain projectID , email and permissions.
-
+@param {string} project[].email - The email of requesting user.
+@param {string} project[].projectID - the unique id of the project.
+@returns {void} The method updates the state of Project
 */
 
 
@@ -261,7 +268,9 @@ A function that makes a request to delete the seletected project.
         })
     }
 
-
+    /**
+	@param {Object} u
+    */
     
     render(){
         // let fullProject = {}
