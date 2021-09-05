@@ -375,7 +375,8 @@ async function updateEverythingProject(dbController, id, pname, ddate, sdate, ow
                 startDate: sdate,
                 owner: own,
                 groupMembers: members,
-                graph: grph
+                graph: grph,
+                lastAccessed: new Date().toString()
             }
         })
             .then(ans=>{

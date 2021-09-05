@@ -321,7 +321,7 @@ function makeProjectRoute(db) {
                     status: "not started",
                     groupMembers :[ownerMemberObject],
                     graph: {},
-                    lastAccessed: new Date(),
+                    lastAccessed: new Date().toString(),
 
                 };
 
@@ -329,7 +329,7 @@ function makeProjectRoute(db) {
                 ProjectManagerService.insertProject(db,data)
                     .then(ans=>{
 
-                        //mailer.newProject(data.projectName,data.projectOwner,data.dueDate,data.description)
+                        mailer.newProject(data.projectName,data.projectOwner,data.dueDate,data.projectDescription)
                         console.log("successfully added new project.");
                         console.log("attempting to update token...");
                         authentication.generateToken(req,res,db)

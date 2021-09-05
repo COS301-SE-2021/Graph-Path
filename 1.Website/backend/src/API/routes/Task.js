@@ -212,6 +212,8 @@ function  makeTaskRoute(db)
      * @apiSuccess (200) {list} list of task objects
      */
     router.post('/insertTask',
+        authentication.authenticateToken,
+        authorisation.AuthoriseAddTask,
         body('description').exists().notEmpty().notEmpty().isString(),
         body('title').exists().notEmpty().notEmpty().isString(),
         body('status').exists().notEmpty().isIn(['not started' ,'in progress', 'complete' , 'back-log']),
@@ -222,8 +224,7 @@ function  makeTaskRoute(db)
         body('due').exists().isDate(),
         body('issued').exists().isDate(),
         body('nodeID').exists().notEmpty().isString(),
-        authentication.authenticateToken,
-        authorisation.AuthoriseAddTask,
+
         (req, res)=>{
 
             const validationFails = validationResult(req);

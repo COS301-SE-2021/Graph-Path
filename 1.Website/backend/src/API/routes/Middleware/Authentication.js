@@ -27,7 +27,6 @@ async function generateToken(req,res,db){
     return await new Promise((resolve, reject)=>{
         userManagementService.getUserByEmail(db,email)
             .then((result)=>{
-                console.log(result)
                 if(result !== "user not found" || (result !== "ServerDB")){
                     const user = {
                         username : result.firstName,

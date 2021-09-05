@@ -203,7 +203,9 @@ function AuthoriseUpdateProjectOwner(res,req,next){
 
 function AuthoriseAddTask(res,req,next){
     console.log("checking permission to add a task...")
+    console.log(req.length);
     const userProjects = req.user.projects;
+
     const userProject = userProjects.filter(project => project.projectID === req.body.projectID);
     if( userProject){
         console.log(userProject[0])

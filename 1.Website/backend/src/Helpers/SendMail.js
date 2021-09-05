@@ -242,7 +242,7 @@ function newProject(ProjectName,projectOwner,projectDueDate ,description){
     transporter.sendMail(options)
         .then((result)=>{
 
-            console.log("successfully sent new project creation notification")
+            console.log("successfully sent new project creation notification to "+projectOwner)
         })
         .catch((error)=>{
             console.log("failed to send new project creation notification:")
