@@ -97,7 +97,7 @@ class GraphManager{
       this.createTraversableGraph() ;
       var visited = {} ;
       for ( let node of Object.keys(this.adjacencyList)){
-        console.log('Node:',node)
+        // console.log('Node:',node)
         visited[node] = false ;
       }
 
@@ -114,10 +114,10 @@ class GraphManager{
             visited[s] = true ;
             var currNode = this.graph.nodes.find(node => node.id === s ) ; 
             if (currNode !== undefined && !currNode.critical){
-              console.log('not critical')
+              // console.log('not critical')
             }
             else{
-              console.log(' critical',result)
+              // console.log(' critical',result)
               //create path
               let c = result.pop() ; 
               let temp = [] ; 
@@ -140,7 +140,7 @@ class GraphManager{
 
         }
       }
-      console.log('Result' ,paths)
+      // console.log('Result' ,paths)
       return paths ; 
     }
 
@@ -148,7 +148,7 @@ class GraphManager{
 
       if (typeof start === 'string'){
         var path = this.pathFromBFS(start) ;
-        console.log('colored edge',path)
+        // console.log('colored edge',path)
 
         if (path.length){
           //edit the color to red
@@ -159,7 +159,7 @@ class GraphManager{
                 path = path.splice(del,1) ;
                 let newE = {...value} ; 
                 newE['color'] = '#200' ;
-                console.log('colored edge', newE)
+                // console.log('colored edge', newE)
                 return newE ;
               }
               else{
@@ -247,7 +247,7 @@ class GraphManager{
     showNodeList(){
       var nodes = this.graph.nodes ; 
       if(nodes.length <= 0){
-        console.log('Nothing in the Array') ; 
+        // console.log('Nothing in the Array') ; 
       }
       else{
         console.log(`${nodes.length} Nodes`)
@@ -282,7 +282,11 @@ class GraphManager{
               color:'#080',
               size:2,
           }
-          
+        let nameSrc = this.graph.nodes.find(v=>v.id === src) ;
+        let nameTgt = this.graph.nodes.find(v=>v.id === tgt) ;
+        if(nameSrc !== undefined && nameTgt !== undefined){
+              edg["label"] = `${ nameSrc.label} to -> ${nameTgt.label}` ;
+        }
           this.graph.edges.push(edg) ; 
   
         if (!isAcyclic(this.graph)){   
@@ -331,7 +335,7 @@ class GraphManager{
 
             }
           }) ;
-          console.log('new edges',newEdges)
+          // console.log('new edges',newEdges)
             newGraph.edges = newEdges ;
             this.graph = newGraph ;
           return true ;
@@ -372,7 +376,7 @@ class GraphManager{
             size:15,
             critical:fromTask.critical
         }; 
-      console.log('Manager:addNode',fromTask,obj) ; 
+      // console.log('Manager:addNode',fromTask,obj) ; 
 
         // if there was already a node?
         let len = curr.nodes.length ;

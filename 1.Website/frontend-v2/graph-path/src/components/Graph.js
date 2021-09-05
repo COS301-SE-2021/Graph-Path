@@ -14,6 +14,7 @@ import {connect} from 'react-redux'
 
 class GraphPath extends Component{
   graphManager = null ;
+  initialGraph = {} ;
   
   constructor(props){
     super(props) ;
@@ -35,12 +36,13 @@ class GraphPath extends Component{
   }
   componentDidMount(){
     const {graph} = this.props.project
-    const graphObj = JSON.parse(JSON.stringify(graph)) ;
+    var graphObj = JSON.parse(JSON.stringify(graph)) ;
     // const graphObj = {...graph}
     console.log('created',graphObj)
 
     if (graph !== undefined ){
-      this.graphManager = new GraphManager(graphObj)
+      this.initialGraph = graphObj ;
+      this.graphManager = new GraphManager(graph)
       this.setState({
         currGraph: this.graphManager.getGraph() 
       })  ;
@@ -110,8 +112,6 @@ class GraphPath extends Component{
         showTask:!this.state.showTask ,
         nodeTasks:filter,
         currNodeID:nodeId
-      },()=>{
-        console.log('after',this.state.nodeTasks)
       }) ;      
     }
     else{
@@ -173,33 +173,33 @@ class GraphPath extends Component{
         PopUpMessage('Cannot make edge to self','error')
       }
       else{  
-        this.setState({
-          target:id
-        }) ; 
-        this.graphManager.setGraph(this.state.currGraph) ;
-        let addedEdge = this.graphManager.addEdge(this.state.source,this.state.target) ;
-        console.log('adding edge',addedEdge) ;
+        // this.setState({
+        //   target:id
+        // }) ; 
+        // this.graphManager.setGraph(this.state.currGraph) ;
+        let addedEdge = this.graphManager.addEdge(this.state.source,id) ;
+        // console.log('adding edge',addedEdge) ;
 
-    if (addedEdge === 1){
-      this.updateGraph() ;
-      console.log('adding edge',this.graphManager.getGraph()) ;
+        if (addedEdge === 1){
+          this.updateGraph() ;
+          console.log('adding edge',this.graphManager.getGraph()) ;
 
-    }
-    else if (addedEdge === 0 ){
-      // alert('Edge Makes graph Cyclic')
-      PopUpMessage('Edge Makes graph Cyclic','error')
+        }
+        else if (addedEdge === 0 ){
+          // alert('Edge Makes graph Cyclic')
+          PopUpMessage('Edge Makes graph Cyclic','Error')
 
-    }
-    else{
-      // alert('Edge Exists')
-      PopUpMessage('Edge Exists','warning')
-    }
+        }
+        else{
+          // alert('Edge Exists')
+          PopUpMessage('Edge Exists','warning')
+        }
       }
-      //save the information
-      //send the information to make graph
-      //update Graph
-      //cleanup
-      this.cleanUpAfterEdgeAddition() ;
+        //save the information
+        //send the information to make graph
+        //update Graph
+        //cleanup
+        this.cleanUpAfterEdgeAddition() ;
     }
 
   }
@@ -427,7 +427,7 @@ saveProjectGraph=(projectId)=>{
       if (typeof nodeAffected === 'string'){
         this.showTaskModal(nodeAffected)
       }
-
+      this.cleanUpAfterEdgeAddition() ;
     }
   }
 
@@ -583,18 +583,29 @@ saveProjectGraph=(projectId)=>{
                   settings={{
                     clone: false, // do not clone the nodes
                     immutable:false,// cannot updated id of node
-                    labelSizeRatio:1,
-                    labelThreshold:0.1,
-                    drawNodes:true,
-                    drawEdges:true,
-                    minNodeSize:5,
+                    // labelSizeRatio:1,
+                    labelThreshold:0.5,
+                    scalingMode:"inside",
+                    sideMargin:100,
+                    minNodeSize:3,
                     maxNodeSize:10,
+                    minEdgeSize:0.1,
+                    font:"calibri",
+                    defaultLabelSize:18,
+                    defaultLabelColor:"#002",
+                    labelSizeRatio:2,
+                    defaultEdgeHoverColor:'#000',
+                    maxEdgeSize:4,
+                    drawNodes:true, //draw node ?
+                    drawLabels:true, //node label
+                    drawEdges: true, //draw edge?
+                    drawEdgeLabels:true,
                     minArrowSize:10,
-                    drawLabels:	true,//	Determines whether or not to draw node labels.
-                    drawEdgeLabels	:	true,//	Determines whether or not to draw edge labels.
-                    doubleClickEnabled:false,
-                    zoomMax:1,
-                    autoResize:false ,
+                    enableEdgeHovering:true,
+                    edgeHoverPrecision:100,
+                    // doubleClickEnabled:false,
+                    // zoomMax:1,
+                    autoResize:true ,
                     autoRescale:false
                   }}    
                 onClickNode={this.clickNodeHandler}

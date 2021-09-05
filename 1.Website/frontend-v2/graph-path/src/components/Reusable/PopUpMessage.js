@@ -8,7 +8,7 @@ function PopUpMessage(text,type ){
 
     if (['info','success','warning','error'].indexOf(type.toString())>0 ){
         Notification[type]({
-            title: type ,
+            title: type.toUpperCase() ,
             description:text  ,
             duration:3000, 
             placement:'topEnd' 
