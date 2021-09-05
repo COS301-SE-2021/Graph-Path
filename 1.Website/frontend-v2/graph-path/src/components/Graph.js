@@ -287,94 +287,94 @@ class GraphPath extends Component{
         }
         return diff ;
     }
-}
-
-checkSavePermissions =()=>{
-  if (this.props.project !== undefined){
-    this.saveProjectGraph(this.props.project._id) ;
   }
-}
 
-saveProjectGraph=(projectId)=>{
-
-    var saveGraph =true;// this.validateGraphDifference(this.props.project.graph,this.state.currGraph)
-    if ( saveGraph){ // if its not the same graph
-        // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
-        //set the loader while communicating with the server
-        this.setState({
-            loading:true
-        }) ;
-        // const minimalGraph = 
-        const minimalNodes = this.state.currGraph.nodes.map((node)=>{
-            return {
-                id:node.id,
-                label:node.label,
-                x:node.x,
-                y:node.y,
-                size:node.size,
-                color:node.color
-            }
-        }) ;
-        const minimalEdges = this.state.currGraph.edges.map((edge)=>{
-            return {
-                id: edge.id,
-                source: edge.source,
-                target: edge.target,
-                label: edge.label,
-                color: edge.color,
-                size: edge.size,
-            }
-        })
-        const minimalGraph = {
-            nodes:minimalNodes,
-            edges:minimalEdges
-        }
-        const data = {} ; //{ ...this.props.project}  ;
-        data.graph = minimalGraph
-        data.projectID = projectId ;
-        data.email = this.props.loggedUser.email ; 
-        console.log('b4',data)
-
-        axios.patch(`${this.props.api}/project/updateProjectGraph`,data,{
-          headers:{
-            authorization:this.props.loggedUser.token
-          }
-        })
-        .then((res)=>{
-            console.log('update graph response',res.data)
-            // if (res.data.data === undefined) {
-            //     // didn't save
-            //     alert(res.data.message) ; 
-            // }
-            //communication happened successfully
-            this.setState({
-                loading:false,
-                answer:res.data.message,
-                
-            }) ;
-            // this.viewProjectsFromAPI() ;
-            PopUpMessage(res.data.message,'info')
-        })
-        .catch((err)=>{ 
-          if (err.response){
-            console.log(err.response) ;
-            PopUpMessage(err.response.data.message,'error')
-          }
-          else{
-            console.log('Some error',err)
-          }
-            this.setState({
-                loading:false
-            }) ;
-            
-        })
+  checkSavePermissions =()=>{
+    if (this.props.project !== undefined){
+      this.saveProjectGraph(this.props.project._id) ;
     }
-    else{//no difference
-        console.log('Node Project',this.props, this.graphManager) ;
-        alert('no change in graph')
-    }
+  }
 
-}
+  saveProjectGraph=(projectId)=>{
+
+      var saveGraph =true;// this.validateGraphDifference(this.props.project.graph,this.state.currGraph)
+      if ( saveGraph){ // if its not the same graph
+          // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
+          //set the loader while communicating with the server
+          this.setState({
+              loading:true
+          }) ;
+          // const minimalGraph = 
+          const minimalNodes = this.state.currGraph.nodes.map((node)=>{
+              return {
+                  id:node.id,
+                  label:node.label,
+                  x:node.x,
+                  y:node.y,
+                  size:node.size,
+                  color:node.color
+              }
+          }) ;
+          const minimalEdges = this.state.currGraph.edges.map((edge)=>{
+              return {
+                  id: edge.id,
+                  source: edge.source,
+                  target: edge.target,
+                  label: edge.label,
+                  color: edge.color,
+                  size: edge.size,
+              }
+          })
+          const minimalGraph = {
+              nodes:minimalNodes,
+              edges:minimalEdges
+          }
+          const data = {} ; //{ ...this.props.project}  ;
+          data.graph = minimalGraph
+          data.projectID = projectId ;
+          data.email = this.props.loggedUser.email ; 
+          console.log('b4',data)
+
+          axios.patch(`${this.props.api}/project/updateProjectGraph`,data,{
+            headers:{
+              authorization:this.props.loggedUser.token
+            }
+          })
+          .then((res)=>{
+              console.log('update graph response',res.data)
+              // if (res.data.data === undefined) {
+              //     // didn't save
+              //     alert(res.data.message) ; 
+              // }
+              //communication happened successfully
+              this.setState({
+                  loading:false,
+                  answer:res.data.message,
+                  
+              }) ;
+              // this.viewProjectsFromAPI() ;
+              PopUpMessage(res.data.message,'info')
+          })
+          .catch((err)=>{ 
+            if (err.response){
+              console.log(err.response) ;
+              PopUpMessage(err.response.data.message,'error')
+            }
+            else{
+              console.log('Some error',err)
+            }
+              this.setState({
+                  loading:false
+              }) ;
+              
+          })
+      }
+      else{//no difference
+          console.log('Node Project',this.props, this.graphManager) ;
+          alert('no change in graph')
+      }
+
+  }
 
   saveNodeTask=(nodePreInfo)=>{
     let nodeTask ={...nodePreInfo} ;
@@ -461,7 +461,7 @@ saveProjectGraph=(projectId)=>{
 
 
   render(){
-    console.log(' gra',this.props)
+    // console.log(' gra',this.props)
 
 
           const options = {
@@ -551,7 +551,7 @@ saveProjectGraph=(projectId)=>{
           //start rendering
           if (this.graphManager !== null){
             const graph = this.state.currGraph;
-            console.log('curr',graph)
+            // console.log('curr',graph)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
         

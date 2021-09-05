@@ -135,6 +135,8 @@ class Task extends React.Component {
 
     listAllTasks =()=>{
         if (this.props.nodeTasks){
+        console.log('task props',this.props)
+
             if (Array.isArray(this.props.nodeTasks) && this.props.nodeTasks.length>0 ){
              return this.props.nodeTasks.map((task)=>{
                 return <Panel bordered header={`Description : ${task.description} `}>
