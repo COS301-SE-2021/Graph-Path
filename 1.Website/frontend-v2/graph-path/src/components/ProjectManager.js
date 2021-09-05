@@ -44,7 +44,7 @@ class ProjectManager extends Component {
  /**
 A method that requests for all the projects of the logged user and sets the result to Project Manager state.projects.
 When the request fails to retrieve any projects it alerts them.
-@returns {void} The method updates the state of Project
+* @returns {void} The method updates the state of Project
 
 */
     viewProjectsFromAPI=()=>{
