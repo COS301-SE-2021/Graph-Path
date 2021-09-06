@@ -16,5 +16,16 @@ describe('Landing Page Component Testing',()=> {
 
     })
 
+    test('renders the Landing component', ()=>{
+        render(<Landing />);
+    });
+
+    test("there is a button", () => {
+        render(<Landing />);
+        const element = screen.queryByTestId('landing-btn');
+        expect(element).toBeDefined();
+    });
+
+    screen.debug();
 
 })
