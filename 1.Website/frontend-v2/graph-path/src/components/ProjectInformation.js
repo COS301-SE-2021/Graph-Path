@@ -330,16 +330,16 @@ class ProjectInformation extends React.Component{
 
     render() {
         const project = this.props.project;
-        {console.log("proj",project)}
+        // {console.log("proj",project)}
         return(
-            <div id="main-div">
+            <div data-testid="main-div-id" id="main-div">
                 <div id="project-name"><h3>{project.projectName}</h3></div>
                 <div id="project-information">
 
-                        <form className="profileForm" onSubmit={this.onSubmit} >
+                        <form data-testid="form-test-id" className="profileForm" onSubmit={this.onSubmit} >
                             <label>Project Name</label>
                             <input defaultValue={project.projectName}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   disabled = {!!(this.state.disabled)}
                                    onChange={this.change}
                                    type='text'
                                    name = "projName"
@@ -355,7 +355,7 @@ class ProjectInformation extends React.Component{
 
                             <label>Project Description</label>
                             <input defaultValue={project.projectDescription}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   disabled = {!!(this.state.disabled)}
                                    onChange={this.change}
                                    name="projDescription"
                                    type='text'
@@ -368,7 +368,7 @@ class ProjectInformation extends React.Component{
                                    name="startD"
                                    defaultValue={project.startDate}
                                    onChange={this.change}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   disabled = {!!(this.state.disabled)}
                                    required
                             />
 
@@ -377,11 +377,11 @@ class ProjectInformation extends React.Component{
                                    type='date'
                                    name="dueD"
                                    onChange={this.change}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   disabled = {!!(this.state.disabled)}
                                    required
                             />
                             {
-                                this.state.disabled ? <Button id="btn-form" disabled = {(this.state.disabled) ? "" : "disabled"}
+                                this.state.disabled ? <Button id="btn-form" disabled = {(!this.state.disabled)}
                                                               onClick={this.enableEdit}>Edit</Button>
                                     :
 
@@ -390,7 +390,7 @@ class ProjectInformation extends React.Component{
                                     <input className="rs-btn rs-btn-default" id="btn-form" type="submit" value="Update"/>
                             }
 
-                            <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
+                            <Button data-testid="cancel-id" id="btn-form" disabled = {!!(this.state.disabled)}
                                     onClick={this.enableEdit}>Cancel</Button>
 
                         </form>
@@ -437,7 +437,7 @@ class ProjectInformation extends React.Component{
                     </Drawer>
 
                     {/*To Add Members*/}
-                    <Modal backdrop={"static"} show={this.state.showModal} onHide={this.handleCloseEdit}>
+                    <Modal data-testid="modal-test-id" backdrop={"static"} show={this.state.showModal} onHide={this.handleCloseEdit}>
                         <Modal.Header>
                             {
                                 this.state.editMember === false ?
@@ -530,8 +530,8 @@ class ProjectInformation extends React.Component{
 
                 </div>
                 <div id="btn-form-div">
-                    <Button id="btn-info" onClick={this.handleViewMembers}>View Members</Button>
-                    <Button id="btn-info" onClick={this.showAddMembers}>Add Members</Button>
+                    <Button data-testid="view-btn" id="btn-info" onClick={this.handleViewMembers}>View Members</Button>
+                    <Button data-testid="add-btn" id="btn-info" onClick={this.showAddMembers}>Add Members</Button>
                 </div>
             </div>
         )

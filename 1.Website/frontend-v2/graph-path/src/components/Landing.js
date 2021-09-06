@@ -19,7 +19,7 @@ function Landing({logInvalid}) {
 
         return(
 
-            <div id="main-div-landing">
+            <div data-testid="main-landing-id" id="main-div-landing">
                 <div id="left-div">
                         <img id="graph-picture" src={Graph_Picture} alt="graph-picture"/>
                 </div>
