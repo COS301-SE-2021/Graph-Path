@@ -11,13 +11,6 @@ class Kanban extends React.Component {
 
     constructor(props) {
         super(props) ;
-        // super(...arguments);
-       //this.data = extend([], MockData, null, true);
-       // super(props);
-       //  this.data=new DataManager({
-       //      url:'http://localhost:9001/project/convertToKanbanBoard/611bb44d8aaa82090e1a9372/',
-       //      adaptor: new ODataAdaptor
-       //  })
         this.task=[];
         this.myData2=[];
         this.nyData3=[];
