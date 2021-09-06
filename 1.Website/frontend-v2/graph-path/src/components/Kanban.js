@@ -119,16 +119,16 @@ sortProject=()=>{
 
                     <div>
 
-                        <KanbanComponent id="kanban"  keyField="status"
+                        <KanbanComponent cssClass="kanban-header" id="kanban"  keyField="status"
                                                           dataSource={this.state.test} cardSettings={{contentField: "description", headerField: "_id"}}
                                                           swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
                                                     cardClick={this.handler}
                                                     // drag={(prps)=>console.log(prps)}
                                 >
                                     <ColumnsDirective>
-                                        <ColumnDirective headerText="Not Started" keyField="not started"/>
-                                        <ColumnDirective headerText="In Progress" keyField="inProgress"/>
-                                        <ColumnDirective headerText="Complete" keyField="complete"/>
+                                        <ColumnDirective headerText="Not Started" keyField="not started"  />
+                                        <ColumnDirective headerText="In Progress" keyField="inProgress"  template={this.columnTemplate.bind(this)}/>
+                                        <ColumnDirective headerText="Complete" keyField="complete"  template={this.columnTemplate.bind(this)}/>
                                     </ColumnsDirective>
                                 </KanbanComponent>
 
