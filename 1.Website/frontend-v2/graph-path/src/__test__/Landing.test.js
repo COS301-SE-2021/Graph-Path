@@ -1,7 +1,7 @@
 
 import React, {useEffect} from 'react';
 import ReactDom from 'react-dom';
-import {render, cleanup, screen, fireEvent} from '@testing-library/react';
+import {render, cleanup, screen, fireEvent, getByText} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import ProjectInformation from "../components/ProjectInformation";
 import * as ReactDOM from "react-dom";
@@ -23,6 +23,12 @@ describe('Landing Page Component Testing',()=> {
     test("there is a button", () => {
         render(<Landing />);
         const element = screen.queryByTestId('landing-btn');
+        expect(element).toBeDefined();
+    });
+
+    test('renders the Page Name', () => {
+        render(<Landing />);
+        const element = screen.queryByTestId('pageName');
         expect(element).toBeDefined();
     });
 
