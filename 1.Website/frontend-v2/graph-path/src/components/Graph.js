@@ -38,7 +38,7 @@ class GraphPath extends Component{
     const {graph} = this.props.project
     var graphObj = JSON.parse(JSON.stringify(graph)) ;
     // const graphObj = {...graph}
-    console.log('created',graphObj)
+    // console.log('created',graphObj)
 
     if (graph !== undefined ){
       this.initialGraph = graphObj ;
@@ -113,7 +113,7 @@ class GraphPath extends Component{
 
   showTaskModal=(nodeId)=>{
     let filter = this.state.nodeTasks ;
-
+    
     if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
       filter= this.state.taskList.filter((value)=>
       value.nodeID === `${this.props.project._id}_${nodeId}`) ;
@@ -192,7 +192,7 @@ class GraphPath extends Component{
 
         if (addedEdge === 1){
           this.updateGraph() ;
-          console.log('adding edge',this.graphManager.getGraph()) ;
+          // console.log('adding edge',this.graphManager.getGraph()) ;
 
         }
         else if (addedEdge === 0 ){
@@ -287,94 +287,94 @@ class GraphPath extends Component{
         }
         return diff ;
     }
-}
-
-checkSavePermissions =()=>{
-  if (this.props.project !== undefined){
-    this.saveProjectGraph(this.props.project._id) ;
   }
-}
 
-saveProjectGraph=(projectId)=>{
-
-    var saveGraph =true;// this.validateGraphDifference(this.props.project.graph,this.state.currGraph)
-    if ( saveGraph){ // if its not the same graph
-        // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
-        //set the loader while communicating with the server
-        this.setState({
-            loading:true
-        }) ;
-        // const minimalGraph = 
-        const minimalNodes = this.state.currGraph.nodes.map((node)=>{
-            return {
-                id:node.id,
-                label:node.label,
-                x:node.x,
-                y:node.y,
-                size:node.size,
-                color:node.color
-            }
-        }) ;
-        const minimalEdges = this.state.currGraph.edges.map((edge)=>{
-            return {
-                id: edge.id,
-                source: edge.source,
-                target: edge.target,
-                label: edge.label,
-                color: edge.color,
-                size: edge.size,
-            }
-        })
-        const minimalGraph = {
-            nodes:minimalNodes,
-            edges:minimalEdges
-        }
-        const data = {} ; //{ ...this.props.project}  ;
-        data.graph = minimalGraph
-        data.projectID = projectId ;
-        data.email = this.props.loggedUser.email ; 
-        console.log('b4',data)
-
-        axios.patch(`${this.props.api}/project/updateProjectGraph`,data,{
-          headers:{
-            authorization:this.props.loggedUser.token
-          }
-        })
-        .then((res)=>{
-            console.log('update graph response',res.data)
-            // if (res.data.data === undefined) {
-            //     // didn't save
-            //     alert(res.data.message) ; 
-            // }
-            //communication happened successfully
-            this.setState({
-                loading:false,
-                answer:res.data.message,
-                
-            }) ;
-            // this.viewProjectsFromAPI() ;
-            PopUpMessage(res.data.message,'info')
-        })
-        .catch((err)=>{ 
-          if (err.response){
-            console.log(err.response) ;
-            PopUpMessage(err.response.data.message,'error')
-          }
-          else{
-            console.log('Some error',err)
-          }
-            this.setState({
-                loading:false
-            }) ;
-            
-        })
+  checkSavePermissions =()=>{
+    if (this.props.project !== undefined){
+      this.saveProjectGraph(this.props.project._id) ;
     }
-    else{//no difference
-        console.log('Node Project',this.props, this.graphManager) ;
-        alert('no change in graph')
-    }
+  }
 
-}
+  saveProjectGraph=(projectId)=>{
+
+      var saveGraph =true;// this.validateGraphDifference(this.props.project.graph,this.state.currGraph)
+      if ( saveGraph){ // if its not the same graph
+          // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
+          //set the loader while communicating with the server
+          this.setState({
+              loading:true
+          }) ;
+          // const minimalGraph = 
+          const minimalNodes = this.state.currGraph.nodes.map((node)=>{
+              return {
+                  id:node.id,
+                  label:node.label,
+                  x:node.x,
+                  y:node.y,
+                  size:node.size,
+                  color:node.color
+              }
+          }) ;
+          const minimalEdges = this.state.currGraph.edges.map((edge)=>{
+              return {
+                  id: edge.id,
+                  source: edge.source,
+                  target: edge.target,
+                  label: edge.label,
+                  color: edge.color,
+                  size: edge.size,
+              }
+          })
+          const minimalGraph = {
+              nodes:minimalNodes,
+              edges:minimalEdges
+          }
+          const data = {} ; //{ ...this.props.project}  ;
+          data.graph = minimalGraph
+          data.projectID = projectId ;
+          data.email = this.props.loggedUser.email ; 
+          console.log('b4',data)
+
+          axios.patch(`${this.props.api}/project/updateProjectGraph`,data,{
+            headers:{
+              authorization:this.props.loggedUser.token
+            }
+          })
+          .then((res)=>{
+              console.log('update graph response',res.data)
+              // if (res.data.data === undefined) {
+              //     // didn't save
+              //     alert(res.data.message) ; 
+              // }
+              //communication happened successfully
+              this.setState({
+                  loading:false,
+                  answer:res.data.message,
+                  
+              }) ;
+              // this.viewProjectsFromAPI() ;
+              PopUpMessage(res.data.message,'info')
+          })
+          .catch((err)=>{ 
+            if (err.response){
+              console.log(err.response) ;
+              PopUpMessage(err.response.data.message,'error')
+            }
+            else{
+              console.log('Some error',err)
+            }
+              this.setState({
+                  loading:false
+              }) ;
+              
+          })
+      }
+      else{//no difference
+          // console.log('Node Project',this.props, this.graphManager) ;
+          PopUpMessage('No change to graph','warning')
+      }
+
+  }
 
   saveNodeTask=(nodePreInfo)=>{
     let nodeTask ={...nodePreInfo} ;
@@ -405,7 +405,7 @@ saveProjectGraph=(projectId)=>{
       }
     })
     .then((res)=>{
-      console.log('saving task',res) ;
+      console.log('saved task',res) ;
       let taskRes = res.data ;
       if (taskRes.data){
         PopUpMessage('Task Saved','success')
@@ -461,7 +461,7 @@ saveProjectGraph=(projectId)=>{
 
 
   render(){
-    console.log(' gra',this.props)
+    // console.log(' gra',this.props)
 
 
           const options = {
@@ -513,7 +513,7 @@ saveProjectGraph=(projectId)=>{
           events.externalCreateEdge = this.createEdgeBetweenNode
           events.viewTaskInfo = this.showTaskModal ;
           events.click = function(event){
-              console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
+              // console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
               const nodesAffected = event.nodes ;
               const edgesAffected = event.edges ;
               if (event.event.srcEvent.altKey){
@@ -551,7 +551,7 @@ saveProjectGraph=(projectId)=>{
           //start rendering
           if (this.graphManager !== null){
             const graph = this.state.currGraph;
-            console.log('curr',graph)
+            // console.log('curr',graph)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
         

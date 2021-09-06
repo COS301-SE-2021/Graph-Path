@@ -245,7 +245,7 @@ function  makeTaskRoute(db)
                     Assigner:req.body.assigner,
                     due:req.body.due,
                     issued:req.body.due,
-                    nodeID: req.body.projectID+"_"+req.body.nodeID
+                    nodeID: req.body.nodeID
                 }
                 console.log("Attempting to insert a new task...");
                 TaskManagerService.insertTask(db,TaskObject)
