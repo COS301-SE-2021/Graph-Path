@@ -58,7 +58,7 @@ class Dashboard extends React.Component{
 
         return(
             //  <Router>            
-                <div className="main-container">
+                <div data-testid="main-container-id" className="main-container">
                     {/* {this.reloadProjectsInManager()} */}
                     <Profile user={this.props.authUser} ref={this.profileModalRef} />
                     <nav id="nav bar"  >

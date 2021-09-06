@@ -120,7 +120,7 @@ class NewProject extends React.Component{
 
         return( 
             <>
-            <Modal backdrop={"static"} show={this.state.show} onHide={this.cleanUp}>
+            <Modal data-testid="modal-id-test" backdrop={"static"} show={this.state.show} onHide={this.cleanUp}>
                 <Modal.Header>
                     <Modal.Title>New Project</Modal.Title>
                 </Modal.Header>
