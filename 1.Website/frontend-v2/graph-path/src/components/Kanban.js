@@ -22,10 +22,10 @@ class Kanban extends React.Component {
             //data: extend([], MockData, null, true)
         }
     }
-    columnTemplate(props) {
+    columnTemplate(heading) {
         return (<div className="header-template-wrap">
-            <div className={"header-icon e-icons " + props.keyField}></div>
-            <div className="header-text">{props.headerText}</div>
+            <div className={"header-icon e-icons " + heading.keyField}></div>
+            <div className="header-text">{heading.headerText}</div>
         </div>);
     }
   componentDidMount() {
