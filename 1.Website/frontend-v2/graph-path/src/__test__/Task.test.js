@@ -1,8 +1,6 @@
 import Task from "../components/Task";
 import {render, screen, getByText} from '@testing-library/react';
 import React from "react";
-import Landing from "../components/Landing";
-
 
 describe('Task Component Testing',()=> {
 
@@ -11,11 +9,16 @@ describe('Task Component Testing',()=> {
     });
 
     test('renders tidTask', () => {
-        render(<Landing />);
+        render(<Task />);
         const element = screen.queryByTestId('tidTask');
         expect(element).toBeDefined();
     });
 
+    test('check button existence', ()=> {
+        render(<Task />);
+        const button = screen.queryByTestId("btn1");
+        expect(button).toBeDefined();
+    });
 
 
 })
