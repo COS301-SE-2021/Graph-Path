@@ -1,6 +1,6 @@
 import React from 'react' ;
 import PropTypes from 'prop-types' ;
-import {Schema,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, Row} from 'rsuite' ;
+import {Schema,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, Row} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
 /**
  * Task will show a list of the tasks provided for a node. 
@@ -142,11 +142,13 @@ class Task extends React.Component {
                 return <Panel bordered header={`Description : ${task.description} `}>
                 <small>
                 
-                    Issued : {task.issued} <br/>
-                    Due-Date : {task.due} <br/>
-                    Status : {task.status}
+                    <b>Issued</b> : {task.issued} <br/>
+                    <b>Due-Date</b> : {task.due} <br/>
+                    <b>Status </b>: {task.status}
                     <br/>
                     </small>
+                    <Button > <Icon icon={'trash'}/>
+                    </Button>
             </Panel>
              
                }) 
