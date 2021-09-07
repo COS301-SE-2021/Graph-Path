@@ -85,7 +85,8 @@ function  makeTaskRoute(db)
             .then((ans)=>{
                 if(ans === "No available tasks"){
                     res.send({
-                        message:"There were no available tasks to retrieve."
+                        message:"There were no available tasks to retrieve.",
+                        data: []
                     })
                 }else if(ans !== null){
                     res.send({
