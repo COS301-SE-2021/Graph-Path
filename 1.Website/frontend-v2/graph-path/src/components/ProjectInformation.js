@@ -393,7 +393,7 @@ class ProjectInformation extends React.Component{
                                    required
                             />
                             {
-                                project.permissions.includes("update all project") === true ?
+                                project.permissions.includes("update all project") === true || project.permissions.includes("owner") ?
                                     this.state.disabled ? <Button id="btn-form" disabled = {(!this.state.disabled)}
                                                                   onClick={this.enableEdit}>Edit</Button>
                                         :
@@ -406,7 +406,7 @@ class ProjectInformation extends React.Component{
                                             >Edit</Button>
                             }
                             {
-                                project.permissions.includes("update all project") === true ?
+                                project.permissions.includes("update all project") === true || project.permissions.includes("owner") ?
                                     <Button data-testid="cancel-id" id="btn-form" disabled={!!(this.state.disabled)}
                                             onClick={this.enableEdit}>Cancel</Button>
                                     :
@@ -440,14 +440,14 @@ class ProjectInformation extends React.Component{
                                                 <div>
                                                     <p id="email-p">Email: {value.email}</p>
                                                     {
-                                                        project.permissions.includes("update all project") === true ?
+                                                        project.permissions.includes("update all project") === true || project.permissions.includes("owner") ?
                                                             <Icon id="change-icon" icon="pencil-square" onClick={()=>this.handleEditRole(value.email)} />
                                                             :
                                                             <></>
                                                     }
 
                                                     {
-                                                        project.permissions.includes("remove members") === true ?
+                                                        project.permissions.includes("remove members") === true || project.permissions.includes("owner") ?
                                                             <Icon id="remove-icon" icon="user-times" onClick={()=>this.removeMember(value.email)}/>
                                                             :
                                                             <></>
@@ -466,7 +466,7 @@ class ProjectInformation extends React.Component{
                                 )
                             })}
                             {
-                                project.permissions.includes("add members") === true ?
+                                project.permissions.includes("add members") === true || project.permissions.includes("owner") ?
                                     <Icon onClick={this.addMemberModal} id="add-icon" icon={"user-plus"}/>
                                     :
                                     <></>
@@ -538,7 +538,7 @@ class ProjectInformation extends React.Component{
                                                 </div>
                                             </FlexboxGrid.Item>
                                         {
-                                            project.permissions.includes("add members") === true ?
+                                            project.permissions.includes("add members") === true || project.permissions.includes("owner") ?
                                                 this.state.editMember === false ?
                                                 <input type="submit" className="rs-btn rs-btn-default" id="add-member-btn" value="Add Member"/>
                                                     : <></>
@@ -574,7 +574,7 @@ class ProjectInformation extends React.Component{
                 <div id="btn-form-div">
                     <Button data-testid="view-btn" id="btn-info" onClick={this.handleViewMembers}>View Members</Button>
                     {
-                        project.permissions.includes("add members") === true ?
+                        project.permissions.includes("add members") === true || project.permissions.includes("owner") ?
                             <Button data-testid="add-btn" id="btn-info" onClick={this.showAddMembers}>Add Members</Button>
                             :
                             <Button data-testid="add-btn" id="btn-info" disabled={true}>Add Members</Button>
