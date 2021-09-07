@@ -5,7 +5,7 @@ import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
-import { Popover,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader} from 'rsuite' ;
+import { Popover,Avatar,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader} from 'rsuite' ;
 import ModalHeader from "rsuite/lib/Modal/ModalHeader";
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
@@ -128,7 +128,7 @@ class GraphPath extends Component{
       
       this.setState({
         showTask:!this.state.showTask ,
-        nodeId:''
+        currNodeId:''
       }) ;
     }
 
@@ -555,39 +555,38 @@ class GraphPath extends Component{
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
         
-          <Form onSubmit={this.addNewNode} data-testid="form">
-            <FormGroup>
-                <ControlLabel> Node Name</ControlLabel>
-                <FormControl name="node" type="text" value={this.state.nodeName} onChange={this.handleChange} />
-            </FormGroup>
-
-            <FormGroup>
-              <Checkbox checked={this.state.critical} onChange={this.handleCritical}>
-                Critical Node ?
-              </Checkbox>
-            </FormGroup>
-            <FormGroup>
-                <FormControl type="submit"/>
+             <Form onSubmit={this.addNewNode} data-testid="form">
+                <FormGroup>
+                    <ControlLabel> Node Name</ControlLabel>
+                    <FormControl name="node" type="text" value={this.state.nodeName} onChange={this.handleChange} />
                 </FormGroup>
-        </Form>
-        </Popover>)
+
+                <FormGroup>
+                    <Checkbox checked={this.state.critical} onChange={this.handleCritical}>
+                    Critical Node ?
+                    </Checkbox>
+                </FormGroup>
+                <FormGroup>
+                    <FormControl type="submit"/>
+                 </FormGroup>
+            </Form>
+        </Popover>) ; 
+        const taskSpeaker=(<Popover keyboard={true} title={"Provided tasks"} visible={this.state.showTask}
+               overflow={true} backdrop={true}>
+                
+           
+                   <Modal.Body>
+                     <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={this.saveNodeTask}/>
+                   </Modal.Body>
+               </Popover>) ;
+               const currNode = this.state.currNodeID.length > 1 ? 
+               this.graphManager.graph.nodes.find(el => el.id === this.state.currNodeID): undefined ;
             return (
               <div >
                 {
                   this.state.loading && (<Loader backdrop speed={'fast'} size={'lg'}/>)
                 }
                 
-               <Modal keyboard={true} show={this.state.showTask}
-               overflow={true} backdrop={true} onHide={this.showTaskModal}>
-                 <ModalHeader closeButton={false} >
-                   <Modal.Title>
-                     Provided tasks
-                   </Modal.Title>
-                 </ModalHeader>
-                   <Modal.Body>
-                     <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={this.saveNodeTask}/>
-                   </Modal.Body>
-               </Modal>
               <div id="graph-info" >
                 <h3>{this.props.project.projectName}</h3>
 
@@ -600,13 +599,20 @@ class GraphPath extends Component{
               </div>
 
                 <div id="graphbox">
-
+                    <div>
+                 {currNode !== undefined ?
+                 
+                      <Whisper  speaker={taskSpeaker} trigger={'click'} onExit={this.showTaskModal}  >
+                        <Avatar >{currNode.label}</Avatar>
+                      </Whisper >
+                 : <small>Click a node to add a task. To add node press, Add Node on top</small>}
+                      
+                     </div>
                 <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
                   graph={graph}
                   style={{
                     // position:"relative", 
                     height:"92%", width:"100%" ,  
-                    border:"double 3px black",
                   }}
                   settings={{
                     clone: false, // do not clone the nodes
@@ -637,7 +643,7 @@ class GraphPath extends Component{
                     autoRescale:false
                   }}    
                 onClickNode={this.clickNodeHandler}
-
+                clickStage={()=>console.log('stage')}
                   // options={options}
                   // events={events}
               >
@@ -683,19 +689,7 @@ function mapStateToProps(state){
 
 
 export default connect(mapStateToProps)(withRouter(GraphPath)) ;
-// let graph2 = {
-//             nodes: [
-//               { id: 1, label: "Node 1", title: "node 1 tootip text" },
-//               { id: 2, label: "Node 2", title: "node 2 tootip text" },
-//               { id: 3, label: "Node 3", title: "node 3 tootip text" },
-//               { id: 4, label: "Node 4", title: "node 4 tootip text" },
-//               { id: 5, label: "Node 5", title: "node 5 tootip text" }
-//             ],
-//             edges: [
-//               { from: 2, to: 4 },
-//               { from: 2, to: 5 }
-//             ]
-//           };
+
   /* <Row>
               <Col>
                 <Panel bordered bodyFill header="Task"/>
