@@ -11,7 +11,7 @@ async function getAllTasks(dbController){
         db.collection('Tasks').find({}).toArray()
             .then(ans=>{
                 if(ans == null){
-                    console.log("No available tasks");
+                    //console.log("No available tasks");
                     resolve("No available tasks");
                 }else{
                     resolve(ans);

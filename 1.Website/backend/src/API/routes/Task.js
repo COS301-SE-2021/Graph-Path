@@ -85,7 +85,8 @@ function  makeTaskRoute(db)
             .then((ans)=>{
                 if(ans === "No available tasks"){
                     res.send({
-                        message:"There were no available tasks to retrieve."
+                        message:"There were no available tasks to retrieve.",
+                        data: []
                     })
                 }else if(ans !== null){
                     res.send({
@@ -280,7 +281,7 @@ function  makeTaskRoute(db)
 
     /**
      * @api {delete}  /task/deleteTaskByID/:id
-     * @apiName  delete task by ID
+     * @apiName  delete task by task ID
      * @apiDescription This endpoint deletes a task matching the passed in ID
      * @apiGroup Task
      * @apiParam  {String} [id] task ID
@@ -316,6 +317,12 @@ function  makeTaskRoute(db)
                 })
             });
     })
+
+    //Also add delete for all tasks by nodeid 
+
+    //and delete task by projectID, for when the project is deleted. - or you can just hook that up to when a project is deleted.
+
+
 
 
 
