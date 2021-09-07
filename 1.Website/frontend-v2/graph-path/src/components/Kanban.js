@@ -11,13 +11,6 @@ class Kanban extends React.Component {
 
     constructor(props) {
         super(props) ;
-        // super(...arguments);
-       //this.data = extend([], MockData, null, true);
-       // super(props);
-       //  this.data=new DataManager({
-       //      url:'http://localhost:9001/project/convertToKanbanBoard/611bb44d8aaa82090e1a9372/',
-       //      adaptor: new ODataAdaptor
-       //  })
         this.task=[];
         this.myData2=[];
         this.nyData3=[];
@@ -29,6 +22,12 @@ class Kanban extends React.Component {
             //data: extend([], MockData, null, true)
         }
     }
+    columnTemplate(heading) {
+        return (<div className="header-template-wrap">
+            <div className={"header-icon e-icons " + heading.keyField}></div>
+            <div className="header-text">{heading.headerText}</div>
+        </div>);
+    }
   componentDidMount() {
     this.firstSearch();
 
@@ -36,12 +35,12 @@ class Kanban extends React.Component {
    }
 
    firstSearch =()=>{
-     axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/lbmuhali@gmail.com`,{
+     axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/ntpnaane@gmail.com`,{
          headers:{
              authorization: this.props.user.token
          }
      })
-           //.then(res=>res.json())
+
            .then((res)=> {
                if (res.data !== undefined){
                    //this.myData1 = res.data;
@@ -59,8 +58,7 @@ class Kanban extends React.Component {
            .catch((err)=>{
                console.log('error in initialization',err)
            })
-    //   console.log(this.state.task2);
-    // return this.state.task2;
+
    }
 
     secondSearch =()=>{
@@ -120,25 +118,19 @@ sortProject=()=>{
           return (
 
                     <div>
-                        {/*{this.state.test.length>0 ?*/}
-                        {/*   // this.state.test.map((filteredArr)=> {*/}
-                        {/*        return(*/}
-                        <KanbanComponent id="kanban"  keyField="status"
+
+                        <KanbanComponent cssClass="kanban-header" id="kanban"  keyField="status"
                                                           dataSource={this.state.test} cardSettings={{contentField: "description", headerField: "_id"}}
                                                           swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
                                                     cardClick={this.handler}
                                                     // drag={(prps)=>console.log(prps)}
                                 >
                                     <ColumnsDirective>
-                                        <ColumnDirective headerText="Not Started" keyField="not started"/>
-                                        <ColumnDirective headerText="In Progress" keyField="inProgress"/>
-                                        <ColumnDirective headerText="Complete" keyField="complete"/>
+                                        <ColumnDirective headerText="Not Started" keyField="not started"  />
+                                        <ColumnDirective headerText="In Progress" keyField="inProgress"  template={this.columnTemplate.bind(this)}/>
+                                        <ColumnDirective headerText="Complete" keyField="complete"  template={this.columnTemplate.bind(this)}/>
                                     </ColumnsDirective>
                                 </KanbanComponent>
-                        {/*)*/}
-                        {/*    })*/}
-                        {/*: 'No Task'*/}
-                        {/*}*/}
 
 
                     </div>
@@ -158,31 +150,3 @@ Kanban.propTypes = {
 }
 
 export default Kanban;
-
-
-/*
-
-swimlaneSettings={{ keyField: ""}}
-
-<KanbanComponent id="root"  keyField="Status" dataSource={this.data} cardSettings={{contentField: "Description", headerField: "Id"}} swimlaneSettings={{ keyField: "Project"}} dialogOpen={this.DialogOpen.bind(this)}>
-                            <ColumnsDirective>
-                                <ColumnDirective headerText="Not Started" keyField="notStartedTasks"/>
-                                <ColumnDirective headerText="In Progress" keyField="inProgressTasks"/>
-                                <ColumnDirective headerText="Complete" keyField="completeTasks"/>
-                            </ColumnsDirective>
-                        </KanbanComponent>
-
-    <KanbanComponent id="kanban"  keyField="DueDate"
-                                            dataSource={this.state.task3} cardSettings={{contentField: "description", headerField: "TaskUniqueID"}}
-
-                        >
-                            <ColumnsDirective>
-                                <ColumnDirective headerText="Not Started" keyField="2021-08-28"/>
-                                <ColumnDirective headerText="In Progress" keyField="2021-08-15"/>
-                                <ColumnDirective headerText="Complete" keyField="completeTasks"/>
-                            </ColumnsDirective>
-                        </KanbanComponent>
-
-                        console.log([this.state.task3])
-* */
-

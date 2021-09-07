@@ -47,7 +47,7 @@ class Profile extends React.Component{
             <>
                 <Drawer full placement={"top"} backdrop={"static"} show={this.state.show} onHide={this.handleClose}>
                     <Drawer.Header>
-                        <Drawer.Title>Profile</Drawer.Title>
+                        <Drawer.Title style={{textAlign:"center"}}>Profile</Drawer.Title>
                         <Divider/>
                     </Drawer.Header>
                     <Drawer.Body id="body-div">
@@ -60,8 +60,8 @@ class Profile extends React.Component{
                         <div id="div-form">
                             <form className="profileForm" onSubmit={this.onSubmit} >
                                 <label>Username</label>
-                                <input defaultValue={user.username}
-                                       disabled = {(this.state.disabled) ? "disabled" : ""}
+                                <input defaultValue={this.props.user.name}
+                                       disabled = {!!(this.state.disabled)}
                                        onChange={this.change}
                                        type='text'    />
 
@@ -72,17 +72,17 @@ class Profile extends React.Component{
                                        type='text'/>
 
 
-                                <label>Password</label>
-                                <input
-                                       type='text'
-                                       name="dueDate"
-                                       onChange={this.change}
-                                       disabled = {(this.state.disabled) ? "disabled" : ""}/>
+                                {/*<label>Password</label>*/}
+                                {/*<input*/}
+                                {/*       type='text'*/}
+                                {/*       name="dueDate"*/}
+                                {/*       onChange={this.change}*/}
+                                {/*       disabled = {!!(this.state.disabled)}/>*/}
 
-                                <Button disabled = {(this.state.disabled) ? "" : "disabled"}
-                                        onClick={this.enableEdit}>Edit</Button>
-                                <Button disabled = {(this.state.disabled) ? "disabled" : ""}
-                                        onClick={this.enableEdit}>Cancel</Button>
+                                {/*<Button disabled = {(this.state.disabled) ? "" : "disabled"}*/}
+                                {/*        onClick={this.enableEdit}>Edit</Button>*/}
+                                {/*<Button disabled = {(this.state.disabled) ? "disabled" : ""}*/}
+                                {/*        onClick={this.enableEdit}>Cancel</Button>*/}
 
                             </form>
 

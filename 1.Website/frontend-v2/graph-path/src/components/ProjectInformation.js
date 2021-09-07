@@ -22,6 +22,16 @@ class ProjectInformation extends React.Component{
      * Add or Invite Members
      * Remove Members
      * Change roles
+     *
+     * Permissions
+     * - update project owner
+     * - update graph
+     * - update all project
+     * - delete project
+     * - delete task
+     * - remove members
+     * - add members
+     *
      * @returns {JSX.Element}
      */
 
@@ -330,16 +340,16 @@ class ProjectInformation extends React.Component{
 
     render() {
         const project = this.props.project;
-        {console.log("proj",project)}
+         {console.log("proj",project)}
         return(
-            <div id="main-div">
+            <div data-testid="main-div-id" id="main-div">
                 <div id="project-name"><h3>{project.projectName}</h3></div>
                 <div id="project-information">
 
-                        <form className="profileForm" onSubmit={this.onSubmit} >
+                        <form data-testid="form-test-id" className="profileForm" onSubmit={this.onSubmit} >
                             <label>Project Name</label>
                             <input defaultValue={project.projectName}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   disabled = {!!(this.state.disabled)}
                                    onChange={this.change}
                                    type='text'
                                    name = "projName"
@@ -355,7 +365,7 @@ class ProjectInformation extends React.Component{
 
                             <label>Project Description</label>
                             <input defaultValue={project.projectDescription}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   disabled = {!!(this.state.disabled)}
                                    onChange={this.change}
                                    name="projDescription"
                                    type='text'
@@ -368,7 +378,7 @@ class ProjectInformation extends React.Component{
                                    name="startD"
                                    defaultValue={project.startDate}
                                    onChange={this.change}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   disabled = {!!(this.state.disabled)}
                                    required
                             />
 
@@ -377,21 +387,30 @@ class ProjectInformation extends React.Component{
                                    type='date'
                                    name="dueD"
                                    onChange={this.change}
-                                   disabled = {(this.state.disabled) ? "disabled" : ""}
+                                   disabled = {!!(this.state.disabled)}
                                    required
                             />
                             {
-                                this.state.disabled ? <Button id="btn-form" disabled = {(this.state.disabled) ? "" : "disabled"}
-                                                              onClick={this.enableEdit}>Edit</Button>
+                                project.permissions.includes("update all project") === true ?
+                                    this.state.disabled ? <Button id="btn-form" disabled = {(!this.state.disabled)}
+                                                                  onClick={this.enableEdit}>Edit</Button>
+                                        :
+
+                                        // <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
+                                        //         onClick={this.enableEdit}>Update</Button>
+                                        <input className="rs-btn rs-btn-default" id="btn-form" type="submit" value="Update"/>
                                     :
-
-                                    // <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
-                                    //         onClick={this.enableEdit}>Update</Button>
-                                    <input className="rs-btn rs-btn-default" id="btn-form" type="submit" value="Update"/>
+                                    <Button id="btn-form" disabled = {true}
+                                            >Edit</Button>
                             }
-
-                            <Button id="btn-form" disabled = {(this.state.disabled) ? "disabled" : ""}
-                                    onClick={this.enableEdit}>Cancel</Button>
+                            {
+                                project.permissions.includes("update all project") === true ?
+                                    <Button data-testid="cancel-id" id="btn-form" disabled={!!(this.state.disabled)}
+                                            onClick={this.enableEdit}>Cancel</Button>
+                                    :
+                                    <Button data-testid="cancel-id" id="btn-form" disabled={true}
+                                            >Cancel</Button>
+                            }
 
                         </form>
 
@@ -418,8 +437,20 @@ class ProjectInformation extends React.Component{
                                             <>
                                                 <div>
                                                     <p id="email-p">Email: {value.email}</p>
-                                                    <Icon id="change-icon" icon="pencil-square" onClick={()=>this.handleEditRole(value.email)} />
-                                                    <Icon id="remove-icon" icon="user-times" onClick={()=>this.removeMember(value.email)}/>
+                                                    {
+                                                        project.permissions.includes("update all project") === true ?
+                                                            <Icon id="change-icon" icon="pencil-square" onClick={()=>this.handleEditRole(value.email)} />
+                                                            :
+                                                            <></>
+                                                    }
+
+                                                    {
+                                                        project.permissions.includes("remove members") === true ?
+                                                            <Icon id="remove-icon" icon="user-times" onClick={()=>this.removeMember(value.email)}/>
+                                                            :
+                                                            <></>
+                                                    }
+
                                                 </div>
                                                 <Divider/>
                                             </> : <>
@@ -432,12 +463,18 @@ class ProjectInformation extends React.Component{
                                     </div>
                                 )
                             })}
-                            <Icon onClick={this.addMemberModal} id="add-icon" icon={"user-plus"}/>
+                            {
+                                project.permissions.includes("add members") === true ?
+                                    <Icon onClick={this.addMemberModal} id="add-icon" icon={"user-plus"}/>
+                                    :
+                                    <></>
+                            }
+
                         </Drawer.Body>
                     </Drawer>
 
                     {/*To Add Members*/}
-                    <Modal backdrop={"static"} show={this.state.showModal} onHide={this.handleCloseEdit}>
+                    <Modal data-testid="modal-test-id" backdrop={"static"} show={this.state.showModal} onHide={this.handleCloseEdit}>
                         <Modal.Header>
                             {
                                 this.state.editMember === false ?
@@ -499,9 +536,12 @@ class ProjectInformation extends React.Component{
                                                 </div>
                                             </FlexboxGrid.Item>
                                         {
-                                            this.state.editMember === false ?
-                                            <input type="submit" className="rs-btn rs-btn-default" id="add-member-btn" value="Add Member"/>
-                                                : <></>
+                                            project.permissions.includes("add members") === true ?
+                                                this.state.editMember === false ?
+                                                <input type="submit" className="rs-btn rs-btn-default" id="add-member-btn" value="Add Member"/>
+                                                    : <></>
+                                                :
+                                                <></>
 
                                         }
 
@@ -530,8 +570,14 @@ class ProjectInformation extends React.Component{
 
                 </div>
                 <div id="btn-form-div">
-                    <Button id="btn-info" onClick={this.handleViewMembers}>View Members</Button>
-                    <Button id="btn-info" onClick={this.showAddMembers}>Add Members</Button>
+                    <Button data-testid="view-btn" id="btn-info" onClick={this.handleViewMembers}>View Members</Button>
+                    {
+                        project.permissions.includes("add members") === true ?
+                            <Button data-testid="add-btn" id="btn-info" onClick={this.showAddMembers}>Add Members</Button>
+                            :
+                            <Button data-testid="add-btn" id="btn-info" disabled={true}>Add Members</Button>
+                    }
+
                 </div>
             </div>
         )

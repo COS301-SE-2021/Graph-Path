@@ -85,7 +85,8 @@ function  makeTaskRoute(db)
             .then((ans)=>{
                 if(ans === "No available tasks"){
                     res.send({
-                        message:"There were no available tasks to retrieve."
+                        message:"There were no available tasks to retrieve.",
+                        data: []
                     })
                 }else if(ans !== null){
                     res.send({
@@ -569,11 +570,10 @@ function  makeTaskRoute(db)
             let issued = req.body.issued;
             let due = req.body.due;
             let nodeID = req.body.nodeID;
-            let tasknr = req.body.tasknr;
             let status = req.body.status;
             let project = req.body.project;
 
-            TaskManagerService.updateEverythingTask(db,ID, assignee, assigner, description, issued, due, nodeID, tasknr, status, project)
+            TaskManagerService.updateEverythingTask(db,ID, assignee, assigner, description, issued, due, nodeID, status, project)
                 .then((ans)=>{
                 if(ans == null){
                     res.send({
