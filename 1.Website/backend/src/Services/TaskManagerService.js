@@ -191,7 +191,7 @@ async function updateTaskAssigner(dbController, id, assigner){
     })
 }
 
-async function updateEverythingTask(dbController,id, assignee, assigner, description, issued, due, nodeID, tasknr, status, project){
+async function updateEverythingTask(dbController,id, assignee, assigner, description, issued, due, nodeID, status, project){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
         db.collection('Tasks').updateOne({
@@ -204,7 +204,6 @@ async function updateEverythingTask(dbController,id, assignee, assigner, descrip
                 issued: issued,
                 due : due,
                 nodeID : nodeID,
-                tasknr: tasknr,
                 status:status,
                 project: project
             }
