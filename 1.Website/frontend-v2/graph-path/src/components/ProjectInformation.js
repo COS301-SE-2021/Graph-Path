@@ -7,9 +7,11 @@ import {
     Drawer,
     FlexboxGrid,
     Icon,
-    Modal
+    Modal,
+    Notification
 } from "rsuite";
 import axios from "axios";
+import PopUpMessage from "./Reusable/PopUpMessage";
 
 // function Paragraph() {
 //     return null;
@@ -105,8 +107,7 @@ class ProjectInformation extends React.Component{
                         answer: resp.message
                     },()=>{
                         if (this.state.answer !== undefined) {
-                            //alert(`Username or Password changed `)
-                            //this.props.updateUser(data)
+                            PopUpMessage("Member Added", "success")
 
                         } else {
                             alert(`Something went wrong please update again `)
@@ -205,8 +206,7 @@ class ProjectInformation extends React.Component{
                         answer: res.message
                     },()=>{
                         if (this.state.answer !== undefined) {
-                            //alert(`Username or Password changed `)
-                            //this.props.updateUser(data)
+                            PopUpMessage("Project Updated", "success")
 
                         } else {
                             alert(`Something went wrong please update again `)
@@ -251,6 +251,7 @@ class ProjectInformation extends React.Component{
                             //     popUpText: email+" has been removed from the project."
                             // });
                             // this.showPopUP()
+                            PopUpMessage("Member Removed", "success")
                         }else{
                             alert("something went wrong please remove again")
                         }
@@ -329,6 +330,7 @@ class ProjectInformation extends React.Component{
         console.log("data-gr",data)
 
         this.sendData(data)
+
     }
 
     change = (e)=>{
