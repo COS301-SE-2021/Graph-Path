@@ -6,11 +6,13 @@ const mongoose = require('mongoose') ;
 const router = express.Router();
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('../../Services/ProjectManagerService');
+const TaskManagerService = require('../../Services/TaskManagerService');
 const kanbanBoard = require('../../Helpers/kanbanBoard');
 const { param,body, validationResult } = require('express-validator');
 const mailer = require('../../Helpers/SendMail');
 
 const { auth, requiresAuth } = require('express-openid-connect');
+const {projectCompletion} = require("../../Helpers/SendMail");
 function makeProjectRoute(db) {
 
 
@@ -70,82 +72,102 @@ function makeProjectRoute(db) {
      * @apiGroup Project
      * @apiSuccess (200) {object} datasourse for kanban
      */
-    router.get('/convertToKanbanBoard',
-        authentication.authenticateToken,
-        authorisation.AuthoriseKanbanBoard,
-        param('id').exists().notEmpty().isMongoId(),
-        (req,res)=>{
+    router.get('/convertToKanbanBoard/:email',
+        //authentication.authenticateToken,
+        //uthorisation.AuthoriseKanbanBoard,
+        param('email').exists().notEmpty().isEmail(),
+        //param('id').exists().notEmpty().isMongoId(),
+        async (req, res) => {
             const failedValidation = validationResult(req);
-            if(!failedValidation.isEmpty()){
+            if (!failedValidation.isEmpty()) {
                 res.status(420).send({
                     message: "Bad request , invalid parameters",
                     data: failedValidation
                 })
             }
 
+            const email = req.params.email;
+            let responseObject = {
+                message: "",
+                data: []
+            }
+            let AllProjects =  await ProjectManagerService.getAllProjectsByUserEmail(db,email).then((projects) => {
+                    return projects
+                })
+            console.log(AllProjects);
 
-        const ProjectId = req.body.projectID;
-        kanbanBoard.getProjectGraph(db,ProjectId)
-            .then((project)=>{
+            for (let i = 0; i < AllProjects.length; i++) {
 
-                kanbanBoard.updateNodesID(db ,project).then(()=>{})
-                let projectNodes = kanbanBoard.getNodes(project);
-                if(projectNodes.length === 0)
-                {
-                    res.send({
-                        message:"this project graph has no nodes",
-                        data: []
+                let projectObj ={
+                    projectName: AllProjects[i].projectName,
+                }
+                await TaskManagerService.getAllTasksByProject(db ,AllProjects[i]._id.toString())
+                    .then((task)=>{
+
+                        projectObj.tasks = task;
+                        responseObject.data.push(projectObj)
+
                     })
-                }
 
-                else {
-                    // pool all tasks of nodes
-                    //console.log(projectNodes);
-                    kanbanBoard.getTasks(db,projectNodes).then((AllTasks)=>{
-                        if(AllTasks === "Tasks collection empty")
-                        {
-                            res.send({
-                                message:AllTasks,
-                                data: []
-                            })
-                        }
+            }
 
-                        else if(AllTasks.length == 0)
-                        {
-                            res.send({
-                                message: "This project has no tasks",
-                                data: []
-                            })
-                        }
+            res.send(
+                responseObject
+            )
 
-                        else
-                        {
-                            res.send({
-                                message:"success",
-                                data: kanbanBoard.splitTasksByStatus(AllTasks),
-                            })
-                        }
+/*
+            const ProjectId = req.body.projectID;
+            kanbanBoard.getProjectGraph(db, ProjectId)
+                .then((project) => {
 
-                   })
-                        .catch((err)=>{
-                            res.send({
-                                message:"error",
-                                data: err
-                            })
-                        });
+                    kanbanBoard.updateNodesID(db, project).then(() => {
+                    })
+                    let projectNodes = kanbanBoard.getNodes(project);
+                    if (projectNodes.length === 0) {
+                        res.send({
+                            message: "this project graph has no nodes",
+                            data: []
+                        })
+                    } else {
+                        // pool all tasks of nodes
+                        //console.log(projectNodes);
+                        kanbanBoard.getTasks(db, projectNodes).then((AllTasks) => {
+                            if (AllTasks === "Tasks collection empty") {
+                                res.send({
+                                    message: AllTasks,
+                                    data: []
+                                })
+                            } else if (AllTasks.length == 0) {
+                                res.send({
+                                    message: "This project has no tasks",
+                                    data: []
+                                })
+                            } else {
+                                res.send({
+                                    message: "success",
+                                    data: kanbanBoard.splitTasksByStatus(AllTasks),
+                                })
+                            }
+
+                        })
+                            .catch((err) => {
+                                res.send({
+                                    message: "error",
+                                    data: err
+                                })
+                            });
 
 
-
-                }
-
-
-            })
-            .catch((err)=>{
-
-            })
+                    }
 
 
-    })
+                })
+                .catch((err) => {
+
+                })
+
+    */
+        })
 
     /**
      * @api {get}  /project/listProjects
@@ -322,7 +344,7 @@ function makeProjectRoute(db) {
                     status: "not started",
                     groupMembers :[ownerMemberObject],
                     graph: {},
-                    lastAccessed: new Date().toString(),
+                    lastAccessed: new Date().toString().split("GMT")[0],
 
                 };
 
