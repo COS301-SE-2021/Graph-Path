@@ -72,7 +72,7 @@ class Dashboard extends React.Component{
                                 
                             }
                         </div>
-                        <img id="logo-pic" src={Logo}/>
+                        <img alt="graph logo" id="logo-pic" src={Logo}/>
 
 
                             <Button id="profile-btn" onClick={this.showP}>Profile</Button>
@@ -122,7 +122,7 @@ class Dashboard extends React.Component{
                         <div id="main-content">
                             <Switch>
                                 <Route path={`${match.path}/modal`} exact>
-                                    <Modal />
+                                    <Modal user={this.props.authUser} />
                                 </Route>
                                 <Route path={`${match.path}/manager`} render={()=>{
                                     return <ProjectManager /> 

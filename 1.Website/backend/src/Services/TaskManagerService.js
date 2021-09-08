@@ -31,8 +31,10 @@ async function getTaskByID(dbController, id){
         })
             .then(ans=>{
                 if(ans == null){
+
                     resolve("No available task");
                 }else{
+
                     resolve(ans);
                 }
             })
@@ -50,6 +52,7 @@ async function getAllTasksByProject(dbController, id){
                 if(ans == null){
                     resolve("No tasks found");
                 }else{
+                    console.log(ans)
                     resolve(ans);
                 }
             })
@@ -149,6 +152,21 @@ async function updateTaskDueDate(id, ddate){
 
  */
 
+async function deleteTaskByNodeID(dbController, id){
+    const db = dbController.getConnectionInstance();
+    return await  new Promise((resolve,reject)=>{
+        db.collection('Tasks').deleteMany ({
+            "nodeID":id
+        })
+            .then(ans=>{
+                resolve(ans);
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
 async function updateTaskAssignee(dbController, id, assignee){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
@@ -229,5 +247,6 @@ module.exports={
     //updateTaskDueDate,
     updateTaskAssigner,
     updateTaskAssignee,
-    updateEverythingTask
+    updateEverythingTask,
+    deleteTaskByNodeID,
 }
