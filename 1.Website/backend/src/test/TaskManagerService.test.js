@@ -32,8 +32,8 @@ describe('TaskManagerService.getTaskByID',  ()=> {
         });
         MockDB = await MockDBController;
 
-        const Tasks = MockDB.getConnectionInstance().collection('Tasks');
-        await Tasks.insertOne(mockTask);
+        //const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+        //await Tasks.insertOne(mockTask);
 
 
     });
@@ -43,10 +43,11 @@ describe('TaskManagerService.getTaskByID',  ()=> {
     });
 
     it('it should return when an error when the task does not exist',   async () => {
-
+        const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+        await Tasks.insertOne(mockTask);
         const invalidID = new mongoose.mongo.ObjectID();
         const response = await taskManagerService.getTaskByID(MockDB,invalidID);
-        expect(response.message).toBe("No available task");
+        expect(response).toBe("No available task");
 
     });
 
