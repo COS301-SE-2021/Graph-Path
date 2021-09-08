@@ -138,11 +138,25 @@ async function removeProjectByID(dbController, ID){
         db.collection('Projects').deleteOne({
             "_id": ObjectId(ID)
         })
-            .then(ans =>{
-                resolve(ans);
+            .then(deleteProjectAns =>{
+                console.log("successfully deleted Project by ID");
+                console.log("attempting to delete all tasks of deleted project...");
+                db.collection('Tasks').deleteMany({
+                    "projectID":ObjectId(ID)
+                })
+                    .then(manyDeletedTasks=>{
+                        console.log("successfully deleted all tasks of project");
+                        resolve(manyDeletedTasks)
+                    })
+                    .catch(deleteManyTasksErr=>{
+                        console.log("failed to delete all tasks of project");
+                        reject(deleteManyTasksErr)
+                    })
+
             })
-            .catch(err=>{
-                reject(err);
+            .catch(DeleteProjectErr=>{
+                console.log("failed to delete project");
+                reject(DeleteProjectErr);
             })
     })
 
