@@ -198,6 +198,9 @@ function  makeTaskRoute(db)
     }) ;
 
 
+    // all tasks
+    // all tasks by node
+    //
     /**
      * @api {post}  /task/insertTask
      * @apiName  insert new task
@@ -243,7 +246,7 @@ function  makeTaskRoute(db)
                     status:req.body.status,
                     projectID:req.body.projectID,
                     taskMembers:req.body.taskMembers,
-                    Assigner:req.body.assigner,
+                    assigner:req.body.assigner,
                     due:req.body.due,
                     issued:req.body.due,
                     nodeID: req.body.nodeID
@@ -319,6 +322,44 @@ function  makeTaskRoute(db)
     })
 
     //Also add delete for all tasks by nodeid 
+
+    router.delete("/deleteTaskByNodeID/:id",
+        authentication.authenticateToken,
+        authorisation.AuthoriseDeleteTask,
+        param('id').exists().notEmpty().isString(),
+        (req, res)=>{
+        console.log("attempting to delete all tasks of a Node...");
+        const failedValidation = validationResult(req);
+        if(!failedValidation.isEmpty()){
+            res.status(420).send({
+                message: "Bad request , invalid parameters",
+                data: failedValidation
+            })
+        }
+        let ID = req.params.id ;
+        TaskManagerService.deleteTaskByNodeID(db,ID)
+            .then((ans)=>{
+                if(ans.deletedCount >0){
+                    console.log("successfully deleted all tasks of a Node.");
+                    res.send({
+                        message:"The task was successfully removed."
+                    });
+                }else{
+                    console.log("failed to  delete all tasks of a Node.");
+                    res.send({
+                        message:"The task could not be removed."
+                    });
+                }
+
+            })
+            .catch(err=>{
+                console.log("failed to  delete all tasks of a Node.");
+                res.status(500).send({
+                    message:"Server error: could not remove the task.",
+                    err:err
+                })
+            });
+    })
 
     //and delete task by projectID, for when the project is deleted. - or you can just hook that up to when a project is deleted.
 
