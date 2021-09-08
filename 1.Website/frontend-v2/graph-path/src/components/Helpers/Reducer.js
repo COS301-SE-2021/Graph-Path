@@ -8,7 +8,7 @@ const initial = {
   }
 //reducer
 function reducer(state = initial,action){
-    console.log('Reducer to',action.type)
+    // console.log('Reducer to',action.type)
     switch(action.type ){
       case 'UPDATE_TOKEN':
         let auth = {

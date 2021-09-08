@@ -1,6 +1,6 @@
 import React from 'react' ;
 import PropTypes from 'prop-types' ;
-import {Schema,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, Row} from 'rsuite' ;
+import {Schema,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
 /**
  * Task will show a list of the tasks provided for a node. 
@@ -18,6 +18,8 @@ class Task extends React.Component {
             assignee:[],
             assigner:{},
             newTask:false, //if true return form for new task
+            editTask:{},
+            newStatus:'not started',
             formValue:{
                 description: '' , 
                 issued: new Date(now.getFullYear(),now.getMonth(),now.getDate()).toJSON().slice(0,10) ,
@@ -133,25 +135,58 @@ class Task extends React.Component {
         }
     }
 
+    switchToEditTask = (taskObj) =>{
+        console.log('selected for edit',taskObj) ; 
+        this.setState({
+            editTask:taskObj
+        }) ; 
+    }
+    handleSortChange =(value)=>{
+        // console.log('value',value )
+        this.setState({
+            newStatus:value
+        })}
+
     listAllTasks =()=>{
         if (this.props.nodeTasks){
-        console.log('task props',this.props)
-
-            if (Array.isArray(this.props.nodeTasks) && this.props.nodeTasks.length>0 ){
-             return this.props.nodeTasks.map((task)=>{
+        // console.log('task props',this.props)
+            if(this.state.editTask.status !== undefined){
+                const task = this.state.editTask ;
+                // the edit button pressed
+                const options = [{label:"Not Started",value:"not started"},{label:"Complete",value:"complete"},{label:"In Progress",value:"in progress"}]
                 return <Panel bordered header={`Description : ${task.description} `}>
-                <small>
+                    <small>
                 
-                    <b>Issued</b> : {task.issued} <br/>
-                    <b>Due-Date</b> : {task.due} <br/>
-                    <b>Status </b>: {task.status}
-                    <br/>
+                        <b>Issued</b> : {task.issued} <br/>
+                        <b>Due-Date</b> : {task.due} <br/>
+                        <b>Status </b>:  <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
+                           
+                        <br/>
                     </small>
                     <Button > <Icon icon={'trash'}/>
                     </Button>
-            </Panel>
-             
-               }) 
+
+                    <Button onClick={()=>this.switchToEditTask(task)}><Icon icon={'pencil-square'}/>Edit Task</Button>
+                </Panel>
+            }
+            else if (Array.isArray(this.props.nodeTasks) && this.props.nodeTasks.length>0 ){
+             return <PanelGroup accordion bordered>{
+                 this.props.nodeTasks.map((task)=>{
+                    return <Panel bordered header={`Description : ${task.description} `}>
+                    <small>
+                
+                        <b>Issued</b> : {task.issued} <br/>
+                        <b>Due-Date</b> : {task.due} <br/>
+                        <b>Status </b>: {task.status}
+                        <br/>
+                    </small>
+                    <Button > <Icon icon={'trash'}/>
+                    </Button>
+
+                    <Button onClick={()=>this.switchToEditTask(task)}><Icon icon={'pencil-square'}/>Edit Task</Button>
+                </Panel>})}
+            </PanelGroup>
+               
             }
             else{
                 return <small>

@@ -32,7 +32,7 @@ class Dashboard extends React.Component{
     }
 
     profileModalRef=(obj)=>{
-        console.log('ref0',obj) ;
+        // console.log('ref0',obj) ;
 
         this.showProfile = obj && obj.handleShow;
     }

@@ -279,7 +279,7 @@ class GraphManager{
               source:src, 
               target:tgt,
               label:`${ src} to ${tgt}` ,
-              color:'#080',
+              color:'#0ff',
               size:2,
           }
         let nameSrc = this.graph.nodes.find(v=>v.id === src) ;
@@ -373,7 +373,7 @@ class GraphManager{
         var curr = this.graph ; 
         var obj = {
             label:fromTask.label , // give it lable fromTask
-            size:15,
+            size:20,
             critical:fromTask.critical
         }; 
       // console.log('Manager:addNode',fromTask,obj) ; 
@@ -390,7 +390,7 @@ class GraphManager{
             }
 
             obj["id"]= `n${nodeId}` ;
-            obj["color"] = '#0000ff' ; //following nodes are blue
+            obj["color"] = '#f00000' ; //following nodes are blue
             if (len % 2 === 0){
                 obj["x"] = 2*len ; 
                 obj["y"] = 2*len ;
@@ -403,7 +403,7 @@ class GraphManager{
         else{
             // add node with edge depending on self
             obj["id"]= `n1` ;
-            obj["color"] = '#0000ff' ; //start is red
+            obj["color"] = '#ff0000' ; //start is red
             obj["x"] = 0 ; 
             obj["y"] = 0 ;
 

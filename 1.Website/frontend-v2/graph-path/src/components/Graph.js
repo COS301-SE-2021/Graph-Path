@@ -32,6 +32,7 @@ class GraphPath extends Component{
       taskList:[], 
       nodeTasks:[],
       currNodeID:'',
+      currNodeName:''
     }
   }
   componentDidMount(){
@@ -111,7 +112,7 @@ class GraphPath extends Component{
     }) ;
   }
 
-  showTaskModal=(nodeId)=>{
+  showTaskModal=(nodeId,nodeLabel)=>{
     let filter = this.state.nodeTasks ;
     
     if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
@@ -121,14 +122,16 @@ class GraphPath extends Component{
       this.setState({
         showTask:!this.state.showTask ,
         nodeTasks:filter,
-        currNodeID:nodeId
+        currNodeID:nodeId,
+        currNodeName:nodeLabel,
       }) ;      
     }
     else{
       
       this.setState({
         showTask:!this.state.showTask ,
-        currNodeId:''
+        currNodeId:'',
+        currNodeName:'',
       }) ;
     }
 
@@ -421,11 +424,12 @@ class GraphPath extends Component{
     .catch((err)=>{
       if (err.response){
         console.log(err.response) ;
+        PopUpMessage(err.response.data.message,'warning')
       }
       else{
+        PopUpMessage('Something went wrong,please try again','info')
         console.log('Some error',err)
       }
-      PopUpMessage('Something went wrong,please try again','info')
       this.setState({
         loading:false
       })
@@ -435,7 +439,7 @@ class GraphPath extends Component{
   clickNodeHandler = (event)=>{
     console.log(event) ; 
     const nodeAffected = event.data.node.id ;
-    // const edgesAffected = event.edges ;
+    const nameOfNode = event.data.node.label ;
 
     if (event.data.captor.altKey){
       //delete node or edge
@@ -453,7 +457,7 @@ class GraphPath extends Component{
     }
     else{
       if (typeof nodeAffected === 'string'){
-        this.showTaskModal(nodeAffected)
+        this.showTaskModal(nodeAffected,nameOfNode)
       }
       this.cleanUpAfterEdgeAddition() ;
     }
@@ -579,8 +583,6 @@ class GraphPath extends Component{
                      <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={this.saveNodeTask}/>
                    </Modal.Body>
                </Popover>) ;
-               const currNode = this.state.currNodeID.length > 1 ? 
-               this.graphManager.graph.nodes.find(el => el.id === this.state.currNodeID): undefined ;
             return (
               <div >
                 {
@@ -600,10 +602,10 @@ class GraphPath extends Component{
 
                 <div id="graphbox">
                     <div>
-                 {currNode !== undefined ?
+                 {this.state.currNodeID.length > 1 ?
                  
                       <Whisper  speaker={taskSpeaker} trigger={'click'} onExit={this.showTaskModal}  >
-                        <Avatar >{currNode.label}</Avatar>
+                        <Avatar size={'lg'}>{this.state.currNodeName}</Avatar>
                       </Whisper >
                  : <small>Click a node to add a task. To add node press, Add Node on top</small>}
                       
