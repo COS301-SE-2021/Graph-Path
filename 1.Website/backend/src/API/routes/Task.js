@@ -330,7 +330,7 @@ function  makeTaskRoute(db)
         authorisation.AuthoriseDeleteTask,
         body('projectID').exists().notEmpty(),
         body('email').exists().notEmpty().isEmail(),
-        param('nodeID').exists().notEmpty().isString(),
+        // param('nodeID').exists().notEmpty(),
         (req, res)=>{
         console.log("attempting to delete all tasks of a Node...");
         const failedValidation = validationResult(req);
