@@ -17,11 +17,10 @@ function makeProjectRoute(db) {
 
 
     router.get("/statistics/RadarGraph/:projectID",
-        (req,res)=>{
+        authentication.authenticateToken,
+        param("projectID").exists().notEmpty().isMongoId(),
+        async (req,res)=>{
             const projectID = req.params.projectID;
-           // ProjectManagerService.getProjectByID(db,projectID.then()
-
-
             const responseObj = {
                 numTasks: 0,
                 labels : [],
@@ -29,10 +28,21 @@ function makeProjectRoute(db) {
                 projectName: "",
 
             }
+           await ProjectManagerService.getProjectByID(db,projectID)
+               .then((project)=>{
+                    responseObj.projectName = project.projectName;
 
-            TaskManagerService.getAllTasksByProject(db,projectID)
+                })
+               .catch((err)=>{
+                   res.send({
+                       message: "Statistics,failed to get project by ID ",
+                       data: err
+                   })
+               })
+
+             TaskManagerService.getAllTasksByProject(db,projectID)
                 .then((tasks)=>{
-
+                    responseObj.numTasks = tasks.length;
                     for (let i = 0; i < tasks.length ; i++) {
 
                         let NodeLabel = tasks[i].title;
@@ -47,16 +57,12 @@ function makeProjectRoute(db) {
                     })
 
                 })
-                .then((err)=>{
+                .catch((err)=>{
                     res.send({
                         message: "Statistics: radar Graph failed, failed to generate stats ",
                         data: []
                     })
                 })
-
-            //getProjectName:
-            //nodes:
-            //num of tasks per Node:
 
 
 

@@ -184,7 +184,7 @@ function sendInvites(ProjectName , projectOwner , projectDueDate, recipients)
     transporter.sendMail(options)
         .then((result)=>{
 
-            console.log("successfully sent project invite email notification");
+            console.log("successfully sent project invite email notification to : "+recipients);
         })
         .catch((error)=>{
             console.log("failed to send project invite email notification:");
@@ -423,9 +423,6 @@ function taskAssignment(projectName , projectOwner , projectDueDate,Description,
 
 }
 
-//sendNotification("New project",'u17049106@tuks.co.za');
-
-//sendInvites("test Project 1", 'u17049106@tuks.co.za');
 
 module.exports = {
     sendInvites,

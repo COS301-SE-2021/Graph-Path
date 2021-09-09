@@ -9,8 +9,6 @@ const ObjectId = require('mongodb').ObjectID;
 const TaskManagerService = require('../../Services/TaskManagerService');
 const { body, validationResult, param,check} = require('express-validator');
 
-
-
 function  makeTaskRoute(db)
 {
     /**
@@ -69,6 +67,8 @@ function  makeTaskRoute(db)
 
 
     });
+
+
 
 
     /**
@@ -290,6 +290,8 @@ function  makeTaskRoute(db)
      * @apiParam  {String} [id] task ID
      */
     router.delete('/deleteTaskByID/:id',
+        authentication.authenticateToken,
+        authorisation.AuthoriseDeleteTask,
         param('id').isMongoId(),
         (req, res)=>{
             const failedValidation = validationResult(req);
@@ -326,7 +328,9 @@ function  makeTaskRoute(db)
     router.delete("/deleteTaskByNodeID/:id",
         authentication.authenticateToken,
         authorisation.AuthoriseDeleteTask,
-        param('id').exists().notEmpty().isString(),
+        body('projectID').exists().notEmpty(),
+        body('email').exists().notEmpty().isEmail(),
+        param('nodeID').exists().notEmpty().isString(),
         (req, res)=>{
         console.log("attempting to delete all tasks of a Node...");
         const failedValidation = validationResult(req);
@@ -483,7 +487,6 @@ function  makeTaskRoute(db)
     router.patch('/updateTaskAssignee',
         body('id').exists().notEmpty().isMongoId(),
         body('assignee').exists().notEmpty(),
-
         (req,res)=>{
             const failedValidation = validationResult(req);
             if(!failedValidation.isEmpty()){
