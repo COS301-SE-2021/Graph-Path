@@ -115,7 +115,8 @@ class Dashboard extends React.Component{
                                                           to={`${match.url}/kanban`} >Kanban</Nav.Item>
 
                                                 <Dropdown id="nav-option" title="Statistics" icon={<Icon icon="bar-chart"/>}>
-                                                    <Dropdown.Item id="nav-option">Overall</Dropdown.Item>
+                                                    <Dropdown.Item id="nav-option" componentClass={Link}
+                                                    to={`${match.url}/pieChart`}>Project Tasks</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
                                                                    to={`${match.url}/radarChart`}>Project Nodes</Dropdown.Item>
                                                 </Dropdown>
@@ -142,12 +143,9 @@ class Dashboard extends React.Component{
                                 <Route path={`${match.path}/radarChart`} exact>
                                     <RadarChart user={this.props.authUser} />
                                 </Route>
-                                {/*<Route path={`${match.path}/statistics`} exact>*/}
-                                {/*    <RadarChart user={this.props.authUser} />*/}
-                                {/*</Route>*/}
-                                {/*<Route path={`${match.path}/radarChart`} exact>*/}
-                                {/*    <PieChart />*/}
-                                {/*</Route>*/}
+                                <Route path={`${match.path}/pieChart`} exact>
+                                    <PieChart user={this.props.authUser} />
+                                </Route>
                                     
                             {
                                 this.state.redirect?this.changeRedirect(`${match.url}/manager`):""
