@@ -479,6 +479,10 @@ class GraphPath extends Component{
 
   deleteOneTask=(taskId)=>{
     axios.delete(`${this.props.api}/task/deleteTaskByID/${taskId}`,{
+      data: { 
+        projectID:this.props.project._id ,
+        email:this.props.loggedUser.email
+      },
       headers:{
         authorization:this.props.loggedUser.token
       }
