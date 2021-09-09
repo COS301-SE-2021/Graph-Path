@@ -6,7 +6,7 @@ describe('Task Component Testing',()=> {
 
     afterEach(cleanup);
     test('renders the Task component', ()=>{
-        render(<Task />);
+        render(<Task />);  
     });
 
     test('renders tidTask', () => {
@@ -27,5 +27,5 @@ describe('Task Component Testing',()=> {
         expect(button).toBeDefined();
     });
 
-  
+
 })
