@@ -39,7 +39,7 @@ class CustomHeader extends Component{
 
             axios.post(`http://localhost:9001/user/requestToken`,data)
             .then((res)=>{
-                console.log('from token ',res)
+                // console.log('from token ',res)
                 
                 let authUser = {...user} ;
                 // logInvalid(user)

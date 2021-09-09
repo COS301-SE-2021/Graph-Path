@@ -191,8 +191,8 @@ The neccesary information for the request to go through follows:
         // console.log('sorting...') ;
         if (this.state.sortValue === 'recent'){
             let newArray = this.state.projects.sort((v1,v2,)=>{
-                let date1=v1.lastDateAccessed.toLowerCase();
-                let date2 = v2.lastDateAccessed.toLowerCase();
+                let date1=v1.lastAccessed.toLowerCase();
+                let date2 = v2.lastAccessed.toLowerCase();
 
                 if(date1<date2){
                     //date1 came first, put last
@@ -233,6 +233,9 @@ The neccesary information for the request to go through follows:
     showM=()=>{
         this.showModal();
     }
+    /**
+	@param {Object} project object together with request identity
+    */
 
     sendProjectInfo=(project)=>{
 
@@ -268,9 +271,7 @@ The neccesary information for the request to go through follows:
         })
     }
 
-    /**
-	@param {Object} u
-    */
+    
     
     render(){
         // let fullProject = {}
