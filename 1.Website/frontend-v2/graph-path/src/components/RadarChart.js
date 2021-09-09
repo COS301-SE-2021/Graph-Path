@@ -119,26 +119,26 @@ class RadarChart extends React.Component{
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
                                                 colspan={6}
-                                                style={{
-                                                    flexDirection: 'column',
-                                                    alignItems: 'flex-start',
-                                                    overflow: 'hidden'
-                                                }}
+                                                // style={{
+                                                //     flexDirection: 'column',
+                                                //     alignItems: 'flex-start',
+                                                //     overflow: 'hidden'
+                                                // }}
                                             >
                                                 <div>{item.projectName}</div>
                                             </FlexboxGrid.Item>
                                             <FlexboxGrid.Item
                                                 colspan={6}
-                                                style={{
-                                                    flexDirection: 'column',
-                                                    alignItems: 'flex-start',
-                                                    overflow: 'hidden'
-                                                }}
+                                                // style={{
+                                                //     flexDirection: 'column',
+                                                //     alignItems: 'flex-start',
+                                                //     overflow: 'hidden'
+                                                // }}
                                             >
-                                                <div>{item.projectOwner}</div>
+                                                {/*<div>{item.projectOwner}</div>*/}
                                             </FlexboxGrid.Item>
                                             <FlexboxGrid.Item
-                                                colspan={6}
+                                                // colspan={6}
                                                 style={{
 
                                                 }}
