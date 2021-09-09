@@ -79,7 +79,7 @@ class Task extends React.Component {
                 ref ={ ref =>(this.form = ref)}
                 onCheck={formError=>this.handleTaskErrors(formError)} 
                 onChange={this.handleTaskCreation}> 
-            <FormGroup>
+            <FormGroup data-testid="filter-input-description">
                 <ControlLabel>Description</ControlLabel>
                 <FormControl name="description" placeholder="Task Description"  />
                 <HelpBlock tooltip>Required</HelpBlock>
@@ -117,7 +117,7 @@ class Task extends React.Component {
                 </CustomField>
             
             <FormGroup>
-                <Button onClick={this.handleTaskSubmit}>Submit</Button>
+                <Button data-testid="btn1" onClick={this.handleTaskSubmit}>Submit</Button>
             </FormGroup>
         </Form>
         </div>
@@ -228,7 +228,7 @@ class Task extends React.Component {
     }
 
     render(){
-        return <div data-testid="tidTask">
+        return <div id="tidTask" data-testid="tidTask">
             <div>
                 <Button onClick={this.toogleScreen}  appearance={'ghost'}>
                 {this.state.newTask?"Close":"ADD TASK"}

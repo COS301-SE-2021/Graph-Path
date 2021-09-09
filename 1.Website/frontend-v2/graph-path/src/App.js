@@ -13,12 +13,12 @@ class App extends React.Component {
     render(){
     return (
       <Provider store={store}>
-      <Router>
-        <div className="App" data-testid="tidApp">    
-            <Header />
-            {/* <ConnectedHeader /> */}
-        </div>
-       </Router> 
+          <Router>
+            <div className="App" data-testid="tidApp">
+                <Header />
+                {/* <ConnectedHeader /> */}
+            </div>
+           </Router>
        </Provider>
     );
   }
