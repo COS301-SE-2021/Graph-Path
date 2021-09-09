@@ -1,3 +1,4 @@
+import { node } from "prop-types";
 import isAcyclic from "./DAG";
 
 class GraphManager{
@@ -228,6 +229,22 @@ class GraphManager{
       delete this.adjacencyList[vertex] ;
     }
 
+    changeColor=(id,color)=>{
+      var nodes = this.graph.nodes ;
+      if (nodes && Array.isArray(nodes)){
+        let ind = -1 ;
+        let found = nodes.find((value,i)=>{if (value.id === id){
+          ind = i ;
+          return value ; 
+        }}) ;
+        if (found && ind > 0 ){
+          found.color = color ;
+          nodes.splice(ind,1,found)
+          return 1 ;
+        }
+      }
+      return 0 ; 
+    }
   
     setGraph = (graph)=>{
       if (Array.isArray(graph.nodes) && Array.isArray(graph.edges) ){

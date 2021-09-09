@@ -9,3 +9,15 @@
     float: right;
     background-color: rgba(29 ,26 ,36,0.1 ) ;
 }
+
+.not-started{
+    color: #d01;
+}
+
+.in-prog{
+    color: #ef1;
+}
+
+.complete{
+    color: #5d1;
+}

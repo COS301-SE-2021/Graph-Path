@@ -98,6 +98,14 @@ class GraphPath extends Component{
             }) ;
 
         })
+
+        //update the task list if it was already showing
+        if (this.state.showTask&&this.props.project&& this.state.currNodeID.length>1){
+          let filt = this.filterByID(`${this.props.project}_ ${this.state.currNodeID}`)
+          this.setState({
+            nodeTask:filt
+          }) ;
+        }
     }
     else{
       this.setState({
@@ -113,15 +121,18 @@ class GraphPath extends Component{
     }) ;
   }
 
+  filterByID=(id)=>{
+    return this.state.taskList.filter(value=>value.nodeID === id ) ;
+  }
+
   showTaskModal=(nodeId,nodeLabel)=>{
     let filter = this.state.nodeTasks ;
     
     if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
-      filter= this.state.taskList.filter((value)=>
-      value.nodeID === `${this.props.project._id}_${nodeId}`) ;
+      filter= this.filterByID(`${this.props.project._id}_${nodeId}`) ;
       
       this.setState({
-        showTask:!this.state.showTask ,
+        // showTask:!this.state.showTask ,
         nodeTasks:filter,
         currNodeID:nodeId,
         currNodeName:nodeLabel,
@@ -133,6 +144,7 @@ class GraphPath extends Component{
         showTask:!this.state.showTask ,
         currNodeId:'',
         currNodeName:'',
+        nodeTask:[]
       }) ;
     }
 
@@ -467,29 +479,43 @@ class GraphPath extends Component{
 
   deleteOneTask=(taskId)=>{
     axios.delete(`${this.props.api}/task/deleteTaskByID/${taskId}`,{
+      data: { 
+        projectID:this.props.project._id ,
+        email:this.props.loggedUser.email
+      },
       headers:{
         authorization:this.props.loggedUser.token
       }
     })
     .then((res)=>{
-      PopUpMessage(res.data.message,'info')
+      PopUpMessage(res.data.message,'info') ; 
+      this.viewAllTasksForProject() ;
+
     })
     .catch((err)=>{
       if (err.response){
         console.log('Detailed err:',err.response)
+        PopUpMessage(err.response.data.message,'info')
       }
       console.log('some error',err) ;
     })
   }
+
+
 
   deleteAllNodeTask=(nodeID)=>{
     axios.delete(`${this.props.api}/task/deleteTaskByNodeID/${nodeID}`,{
+      data: { 
+        projectID:this.props.project._id ,
+        email:this.props.loggedUser.email
+      },
       headers:{
         authorization:this.props.loggedUser.token
       }
     })
     .then((res)=>{
       PopUpMessage(res.data.message,'info')
+      this.viewAllTasksForProject() ;
     })
     .catch((err)=>{
       if (err.response){
@@ -499,10 +525,166 @@ class GraphPath extends Component{
     })
   }
 
+  newTaskModal=()=>{
+    return <Modal show={this.state.showTask} 
+    keyboard={true}
+    onHide={this.showTaskModal}
+    overflow={true} backdrop={true} >
+      
+      <Modal.Header>
+        <Modal.Title>
+          Provided tasks
+        </Modal.Title>
+      </Modal.Header>
+    <Modal.Body>
+      
+      <Task nodeTasks={this.state.nodeTasks} 
+      deleteNodeTasks={this.deleteAllNodeTask} 
+      deleteTask={this.deleteOneTask} 
+      sendTaskInfo={this.saveNodeTask}/>
+    </Modal.Body>
+    </Modal>
+
+  }
+
   render(){
-    // console.log(' gra',this.props)
+    // console.log(' gra',this.props) 
+          
+          //start rendering
+          if (this.graphManager !== null){
+            const graph = this.state.currGraph;
+            // console.log('curr',graph)
+            const speaker = (
+            <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
+        
+             <Form onSubmit={this.addNewNode} data-testid="form">
+                <FormGroup>
+                    <ControlLabel> Node Name</ControlLabel>
+                    <FormControl name="node" type="text" value={this.state.nodeName} onChange={this.handleChange} />
+                </FormGroup>
+
+                <FormGroup>
+                    <Checkbox checked={this.state.critical} onChange={this.handleCritical}>
+                    Critical Node ?
+                    </Checkbox>
+                </FormGroup>
+                <FormGroup>
+                    <FormControl type="submit"/>
+                 </FormGroup>
+            </Form>
+        </Popover>) ; 
+      
+            return (
+              <div >
+                {
+                  this.state.loading && (<Loader backdrop speed={'fast'} size={'lg'}/>)
+                }
+                
+              <div id="graph-info" >
+                <h3>{this.props.project.projectName}</h3>
+
+                <div id="graph-nav">
+                <Whisper speaker={speaker} placement={'leftStart'} trigger={'active'}>
+                <Button >Add Node</Button>
+                </Whisper> &nbsp;
+                <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>
+                  </div>
+              </div>
+
+                <div id="graphbox">
+                    <div>
+                 {this.state.currNodeID.length > 1 ?
+                 
+                        
+                        <Avatar onClick={this.showTaskModal} className={'nodeView'} circle size={'lg'}>{
+                        this.state.currNodeName===''?'click a node':this.state.currNodeName}</Avatar>
+                 : <small>Click a node to add a task. To add node press, Add Node on top</small>}
+                      {
+                      this.newTaskModal()}
+                     </div>
+                <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
+                  graph={graph}
+                  style={{
+                    // position:"relative", 
+                    height:"92%", width:"100%" ,  
+                  }}
+                  settings={{
+                    clone: false, // do not clone the nodes
+                    immutable:false,// cannot updated id of node
+                    // labelSizeRatio:1,
+                    labelThreshold:0.5,
+                    scalingMode:"inside",
+                    sideMargin:100,
+                    minNodeSize:3,
+                    maxNodeSize:10,
+                    minEdgeSize:0.1,
+                    font:"calibri",
+                    defaultLabelSize:30,
+                    defaultLabelColor:"#ba0",
+                    labelSizeRatio:4,
+                    defaultEdgeHoverColor:'#000',
+                    maxEdgeSize:4,
+                    drawNodes:true, //draw node ?
+                    drawLabels:true, //node label
+                    drawEdges: true, //draw edge?
+                    drawEdgeLabels:true,
+                    minArrowSize:10,
+                    enableEdgeHovering:true,
+                    edgeHoverPrecision:100,
+                    // doubleClickEnabled:false,
+                    // zoomMax:1,
+                    autoResize:true ,
+                    autoRescale:false
+                  }}    
+                onClickNode={this.clickNodeHandler}
+                clickStage={()=>console.log('stage')}
+                  // options={options}
+                  // events={events}
+              >
+                <EdgeShapes default="arrow"/>
+                <NodeShapes default="def"/>
+                <DragNodes />
+                {/* <Dagre directed={false}/> */}
+                {/* <RandomizeNodePositions seed={20} /> */}
+                {/* <RelativeSize size={30} /> */}
+                
+              </Sigma>
+
+              </div>
+              </div>
+  
+            )
+          }
+          else{
+            return (<div>
+              Something Wrong
+            </div>)
+          }
+        
+    }
+}
+
+GraphPath.defaultProps = {
+  api:'http://localhost:9001'
+}
+
+GraphPath.propTypes = {
+  // task:PropTypes.array,
+  project:PropTypes.object,
+  api:PropTypes.string , 
+  updateParent: PropTypes.func.isRequired
+}
+
+function mapStateToProps(state){
+  return {
+      loggedUser:state.loggedUser
+  } ;
+}
 
 
+export default connect(mapStateToProps)(withRouter(GraphPath)) ;
+
+  /* 
           const options = {
             layout: {
               randomSeed: undefined,
@@ -585,164 +767,5 @@ class GraphPath extends Component{
                 }
               }
               
-          }  
-          
-          //start rendering
-          if (this.graphManager !== null){
-            const graph = this.state.currGraph;
-            // console.log('curr',graph)
-            const speaker = (
-            <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
-        
-             <Form onSubmit={this.addNewNode} data-testid="form">
-                <FormGroup>
-                    <ControlLabel> Node Name</ControlLabel>
-                    <FormControl name="node" type="text" value={this.state.nodeName} onChange={this.handleChange} />
-                </FormGroup>
-
-                <FormGroup>
-                    <Checkbox checked={this.state.critical} onChange={this.handleCritical}>
-                    Critical Node ?
-                    </Checkbox>
-                </FormGroup>
-                <FormGroup>
-                    <FormControl type="submit"/>
-                 </FormGroup>
-            </Form>
-        </Popover>) ; 
-        const taskSpeaker=(<Popover keyboard={true} title={"Provided tasks"} visible={this.state.showTask}
-               overflow={true} backdrop={true}>
-                
-           
-                   <Modal.Body>
-                     <Task nodeTasks={this.state.nodeTasks} 
-                     deleteNodeTasks={this.deleteAllNodeTask} 
-                     deleteTask={this.deleteOneTask} 
-                     sendTaskInfo={this.saveNodeTask}/>
-                   </Modal.Body>
-               </Popover>) ;
-            return (
-              <div >
-                {
-                  this.state.loading && (<Loader backdrop speed={'fast'} size={'lg'}/>)
-                }
-                
-              <div id="graph-info" >
-                <h3>{this.props.project.projectName}</h3>
-
-                <div id="graph-nav">
-                <Whisper speaker={speaker} placement={'leftStart'} trigger={'active'}>
-                <Button >Add Node</Button>
-                </Whisper> &nbsp;
-                <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>
-                  </div>
-              </div>
-
-                <div id="graphbox">
-                    <div>
-                 {this.state.currNodeID.length > 1 ?
-                 
-                      <Whisper  speaker={taskSpeaker} trigger={'active'} onExit={this.showTaskModal}  >
-                        <Avatar circle size={'lg'}>{this.state.currNodeName}</Avatar>
-                      </Whisper >
-                 : <small>Click a node to add a task. To add node press, Add Node on top</small>}
-                      
-                     </div>
-                <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
-                  graph={graph}
-                  style={{
-                    // position:"relative", 
-                    height:"92%", width:"100%" ,  
-                  }}
-                  settings={{
-                    clone: false, // do not clone the nodes
-                    immutable:false,// cannot updated id of node
-                    // labelSizeRatio:1,
-                    labelThreshold:0.5,
-                    scalingMode:"inside",
-                    sideMargin:100,
-                    minNodeSize:3,
-                    maxNodeSize:10,
-                    minEdgeSize:0.1,
-                    font:"calibri",
-                    defaultLabelSize:18,
-                    defaultLabelColor:"#002",
-                    labelSizeRatio:2,
-                    defaultEdgeHoverColor:'#000',
-                    maxEdgeSize:4,
-                    drawNodes:true, //draw node ?
-                    drawLabels:true, //node label
-                    drawEdges: true, //draw edge?
-                    drawEdgeLabels:true,
-                    minArrowSize:10,
-                    enableEdgeHovering:true,
-                    edgeHoverPrecision:100,
-                    // doubleClickEnabled:false,
-                    // zoomMax:1,
-                    autoResize:true ,
-                    autoRescale:false
-                  }}    
-                onClickNode={this.clickNodeHandler}
-                clickStage={()=>console.log('stage')}
-                  // options={options}
-                  // events={events}
-              >
-                <EdgeShapes default="arrow"/>
-                <NodeShapes default="def"/>
-                <DragNodes />
-                {/* <Dagre directed={false}/> */}
-                {/* <RandomizeNodePositions seed={20} /> */}
-                {/* <RelativeSize size={30} /> */}
-                
-              </Sigma>
-
-              </div>
-              </div>
-  
-            )
-          }
-          else{
-            return (<div>
-              Something Wrong
-            </div>)
-          }
-        
-    }
-}
-
-GraphPath.defaultProps = {
-  api:'http://localhost:9001'
-}
-
-GraphPath.propTypes = {
-  // task:PropTypes.array,
-  project:PropTypes.object,
-  api:PropTypes.string , 
-  updateParent: PropTypes.func.isRequired
-}
-
-function mapStateToProps(state){
-  return {
-      loggedUser:state.loggedUser
-  } ;
-}
-
-
-export default connect(mapStateToProps)(withRouter(GraphPath)) ;
-
-  /* <Row>
-              <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-
-              </Row> */
+          }  */
         
