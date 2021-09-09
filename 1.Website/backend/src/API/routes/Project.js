@@ -48,8 +48,12 @@ function makeProjectRoute(db) {
                         let NodeLabel = tasks[i].title;
                         let NodeID =  tasks[i].nodeID;
                         let NodeTasks = tasks.filter(task => task.nodeID ===NodeID);
-                        responseObj.labels.push(NodeLabel);
-                        responseObj.data.push( NodeTasks.length);
+                        if(!responseObj.labels.includes( tasks[i].title)){
+                            responseObj.labels.push(NodeLabel);
+                            responseObj.data.push( NodeTasks.length);
+                        }
+
+
                     }
                     res.send({
                         message: "successful",
