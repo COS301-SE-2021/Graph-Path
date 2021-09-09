@@ -4,6 +4,8 @@ import '../css/Kanban.css';
 import { KanbanComponent, ColumnsDirective, ColumnDirective } from '@syncfusion/ej2-react-kanban';
 import axios from 'axios';
 import PropTypes from 'prop-types' ;
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
 
 
 class Kanban extends React.Component {
@@ -17,8 +19,8 @@ class Kanban extends React.Component {
         this.state={
             loading: true,
             test: [[]],
-            task2: [],
-            task3: [],
+            projectsByEmail: [],
+            allTasks: [],
             //data: extend([], MockData, null, true)
         }
     }
@@ -35,25 +37,23 @@ class Kanban extends React.Component {
    }
 
    firstSearch =()=>{
-     axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/ntpnaane@gmail.com`,{
+     axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.loggedUser.email}`,{
          headers:{
              authorization: this.props.user.token
          }
      })
-
            .then((res)=> {
                if (res.data !== undefined){
-                   //this.myData1 = res.data;
-                //   console.log(res.data.data[0]._id);
                    console.log('length: ',res.data.data.length);
+
                    let array1=[];
                    for(let i=0;i<res.data.data.length;i++) {
                        array1.push(res.data.data[i])
+               }
+                   this.setState({projectsByEmail: array1})
+               }
+               console.log('projs',this.state.projectsByEmail);
 
-               }
-                   this.setState({task2: array1})
-               }
-               console.log(this.state.task2);
            })
            .catch((err)=>{
                console.log('error in initialization',err)
@@ -67,24 +67,19 @@ class Kanban extends React.Component {
                     console.log('2nd',res)
                     if (res.data !== undefined )
                     {
-
-                        this.setState({task3: res.data.data},()=>this.sortProject())
-
-                }})
+                        this.setState({allTasks: res.data.data},()=>this.sortProject())
+                    }})
                 .catch((err)=>{
                     console.log('error in initialization',err)
                 })
-
     }
 
 sortProject=()=>{
-
-    if(this.state.task3.length > 0 && this.state.task2.length>0){
-      let temp=this.state.task3.filter((project)=>{
-          let i=this.state.task2.find(el=>el._id===project.project)
-          console.log(i);
+    if(this.state.allTasks.length > 0 && this.state.projectsByEmail.length>0){
+      let temp=this.state.allTasks.filter((project)=>{
+          let i=this.state.projectsByEmail.find(el=>el._id===project.projectID)
                     if(i!==undefined){
-                        if(project.project===i._id){
+                        if(project.projectID===i._id){
                             let newTask=project
                             newTask['projectName']=i.projectName;
                             return newTask;
@@ -120,7 +115,7 @@ sortProject=()=>{
                     <div>
 
                         <KanbanComponent cssClass="kanban-header" id="kanban"  keyField="status"
-                                                          dataSource={this.state.test} cardSettings={{contentField: "description", headerField: "_id"}}
+                                                          dataSource={this.state.test} cardSettings={{contentField: "description", headerField: "_id" }}
                                                           swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
                                                     cardClick={this.handler}
                                                     // drag={(prps)=>console.log(prps)}
@@ -140,6 +135,7 @@ sortProject=()=>{
     }
 }
 
+
 Kanban.defaultProps = {
     api:'http://localhost:9001'
 }
@@ -149,4 +145,25 @@ Kanban.propTypes = {
     api: PropTypes.string
 }
 
-export default Kanban;
+
+function updateUserToken(token){
+    return {
+        type:'UPDATE_TOKEN' ,
+        payload: {
+            token:token
+        }
+    }
+}
+
+function mapStateToProps(state){
+    return {
+        loggedUser:state.loggedUser
+    } ;
+}
+
+
+const mapDispatchToProps = {
+    updateUserToken,
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Kanban) ;
