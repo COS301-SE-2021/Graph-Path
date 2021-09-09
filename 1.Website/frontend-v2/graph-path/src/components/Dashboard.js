@@ -110,7 +110,7 @@ class Dashboard extends React.Component{
                                                           to={`${match.url}/modal`} >Calendar</Nav.Item>
 
                                                 <Nav.Item id="nav-option"
-                                                          icon={<Icon icon="todo"/>}
+                                                          icon={<Icon icon="tasks"/>}
                                                           componentClass={Link}
                                                           to={`${match.url}/kanban`} >Kanban</Nav.Item>
 
