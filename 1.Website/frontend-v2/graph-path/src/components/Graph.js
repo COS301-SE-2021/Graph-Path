@@ -1,16 +1,15 @@
 import {React,Component} from "react";
 import {Sigma,NodeShapes,EdgeShapes,DragNodes} from 'react-sigma' ; 
-import Dagre from 'react-sigma/lib/Dagre' ;
+// import Dagre from 'react-sigma/lib/Dagre' ;
 import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
 import { Popover,Avatar,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader} from 'rsuite' ;
-import ModalHeader from "rsuite/lib/Modal/ModalHeader";
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
 import Task from "./Task";
-import {connect} from 'react-redux'
+import {connect} from 'react-redux' ;
 
 class GraphPath extends Component{
   graphManager = null ;
@@ -32,6 +31,7 @@ class GraphPath extends Component{
       taskList:[], 
       nodeTasks:[],
       currNodeID:'',
+      currNodeName:''
     }
   }
   componentDidMount(){
@@ -67,6 +67,7 @@ class GraphPath extends Component{
     console.log('update parent',semiUpdate)
     
   }
+
   viewAllTasksForProject = ()=>{
     if (this.props.project !== undefined){
         
@@ -105,13 +106,14 @@ class GraphPath extends Component{
     }
 
 }
+
   showNodeForm = ()=>{
     this.setState({
       showNode:!this.state.showNode
     }) ;
   }
 
-  showTaskModal=(nodeId)=>{
+  showTaskModal=(nodeId,nodeLabel)=>{
     let filter = this.state.nodeTasks ;
     
     if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
@@ -121,14 +123,16 @@ class GraphPath extends Component{
       this.setState({
         showTask:!this.state.showTask ,
         nodeTasks:filter,
-        currNodeID:nodeId
+        currNodeID:nodeId,
+        currNodeName:nodeLabel,
       }) ;      
     }
     else{
       
       this.setState({
         showTask:!this.state.showTask ,
-        currNodeId:''
+        currNodeId:'',
+        currNodeName:'',
       }) ;
     }
 
@@ -139,6 +143,7 @@ class GraphPath extends Component{
       nodeName:value
     }) ;
   }
+
   handleCritical = (value)=>{
     this.setState({
       critical:!this.state.critical
@@ -421,11 +426,12 @@ class GraphPath extends Component{
     .catch((err)=>{
       if (err.response){
         console.log(err.response) ;
+        PopUpMessage(err.response.data.message,'warning')
       }
       else{
+        PopUpMessage('Something went wrong,please try again','info')
         console.log('Some error',err)
       }
-      PopUpMessage('Something went wrong,please try again','info')
       this.setState({
         loading:false
       })
@@ -435,7 +441,7 @@ class GraphPath extends Component{
   clickNodeHandler = (event)=>{
     console.log(event) ; 
     const nodeAffected = event.data.node.id ;
-    // const edgesAffected = event.edges ;
+    const nameOfNode = event.data.node.label ;
 
     if (event.data.captor.altKey){
       //delete node or edge
@@ -453,12 +459,45 @@ class GraphPath extends Component{
     }
     else{
       if (typeof nodeAffected === 'string'){
-        this.showTaskModal(nodeAffected)
+        this.showTaskModal(nodeAffected,nameOfNode)
       }
       this.cleanUpAfterEdgeAddition() ;
     }
   }
 
+  deleteOneTask=(taskId)=>{
+    axios.delete(`${this.props.api}/task/deleteTaskByID/${taskId}`,{
+      headers:{
+        authorization:this.props.loggedUser.token
+      }
+    })
+    .then((res)=>{
+      PopUpMessage(res.data.message,'info')
+    })
+    .catch((err)=>{
+      if (err.response){
+        console.log('Detailed err:',err.response)
+      }
+      console.log('some error',err) ;
+    })
+  }
+
+  deleteAllNodeTask=(nodeID)=>{
+    axios.delete(`${this.props.api}/task/deleteTaskByNodeID/${nodeID}`,{
+      headers:{
+        authorization:this.props.loggedUser.token
+      }
+    })
+    .then((res)=>{
+      PopUpMessage(res.data.message,'info')
+    })
+    .catch((err)=>{
+      if (err.response){
+        console.log('Detailed err:',err.response)
+      }
+      console.log('some error',err) ;
+    })
+  }
 
   render(){
     // console.log(' gra',this.props)
@@ -576,11 +615,12 @@ class GraphPath extends Component{
                 
            
                    <Modal.Body>
-                     <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={this.saveNodeTask}/>
+                     <Task nodeTasks={this.state.nodeTasks} 
+                     deleteNodeTasks={this.deleteAllNodeTask} 
+                     deleteTask={this.deleteOneTask} 
+                     sendTaskInfo={this.saveNodeTask}/>
                    </Modal.Body>
                </Popover>) ;
-               const currNode = this.state.currNodeID.length > 1 ? 
-               this.graphManager.graph.nodes.find(el => el.id === this.state.currNodeID): undefined ;
             return (
               <div >
                 {
@@ -600,10 +640,10 @@ class GraphPath extends Component{
 
                 <div id="graphbox">
                     <div>
-                 {currNode !== undefined ?
+                 {this.state.currNodeID.length > 1 ?
                  
-                      <Whisper  speaker={taskSpeaker} trigger={'click'} onExit={this.showTaskModal}  >
-                        <Avatar >{currNode.label}</Avatar>
+                      <Whisper  speaker={taskSpeaker} trigger={'active'} onExit={this.showTaskModal}  >
+                        <Avatar circle size={'lg'}>{this.state.currNodeName}</Avatar>
                       </Whisper >
                  : <small>Click a node to add a task. To add node press, Add Node on top</small>}
                       

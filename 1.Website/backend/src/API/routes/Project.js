@@ -16,6 +16,58 @@ const {projectCompletion} = require("../../Helpers/SendMail");
 function makeProjectRoute(db) {
 
 
+    router.get("/statistics/RadarGraph/:projectID",
+        authentication.authenticateToken,
+        param("projectID").exists().notEmpty().isMongoId(),
+        async (req,res)=>{
+            const projectID = req.params.projectID;
+            const responseObj = {
+                numTasks: 0,
+                labels : [],
+                data: [],
+                projectName: "",
+
+            }
+           await ProjectManagerService.getProjectByID(db,projectID)
+               .then((project)=>{
+                    responseObj.projectName = project.projectName;
+
+                })
+               .catch((err)=>{
+                   res.send({
+                       message: "Statistics,failed to get project by ID ",
+                       data: err
+                   })
+               })
+
+             TaskManagerService.getAllTasksByProject(db,projectID)
+                .then((tasks)=>{
+                    responseObj.numTasks = tasks.length;
+                    for (let i = 0; i < tasks.length ; i++) {
+
+                        let NodeLabel = tasks[i].title;
+                        let NodeID =  tasks[i].nodeID;
+                        let NodeTasks = tasks.filter(task => task.nodeID ===NodeID);
+                        responseObj.labels.push(NodeLabel);
+                        responseObj.data.push( NodeTasks.length);
+                    }
+                    res.send({
+                        message: "successful",
+                        data: responseObj
+                    })
+
+                })
+                .catch((err)=>{
+                    res.send({
+                        message: "Statistics: radar Graph failed, failed to generate stats ",
+                        data: []
+                    })
+                })
+
+
+
+        })
+
     router.get('/requestToken',
 
         (req,res)=>{
@@ -421,7 +473,7 @@ function makeProjectRoute(db) {
                 const projectOwner =project.owner;
                 const projectDueDate =project.dueDate;
                 const recipients =MemberEmails ;
-                //mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients);
+                mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients);
 
                     console.log("successfully added new members...")
                 res.send({

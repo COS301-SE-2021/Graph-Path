@@ -140,7 +140,7 @@ class NewProject extends React.Component{
 
                         <FormGroup>
                             <ControlLabel>Description</ControlLabel>
-                            <FormControl name="description" placeholder="Task Description"  />
+                            <FormControl name="description" placeholder="Project Description"  />
                             <HelpBlock tooltip>Required</HelpBlock>
                         </FormGroup>
 
