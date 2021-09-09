@@ -117,7 +117,7 @@ class Dashboard extends React.Component{
                                                 <Dropdown id="nav-option" title="Statistics" icon={<Icon icon="bar-chart"/>}>
                                                     <Dropdown.Item id="nav-option">Overall</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
-                                                                   to={`${match.url}/statistics`}>Project</Dropdown.Item>
+                                                                   to={`${match.url}/radarChart`}>Project Nodes</Dropdown.Item>
                                                 </Dropdown>
 
                                             </Nav>
@@ -139,8 +139,8 @@ class Dashboard extends React.Component{
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
                                     return <Kanban user={this.props.authUser}/> }}/>
-                                <Route path={`${match.path}/statistics`} exact>
-                                    <Statistics user={this.props.authUser} />
+                                <Route path={`${match.path}/radarChart`} exact>
+                                    <RadarChart user={this.props.authUser} />
                                 </Route>
                                 {/*<Route path={`${match.path}/statistics`} exact>*/}
                                 {/*    <RadarChart user={this.props.authUser} />*/}
