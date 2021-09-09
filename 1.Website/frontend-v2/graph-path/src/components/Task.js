@@ -2,6 +2,7 @@ import React from 'react' ;
 import PropTypes from 'prop-types' ;
 import {Schema,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
+import  '../css/Common.css' ;
 
 
 
@@ -58,72 +59,7 @@ class Task extends React.Component {
         }) ;
     }
 
-    createNewTask=()=>{
-        const {formError,formValue} = this.state ;
-        const {DateType,StringType} = Schema.Types ;
-        let dueDate = new Date() ;
-        dueDate.setFullYear(dueDate.getFullYear()+1)
-        const taskModel =Schema.Model({
-            description: StringType().minLength(5,'Please add more details on the description')
-                .isRequired('This field is required.') ,
-            issued:DateType().min(new Date(dueDate.getFullYear()-1,dueDate.getMonth(),dueDate.getDate()-1),'The issued date cannot be set to a date that has passed.')
-                .isRequired('This field is required.') ,
-            due:DateType().range(new Date(),dueDate,'The due date cannot be set to a date more than 12 months from now or a passed date.')
-                .isRequired('This field is required.') ,
-        })
-
-        return (
-            <div>
-            <Form formValue={formValue} 
-                model={taskModel}
-                ref ={ ref =>(this.form = ref)}
-                onCheck={formError=>this.handleTaskErrors(formError)} 
-                onChange={this.handleTaskCreation}> 
-            <FormGroup data-testid="filter-input-description">
-                <ControlLabel>Description</ControlLabel>
-                <FormControl name="description" placeholder="Task Description"  />
-                <HelpBlock tooltip>Required</HelpBlock>
-            </FormGroup>
-
-           <CustomField 
-               accepter={DatePicker}
-               name={"issued"} 
-               label={"Start Date"}
-               oneTap={true}
-                // format={'YYYY-MM-DD'}
-                error={formError.issued}
-
-           />
-            {/* <HelpBlock tooltip>Required</HelpBlock> */}
-
-            <CustomField 
-                accepter={DatePicker}
-                name={"due"}
-                label={"Due Date"}
-                error={formError.due}
-                oneTap={true}
-                format={'YYYY-MM-DD'}
-            />
-            <CustomField 
-                name="status" 
-                label={"Status"}    
-                accepter={RadioGroup}
-                // error={}
-                inline
-            >
-                <Radio value={'not started'} >Not Started</Radio>
-                <Radio value={'in progress'} >In Progress</Radio>
-                <Radio value={'complete'} >Complete</Radio>
-                </CustomField>
-            
-            <FormGroup>
-                <Button data-testid="btn1" onClick={this.handleTaskSubmit}>Submit</Button>
-            </FormGroup>
-        </Form>
-        </div>
-        )
-    }
-
+  
     handleTaskSubmit =()=>{
         const {formValue} = this.state ;
         if (!this.form.check()){
@@ -150,6 +86,73 @@ class Task extends React.Component {
             newStatus:value
         })}
 
+        createNewTask=()=>{
+            const {formError,formValue} = this.state ;
+            const {DateType,StringType} = Schema.Types ;
+            let dueDate = new Date() ;
+            dueDate.setFullYear(dueDate.getFullYear()+1)
+            const taskModel =Schema.Model({
+                description: StringType().minLength(5,'Please add more details on the description')
+                    .isRequired('This field is required.') ,
+                issued:DateType().min(new Date(dueDate.getFullYear()-1,dueDate.getMonth(),dueDate.getDate()-1),'The issued date cannot be set to a date that has passed.')
+                    .isRequired('This field is required.') ,
+                due:DateType().range(new Date(),dueDate,'The due date cannot be set to a date more than 12 months from now or a passed date.')
+                    .isRequired('This field is required.') ,
+            })
+    
+            return (
+                <div>
+                <Form formValue={formValue} 
+                    model={taskModel}
+                    ref ={ ref =>(this.form = ref)}
+                    onCheck={formError=>this.handleTaskErrors(formError)} 
+                    onChange={this.handleTaskCreation}> 
+                <FormGroup data-testid="filter-input-description">
+                    <ControlLabel>Description</ControlLabel>
+                    <FormControl name="description" placeholder="Task Description"  />
+                    <HelpBlock tooltip>Required</HelpBlock>
+                </FormGroup>
+    
+               <CustomField 
+                   accepter={DatePicker}
+                   name={"issued"} 
+                   label={"Start Date"}
+                   oneTap={true}
+                    // format={'YYYY-MM-DD'}
+                    error={formError.issued}
+    
+               />
+                {/* <HelpBlock tooltip>Required</HelpBlock> */}
+    
+                <CustomField 
+                    accepter={DatePicker}
+                    name={"due"}
+                    label={"Due Date"}
+                    error={formError.due}
+                    oneTap={true}
+                    format={'YYYY-MM-DD'}
+                />
+                <CustomField 
+                    name="status" 
+                    label={"Status"}    
+                    accepter={RadioGroup}
+                    // error={}
+                    inline
+                >
+                    <Radio className={'not-started'} value={'not started'} >Not Started</Radio>
+                    <Radio className={'in-prog'} value={'in progress'} >In Progress</Radio>
+                    <Radio className={'complete'} value={'complete'} >Complete</Radio>
+                    </CustomField>
+                
+                <FormGroup>
+                    <Button data-testid="btn1" onClick={this.handleTaskSubmit}>Submit</Button>
+                </FormGroup>
+            </Form>
+            </div>
+            )
+        }
+    
+
     listAllTasks =()=>{
         if (this.props.nodeTasks){
         // console.log('task props',this.props)
@@ -157,20 +160,32 @@ class Task extends React.Component {
                 const task = this.state.editTask ;
                 // the edit button pressed
                 const options = [{label:"Not Started",value:"not started"},{label:"Complete",value:"complete"},{label:"In Progress",value:"in progress"}]
-                return <Panel bordered header={`Description : ${task.description} `}>
+                return <><Panel bordered header={`Description : ${task.description} `}>
                     <small>
                 
                         <b>Issued</b> : {task.issued} <br/>
                         <b>Due-Date</b> : {task.due} <br/>
-                        <b>Status </b>:  <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
-                           
+                        <b>Status </b>:
+                        <Form formValue={this.state.formValue}
+                    onChange={this.handleTaskCreation}> 
+                        
+                        <CustomField 
+                                name="status" 
+                                label={"Status"}    
+                                accepter={SelectPicker}
+                                // error={}
+                                inline
+                                data={options}
+                            ></CustomField>  
+                        </Form >
+                                                    
                         <br/>
                     </small>
                     <Button > <Icon icon={'trash'}/>
                     </Button>
 
                     <Button onClick={()=>this.switchToEditTask(task)}><Icon icon={'pencil-square'}/>Edit Task</Button>
-                </Panel>
+                </Panel></>
             }
             else if (Array.isArray(this.props.nodeTasks) && this.props.nodeTasks.length>0 ){
              return <PanelGroup accordion bordered>{

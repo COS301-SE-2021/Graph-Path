@@ -25,3 +25,13 @@
 canvas.sigma-mouse{
     position: relative !important;
 } */
+
+
+.nodeView{
+    font-size: unset;
+    text-align: center;
+}
+
+.nodeView:hover{
+    cursor:pointer ;
+}

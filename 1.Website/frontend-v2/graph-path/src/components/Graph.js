@@ -611,16 +611,15 @@ class GraphPath extends Component{
             </Form>
         </Popover>) ; 
         const taskSpeaker=(<Popover keyboard={true} title={"Provided tasks"} visible={this.state.showTask}
-               overflow={true} backdrop={true}>
-                
-           
-                   <Modal.Body>
-                     <Task nodeTasks={this.state.nodeTasks} 
+               overflow={true} backdrop={true} 
+               children={
+                  <Task nodeTasks={this.state.nodeTasks} 
                      deleteNodeTasks={this.deleteAllNodeTask} 
                      deleteTask={this.deleteOneTask} 
                      sendTaskInfo={this.saveNodeTask}/>
-                   </Modal.Body>
-               </Popover>) ;
+               }>
+                
+           </Popover>) ;
             return (
               <div >
                 {
@@ -642,8 +641,11 @@ class GraphPath extends Component{
                     <div>
                  {this.state.currNodeID.length > 1 ?
                  
-                      <Whisper  speaker={taskSpeaker} trigger={'active'} onExit={this.showTaskModal}  >
-                        <Avatar circle size={'lg'}>{this.state.currNodeName}</Avatar>
+                      <Whisper  speaker={taskSpeaker} trigger={'active'}
+                       onExit={this.showTaskModal} 
+                       placement={'rightEnd'} >
+                        <Avatar className={'nodeView'} circle size={'lg'}>{
+                        this.state.currNodeName===''?'click a node':this.state.currNodeName}</Avatar>
                       </Whisper >
                  : <small>Click a node to add a task. To add node press, Add Node on top</small>}
                       
@@ -665,9 +667,9 @@ class GraphPath extends Component{
                     maxNodeSize:10,
                     minEdgeSize:0.1,
                     font:"calibri",
-                    defaultLabelSize:18,
-                    defaultLabelColor:"#002",
-                    labelSizeRatio:2,
+                    defaultLabelSize:30,
+                    defaultLabelColor:"#ba0",
+                    labelSizeRatio:4,
                     defaultEdgeHoverColor:'#000',
                     maxEdgeSize:4,
                     drawNodes:true, //draw node ?
