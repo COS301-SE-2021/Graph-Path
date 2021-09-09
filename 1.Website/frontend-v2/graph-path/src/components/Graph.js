@@ -132,7 +132,7 @@ class GraphPath extends Component{
       filter= this.filterByID(`${this.props.project._id}_${nodeId}`) ;
       
       this.setState({
-        showTask:!this.state.showTask ,
+        // showTask:!this.state.showTask ,
         nodeTasks:filter,
         currNodeID:nodeId,
         currNodeName:nodeLabel,
@@ -596,7 +596,7 @@ class GraphPath extends Component{
                         this.state.currNodeName===''?'click a node':this.state.currNodeName}</Avatar>
                  : <small>Click a node to add a task. To add node press, Add Node on top</small>}
                       {
-                      this.state.nodeTasks?this.newTaskModal():<></>}
+                      this.newTaskModal()}
                      </div>
                 <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
                   graph={graph}
