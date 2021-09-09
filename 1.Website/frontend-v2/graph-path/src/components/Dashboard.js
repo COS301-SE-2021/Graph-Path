@@ -11,6 +11,9 @@ import Logout from "./Logout";
 import Logo from "../img/Logo4.png";
 import Kanban from './Kanban';
 import { connect} from 'react-redux' ;
+import RadarChart from "./RadarChart";
+import PieChart from "./PieChart";
+import Statistics from "./Statistics";
 
 
 class Dashboard extends React.Component{
@@ -54,29 +57,35 @@ class Dashboard extends React.Component{
     }
 
     render(){
-        const {match} =this.props ; 
-
+        const {match} =this.props ;
+        const picture = this.props.authUser.picture;
+        console.log("match",match)
         return(
             //  <Router>            
                 <div data-testid="main-container-id" className="main-container">
                     {/* {this.reloadProjectsInManager()} */}
                     <Profile user={this.props.authUser} ref={this.profileModalRef} />
-                    <nav id="nav bar"  >
-                        <div id="side-bar-button">
-                            {
-                                this.state.showSideBar === true ?
-                                    <IoIcons.MdClose id="btn-side-bar" onClick={this.handleSideBar} />
-                                    :
-                                <FaIcons.FaBars id="btn-side-bar" onClick={this.handleSideBar} />
+                    <nav id="nav-bar"  >
+                        <div style={{display:"table-row"}}>
+                            <div id="side-bar-button">
+                                {
+                                    this.state.showSideBar === true ?
+                                        <IoIcons.MdClose id="btn-side-bar" onClick={this.handleSideBar} />
+                                        :
+                                    <FaIcons.FaBars id="btn-side-bar" onClick={this.handleSideBar} />
 
-                                
-                            }
+
+                                }
+                            </div>
+                            <img alt="graph logo" id="logo-pic" src={Logo}/>
+
+                            {/*<div id="two-btn">*/}
+                            {/*    <img src={picture} />*/}
+                                <Button id="profile-btn" onClick={this.showP}>Profile</Button>
+                                <Logout/>
+                            {/*</div>*/}
                         </div>
-                        <img alt="graph logo" id="logo-pic" src={Logo}/>
 
-
-                            <Button id="profile-btn" onClick={this.showP}>Profile</Button>
-                            <Logout/>
 
 
                     </nav>
@@ -107,7 +116,8 @@ class Dashboard extends React.Component{
 
                                                 <Dropdown id="nav-option" title="Statistics" icon={<Icon icon="bar-chart"/>}>
                                                     <Dropdown.Item id="nav-option">Overall</Dropdown.Item>
-                                                    <Dropdown.Item id="nav-option">Project</Dropdown.Item>
+                                                    <Dropdown.Item id="nav-option" componentClass={Link}
+                                                                   to={`${match.url}/statistics`}>Project</Dropdown.Item>
                                                 </Dropdown>
 
                                             </Nav>
@@ -129,6 +139,15 @@ class Dashboard extends React.Component{
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
                                     return <Kanban user={this.props.authUser}/> }}/>
+                                <Route path={`${match.path}/statistics`} exact>
+                                    <Statistics user={this.props.authUser} />
+                                </Route>
+                                {/*<Route path={`${match.path}/statistics`} exact>*/}
+                                {/*    <RadarChart user={this.props.authUser} />*/}
+                                {/*</Route>*/}
+                                {/*<Route path={`${match.path}/radarChart`} exact>*/}
+                                {/*    <PieChart />*/}
+                                {/*</Route>*/}
                                     
                             {
                                 this.state.redirect?this.changeRedirect(`${match.url}/manager`):""

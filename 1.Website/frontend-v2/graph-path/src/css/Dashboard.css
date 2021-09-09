@@ -10,11 +10,12 @@
     background: #100f0f;
 }
 
-nav{
+#nav-bar{
     background: #1a1d24;
     height: 60px;
-    display: block;
+    display: table;
     width: 100vw;
+    /*position: relative;*/
 }
 
 
@@ -93,8 +94,19 @@ nav{
 }
 
 #logo-pic{
-    width: 130px;
+    width: 9%;
     margin-top: 10px;
+}
+
+#two-btn{
+    background-color: #63ba3c;
+    display: table-cell;
+    /*float: right;*/
+    /*max-height: 5%;*/
+    /*display: flex;*/
+    /*margin-top: 2.5%;*/
+    /*width: 10%;*/
+    /*position: absolute;*/
 }
 
 #profile-btn{
@@ -109,3 +121,28 @@ nav{
     cursor: pointer;
     text-align: center;
 }
+
+/*#signup-btn {*/
+/*    !*position: absolute;*!*/
+/*    !*margin-top: 2%;*!*/
+/*    !*left: 80%;*!*/
+/*    !*margin-left: 40%;*!*/
+/*    transform: translate(-50%, -50%);*/
+/*    -ms-transform: translate(-50%, -50%);*/
+/*    color: white;*/
+/*    border: none;*/
+/*    cursor: pointer;*/
+/*    text-align: center;*/
+/*}*/
+
+/*#signup-btn:hover {*/
+/*    background-color: #1386d9;*/
+/*    color: white;*/
+/*}*/
+
+#two-btn img{
+    border-radius: 100%;
+    width: 50%;
+    /*margin-left: 80px;*/
+}
+
