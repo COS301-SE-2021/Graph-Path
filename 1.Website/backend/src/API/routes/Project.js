@@ -22,10 +22,11 @@ function makeProjectRoute(db) {
         async (req,res)=>{
             const projectID = req.params.projectID;
             const responseObj = {
+                projectName: "",
                 numTasks: 0,
                 labels : [],
                 data: [],
-                projectName: "",
+
 
             }
            await ProjectManagerService.getProjectByID(db,projectID)
@@ -48,8 +49,12 @@ function makeProjectRoute(db) {
                         let NodeLabel = tasks[i].title;
                         let NodeID =  tasks[i].nodeID;
                         let NodeTasks = tasks.filter(task => task.nodeID ===NodeID);
-                        responseObj.labels.push(NodeLabel);
-                        responseObj.data.push( NodeTasks.length);
+                        if(!responseObj.labels.includes( tasks[i].title)){
+                            responseObj.labels.push(NodeLabel);
+                            responseObj.data.push( NodeTasks.length);
+                        }
+
+
                     }
                     res.send({
                         message: "successful",
@@ -110,9 +115,9 @@ function makeProjectRoute(db) {
 
                     }
                     const total = notStarted + inProgress +finished;
-                    notStarted = notStarted/total;
-                    inProgress = inProgress/total;
-                    finished = finished/total;
+                    notStarted = (notStarted/total)*100;
+                    inProgress = (inProgress/total)*100;
+                    finished = (finished/total)*100;
 
                     responseObj.labels = ["not started","in-progress","complete"]
                     responseObj.data = [notStarted,inProgress,finished]
