@@ -2,6 +2,9 @@ import React from 'react' ;
 import PropTypes from 'prop-types' ;
 import {Schema,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
+
+
+
 /**
  * Task will show a list of the tasks provided for a node. 
  * It will also provide a way to add new tasks to the node
@@ -172,7 +175,7 @@ class Task extends React.Component {
             else if (Array.isArray(this.props.nodeTasks) && this.props.nodeTasks.length>0 ){
              return <PanelGroup accordion bordered>{
                  this.props.nodeTasks.map((task)=>{
-                    return <Panel bordered header={`Description : ${task.description} `}>
+                    return <Panel key={task._id} bordered header={`Description : ${task.description} `}>
                     <small>
                 
                         <b>Issued</b> : {task.issued} <br/>
@@ -180,7 +183,7 @@ class Task extends React.Component {
                         <b>Status </b>: {task.status}
                         <br/>
                     </small>
-                    <Button > <Icon icon={'trash'}/>
+                    <Button onClick={()=>this.props.deleteTask(task._id)}> <Icon icon={'trash'}/>
                     </Button>
 
                     <Button onClick={()=>this.switchToEditTask(task)}><Icon icon={'pencil-square'}/>Edit Task</Button>
@@ -200,19 +203,37 @@ class Task extends React.Component {
             </>
         }
     }
+
     toogleScreen=()=>{
         console.log('toggled')
         this.setState({
             newTask: !this.state.newTask
         }) ;
     }
-    
+
+    deleteAll = ()=>{
+        const tasks = this.props.nodeTasks ;
+        if (tasks){
+            if (tasks.length > 0 ){
+                const temp = tasks[0] ; 
+                this.props.deleteNodeTasks(temp.nodeID) ; 
+            }
+            else{
+                alert('no task to delete') ;
+            }
+        }
+        else{
+            //nothing
+        }
+    }
+
     render(){
         return <div data-testid="tidTask">
             <div>
-                <Button onClick={this.toogleScreen}>
+                <Button onClick={this.toogleScreen}  appearance={'ghost'}>
                 {this.state.newTask?"Close":"ADD TASK"}
-                </Button> | DELETE TASK
+                </Button> | <Button onClick={this.deleteAll}
+                 appearance={'subtle'}>DELETE ALL TASKS</Button>
             </div>
             <div>
                 {
@@ -230,7 +251,9 @@ class Task extends React.Component {
 
 Task.propType = {
     nodeTasks : PropTypes.array.isRequired, 
-    sendTaskInfo:PropTypes.func.isRequired 
+    sendTaskInfo:PropTypes.func.isRequired,
+    deleteTask :PropTypes.func.isRequired, 
+    deleteNodeTasks:PropTypes.func.isRequired, 
+    
 }
-
-export default Task ;
+export default (Task) ;

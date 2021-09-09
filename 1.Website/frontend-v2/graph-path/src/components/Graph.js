@@ -1,16 +1,15 @@
 import {React,Component} from "react";
 import {Sigma,NodeShapes,EdgeShapes,DragNodes} from 'react-sigma' ; 
-import Dagre from 'react-sigma/lib/Dagre' ;
+// import Dagre from 'react-sigma/lib/Dagre' ;
 import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
 import { Popover,Avatar,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader} from 'rsuite' ;
-import ModalHeader from "rsuite/lib/Modal/ModalHeader";
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
 import Task from "./Task";
-import {connect} from 'react-redux'
+import {connect} from 'react-redux' ;
 
 class GraphPath extends Component{
   graphManager = null ;
@@ -68,6 +67,7 @@ class GraphPath extends Component{
     console.log('update parent',semiUpdate)
     
   }
+
   viewAllTasksForProject = ()=>{
     if (this.props.project !== undefined){
         
@@ -106,6 +106,7 @@ class GraphPath extends Component{
     }
 
 }
+
   showNodeForm = ()=>{
     this.setState({
       showNode:!this.state.showNode
@@ -142,6 +143,7 @@ class GraphPath extends Component{
       nodeName:value
     }) ;
   }
+
   handleCritical = (value)=>{
     this.setState({
       critical:!this.state.critical
@@ -463,6 +465,39 @@ class GraphPath extends Component{
     }
   }
 
+  deleteOneTask=(taskId)=>{
+    axios.delete(`${this.props.api}/task/deleteTaskByID/${taskId}`,{
+      headers:{
+        authorization:this.props.loggedUser.token
+      }
+    })
+    .then((res)=>{
+      PopUpMessage(res.data.message,'info')
+    })
+    .catch((err)=>{
+      if (err.response){
+        console.log('Detailed err:',err.response)
+      }
+      console.log('some error',err) ;
+    })
+  }
+
+  deleteAllNodeTask=(nodeID)=>{
+    axios.delete(`${this.props.api}/task/deleteTaskByNodeID/${nodeID}`,{
+      headers:{
+        authorization:this.props.loggedUser.token
+      }
+    })
+    .then((res)=>{
+      PopUpMessage(res.data.message,'info')
+    })
+    .catch((err)=>{
+      if (err.response){
+        console.log('Detailed err:',err.response)
+      }
+      console.log('some error',err) ;
+    })
+  }
 
   render(){
     // console.log(' gra',this.props)
@@ -580,7 +615,10 @@ class GraphPath extends Component{
                 
            
                    <Modal.Body>
-                     <Task nodeTasks={this.state.nodeTasks} sendTaskInfo={this.saveNodeTask}/>
+                     <Task nodeTasks={this.state.nodeTasks} 
+                     deleteNodeTasks={this.deleteAllNodeTask} 
+                     deleteTask={this.deleteOneTask} 
+                     sendTaskInfo={this.saveNodeTask}/>
                    </Modal.Body>
                </Popover>) ;
             return (
@@ -604,8 +642,8 @@ class GraphPath extends Component{
                     <div>
                  {this.state.currNodeID.length > 1 ?
                  
-                      <Whisper  speaker={taskSpeaker} trigger={'click'} onExit={this.showTaskModal}  >
-                        <Avatar size={'lg'}>{this.state.currNodeName}</Avatar>
+                      <Whisper  speaker={taskSpeaker} trigger={'active'} onExit={this.showTaskModal}  >
+                        <Avatar circle size={'lg'}>{this.state.currNodeName}</Avatar>
                       </Whisper >
                  : <small>Click a node to add a task. To add node press, Add Node on top</small>}
                       
