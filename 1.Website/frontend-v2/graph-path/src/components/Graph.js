@@ -98,6 +98,14 @@ class GraphPath extends Component{
             }) ;
 
         })
+
+        //update the task list if it was already showing
+        if (this.state.showTask&&this.props.project&& this.state.currNodeID.length>1){
+          let filt = this.filterByID(`${this.props.project}_ ${this.state.currNodeID}`)
+          this.setState({
+            nodeTask:filt
+          }) ;
+        }
     }
     else{
       this.setState({
@@ -113,12 +121,15 @@ class GraphPath extends Component{
     }) ;
   }
 
+  filterByID=(id)=>{
+    return this.state.taskList.filter(value=>value.nodeID === id ) ;
+  }
+
   showTaskModal=(nodeId,nodeLabel)=>{
     let filter = this.state.nodeTasks ;
     
     if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
-      filter= this.state.taskList.filter((value)=>
-      value.nodeID === `${this.props.project._id}_${nodeId}`) ;
+      filter= this.filterByID(`${this.props.project._id}_${nodeId}`) ;
       
       this.setState({
         showTask:!this.state.showTask ,
@@ -133,6 +144,7 @@ class GraphPath extends Component{
         showTask:!this.state.showTask ,
         currNodeId:'',
         currNodeName:'',
+        nodeTask:[]
       }) ;
     }
 
@@ -472,24 +484,34 @@ class GraphPath extends Component{
       }
     })
     .then((res)=>{
-      PopUpMessage(res.data.message,'info')
+      PopUpMessage(res.data.message,'info') ; 
+      this.viewAllTasksForProject() ;
+
     })
     .catch((err)=>{
       if (err.response){
         console.log('Detailed err:',err.response)
+        PopUpMessage(err.response.data.message,'info')
       }
       console.log('some error',err) ;
     })
   }
 
+
+
   deleteAllNodeTask=(nodeID)=>{
     axios.delete(`${this.props.api}/task/deleteTaskByNodeID/${nodeID}`,{
+      data: { 
+        projectID:this.props.project._id ,
+        email:this.props.loggedUser.email
+      },
       headers:{
         authorization:this.props.loggedUser.token
       }
     })
     .then((res)=>{
       PopUpMessage(res.data.message,'info')
+      this.viewAllTasksForProject() ;
     })
     .catch((err)=>{
       if (err.response){
@@ -499,93 +521,30 @@ class GraphPath extends Component{
     })
   }
 
+  newTaskModal=()=>{
+    return <Modal show={this.state.showTask} 
+    keyboard={true}
+    onHide={this.showTaskModal}
+    overflow={true} backdrop={true} >
+      
+      <Modal.Header>
+        <Modal.Title>
+          Provided tasks
+        </Modal.Title>
+      </Modal.Header>
+    <Modal.Body>
+      
+      <Task nodeTasks={this.state.nodeTasks} 
+      deleteNodeTasks={this.deleteAllNodeTask} 
+      deleteTask={this.deleteOneTask} 
+      sendTaskInfo={this.saveNodeTask}/>
+    </Modal.Body>
+    </Modal>
+
+  }
+
   render(){
-    // console.log(' gra',this.props)
-
-
-          const options = {
-            layout: {
-              randomSeed: undefined,
-              improvedLayout:true,
-              clusterThreshold: 150,
-              // hierarchical: {
-              //   enabled:false,
-              //   levelSeparation: 150,
-              //   nodeSpacing: 100,
-              //   treeSpacing: 200,
-              //   blockShifting: true,
-              //   edgeMinimization: true,
-              //   parentCentralization: true,
-              //   direction: 'UD',        // UD, DU, LR, RL
-              //   sortMethod: 'hubsize',  // hubsize, directed
-              //   shakeTowards: 'leaves'  // roots, leaves
-              // }
-            },
-            nodes:{
-              physics:false
-            },
-            edges: {
-              color: "#ff0000" , 
-              physics:false 
-            },
-            // physics:{
-              // enabled:true ,
-              // forceAtlas2Based: {
-              //   theta: 1,
-              //   gravitationalConstant: -50,
-              //   centralGravity: 0.01,
-              //   springConstant: 0.08,
-              //   springLength: 100,
-              //   damping: 0.4,
-              //   avoidOverlap: 0
-              // }
-            // }
-          };
-          
-          const events = {} ;
-          events.select =  function(event) {
-              // var { nodes, edges } = event;
-            }  ;
-
-          events.externalRemoveNode = this.removeNode ;
-          events.externalRemoveEdge = this.removeEdge ;
-          events.externalCreateEdge = this.createEdgeBetweenNode
-          events.viewTaskInfo = this.showTaskModal ;
-          events.click = function(event){
-              // console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
-              const nodesAffected = event.nodes ;
-              const edgesAffected = event.edges ;
-              if (event.event.srcEvent.altKey){
-                //delete node or edge
-                if (nodesAffected.length>0){
-                  let curr = nodesAffected.shift() ;
-
-                  events.externalRemoveNode(curr) ;
-
-                }
-                else if (edgesAffected.length> 0) {
-                  let currE = edgesAffected.shift()
-                  events.externalRemoveEdge(currE)
-                }
-              }
-              else if (event.event.srcEvent.ctrlKey){
-                //add edge between node
-                if (nodesAffected.length>0){
-                  let curr = nodesAffected.shift() ;
-                  events.externalCreateEdge(curr) ; 
-                }
-
-              }
-              else{
-                //view task information
-                if (nodesAffected.length>0){
-                  let node = nodesAffected[0];
-                  events.viewTaskInfo(node) ;
-
-                }
-              }
-              
-          }  
+    // console.log(' gra',this.props) 
           
           //start rendering
           if (this.graphManager !== null){
@@ -610,16 +569,7 @@ class GraphPath extends Component{
                  </FormGroup>
             </Form>
         </Popover>) ; 
-        const taskSpeaker=(<Popover keyboard={true} title={"Provided tasks"} visible={this.state.showTask}
-               overflow={true} backdrop={true} 
-               children={
-                  <Task nodeTasks={this.state.nodeTasks} 
-                     deleteNodeTasks={this.deleteAllNodeTask} 
-                     deleteTask={this.deleteOneTask} 
-                     sendTaskInfo={this.saveNodeTask}/>
-               }>
-                
-           </Popover>) ;
+      
             return (
               <div >
                 {
@@ -641,14 +591,12 @@ class GraphPath extends Component{
                     <div>
                  {this.state.currNodeID.length > 1 ?
                  
-                      <Whisper  speaker={taskSpeaker} trigger={'active'}
-                       onExit={this.showTaskModal} 
-                       placement={'rightEnd'} >
-                        <Avatar className={'nodeView'} circle size={'lg'}>{
+                        
+                        <Avatar onClick={this.showTaskModal} className={'nodeView'} circle size={'lg'}>{
                         this.state.currNodeName===''?'click a node':this.state.currNodeName}</Avatar>
-                      </Whisper >
                  : <small>Click a node to add a task. To add node press, Add Node on top</small>}
-                      
+                      {
+                      this.state.nodeTasks?this.newTaskModal():<></>}
                      </div>
                 <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
                   graph={graph}
@@ -732,19 +680,88 @@ function mapStateToProps(state){
 
 export default connect(mapStateToProps)(withRouter(GraphPath)) ;
 
-  /* <Row>
-              <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
-                <Col>
-                <Panel bordered bodyFill header="Task"/>
-                </Col>
+  /* 
+          const options = {
+            layout: {
+              randomSeed: undefined,
+              improvedLayout:true,
+              clusterThreshold: 150,
+              // hierarchical: {
+              //   enabled:false,
+              //   levelSeparation: 150,
+              //   nodeSpacing: 100,
+              //   treeSpacing: 200,
+              //   blockShifting: true,
+              //   edgeMinimization: true,
+              //   parentCentralization: true,
+              //   direction: 'UD',        // UD, DU, LR, RL
+              //   sortMethod: 'hubsize',  // hubsize, directed
+              //   shakeTowards: 'leaves'  // roots, leaves
+              // }
+            },
+            nodes:{
+              physics:false
+            },
+            edges: {
+              color: "#ff0000" , 
+              physics:false 
+            },
+            // physics:{
+              // enabled:true ,
+              // forceAtlas2Based: {
+              //   theta: 1,
+              //   gravitationalConstant: -50,
+              //   centralGravity: 0.01,
+              //   springConstant: 0.08,
+              //   springLength: 100,
+              //   damping: 0.4,
+              //   avoidOverlap: 0
+              // }
+            // }
+          };
+          
+          const events = {} ;
+          events.select =  function(event) {
+              // var { nodes, edges } = event;
+            }  ;
 
-              </Row> */
+          events.externalRemoveNode = this.removeNode ;
+          events.externalRemoveEdge = this.removeEdge ;
+          events.externalCreateEdge = this.createEdgeBetweenNode
+          events.viewTaskInfo = this.showTaskModal ;
+          events.click = function(event){
+              // console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
+              const nodesAffected = event.nodes ;
+              const edgesAffected = event.edges ;
+              if (event.event.srcEvent.altKey){
+                //delete node or edge
+                if (nodesAffected.length>0){
+                  let curr = nodesAffected.shift() ;
+
+                  events.externalRemoveNode(curr) ;
+
+                }
+                else if (edgesAffected.length> 0) {
+                  let currE = edgesAffected.shift()
+                  events.externalRemoveEdge(currE)
+                }
+              }
+              else if (event.event.srcEvent.ctrlKey){
+                //add edge between node
+                if (nodesAffected.length>0){
+                  let curr = nodesAffected.shift() ;
+                  events.externalCreateEdge(curr) ; 
+                }
+
+              }
+              else{
+                //view task information
+                if (nodesAffected.length>0){
+                  let node = nodesAffected[0];
+                  events.viewTaskInfo(node) ;
+
+                }
+              }
+              
+          }  */
         
