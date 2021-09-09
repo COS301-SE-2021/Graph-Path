@@ -17,7 +17,7 @@ function makeProjectRoute(db) {
 
 
     router.get("/statistics/RadarGraph/:projectID",
-        authentication.authenticateToken,
+        //authentication.authenticateToken,
         param("projectID").exists().notEmpty().isMongoId(),
         async (req,res)=>{
             const projectID = req.params.projectID;
@@ -51,6 +51,71 @@ function makeProjectRoute(db) {
                         responseObj.labels.push(NodeLabel);
                         responseObj.data.push( NodeTasks.length);
                     }
+                    res.send({
+                        message: "successful",
+                        data: responseObj
+                    })
+
+                })
+                .catch((err)=>{
+                    res.send({
+                        message: "Statistics: radar Graph failed, failed to generate stats ",
+                        data: []
+                    })
+                })
+
+
+
+        })
+
+    router.get("/statistics/donutChart/:projectID",
+        //authentication.authenticateToken,
+        param("projectID").exists().notEmpty().isMongoId(),
+        async (req,res)=>{
+            const projectID = req.params.projectID;
+            const responseObj = {
+                projectName: "",
+            }
+            await ProjectManagerService.getProjectByID(db,projectID)
+                .then((project)=>{
+                    responseObj.projectName = project.projectName;
+
+                })
+                .catch((err)=>{
+                    res.send({
+                        message: "Statistics donutChart,failed to get project by ID ",
+                        data: err
+                    })
+                })
+
+            TaskManagerService.getAllTasksByProject(db,projectID)
+                .then((tasks)=>{
+                    responseObj.numTasks = tasks.length;
+                    let notStarted = 0 ;
+                    let inProgress = 0 ;
+                    let finished = 0 ;
+
+                    for (let i = 0; i < tasks.length ; i++) {
+
+                        if(tasks[i].status ==="complete") {
+                            finished++;}
+
+                        else if(tasks[i].status ==="in-progress") {
+                            inProgress++
+                        }
+
+                        else if(tasks[i].status ==="not started") {
+                            notStarted++;
+                        }
+
+                    }
+                    const total = notStarted + inProgress +finished;
+                    notStarted = notStarted/total;
+                    inProgress = inProgress/total;
+                    finished = finished/total;
+
+                    responseObj.labels = ["not started","in-progress","complete"]
+                    responseObj.data = [notStarted,inProgress,finished]
                     res.send({
                         message: "successful",
                         data: responseObj
