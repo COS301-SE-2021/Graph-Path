@@ -208,7 +208,10 @@ async function updateProjectGraph(dbController,id, graphObject){
         db.collection('Projects').updateOne({
             "_id": ObjectId(id)
         },{
-            $set:{graph:graphObject}
+            $set:{
+                graph:graphObject,
+                lastAccessed: new Date().toString().split("GMT")[0]
+            }
         })
             .then(ans=>{
                 resolve(ans);
@@ -389,7 +392,7 @@ async function updateEverythingProject(dbController, id, pname, ddate, sdate, ow
                 owner: own,
                 groupMembers: members,
                 graph: grph,
-                lastAccessed: new Date().toString()
+                lastAccessed: new Date().toString().split("GMT")[0]
             }
         })
             .then(ans=>{
