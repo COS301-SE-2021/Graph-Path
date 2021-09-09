@@ -41,7 +41,7 @@ class Profile extends React.Component{
     }
 
     render() {
-        const picture = this.props.user.picture;
+        // const picture = this.props.user.picture;
         const user = this.props.user;
         return(
             <>
@@ -52,7 +52,8 @@ class Profile extends React.Component{
                     </Drawer.Header>
                     <Drawer.Body id="body-div">
                         <div id="picture-div">
-                            <img src={picture} />
+
+                            {/*<img src={picture} />*/}
                             <Divider/>
                             <h6>{this.props.user.name}</h6>
 
