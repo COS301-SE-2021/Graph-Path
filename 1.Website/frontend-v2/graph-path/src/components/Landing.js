@@ -7,6 +7,11 @@ import {useAuth0} from '@auth0/auth0-react';
 import JSONPretty from 'react-json-pretty';
 import LoginBtn from "./LoginBtn";
 import Graph_Picture from "../img/graph_2.svg";
+import dashboard from "../img/dashboard.jpg";
+import createP from "../img/createp.jpg";
+import graph from "../img/graph.jpg";
+import stats1 from "../img/stats1.jpg";
+import stats2 from "../img/stats2.jpg";
 
 function Landing({logInvalid}) {
 
@@ -22,6 +27,15 @@ function Landing({logInvalid}) {
             <div data-testid="main-landing-id" id="main-div-landing">
                 <div id="left-div">
                         <img id="graph-picture" src={Graph_Picture} alt="graph-picture"/>
+
+                        <Carousel id="carousel-id" autoplay shape='bar' className="custom-slider">
+                                <img src={dashboard} />
+                                <img src={createP} />
+                                <img src={graph} />
+                                <img src={stats1} />
+                                <img src={stats2} />
+
+                        </Carousel>
                 </div>
                 <div id="right-div">
                         <h1 id="pageName">GRAPH PATH </h1>

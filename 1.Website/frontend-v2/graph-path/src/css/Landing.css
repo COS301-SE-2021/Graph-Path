@@ -7,6 +7,7 @@ p.aboutText{
 }
 p.introText{
     width: 90%;
+
     padding: 10px;
     font-size: 2em;
 }
@@ -70,6 +71,7 @@ span{
     /*color: #169DE0;*/
     color: white;
     margin-top: 7%;
+
 }
 
 #main-div-landing{
@@ -97,10 +99,18 @@ span{
 }
 
 #graph-picture{
-    width: 600px;
+    width: 70%;
     margin-top: 10%;
 }
 
 #landing-btn{
     background-color: pink;
+}
+
+#carousel-id{
+    width: 80%;
+    height: 45%;
+    margin-left: 10%;
+    margin-top: 10%;
+    border-radius: 5px;
 }
