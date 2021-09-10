@@ -105,7 +105,7 @@ function makeProjectRoute(db) {
                         if(tasks[i].status ==="complete") {
                             finished++;}
 
-                        else if(tasks[i].status ==="in-progress") {
+                        else if(tasks[i].status ==="in progress") {
                             inProgress++
                         }
 
