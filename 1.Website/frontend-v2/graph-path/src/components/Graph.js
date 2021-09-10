@@ -236,6 +236,8 @@ class GraphPath extends Component{
     let result = this.graphManager.removeNode(id) ;
     if (result){
       this.updateGraph() ;
+      this.deleteAllNodeTask(`${this.props.project._id}_${id}`) ; 
+
     }
     else{
       //could not delete
@@ -451,7 +453,7 @@ class GraphPath extends Component{
   }
 
   clickNodeHandler = (event)=>{
-    console.log(event) ; 
+    // console.log(event) ; 
     const nodeAffected = event.data.node.id ;
     const nameOfNode = event.data.node.label ;
 
@@ -462,7 +464,7 @@ class GraphPath extends Component{
       }
       // else if()
     }
-    else if(event.data.captor.ctrlKey){
+    else if(event.data.captor.ctrlKey || event.data.captor.shiftKey){
        //add edge between node
       if (typeof nodeAffected === 'string'){
         this.createEdgeBetweenNode(nodeAffected)
@@ -620,7 +622,7 @@ class GraphPath extends Component{
                     minEdgeSize:0.1,
                     font:"calibri",
                     defaultLabelSize:30,
-                    defaultLabelColor:"#ba0",
+                    defaultLabelColor:"#000",
                     labelSizeRatio:4,
                     defaultEdgeHoverColor:'#000',
                     maxEdgeSize:4,
