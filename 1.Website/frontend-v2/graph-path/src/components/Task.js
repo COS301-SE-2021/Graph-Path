@@ -46,7 +46,7 @@ class Task extends React.Component {
             .isRequired('This field is required.') ,
         issued:this.DateType().min(new Date(this.dueDate.getFullYear()-1,this.dueDate.getMonth(),this.dueDate.getDate()-1),'The issued date cannot be set to a date that has passed.')
             .isRequired('This field is required.') ,
-        due:this.DateType().range(this.now,this.dueDate,'The due date cannot be set to a date more than 12 months from now or a passed date.')
+        due:this.DateType().range(new Date(),this.dueDate,'The due date cannot be set to a date more than 12 months from now or a passed date.')
             .isRequired('This field is required.') ,
     })
     // EOF provate fields
