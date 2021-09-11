@@ -1,19 +1,42 @@
 const mongoose = require('mongoose');
-// const db =  require('../Controllers/DBController') ;
 
-const UserSchema = mongoose.Schema({
+const UserObjectScheme ={
 
-    _id: mongoose.Schema.Types.ObjectId,
-    firstName: String,
-    surname: String,
-    email:String,
-    password: String,
-    username: String,
-    type: String,
-    Notification: String,
+    //_id: mongoose.Schema.Types.ObjectId,
+    email: String,
+    email_verified: Boolean,
+    family_name:String,
+    given_name: String,
+    locale: String,//language?
+    name: String,//full names
+    nickname: String,
+    picture: Image,//link to an image
+    sub: String,//something to do with google auth
+    updated_at: String,//might be of type date
+    Notification: Array,
 
-},{collection :'User'});
+}
+
+const UserObjectBlank ={
+
+    //_id: mongoose.Schema.Types.ObjectId,
+    email: "",
+    email_verified: "",
+    family_name:"",
+    given_name: "",
+    locale: "",//language?
+    name: "",//full names
+    nickname: "",
+    picture: "",//link to an image
+    sub: "",//something to do with google auth
+    updated_at: "",//might be of type date
+    Notification: [],
+
+}
 
 // const dbUserModel = db.model('UserModel',UserSchema,'Users') ;
 // module.exports = dbUserModel ;
-module.exports  = mongoose.model("UserModel",UserSchema);
+module.exports={
+    UserObjectScheme,
+    UserObjectBlank
+}
