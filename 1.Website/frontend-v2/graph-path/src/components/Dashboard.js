@@ -14,6 +14,7 @@ import { connect} from 'react-redux' ;
 import RadarChart from "./RadarChart";
 import PieChart from "./PieChart";
 import Statistics from "./Statistics";
+import Calendar from "./Calendar";
 
 
 class Dashboard extends React.Component{
@@ -133,7 +134,8 @@ class Dashboard extends React.Component{
                         <div id="main-content">
                             <Switch>
                                 <Route path={`${match.path}/modal`} exact>
-                                    <Modal user={this.props.authUser} />
+                                    {/*<Modal user={this.props.authUser} />*/}
+                                    <Calendar user={this.props.authUser} />
                                 </Route>
                                 <Route path={`${match.path}/manager`} render={()=>{
                                     return <ProjectManager /> 
