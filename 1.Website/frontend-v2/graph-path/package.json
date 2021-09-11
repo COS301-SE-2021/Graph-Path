@@ -11,6 +11,8 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
+    "chart": "^0.1.2",
+    "chart.js": "^3.5.1",
     "date-fns": "^2.23.0",
     "jest-dom": "^4.0.0",
     "prop-types": "^15.7.2",
