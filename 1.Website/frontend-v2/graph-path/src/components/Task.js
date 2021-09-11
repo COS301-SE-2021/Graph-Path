@@ -97,6 +97,7 @@ class Task extends React.Component {
             else{
                 let fullTask = Object.assign(this.state.editTask,updated) ;
                 console.log('updated ',fullTask) ; 
+                this.props.updateNode(fullTask) ;
                 this.switchToEditTask({}) ; //switch view
             }
 

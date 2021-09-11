@@ -525,6 +525,22 @@ class GraphPath extends Component{
     })
   }
 
+  updateNode=(node)=>{
+    axios.patch(`${this.props.api}/task/updateEverythingTask`,node,{
+      headers:{
+        authorization:this.props.loggedUser.token
+      }
+    })
+    .then((res)=>{
+      console.log('update res',res); 
+    })
+    .catch((err)=>{
+      if(err.response ){
+        console.log('err msg',err.response) ;
+      }
+    })
+  }
+
   newTaskModal=()=>{
     return <Modal show={this.state.showTask} 
     keyboard={true}
@@ -542,6 +558,7 @@ class GraphPath extends Component{
       members={this.props.project.groupMembers}
       deleteNodeTasks={this.deleteAllNodeTask} 
       deleteTask={this.deleteOneTask} 
+      updateNode={this.updateNode}
       sendTaskInfo={this.saveNodeTask}/>
     </Modal.Body>
     </Modal>
