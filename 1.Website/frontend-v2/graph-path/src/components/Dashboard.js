@@ -59,7 +59,7 @@ class Dashboard extends React.Component{
     render(){
         const {match} =this.props ;
         const picture = this.props.authUser.picture;
-        console.log("match",match)
+        // console.log("match",match)
         return(
             //  <Router>            
                 <div data-testid="main-container-id" className="main-container">

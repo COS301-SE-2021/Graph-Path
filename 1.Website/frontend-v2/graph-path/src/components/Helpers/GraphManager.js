@@ -2,6 +2,17 @@ import { node } from "prop-types";
 import isAcyclic from "./DAG";
 
 class GraphManager{
+  /**
+   * @member {Object} graph - the graph representation of project. 
+   * */ 
+    graph = {} ; 
+
+    /**
+     * @member {Object} adjacencyList - adjacency representation of the graph 
+     * 
+    */
+    adjacencyList = {} ; 
+
     constructor(graph){
       if (graph === undefined || graph.nodes === undefined || graph.edges === undefined){
         this.setGraph({}) ;
@@ -239,7 +250,8 @@ class GraphManager{
         }}) ;
         if (found && ind > 0 ){
           found.color = color ;
-          nodes.splice(ind,1,found)
+          nodes.splice(ind,1,found) ;
+          this.graph.nodes = nodes ;
           return 1 ;
         }
       }

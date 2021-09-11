@@ -181,9 +181,8 @@ class GraphPath extends Component{
     }
     else{
         this.graphManager.addNode(name) ;
-        this.setState({
-          currGraph: this.graphManager.getGraph() 
-        },()=>  this.cleanUpAfterNodeAddition() )  ;
+        this.updateGraph();
+        this.cleanUpAfterNodeAddition()   ;
       
     }
   }
@@ -316,7 +315,7 @@ class GraphPath extends Component{
 
   saveProjectGraph=(projectId)=>{
 
-      var saveGraph =true;// this.validateGraphDifference(this.props.project.graph,this.state.currGraph)
+      var saveGraph =this.validateGraphDifference(this.initialGraph,this.state.currGraph)
       if ( saveGraph){ // if its not the same graph
           // console.log('valid?:',saveGraph,'Saving to porjec',projNode.projectName,this.state.grapRep) ;
           //set the loader while communicating with the server
@@ -407,8 +406,9 @@ class GraphPath extends Component{
     nodeTask.email = this.props.loggedUser.email ;
     nodeTask.taskMembers = []
 
-    let label = this.state.currGraph.nodes.find(node=>node.id === this.state.currNodeID) ;
-    if (label!== undefined){
+    let label = this.state.currNodeName ;
+    if (label.length<1){
+      label =  this.state.currGraph.nodes.find(node=>node.id === this.state.currNodeID) ;
       nodeTask.title = label.label ;
     }
 
@@ -503,8 +503,6 @@ class GraphPath extends Component{
     })
   }
 
-
-
   deleteAllNodeTask=(nodeID)=>{
     axios.delete(`${this.props.api}/task/deleteTaskByNodeID/${nodeID}`,{
       data: { 
@@ -541,6 +539,7 @@ class GraphPath extends Component{
     <Modal.Body>
       
       <Task nodeTasks={this.state.nodeTasks} 
+      members={this.props.project.groupMembers}
       deleteNodeTasks={this.deleteAllNodeTask} 
       deleteTask={this.deleteOneTask} 
       sendTaskInfo={this.saveNodeTask}/>
@@ -672,7 +671,7 @@ GraphPath.defaultProps = {
 
 GraphPath.propTypes = {
   // task:PropTypes.array,
-  project:PropTypes.object,
+  project:PropTypes.object.isRequired,
   api:PropTypes.string , 
   updateParent: PropTypes.func.isRequired
 }
