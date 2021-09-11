@@ -548,13 +548,36 @@ class GraphPath extends Component{
 
   }
 
+  changeNodeByStats(nodeId,stats=50){
+    let color = '#000' ; 
+    if (stats >= 70){
+        //green
+        color = '#0d0'
+    }
+    else if (stats >= 50){
+      color = '#dd0' ;
+    }
+    else{
+      color = '#d00'
+    }
+
+    let res = this.graphManager.changeColor(nodeId,color) ; 
+    if (res){
+      this.updateGraph() ;
+    }
+    else{
+      PopUpMessage('Could not change node color','info') ;
+    }
+
+  }
+
   render(){
     // console.log(' gra',this.props) 
           
           //start rendering
           if (this.graphManager !== null){
             const graph = this.state.currGraph;
-            // console.log('curr',graph)
+            console.log('curr',this.graphManager)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
         
@@ -602,6 +625,7 @@ class GraphPath extends Component{
                  : <small>Click a node to add a task. To add node press, Add Node on top</small>}
                       {
                       this.newTaskModal()}
+
                      </div>
                 <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
                   graph={graph}
@@ -662,7 +686,7 @@ class GraphPath extends Component{
             </div>)
           }
         
-    }
+  }
 }
 
 GraphPath.defaultProps = {

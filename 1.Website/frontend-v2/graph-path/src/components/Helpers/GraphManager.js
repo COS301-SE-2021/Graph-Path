@@ -248,7 +248,7 @@ class GraphManager{
           ind = i ;
           return value ; 
         }}) ;
-        if (found && ind > 0 ){
+        if (found && ind >= 0 ){
           found.color = color ;
           nodes.splice(ind,1,found) ;
           this.graph.nodes = nodes ;
