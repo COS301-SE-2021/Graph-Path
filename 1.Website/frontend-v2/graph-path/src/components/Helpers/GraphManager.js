@@ -90,6 +90,7 @@ class GraphManager{
       while (queue.length){
         currVertex = queue.shift() ;
         if (currVertex !== undefined){
+         console.log('prev',result[result.length-1],'curr',currVertex) ;
           result.push(currVertex) ;
           this.adjacencyList[currVertex].forEach((neighbor)=>{
             if (!visited[neighbor]){
@@ -259,6 +260,8 @@ class GraphManager{
     }
   
     setGraph = (graph)=>{
+      console.log('MGR set old:',this.graph,'new:',graph) ;
+
       if (Array.isArray(graph.nodes) && Array.isArray(graph.edges) ){
         this.graph = graph ;
       }
@@ -270,6 +273,7 @@ class GraphManager{
       }
     }
     getGraph=()=>{
+      console.log('MGR get',this.graph)
       return this.graph ;
     }
 
@@ -442,6 +446,21 @@ class GraphManager{
         // console.log('Manager:',this.graph) ; 
       
     }
+
+    updatePosition=(nodeID,x,y)=>{
+      let ind = -1 ;
+      let node = this.graph.nodes.find((value,i)=>{if (value.id === nodeID){
+        ind = i ;
+        return value ; }}) ; 
+      if (node && ind >=0 ){
+        node.x =  x ; 
+        node.y = y ;
+        this.graph.nodes[ind] = node ;
+        return 1 ;
+      }
+      return 0 ; 
+    }
+    
 }
 
 export default GraphManager ;

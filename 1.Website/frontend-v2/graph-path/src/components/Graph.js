@@ -1,5 +1,6 @@
 import {React,Component} from "react";
-import {Sigma,NodeShapes,EdgeShapes,DragNodes} from 'react-sigma' ; 
+// import {Sigma,NodeShapes,EdgeShapes,DragNodes} from 'react-sigma' ; 
+import Graph from 'react-graph-vis' ;
 // import Dagre from 'react-sigma/lib/Dagre' ;
 import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
@@ -180,6 +181,7 @@ class GraphPath extends Component{
         PopUpMessage('Cannot Submit Empty Name','error')
     }
     else{
+        this.graphManager.setGraph(this.state.currGraph) ;
         this.graphManager.addNode(name) ;
         this.updateGraph();
         this.cleanUpAfterNodeAddition()   ;
@@ -336,8 +338,8 @@ class GraphPath extends Component{
           const minimalEdges = this.state.currGraph.edges.map((edge)=>{
               return {
                   id: edge.id,
-                  source: edge.source,
-                  target: edge.target,
+                  from: edge.source === undefined ? edge.from: edge.source,
+                  to: edge.target === undefined ?edge.to: edge.target,
                   label: edge.label,
                   color: edge.color,
                   size: edge.size,
@@ -589,7 +591,7 @@ class GraphPath extends Component{
   }
 
   render(){
-    // console.log(' gra',this.props) 
+    console.log(' graph',this.state.currGraph) 
           
           //start rendering
           if (this.graphManager !== null){
@@ -614,6 +616,93 @@ class GraphPath extends Component{
                  </FormGroup>
             </Form>
         </Popover>) ; 
+         const options = {
+          layout: {
+            randomSeed: undefined,
+            improvedLayout:true,
+            clusterThreshold: 150,
+            // hierarchical: {
+            //   enabled:false,
+            //   levelSeparation: 150,
+            //   nodeSpacing: 100,
+            //   treeSpacing: 200,
+            //   blockShifting: true,
+            //   edgeMinimization: true,
+            //   parentCentralization: true,
+            //   direction: 'UD',        // UD, DU, LR, RL
+            //   sortMethod: 'hubsize',  // hubsize, directed
+            //   shakeTowards: 'leaves'  // roots, leaves
+            // }
+          },
+          nodes:{
+            physics:false
+          },
+          edges: {
+            color: "#ff0000" , 
+            physics:false 
+          },
+          // physics:{
+            // enabled:true ,
+            // forceAtlas2Based: {
+            //   theta: 1,
+            //   gravitationalConstant: -50,
+            //   centralGravity: 0.01,
+            //   springConstant: 0.08,
+            //   springLength: 100,
+            //   damping: 0.4,
+            //   avoidOverlap: 0
+            // }
+          // }
+        };
+        
+        const events = {} ;
+        events.select =  function(event) {
+            var { nodes, edges } = event;
+            console.log('sel',event)
+          }  ;
+        events.dragEnd = function (event){
+          console.log('drag',event)
+        }
+
+        events.externalRemoveNode = this.removeNode ;
+        events.externalRemoveEdge = this.removeEdge ;
+        events.externalCreateEdge = this.createEdgeBetweenNode
+        events.viewTaskInfo = this.showTaskModal ;
+        events.click = function(event){
+            // console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
+            const nodesAffected = event.nodes ;
+            const edgesAffected = event.edges ;
+            if (event.event.srcEvent.altKey){
+              //delete node or edge
+              if (nodesAffected.length>0){
+                let curr = nodesAffected.shift() ;
+
+                events.externalRemoveNode(curr) ;
+
+              }
+              else if (edgesAffected.length> 0) {
+                let currE = edgesAffected.shift()
+                events.externalRemoveEdge(currE)
+              }
+            }
+            else if (event.event.srcEvent.ctrlKey){
+              //add edge between node
+              if (nodesAffected.length>0){
+                let curr = nodesAffected.shift() ;
+                events.externalCreateEdge(curr) ; 
+              }
+
+            }
+            else{
+              //view task information
+              if (nodesAffected.length>0){
+                let node = nodesAffected[0];
+                events.viewTaskInfo(node) ;
+
+              }
+            }
+            
+        } 
       
             return (
               <div >
@@ -644,7 +733,19 @@ class GraphPath extends Component{
                       this.newTaskModal()}
 
                      </div>
-                <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
+
+                     <Graph key={JSON.stringify(graph)}
+                  graph={this.state.currGraph}
+                  options={options}
+                  events={events}
+                  getNetwork={network => {
+                    //  if you want access to vis.js network api you can set the state in a parent component using this property
+                    // console.log('net',network)
+                    network.stabilize(2000);
+                  }}
+              />
+
+               {/* <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
                   graph={graph}
                   style={{
                     // position:"relative", 
@@ -686,11 +787,12 @@ class GraphPath extends Component{
                 <EdgeShapes default="arrow"/>
                 <NodeShapes default="def"/>
                 <DragNodes />
-                {/* <Dagre directed={false}/> */}
-                {/* <RandomizeNodePositions seed={20} /> */}
-                {/* <RelativeSize size={30} /> */}
+                {/* <Dagre directed={false}/> 
+                {/* <RandomizeNodePositions seed={20} /> 
+                {/* <RelativeSize size={30} /> 
                 
               </Sigma>
+            */}
 
               </div>
               </div>
@@ -727,87 +829,5 @@ function mapStateToProps(state){
 export default connect(mapStateToProps)(withRouter(GraphPath)) ;
 
   /* 
-          const options = {
-            layout: {
-              randomSeed: undefined,
-              improvedLayout:true,
-              clusterThreshold: 150,
-              // hierarchical: {
-              //   enabled:false,
-              //   levelSeparation: 150,
-              //   nodeSpacing: 100,
-              //   treeSpacing: 200,
-              //   blockShifting: true,
-              //   edgeMinimization: true,
-              //   parentCentralization: true,
-              //   direction: 'UD',        // UD, DU, LR, RL
-              //   sortMethod: 'hubsize',  // hubsize, directed
-              //   shakeTowards: 'leaves'  // roots, leaves
-              // }
-            },
-            nodes:{
-              physics:false
-            },
-            edges: {
-              color: "#ff0000" , 
-              physics:false 
-            },
-            // physics:{
-              // enabled:true ,
-              // forceAtlas2Based: {
-              //   theta: 1,
-              //   gravitationalConstant: -50,
-              //   centralGravity: 0.01,
-              //   springConstant: 0.08,
-              //   springLength: 100,
-              //   damping: 0.4,
-              //   avoidOverlap: 0
-              // }
-            // }
-          };
-          
-          const events = {} ;
-          events.select =  function(event) {
-              // var { nodes, edges } = event;
-            }  ;
-
-          events.externalRemoveNode = this.removeNode ;
-          events.externalRemoveEdge = this.removeEdge ;
-          events.externalCreateEdge = this.createEdgeBetweenNode
-          events.viewTaskInfo = this.showTaskModal ;
-          events.click = function(event){
-              // console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
-              const nodesAffected = event.nodes ;
-              const edgesAffected = event.edges ;
-              if (event.event.srcEvent.altKey){
-                //delete node or edge
-                if (nodesAffected.length>0){
-                  let curr = nodesAffected.shift() ;
-
-                  events.externalRemoveNode(curr) ;
-
-                }
-                else if (edgesAffected.length> 0) {
-                  let currE = edgesAffected.shift()
-                  events.externalRemoveEdge(currE)
-                }
-              }
-              else if (event.event.srcEvent.ctrlKey){
-                //add edge between node
-                if (nodesAffected.length>0){
-                  let curr = nodesAffected.shift() ;
-                  events.externalCreateEdge(curr) ; 
-                }
-
-              }
-              else{
-                //view task information
-                if (nodesAffected.length>0){
-                  let node = nodesAffected[0];
-                  events.viewTaskInfo(node) ;
-
-                }
-              }
-              
-          }  */
+          */
         
