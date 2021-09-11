@@ -20,6 +20,47 @@ function  makeTaskRoute(db)
      * @apiParam  {String} [description] Description
      * @apiSuccess (200) {Object} mixed `User` object
      */
+
+
+    router.get('/getStatusStats', (req,res)=>{
+        // get NodeID
+        //get Tasks for NodeID
+        //separate by Status
+        const nodeID = req.body.nodeID;
+        TaskManagerService.getAllNodeTasks(db,nodeID).then((tasks)=>{
+            let notStarted = 1;
+            let inProgress = 0;
+            let completed =  0;
+            for (let i = 0; i < tasks.length; i++) {
+
+                if(tasks[i].status ==="not started"){
+                    notStarted++;
+                }
+                else if(tasks[i].status ==="in progress"){
+                    inProgress++;
+                }
+                else if(tasks[i].status ==="complete"){
+                    completed++;
+                }
+
+            }
+
+            let threshold = completed/(completed+inProgress+notStarted);
+            res.send({
+                message: "successfully sent",
+                nodeCompletionStatus: threshold
+            })
+
+        })
+            .catch(err=>{
+                console.log("err getting tasks of a node")
+                res.send({
+                    message:"err getting tasks of a node",
+                    data: err
+                })
+            })
+
+    })
     router.get('/getTasksByDescription',
 
         body('description').exists().not().isEmpty().trim(),
@@ -588,8 +629,7 @@ function  makeTaskRoute(db)
      */
     router.patch('/updateEverythingTask',
 
-        body('id').exists().notEmpty(),
-        body('assignee').exists().notEmpty().isJSON(),
+        body('taskID').exists().notEmpty().isMongoId(),
         body('assigner').exists().notEmpty().isJSON(),
         body('description').exists().notEmpty().isString(),
         body('issued').exists().notEmpty().isDate(),
@@ -597,7 +637,9 @@ function  makeTaskRoute(db)
         body('nodeID').exists().notEmpty(),
         body('status').exists().isIn(['not started' , 'in progress' , 'complete']),
         body('project').exists().isMongoId(),
-        (req, res)=>{
+        async (req, res)=>{
+
+
 
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
@@ -607,38 +649,72 @@ function  makeTaskRoute(db)
             })
         }
 
-            let ID = req.body.id;
-            let assignee = req.body.assignee;
-            let assigner = req.body.assigner;
-            let description = req.body.description;
-            let issued = req.body.issued;
-            let due = req.body.due;
-            let nodeID = req.body.nodeID;
-            let status = req.body.status;
-            let project = req.body.project;
+            const nodeID = req.body.nodeID;
+            let TaskObject = {
+                description:req.body.description,
+                title:req.body.title,
+                status:req.body.status,
+                projectID:req.body.projectID,
+                taskMembers:req.body.taskMembers,
+                assigner:req.body.assigner,
+                due:req.body.due,
+                issued:req.body.issued,
+                nodeID: req.body.nodeID
+            }
+            let responseObj = {}
 
-            TaskManagerService.updateEverythingTask(db,ID, assignee, assigner, description, issued, due, nodeID, status, project)
+           await TaskManagerService.updateEverythingTask(db,TaskObject,ID)
                 .then((ans)=>{
                 if(ans == null){
-                    res.send({
-                        message:"The task was not updated."
-                    })
+                   responseObj.message="The task was not updated.";
                 }else if(ans.modifiedCount < 1){
-                    res.send({
-                        message: "Could not update the task."
-                    })
+                        responseObj.message= "Could not update the task.";
                 }else if(ans.modifiedCount > 0){
-                    res.send({
-                        message: "The task was updated successfully."
-                    })
+                        responseObj.message= "The task was updated successfully.";
+
                 }
             })
                 .catch((err)=>{
                     res.status(500).send({
-                    message: "Server error: Nothing was updated, make sure the provided ID is correct and valid.",
+                    message: "Server error: failed to update task data",
                     err:err
                 })
                 })
+            await TaskManagerService.getAllNodeTasks(db,nodeID).then((tasks)=>{
+                let notStarted = 1;
+                let inProgress = 0;
+                let completed =  0;
+                for (let i = 0; i < tasks.length; i++) {
+
+                    if(tasks[i].status ==="not started"){
+                        notStarted++;
+                    }
+                    else if(tasks[i].status ==="in progress"){
+                        inProgress++;
+                    }
+                    else if(tasks[i].status ==="complete"){
+                        completed++;
+                    }
+
+                }
+
+                let threshold = completed/(completed+inProgress+notStarted);
+                responseObj.message= "successfully sent",
+                    responseObj.nodeCompletetionStatus= threshold
+
+
+            })
+                .catch(err=>{
+                    console.log("err getting tasks of a node")
+                    res.send({
+                        message:"err getting tasks of a node",
+                        data: err
+                    })
+                })
+
+            res.send(
+                responseObj
+            )
 
     });
 
