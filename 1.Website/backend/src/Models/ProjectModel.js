@@ -3,7 +3,7 @@ const mongoose = require('mongoose') ;
 
 const ProjectObjectScheme = {
 
-    //_id: mongoose.Schema.Types.ObjectId(),
+    //_id: mongoose.Mongo.ObjectId,
     projectName: String,
     startDate: Date,
     dueDate: Date,
@@ -18,7 +18,7 @@ const ProjectObjectScheme = {
 }
 
 const ProjectObjectBlank = {
-    //_id: mongoose.Schema.Types.ObjectId(),
+    //_id: mongoose.Mongo.ObjectId,
     projectName: "",
     startDate: "",
     dueDate: "",

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const UserObjectScheme ={
 
-    //_id: mongoose.Schema.Types.ObjectId,
+    //_id: mongoose.mongo.ObjectId,
     email: String,
     email_verified: Boolean,
     family_name:String,
@@ -19,7 +19,7 @@ const UserObjectScheme ={
 
 const UserObjectBlank ={
 
-    //_id: mongoose.Schema.Types.ObjectId,
+    //_id: mongoose.mongo.ObjectId,
     email: "",
     email_verified: "",
     family_name:"",
@@ -34,8 +34,6 @@ const UserObjectBlank ={
 
 }
 
-// const dbUserModel = db.model('UserModel',UserSchema,'Users') ;
-// module.exports = dbUserModel ;
 module.exports={
     UserObjectScheme,
     UserObjectBlank
