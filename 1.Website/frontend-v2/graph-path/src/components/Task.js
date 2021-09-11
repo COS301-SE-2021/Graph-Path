@@ -15,9 +15,7 @@ import  '../css/Common.css' ;
 class Task extends React.Component {
     
     constructor(props){
-        super(props) ;
-        let now = new Date() ;
-        
+        super(props) ;        
         this.state = {
             assignee:[],
             assigner:{},
@@ -26,31 +24,39 @@ class Task extends React.Component {
             newStatus:'not started',
             formValue:{
                 description: '' , 
-                issued: new Date(now.getFullYear(),now.getMonth(),now.getDate()).toJSON().slice(0,10) ,
-                due: new Date(now.getFullYear(),now.getMonth()+1,now.getDate()).toJSON().slice(0,10),
+                issued: new Date(this.now.getFullYear(),this.now.getMonth(),this.now.getDate()).toJSON().slice(0,10) ,
+                due: new Date(this.now.getFullYear(),this.now.getMonth()+1,this.now.getDate()).toJSON().slice(0,10),
                 status:'not started',
+                taskMembers:[]
             },
             formError:{}
 
         }
     }
 
+    //private fields
+    now = new Date() ;
+
+    DateType = Schema.Types.DateType ;
+    StringType = Schema.Types.StringType ;
+    dueDate = new Date(this.now.getFullYear()+1)
+    
+    taskModel =Schema.Model({
+        description: this.StringType().minLength(5,'Please add more details on the description')
+            .isRequired('This field is required.') ,
+        issued:this.DateType().min(new Date(this.dueDate.getFullYear()-1,this.dueDate.getMonth(),this.dueDate.getDate()-1),'The issued date cannot be set to a date that has passed.')
+            .isRequired('This field is required.') ,
+        due:this.DateType().range(this.now,this.dueDate,'The due date cannot be set to a date more than 12 months from now or a passed date.')
+            .isRequired('This field is required.') ,
+    })
+    // EOF provate fields
+
+
     handleTaskCreation =(form,event)=>{
-        let updated = {...form} ;
-        if ( form.due instanceof Date ){
-            updated.due = form.due.toJSON().slice(0,10) 
-            // console.log('yes Due is Date',updated)
-
-        }
-
-        if (form.issued instanceof Date ){
-        // console.log('yes issued is Date')
-
-            updated.issued = form.issued.toJSON().slice(0,10) 
-        }
+        console.log('Form ',form)
 
         this.setState({
-            formValue:updated
+            formValue:form
         }) ;
     }
     handleTaskErrors = (formError)=>{
@@ -66,44 +72,84 @@ class Task extends React.Component {
             console.log('Form error')
         }
         else{
+            let updated = {...formValue} ;
+            if ( formValue.due instanceof Date ){
+                updated.due = formValue.due.toJSON().slice(0,10) 
+                // console.log('yes Due is Date',updated)
+    
+            }
+    
+            if (formValue.issued instanceof Date ){
+            // console.log('yes issued is Date')
+    
+                updated.issued = formValue.issued.toJSON().slice(0,10) 
+            }
+    
             // alert('saved') ;
-            this.props.sendTaskInfo(formValue) ;
-            this.setState({
-                newTask:!this.state.newTask
-            }) ;
+            console.log('selected submit',updated) ; 
+
+            if (this.state.editTask.nodeID === undefined){
+                this.props.sendTaskInfo(updated) ;
+                this.setState({
+                    newTask:!this.state.newTask
+                }) ;
+            }
+            else{
+                let fullTask = Object.assign(this.state.editTask,updated) ;
+                console.log('updated ',fullTask) ; 
+                this.switchToEditTask({}) ; //switch view
+            }
+
+            
         }
+    }
+
+    
+    toogleScreen=()=>{
+        console.log('toggled')
+        this.setState({
+            newTask: !this.state.newTask,
+            formValue:{
+                description: '' , 
+                issued: new Date(this.now.getFullYear(),this.now.getMonth(),this.now.getDate()).toJSON().slice(0,10) ,
+                due: new Date(this.now.getFullYear(),this.now.getMonth()+1,this.now.getDate()).toJSON().slice(0,10),
+                status:'not started',
+                taskMembers:[]
+            },
+            formError:{},
+            editTask:{}
+
+        }) ;
     }
 
     switchToEditTask = (taskObj) =>{
         console.log('selected for edit',taskObj) ; 
+        
+        let formValue2 = {...this.state.formValue} ;
+        if (taskObj.nodeID !== undefined){    
+            formValue2.description = taskObj.description ; 
+            formValue2.due = taskObj.due ; 
+            formValue2.taskMembers = taskObj.taskMembers ;
+        }
         this.setState({
-            editTask:taskObj
+            editTask:taskObj,
+            formValue:formValue2
         }) ; 
     }
+
     handleSortChange =(value)=>{
         // console.log('value',value )
         this.setState({
             newStatus:value
-        })}
+    })}
 
-        createNewTask=()=>{
+    createNewTask=()=>{
             const {formError,formValue} = this.state ;
-            const {DateType,StringType} = Schema.Types ;
-            let dueDate = new Date() ;
-            dueDate.setFullYear(dueDate.getFullYear()+1)
-            const taskModel =Schema.Model({
-                description: StringType().minLength(5,'Please add more details on the description')
-                    .isRequired('This field is required.') ,
-                issued:DateType().min(new Date(dueDate.getFullYear()-1,dueDate.getMonth(),dueDate.getDate()-1),'The issued date cannot be set to a date that has passed.')
-                    .isRequired('This field is required.') ,
-                due:DateType().range(new Date(),dueDate,'The due date cannot be set to a date more than 12 months from now or a passed date.')
-                    .isRequired('This field is required.') ,
-            })
-    
+        
             return (
                 <div>
                 <Form formValue={formValue} 
-                    model={taskModel}
+                    model={this.taskModel}
                     ref ={ ref =>(this.form = ref)}
                     onCheck={formError=>this.handleTaskErrors(formError)} 
                     onChange={this.handleTaskCreation}> 
@@ -150,7 +196,8 @@ class Task extends React.Component {
             </Form>
             </div>
             )
-        }
+    }
+    
     
 
     listAllTasks =()=>{
@@ -159,32 +206,63 @@ class Task extends React.Component {
             if(this.state.editTask.status !== undefined){
                 const task = this.state.editTask ;
                 // the edit button pressed
+                const {formError,formValue} = this.state ;
                 const options = [{label:"Not Started",value:"not started"},{label:"Complete",value:"complete"},{label:"In Progress",value:"in progress"}]
-                return <><Panel bordered header={`Description : ${task.description} `}>
+                return <><Panel bordered header={'Edit Task '}>
+                   <p> <Button onClick={()=>this.switchToEditTask({})}><Icon icon={'close'}/> Cancel</Button>
+                   
+                   </p>
                     <small>
                 
                         <b>Issued</b> : {task.issued} <br/>
-                        <b>Due-Date</b> : {task.due} <br/>
-                        <b>Status </b>:
-                        <Form formValue={this.state.formValue}
-                    onChange={this.handleTaskCreation}> 
+                       
+                        <Form formValue={formValue}
+                            model={this.taskModel}
+                            ref ={ ref =>(this.form = ref)}
+                            onCheck={formError=>this.handleTaskErrors(formError)} 
+                            onChange={this.handleTaskCreation}> 
+                            
+                        <FormGroup >
+                            <ControlLabel>Description</ControlLabel>
+                            <FormControl name="description" placeholder="Task Description"  />
+                            <HelpBlock tooltip>Required</HelpBlock>
+                        </FormGroup>
+
+
+                        <CustomField 
+                            accepter={DatePicker}
+                            name={"due"}
+                            label={"Due Date"}
+                            error={formError.due}
+                            oneTap={true}
+                            format={'YYYY-MM-DD'}
+                        />
                         
                         <CustomField 
                                 name="status" 
                                 label={"Status"}    
                                 accepter={SelectPicker}
                                 // error={}
-                                inline
+                                inline={'true'}
                                 data={options}
                             ></CustomField>  
+
+                            
+                        <CustomField 
+                                name="status" 
+                                label={"Status"}    
+                                accepter={SelectPicker}
+                                // error={}
+                                inline={'true'}
+                                data={options}
+                            ></CustomField>  
+                            
                         </Form >
                                                     
                         <br/>
                     </small>
-                    <Button > <Icon icon={'trash'}/>
-                    </Button>
 
-                    <Button onClick={()=>this.switchToEditTask(task)}><Icon icon={'pencil-square'}/>Edit Task</Button>
+                    <Button onClick={this.handleTaskSubmit}><Icon icon={'save'} spin={true}/>Save Changes</Button>
                 </Panel></>
             }
             else if (Array.isArray(this.props.nodeTasks) && this.props.nodeTasks.length>0 ){
@@ -219,13 +297,6 @@ class Task extends React.Component {
         }
     }
 
-    toogleScreen=()=>{
-        console.log('toggled')
-        this.setState({
-            newTask: !this.state.newTask
-        }) ;
-    }
-
     deleteAll = ()=>{
         const tasks = this.props.nodeTasks ;
         if (tasks){
@@ -243,6 +314,7 @@ class Task extends React.Component {
     }
 
     render(){
+        console.log('Tasks pros',this.props)
         return <div id="tidTask" data-testid="tidTask">
             <div>
                 <Button onClick={this.toogleScreen}  appearance={'ghost'}>
@@ -266,6 +338,7 @@ class Task extends React.Component {
 
 Task.propType = {
     nodeTasks : PropTypes.array.isRequired, 
+    members :PropTypes.array.isRequired,
     sendTaskInfo:PropTypes.func.isRequired,
     deleteTask :PropTypes.func.isRequired, 
     deleteNodeTasks:PropTypes.func.isRequired, 
