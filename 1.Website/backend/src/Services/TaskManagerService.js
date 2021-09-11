@@ -44,6 +44,27 @@ async function getTaskByID(dbController, id){
     })
 }
 
+async function getAllNodeTasks(dbController, nodeId){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').find({
+            nodeID: nodeId
+        }).toArray()
+            .then(ans=>{
+                if(ans == null){
+
+                    resolve(ans);
+                }else{
+
+                    resolve(ans);
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
 async function getAllTasksByProject(dbController, id){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
@@ -209,21 +230,22 @@ async function updateTaskAssigner(dbController, id, assigner){
     })
 }
 
-async function updateEverythingTask(dbController,id, assignee, assigner, description, issued, due, nodeID, status, project){
+async function updateEverythingTask(dbController,id,taskObj){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
         db.collection('Tasks').updateOne({
             "_id": ObjectId(id)
         },{
             $set:{
-                assignee: assignee,
-                assigner:assigner,
-                description: description,
-                issued: issued,
-                due : due,
-                nodeID : nodeID,
-                status:status,
-                project: project
+                description:taskObj.description,
+                title:taskObj.title,
+                status:taskObj.status,
+                projectID:taskObj.projectID,
+                taskMembers:taskObj.taskMembers,
+                assigner:taskObj.assigner,
+                due:taskObj.due,
+                issued:taskObj.issued,
+                nodeID: taskObj.nodeID
             }
         })
             .then(ans=>{
@@ -249,4 +271,5 @@ module.exports={
     updateTaskAssignee,
     updateEverythingTask,
     deleteTaskByNodeID,
+    getAllNodeTasks,
 }
