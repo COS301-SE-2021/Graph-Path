@@ -190,8 +190,8 @@ class Kanban extends React.Component {
                                         <tr>
 
                                             {props.status !== '' && <td className="card-content">
-                                                {props.status === 'not started' && <div className="e-preparingText e-tooltip-text">notStarted</div>}
-                                                {props.status === 'inProgress' && <div className="e-readyText e-tooltip-text">inProgress</div>}
+                                                {props.status === 'not started' && <div className="e-preparingText e-tooltip-text">Not Started</div>}
+                                                {props.status === 'inProgress' && <div className="e-readyText e-tooltip-text">In Progress</div>}
                                                 {(props.status === 'complete' ) && <div className="e-deliveredText e-tooltip-text">Complete</div>}
 
 
