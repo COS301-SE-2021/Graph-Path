@@ -21,8 +21,11 @@ class Kanban extends React.Component {
             projectsByEmail: [],
             projectsByEmail2:[],
             allTasks: [],
-            //data: extend([], MockData, null, true)
-        }
+
+        };
+        this.fields=[ { text: 'Unique ID', key:'_id' },
+            {key:'status', type:'DropDown'},
+            {key: 'description', type:'TextArea'}]
     }
     columnTemplate(heading) {
         return (<div className="header-template-wrap">
@@ -30,6 +33,7 @@ class Kanban extends React.Component {
             <div className="header-text">{heading.headerText}</div>
         </div>);
     }
+
   componentDidMount() {
     this.firstSearch();
 
@@ -81,6 +85,7 @@ class Kanban extends React.Component {
                        for (let j = 0; j < project.tasks.length; j++) {
                            let task = project.tasks[j];
                            task.projectName = project.projectName;
+                           task.Priority = task.status;
                            task.newID=count++;
                            console.log('task 84', task);
                            tasks.push(task);
@@ -152,20 +157,70 @@ class Kanban extends React.Component {
 
     }
 
+    cardTemplate(props) {
+        // var src = 'src/kanban/images/' + props.ImageURL;
+        return (<div className="card-template">
+            <div className="card-template-wrap">
+                <table className="card-template-wrap">
+                    <colgroup>
+                        <col style={{ width: "55px" }}/>
+                        <col />
+                    </colgroup>
+                    <tbody>
+                    <tr>
 
+                        <td className="e-title">
+                            <div className="e-card-stacked">
+                                <div className="e-card-header">
+                                    <div className="e-card-header-caption">
+                                        <div className="e-card-header-title e-tooltip-text">{props.title}</div>
+                                    </div>
+                                </div>
+                                <div className="e-card-content" style={{ lineHeight: "2.75em" }}>
+                                    <table className="card-template-wrap" style={{ tableLayout: "auto" }}>
+                                        <tbody>
+                                        <tr>
+                                            {( props.status === 'not started' || props.status === 'inProgress' || props.status==='complete') && <td colSpan={2}>
+                                                {props.status !== '' && <div className="e-description e-tooltip-text">{props.description}</div>}
+
+                                            </td>}
+                                            {(props.status === 'complete' ) && <td className="card-content">
+
+                                            </td>}
+                                        </tr>
+                                        <tr>
+
+                                            {props.status !== '' && <td className="card-content">
+                                                {props.status === 'not started' && <div className="e-preparingText e-tooltip-text">notStarted</div>}
+                                                {props.status === 'inProgress' && <div className="e-readyText e-tooltip-text">inProgress</div>}
+                                                {(props.status === 'complete' ) && <div className="e-deliveredText e-tooltip-text">Complete</div>}
+
+
+                                            </td>}
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>);
+    }
     render() {
         //console.log('break test 126',this.state.projectsByEmail2)
 
           return (
-
-
-                    <div>
-
-                        <KanbanComponent cssClass="kanban-header" id="kanban"  keyField="status"
-                                                          dataSource={this.state.projectsByEmail} cardSettings={{contentField: "description", headerField: "newID" }}
-                                                          swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
-                                                    cardClick={this.handler}
-                                                    // drag={(prps)=>console.log(prps)}
+              <div className='schedule-control-section'>
+                  <div className='col-lg-12 control-section'>
+                            <div className='control-wrapper'>
+                                <KanbanComponent cssClass="kanban-card-template" id="kanban"  keyField="status" enableTooltip={true}
+                                                 dataSource={this.state.projectsByEmail} cardSettings={{contentField: "description", headerField: "_id", template: this.cardTemplate.bind(this), selectionType: "Multiple"  }}
+                                                 swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
+                                                 cardClick={this.handler}
+                                    // drag={(prps)=>console.log(prps)}
                                 >
                                     <ColumnsDirective>
                                         <ColumnDirective headerText="Not Started" keyField="not started"  />
@@ -173,9 +228,14 @@ class Kanban extends React.Component {
                                         <ColumnDirective headerText="Complete" keyField="complete"  template={this.columnTemplate.bind(this)}/>
                                     </ColumnsDirective>
                                 </KanbanComponent>
+                            </div>
 
 
-                    </div>
+
+                  </div>
+              </div>
+
+
 
         )
 
