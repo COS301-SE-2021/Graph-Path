@@ -1,0 +1,20 @@
+.fc-today-button{
+    text-transform: capitalize !important;
+}
+
+.fc-event-title-container{
+    text-transform: capitalize !important;
+    padding: 3% !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    /*background-color: rgba(255, 220, 40, 0.15);*/
+    /*background-color: var(--fc-today-bg-color, rgba(255, 220, 40, 0.15));*/
+    background-color: #2b2f36 !important;
+}
+.fc .fc-scrollgrid-liquid{
+    border: 1px solid grey;
+}
+.fc{
+    max-height: 84vh !important;
+}
