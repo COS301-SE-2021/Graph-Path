@@ -158,7 +158,6 @@ class Kanban extends React.Component {
     }
 
     cardTemplate(props) {
-        // var src = 'src/kanban/images/' + props.ImageURL;
         return (<div className="card-template">
             <div className="card-template-wrap">
                 <table className="card-template-wrap">
@@ -217,13 +216,13 @@ class Kanban extends React.Component {
                   <div className='col-lg-12 control-section'>
                             <div className='control-wrapper'>
                                 <KanbanComponent cssClass="kanban-card-template" id="kanban"  keyField="status" enableTooltip={true}
-                                                 dataSource={this.state.projectsByEmail} cardSettings={{contentField: "description", headerField: "_id", template: this.cardTemplate.bind(this), selectionType: "Multiple"  }}
+                                                 dataSource={this.state.projectsByEmail} cardSettings={{contentField: "description", headerField: "_id", template: this.cardTemplate.bind(this)  }}
                                                  swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
                                                  cardClick={this.handler}
                                     // drag={(prps)=>console.log(prps)}
                                 >
                                     <ColumnsDirective>
-                                        <ColumnDirective headerText="Not Started" keyField="not started"  />
+                                        <ColumnDirective headerText="Not Started" keyField="not started"   template={this.columnTemplate.bind(this)}/>
                                         <ColumnDirective headerText="In Progress" keyField="inProgress"  template={this.columnTemplate.bind(this)}/>
                                         <ColumnDirective headerText="Complete" keyField="complete"  template={this.columnTemplate.bind(this)}/>
                                     </ColumnsDirective>
