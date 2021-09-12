@@ -2,6 +2,7 @@ import React from "react";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import axios from "axios";
+import "../css/Calendar.css"
 
 class Calendar extends React.Component{
     constructor(props){
