@@ -71,11 +71,11 @@
     color: #9ACD32;
 }
 
-@keyframes blinker {
-    50% {
-        opacity: 0.1;
-    }
-}
+/*@keyframes blinker {*/
+/*    50% {*/
+/*        opacity: 0.1;*/
+/*    }*/
+/*}*/
 
 /*The header css*/
 .kanban-card-template.e-kanban .header-template-wrap {
