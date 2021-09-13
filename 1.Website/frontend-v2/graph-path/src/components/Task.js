@@ -1,6 +1,6 @@
 import React from 'react' ;
 import PropTypes from 'prop-types' ;
-import {Schema,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
+import {Schema,CheckPicker,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
 import  '../css/Common.css' ;
 
@@ -257,7 +257,7 @@ class Task extends React.Component {
                         <CustomField 
                                 name="taskMembers" 
                                 label={"Assign Task To Project Member"}    
-                                accepter={SelectPicker}
+                                accepter={CheckPicker}
                                 // error={}
                                 inline={'true'}
                                 data={projMembers}
