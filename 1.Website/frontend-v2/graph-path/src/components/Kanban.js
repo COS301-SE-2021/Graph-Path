@@ -222,7 +222,7 @@ class Kanban extends React.Component {
                                     // drag={(prps)=>console.log(prps)}
                                 >
                                     <ColumnsDirective >
-                                        <ColumnDirective headerText="Not Started" keyField="not started" template={this.columnTemplate.bind(this)}/ >
+                                        <ColumnDirective headerText="Not Started" keyField="not started" template={this.columnTemplate.bind(this)}/>
                                         <ColumnDirective headerText="In Progress" keyField="inProgress"  template={this.columnTemplate.bind(this)}/>
                                         <ColumnDirective headerText="Complete" keyField="complete"  template={this.columnTemplate.bind(this)}/>
                                     </ColumnsDirective>
