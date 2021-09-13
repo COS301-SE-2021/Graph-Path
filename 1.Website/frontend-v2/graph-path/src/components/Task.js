@@ -206,6 +206,13 @@ class Task extends React.Component {
             if(this.state.editTask.status !== undefined){
                 const task = this.state.editTask ;
                 // the edit button pressed
+                const projMembers = this.props.members.map((mem)=>{
+                    let taskMem = {
+                        label : mem.email,
+                        value : mem.email
+                    }
+                    return taskMem ;
+                })
                 const {formError,formValue} = this.state ;
                 const options = [{label:"Not Started",value:"not started"},{label:"Complete",value:"complete"},{label:"In Progress",value:"in progress"}]
                 return <><Panel bordered header={'Edit Task '}>
@@ -245,6 +252,15 @@ class Task extends React.Component {
                                 // error={}
                                 inline={'true'}
                                 data={options}
+                            ></CustomField>  
+
+                        <CustomField 
+                                name="taskMembers" 
+                                label={"Assign Task To Project Member"}    
+                                accepter={SelectPicker}
+                                // error={}
+                                inline={'true'}
+                                data={projMembers}
                             ></CustomField>  
                             
                         </Form >

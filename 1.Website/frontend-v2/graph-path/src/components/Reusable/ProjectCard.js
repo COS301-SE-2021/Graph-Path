@@ -31,7 +31,7 @@ class ProjectCard extends Component {
             project.groupMembers !== undefined && project.groupMembers.length > 0 
             ? project.groupMembers.map((member,index)=>{
               return <Divider key={index}>
-                <Divider>{`${member.email} ${member.label}`} </Divider>
+                <Divider><Icon icon={'user-info'}/>{`${member.email}`} </Divider>
               </Divider> 
             })
             :<h5>No Members Yet</h5>
