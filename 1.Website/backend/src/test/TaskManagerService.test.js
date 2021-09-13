@@ -20,7 +20,7 @@ describe('TaskManagerService.getTaskByID',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -38,28 +38,36 @@ describe('TaskManagerService.getTaskByID',  ()=> {
 
     });
     afterAll(async () => {
+        //await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
         await connection.close();
         await MockDB.close();
     });
 
-    it('it should return when an error when the task does not exist',   async () => {
-        const Tasks = MockDB.getConnectionInstance().collection('Tasks');
-        await Tasks.insertOne(mockTask);
+    it('When the task does not exist',   async () => {
+        // const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+        // await Tasks.insertOne(mockTask);
         const invalidID = new mongoose.mongo.ObjectID();
         const response = await taskManagerService.getTaskByID(MockDB,invalidID);
         expect(response).toBe("No available task");
 
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
+
     });
 
-    it('it should return the task if it exist',   async () => {
+    it('it should return the task if it exists',   async () => {
+        const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+        await Tasks.insertOne(mockTask);
         const validID = mockTask._id;
         const response = await taskManagerService.getTaskByID(MockDB,validID);
         expect(response._id).toStrictEqual(validID);
 
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
     });
 
 
     it('it should return the full task object',   async () => {
+        const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+        await Tasks.insertOne(mockTask);
         const validID = mockTask._id;
         const response = await taskManagerService.getTaskByID(MockDB,validID);
         expect(response.description).toStrictEqual(mockTask.description);
@@ -70,6 +78,8 @@ describe('TaskManagerService.getTaskByID',  ()=> {
         expect(response.assignee).toStrictEqual(mockTask.assignee);
         expect(response.assigner).toStrictEqual(mockTask.assigner);
         expect(response.project).toStrictEqual(mockTask.project);
+
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
 
     });
 
@@ -92,7 +102,7 @@ describe('TaskManagerService.getAllTasks',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -110,10 +120,12 @@ describe('TaskManagerService.getAllTasks',  ()=> {
 
     });
     afterAll(async () => {
+        //await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
         await connection.close();
         await MockDB.close();
     });
 
+    //currently the db is not empty so this test fails, unless you run it separately
     it('it should return empty list when no tasks',   async () => {
 
         const invalidID = new mongoose.mongo.ObjectID();
@@ -122,13 +134,15 @@ describe('TaskManagerService.getAllTasks',  ()=> {
 
     });
 
-    it('it should return the task if it exist',   async () => {
+    it('it should return the task information if the task exists',   async () => {
         const Tasks = MockDB.getConnectionInstance().collection('Tasks');
         await Tasks.insertOne(mockTask);
 
         const validID = mockTask._id;
         const response = await taskManagerService.getAllTasks(MockDB);
         expect(response[0]._id).toStrictEqual(validID);
+
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
 
     });
 
@@ -151,8 +165,20 @@ describe('TaskManagerService.getAllTasksByProject',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
+    }
+
+    let mockTask2={
+        _id: new mongoose.mongo.ObjectID(),
+        assignee: "kgmonareng@gmail.com",
+        assigner: "test2@gmail.com",
+        description: "This is a unit testing task, the second one",
+        due: "2021-09-21",
+        issued: "2021-08-17",
+        nodeID: "6117f3aec5960d336cef32ec_n5",
+        projectID: "6117f3aec5960d336cef32ec",
+        status: "in progress"
     }
 
     beforeAll(async () => {
@@ -173,7 +199,7 @@ describe('TaskManagerService.getAllTasksByProject',  ()=> {
         await MockDB.close();
     });
 
-    it('it should return empty list when no tasks',   async () => {
+    it('it should return an empty list when there are no tasks',   async () => {
 
         const invalidID = new mongoose.mongo.ObjectID();
         const response = await taskManagerService.getAllTasksByProject(MockDB,"6117f3aec5960d336cef32ec");
@@ -181,15 +207,53 @@ describe('TaskManagerService.getAllTasksByProject',  ()=> {
 
     });
 
-    it('it should return the task if it exists',   async () => {
+    it('it should return the 1 tasks related to the provided project',   async () => {
         const Tasks = MockDB.getConnectionInstance().collection('Tasks');
         await Tasks.insertOne(mockTask);
 
-        const validID = mockTask.project;
-        const response = await taskManagerService.getAllTasksByProject(MockDB,validID);
-        expect(response[0].project).toStrictEqual(validID);
+        const response1 = await taskManagerService.getTaskByID(MockDB,mockTask._id);
+        expect(response1._id).toStrictEqual(mockTask._id);
+
+        const response2 = await taskManagerService.getAllTasks(MockDB);
+        expect(response2).not.toStrictEqual([]);
+
+
+        const response = await taskManagerService.getAllTasksByProject(MockDB,mockTask.projectID);
+        //expect(response).toStrictEqual([]);
         expect(response[0]._id).toStrictEqual(mockTask._id);
+        expect(response[0].projectID).toStrictEqual(mockTask.projectID);
         expect(response[1]).toStrictEqual(undefined);
+
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
+
+    });
+
+    it('it should return the 2 tasks related to the provided project',   async () => {
+        const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+        await Tasks.insertOne(mockTask);
+
+        const Tasks2 = MockDB.getConnectionInstance().collection('Tasks');
+        await Tasks2.insertOne(mockTask2);
+
+        const response1 = await taskManagerService.getTaskByID(MockDB,mockTask._id);
+        expect(response1._id).toStrictEqual(mockTask._id);
+
+        const response3 = await taskManagerService.getTaskByID(MockDB,mockTask2._id);
+        expect(response3._id).toStrictEqual(mockTask2._id);
+
+        const response2 = await taskManagerService.getAllTasks(MockDB);
+        expect(response2).not.toStrictEqual([]);
+
+
+        const response = await taskManagerService.getAllTasksByProject(MockDB,mockTask.projectID);
+        //expect(response).toStrictEqual([]);
+        expect(response[0]._id).toStrictEqual(mockTask._id);
+        expect(response[0].projectID).toStrictEqual(mockTask.projectID);
+        expect(response[1]._id).toStrictEqual(mockTask2._id);
+        expect(response[1].projectID).toStrictEqual(mockTask2.projectID);
+
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
+        await taskManagerService.deleteTaskByID(MockDB, mockTask2._id);
 
     });
 
@@ -212,7 +276,7 @@ describe('TaskManagerService.insertTask',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -245,20 +309,17 @@ describe('TaskManagerService.insertTask',  ()=> {
     });
 
     // it('The check to see if a task already exists',   async () => {
+    //     const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+    //     await Tasks.insertOne(mockTask);
     //     let reply = await taskManagerService.getTaskByID(MockDB, mockTask._id);
     //     expect(reply._id).toStrictEqual(mockTask._id);
     //     const response = await taskManagerService.insertTask(MockDB,mockTask);
-    //     expect(response.message).toBeDefined();
+    //     // expect(response.message).toBeDefined();
+    //     expect(response).toThrow();
     //
     // });
 
 
-    // it('it should not enter an empty task object',   async () => {//will this testing happen in the middleware?
-    //     mockTask = {};
-    //     const response = await taskManagerService.insertTask(MockDB,mockTask);
-    //     expect(response.message).toBeDefined();
-    //
-    // });
 
 });
 
@@ -279,7 +340,7 @@ describe('TaskManagerService.deleteTaskByID',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -291,8 +352,8 @@ describe('TaskManagerService.deleteTaskByID',  ()=> {
         });
         MockDB = await MockDBController;
 
-        const Tasks = MockDB.getConnectionInstance().collection('Tasks');
-        await Tasks.insertOne(mockTask);
+        // const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+        // await Tasks.insertOne(mockTask);
 
 
     });
@@ -302,11 +363,12 @@ describe('TaskManagerService.deleteTaskByID',  ()=> {
     });
 
     it('it should delete correctly',   async () => {
+        const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+        await Tasks.insertOne(mockTask);
 
         let reply = await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
         let response = await  taskManagerService.getTaskByID(MockDB, mockTask._id);
-        expect(response).toStrictEqual(null);
-        //expect(response).toBeDefined();
+        expect(response).toStrictEqual("No available task");
 
     });
 
@@ -332,7 +394,7 @@ describe('TaskManagerService.updateTaskDescription',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -344,7 +406,7 @@ describe('TaskManagerService.updateTaskDescription',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -405,7 +467,7 @@ describe('TaskManagerService.updateTaskStatus',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -436,6 +498,8 @@ describe('TaskManagerService.updateTaskStatus',  ()=> {
         expect(response._id).toStrictEqual(mockTask._id);
         expect(response.status).toStrictEqual(newStatus[0]);
 
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
+
     });
 
     it('it should update correctly to newStatus[1]',   async () => {
@@ -446,6 +510,8 @@ describe('TaskManagerService.updateTaskStatus',  ()=> {
         let response =  await taskManagerService.getTaskByID(MockDB, mockTask._id);
         expect(response._id).toStrictEqual(mockTask._id);
         expect(response.status).toStrictEqual(newStatus[1]);
+
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
 
     });
 
@@ -458,6 +524,8 @@ describe('TaskManagerService.updateTaskStatus',  ()=> {
         expect(response._id).toStrictEqual(mockTask._id);
         expect(response.status).toStrictEqual(newStatus[2]);
 
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
+
     });
 
     it('it should update correctly to newStatus[3]',   async () => {
@@ -469,11 +537,13 @@ describe('TaskManagerService.updateTaskStatus',  ()=> {
         expect(response._id).toStrictEqual(mockTask._id);
         expect(response.status).toStrictEqual(newStatus[3]);
 
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
+
     });
 
     it('If task not found',   async () => {
         let reply = await taskManagerService.getTaskByID(MockDB, mockTask._id);
-        expect(reply).toStrictEqual(null);
+        expect(reply).toStrictEqual("No available task");
 
     });
 
@@ -498,7 +568,7 @@ describe('TaskManagerService.updateTaskAssignee',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -529,11 +599,13 @@ describe('TaskManagerService.updateTaskAssignee',  ()=> {
         expect(response._id).toStrictEqual(mockTask._id);
         expect(response.assignee).toStrictEqual(newAssignee);
 
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
+
     });
 
     it('If task not found',   async () => {
         let reply = await taskManagerService.getTaskByID(MockDB, mockTask._id);
-        expect(reply).toStrictEqual(null);
+        expect(reply).toStrictEqual("No available task");
 
     });
 
@@ -558,7 +630,7 @@ describe('TaskManagerService.updateTaskAssigner',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
@@ -589,11 +661,13 @@ describe('TaskManagerService.updateTaskAssigner',  ()=> {
         expect(response._id).toStrictEqual(mockTask._id);
         expect(response.assigner).toStrictEqual(newAssigner);
 
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
+
     });
 
     it('If task not found',   async () => {
         let reply = await taskManagerService.getTaskByID(MockDB, mockTask._id);
-        expect(reply).toStrictEqual(null);
+        expect(reply).toStrictEqual("No available task");
 
     });
 
@@ -617,18 +691,19 @@ describe('TaskManagerService.updateEverythingTask',  ()=> {
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "complete"
     }
 
     let testTask={
+        _id: new mongoose.mongo.ObjectID(),
         assignee: "tester@gmail.com",
         assigner: "ntpnaane@gmail.com",
         description: "This is the new unit testing task",
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
-        project: "6117f3aec5960d336cef32ec",
+        projectID: "6117f3aec5960d336cef32ec",
         status: "in progress"
     }
 
@@ -641,8 +716,8 @@ describe('TaskManagerService.updateEverythingTask',  ()=> {
         });
         MockDB = await MockDBController;
 
-         const Tasks = MockDB.getConnectionInstance().collection('Tasks');
-         await Tasks.insertOne(mockTask);
+         // const Tasks = MockDB.getConnectionInstance().collection('Tasks');
+         // await Tasks.insertOne(mockTask);
 
 
     });
@@ -655,7 +730,7 @@ describe('TaskManagerService.updateEverythingTask',  ()=> {
         const Tasks = MockDB.getConnectionInstance().collection('Tasks');
         await Tasks.insertOne(mockTask);
 
-        let reply = await taskManagerService.updateEverythingTask(MockDB, mockTask._id, testTask.assignee, testTask.assigner, testTask.description, testTask.issued, testTask.due, testTask.nodeID, testTask.status, testTask.project );
+        let reply = await taskManagerService.updateEverythingTask(MockDB, mockTask._id, testTask.assignee, testTask.assigner, testTask.description, testTask.issued, testTask.due, testTask.nodeID, testTask.status, testTask.projectID );
         let response =  await taskManagerService.getTaskByID(MockDB, mockTask._id);
         expect(response._id).toStrictEqual(mockTask._id);
         expect(response.assignee).toStrictEqual(testTask.assignee);
@@ -665,13 +740,15 @@ describe('TaskManagerService.updateEverythingTask',  ()=> {
         expect(response.due).toStrictEqual(testTask.due);
         expect(response.nodeID).toStrictEqual(testTask.nodeID);
         expect(response.status).toStrictEqual(testTask.status);
-        expect(response.project).toStrictEqual(testTask.project);
+        expect(response.project).toStrictEqual(testTask.projectID);
+
+        await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
 
     });
 
     it('If task not found',   async () => {
         let reply = await taskManagerService.getTaskByID(MockDB, mockTask._id);
-        expect(reply).toStrictEqual(null);
+        expect(reply).toStrictEqual("No available task");
 
     });
 
