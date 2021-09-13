@@ -39,14 +39,15 @@ class Task extends React.Component {
 
     DateType = Schema.Types.DateType ;
     StringType = Schema.Types.StringType ;
-    dueDate = new Date(this.now.getFullYear()+1)
+    dueDate = new Date(this.now.getFullYear()+1) ;
+    minDate = new Date(this.now.getFullYear(),this.now.getMonth(),this.now.getDate()-1) ;
     
-    taskModel =Schema.Model({
+    taskModel = Schema.Model({
         description: this.StringType().minLength(5,'Please add more details on the description')
             .isRequired('This field is required.') ,
-        issued:this.DateType().min(new Date(this.dueDate.getFullYear()-1,this.dueDate.getMonth(),this.dueDate.getDate()-1),'The issued date cannot be set to a date that has passed.')
+        issued:this.DateType().min(this.minDate,'The issued date cannot be set to a date that has passed.')
             .isRequired('This field is required.') ,
-        due:this.DateType().range(this.now,this.dueDate,'The due date cannot be set to a date more than 12 months from now or a passed date.')
+        due:this.DateType().min(this.minDate,'The due date cannot be set to a date that has passed.')
             .isRequired('This field is required.') ,
     })
     // EOF provate fields
@@ -97,6 +98,7 @@ class Task extends React.Component {
             else{
                 let fullTask = Object.assign(this.state.editTask,updated) ;
                 console.log('updated ',fullTask) ; 
+                this.props.updateNode(fullTask) ;
                 this.switchToEditTask({}) ; //switch view
             }
 
@@ -176,7 +178,7 @@ class Task extends React.Component {
                     label={"Due Date"}
                     error={formError.due}
                     oneTap={true}
-                    format={'YYYY-MM-DD'}
+                    // format={'YYYY-MM-DD'}
                 />
                 <CustomField 
                     name="status" 
@@ -314,7 +316,7 @@ class Task extends React.Component {
     }
 
     render(){
-        console.log('Tasks pros',this.props)
+        // console.log('Tasks pros',this.props)
         return <div id="tidTask" data-testid="tidTask">
             <div>
                 <Button onClick={this.toogleScreen}  appearance={'ghost'}>

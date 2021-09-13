@@ -61,7 +61,7 @@ class GraphManager{
             y['color'] ='#080' ;
             this.graph.edges[index] = y ;
           
-            if ( edge.source=== x){
+            if ( edge.from=== x){
               return y ;
             }
             else{
@@ -70,7 +70,7 @@ class GraphManager{
           }) ;
 
           edgesFiltered.forEach((y)=>{
-            this.addAdjacencyEdge(x,y.target) ;
+            this.addAdjacencyEdge(x,y.to) ;
           }) 
           
           
@@ -90,6 +90,7 @@ class GraphManager{
       while (queue.length){
         currVertex = queue.shift() ;
         if (currVertex !== undefined){
+         console.log('prev',result[result.length-1],'curr',currVertex) ;
           result.push(currVertex) ;
           this.adjacencyList[currVertex].forEach((neighbor)=>{
             if (!visited[neighbor]){
@@ -165,8 +166,8 @@ class GraphManager{
         if (path.length){
           //edit the color to red
           const colorEdges = this.graph.edges.map((value)=>{
-            var del = path.indexOf(value.target) ;
-            if (value.source === start){
+            var del = path.indexOf(value.to) ;
+            if (value.from === start){
               if (del>=0){
                 path = path.splice(del,1) ;
                 let newE = {...value} ; 
@@ -198,7 +199,7 @@ class GraphManager{
           //   let ind = -1 ;
           //   let colorEdge = this.graph.edges.find( (edge,index)=>{
           //     ind = index ;
-          //     if (edge.source === source && edge.target === tar){
+          //     if (edge.from === source && edge.to === tar){
           //       return edge ;
           //     }
           //     else{
@@ -248,7 +249,7 @@ class GraphManager{
           ind = i ;
           return value ; 
         }}) ;
-        if (found && ind > 0 ){
+        if (found && ind >= 0 ){
           found.color = color ;
           nodes.splice(ind,1,found) ;
           this.graph.nodes = nodes ;
@@ -259,6 +260,8 @@ class GraphManager{
     }
   
     setGraph = (graph)=>{
+      console.log('MGR set old:',this.graph,'new:',graph) ;
+
       if (Array.isArray(graph.nodes) && Array.isArray(graph.edges) ){
         this.graph = graph ;
       }
@@ -270,6 +273,7 @@ class GraphManager{
       }
     }
     getGraph=()=>{
+      console.log('MGR get',this.graph)
       return this.graph ;
     }
 
@@ -288,7 +292,7 @@ class GraphManager{
       let edgeId = 1;
       let edgeAlreadyInGraph = false ;
       let allIds = this.graph.edges.map((value)=>{
-        if (value.source === src && value.target ===tgt ){
+        if (value.from === src && value.to ===tgt ){
           edgeAlreadyInGraph = true ;
         }
         return value.id ;
@@ -305,8 +309,8 @@ class GraphManager{
   
         var edg = {
               id:`e${edgeId}`, // give edge an id
-              source:src, 
-              target:tgt,
+              from:src, 
+              to:tgt,
               label:`${ src} to ${tgt}` ,
               color:'#0ff',
               size:2,
@@ -353,10 +357,10 @@ class GraphManager{
         newGraph.nodes = newNodes ;
         if (this.graph.edges.length>0){
           var newEdges = this.graph.edges.filter((edge)=>{
-            if (edge.source === id ){
+            if (edge.from === id ){
               return false
             }
-            else if ( edge.target === id){
+            else if ( edge.to === id){
               return false ;
             }
             else{
@@ -442,6 +446,21 @@ class GraphManager{
         // console.log('Manager:',this.graph) ; 
       
     }
+
+    updatePosition=(nodeID,x,y)=>{
+      let ind = -1 ;
+      let node = this.graph.nodes.find((value,i)=>{if (value.id === nodeID){
+        ind = i ;
+        return value ; }}) ; 
+      if (node && ind >=0 ){
+        node.x =  x ; 
+        node.y = y ;
+        this.graph.nodes[ind] = node ;
+        return 1 ;
+      }
+      return 0 ; 
+    }
+    
 }
 
 export default GraphManager ;
