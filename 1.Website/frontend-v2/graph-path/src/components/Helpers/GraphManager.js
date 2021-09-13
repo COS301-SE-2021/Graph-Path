@@ -61,7 +61,7 @@ class GraphManager{
             y['color'] ='#080' ;
             this.graph.edges[index] = y ;
           
-            if ( edge.source=== x){
+            if ( edge.from=== x){
               return y ;
             }
             else{
@@ -70,7 +70,7 @@ class GraphManager{
           }) ;
 
           edgesFiltered.forEach((y)=>{
-            this.addAdjacencyEdge(x,y.target) ;
+            this.addAdjacencyEdge(x,y.to) ;
           }) 
           
           
@@ -166,8 +166,8 @@ class GraphManager{
         if (path.length){
           //edit the color to red
           const colorEdges = this.graph.edges.map((value)=>{
-            var del = path.indexOf(value.target) ;
-            if (value.source === start){
+            var del = path.indexOf(value.to) ;
+            if (value.from === start){
               if (del>=0){
                 path = path.splice(del,1) ;
                 let newE = {...value} ; 
@@ -199,7 +199,7 @@ class GraphManager{
           //   let ind = -1 ;
           //   let colorEdge = this.graph.edges.find( (edge,index)=>{
           //     ind = index ;
-          //     if (edge.source === source && edge.target === tar){
+          //     if (edge.from === source && edge.to === tar){
           //       return edge ;
           //     }
           //     else{
@@ -292,7 +292,7 @@ class GraphManager{
       let edgeId = 1;
       let edgeAlreadyInGraph = false ;
       let allIds = this.graph.edges.map((value)=>{
-        if (value.source === src && value.target ===tgt ){
+        if (value.from === src && value.to ===tgt ){
           edgeAlreadyInGraph = true ;
         }
         return value.id ;
@@ -309,8 +309,8 @@ class GraphManager{
   
         var edg = {
               id:`e${edgeId}`, // give edge an id
-              source:src, 
-              target:tgt,
+              from:src, 
+              to:tgt,
               label:`${ src} to ${tgt}` ,
               color:'#0ff',
               size:2,
@@ -357,10 +357,10 @@ class GraphManager{
         newGraph.nodes = newNodes ;
         if (this.graph.edges.length>0){
           var newEdges = this.graph.edges.filter((edge)=>{
-            if (edge.source === id ){
+            if (edge.from === id ){
               return false
             }
-            else if ( edge.target === id){
+            else if ( edge.to === id){
               return false ;
             }
             else{

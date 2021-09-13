@@ -126,12 +126,16 @@ class GraphPath extends Component{
     return this.state.taskList.filter(value=>value.nodeID === id ) ;
   }
 
-  showTaskModal=(nodeId,nodeLabel)=>{
+  showTaskModal=(nodeId)=>{
     let filter = this.state.nodeTasks ;
     
     if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
       filter= this.filterByID(`${this.props.project._id}_${nodeId}`) ;
-      
+      let selected = this.state.currGraph.nodes.find(node=>node.id === nodeId) ; 
+      let nodeLabel = 'No Provided Name' ; 
+      if (selected){
+        nodeLabel = selected.label ;
+      }
       this.setState({
         // showTask:!this.state.showTask ,
         nodeTasks:filter,
@@ -457,7 +461,7 @@ class GraphPath extends Component{
   clickNodeHandler = (event)=>{
     // console.log(event) ; 
     const nodeAffected = event.data.node.id ;
-    const nameOfNode = event.data.node.label ;
+    // const nameOfNode = event.data.node.label ;
 
     if (event.data.captor.altKey){
       //delete node or edge
@@ -475,7 +479,7 @@ class GraphPath extends Component{
     }
     else{
       if (typeof nodeAffected === 'string'){
-        this.showTaskModal(nodeAffected,nameOfNode)
+        this.showTaskModal(nodeAffected)
       }
       this.cleanUpAfterEdgeAddition() ;
     }
@@ -596,7 +600,7 @@ class GraphPath extends Component{
           //start rendering
           if (this.graphManager !== null){
             const graph = this.state.currGraph;
-            console.log('curr',this.graphManager)
+            // console.log('curr',this.graphManager)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
         
@@ -635,7 +639,18 @@ class GraphPath extends Component{
             // }
           },
           nodes:{
-            physics:false
+            physics:false,
+            // size:25,
+            shape:'box',
+            font:{
+              color: '#343434',
+              size: 30, // px
+              face: 'arial',
+              background: 'none',
+              strokeWidth: 0, // px
+              strokeColor: '#ffffff',
+              align: 'center'
+            }
           },
           edges: {
             color: "#ff0000" , 
@@ -660,8 +675,18 @@ class GraphPath extends Component{
             var { nodes, edges } = event;
             console.log('sel',event)
           }  ;
+        events.externalDragUpdate = this.graphManager.updatePosition ;
         events.dragEnd = function (event){
           console.log('drag',event)
+
+          const nodesAffected = event.nodes ;
+          if (nodesAffected.length > 0 ){
+            let curr = nodesAffected.shift() ;
+            let {x,y} = event.pointer.canvas ;
+
+            let update = events.externalDragUpdate(curr,x,y) ;
+            console.log('update',update) ;
+          }
         }
 
         events.externalRemoveNode = this.removeNode ;
