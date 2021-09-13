@@ -59,14 +59,14 @@ class Project extends Component {
                             title="Edit Project"
                             icon={<Icon icon={'pencil'}/>}
                             componentClass={Link}
-                            to={`${match.url}/edit`}>EDIT Project
+                            to={`${match.url}/edit`}>Edit Project
 
                         </Nav.Item>
                         <Nav.Item
                             title="View Graph"
                             icon={<Icon icon={'views-authorize'}/>}
                             componentClass={Link}
-                            to={`${match.url}`}>VIEW GRAPH
+                            to={`${match.url}`}>View Graph
                         </Nav.Item>
                     </Nav>
                         </Sidenav.Body>

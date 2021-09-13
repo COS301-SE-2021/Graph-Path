@@ -224,6 +224,26 @@ The neccesary information for the request to go through follows:
                 projects:sortedArray
             }) ;
         }
+        else{
+            let newArray = this.state.projects.sort((v1,v2,)=>{
+                let date1=v1.startDate.toLowerCase();
+                let date2 = v2.startDate.toLowerCase();
+
+                if(date1<date2){
+                    //date1 came first, put last
+                    return 1 ;
+                }
+                if (date1>date2){
+                    return -1 ;
+                }
+                return 0 ;
+            }) ;
+            this.setState({
+                projects:newArray , 
+            }) ;
+            
+
+        }
     }
 
     newProjectModalRef=(obj)=>{

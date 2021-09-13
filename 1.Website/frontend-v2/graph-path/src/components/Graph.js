@@ -137,7 +137,7 @@ class GraphPath extends Component{
         nodeLabel = selected.label ;
       }
       this.setState({
-        // showTask:!this.state.showTask ,
+        showTask:!this.state.showTask ,
         nodeTasks:filter,
         currNodeID:nodeId,
         currNodeName:nodeLabel,
@@ -405,7 +405,7 @@ class GraphPath extends Component{
     const {project} =this.props ;
     nodeTask.projectID = project._id ;
     nodeTask.nodeID = `${project._id}_${this.state.currNodeID}` ;
-    nodeTask.assigner =[{
+    nodeTask.assigner = [{
       email:`${this.props.loggedUser.email}`,
       permissions:['owner']
     }] ;
@@ -532,6 +532,9 @@ class GraphPath extends Component{
   }
 
   updateNode=(node)=>{
+    node.taskID = node._id ;
+    console.log('updated ',node) ; 
+
     axios.patch(`${this.props.api}/task/updateEverythingTask`,node,{
       headers:{
         authorization:this.props.loggedUser.token
@@ -555,7 +558,8 @@ class GraphPath extends Component{
       
       <Modal.Header>
         <Modal.Title>
-          Provided tasks
+          Provided tasks - {"Node: "+this.state.currNodeName}
+
         </Modal.Title>
       </Modal.Header>
     <Modal.Body>
