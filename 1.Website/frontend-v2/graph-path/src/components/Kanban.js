@@ -151,12 +151,6 @@ class Kanban extends React.Component {
     }
 
 
-
-    DialogOpen(args) {
-        args.cancel = true;
-
-    }
-
     cardTemplate(props) {
         return (<div className="card-template">
             <div className="card-template-wrap">

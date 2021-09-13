@@ -130,4 +130,7 @@
     font-style: normal;
 }
 
+.e-kanban .e-kanban-table.e-content-table .e-content-row.e-swimlane-row .e-swimlane-text{
+    color:white;
+}
 
