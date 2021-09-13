@@ -172,7 +172,7 @@ class Kanban extends React.Component {
                             <div className="e-card-stacked">
                                 <div className="e-card-header">
                                     <div className="e-card-header-caption">
-                                        <div className="e-card-header-title e-tooltip-text">{props.title}</div>
+                                        <div style={{color: "#1386d9"}} className="e-card-header-title e-tooltip-text">{props.title}</div>
                                     </div>
                                 </div>
                                 <div className="e-card-content" style={{ lineHeight: "2.75em" }}>
@@ -212,17 +212,17 @@ class Kanban extends React.Component {
         //console.log('break test 126',this.state.projectsByEmail2)
 
           return (
-              <div className='schedule-control-section'>
+              <div className='schedule-control-section' >
                   <div className='col-lg-12 control-section'>
-                            <div className='control-wrapper'>
+                            <div className='control-wrapper' >
                                 <KanbanComponent cssClass="kanban-card-template" id="kanban"  keyField="status" enableTooltip={true}
                                                  dataSource={this.state.projectsByEmail} cardSettings={{contentField: "description", headerField: "_id", template: this.cardTemplate.bind(this)  }}
                                                  swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
-                                                 cardClick={this.handler}
+                                                 cardClick={this.handler} style={{background: "black"}}
                                     // drag={(prps)=>console.log(prps)}
                                 >
-                                    <ColumnsDirective>
-                                        <ColumnDirective headerText="Not Started" keyField="not started"   template={this.columnTemplate.bind(this)}/>
+                                    <ColumnsDirective >
+                                        <ColumnDirective headerText="Not Started" keyField="not started" template={this.columnTemplate.bind(this)}/ >
                                         <ColumnDirective headerText="In Progress" keyField="inProgress"  template={this.columnTemplate.bind(this)}/>
                                         <ColumnDirective headerText="Complete" keyField="complete"  template={this.columnTemplate.bind(this)}/>
                                     </ColumnsDirective>

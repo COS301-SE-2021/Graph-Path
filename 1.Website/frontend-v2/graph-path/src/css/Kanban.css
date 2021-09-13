@@ -9,19 +9,6 @@
 @import "../../node_modules/@syncfusion/ej2-react-kanban/styles/material.css";
 
 
-/*.kanban-card-template .e-card table {*/
-/*    table-layout: fixed;*/
-/*}*/
-
-
-
-
-.kanban-card-template .e-card .e-clock::before {
-    content: '\e20c';
-    color: #ffa500;
-    font-size: 10px;
-}
-
 .kanban-card-template .e-card .e-done::before {
     content: '\ea84';
     color: #008000;
@@ -33,6 +20,7 @@
     line-height: normal;
     font-size: 12px;
     width: 100%;
+    background: #1a1d24;
 }
 
 .kanban-card-template .e-card .card-template-wrap td {
@@ -56,6 +44,7 @@
 .kanban-card-template .e-card .e-description {
     padding-top: 5px;
     padding-bottom: 10px;
+    color:white;
 }
 
 .kanban-card-template .e-card .e-done {
@@ -140,4 +129,5 @@
     font-weight: normal;
     font-style: normal;
 }
+
 
