@@ -549,7 +549,11 @@ class GraphPath extends Component{
     })
     .then((res)=>{
       console.log('update res',res); 
-      // let nodeId = 
+      let nodeId = node.nodeID.split('_')[1] ;
+      console.log('updated id',nodeId)
+      PopUpMessage(res.data.message,'info')
+
+      this.changeNodeByStats(nodeId,res.data.nodeCompletetionStatus)
     })
     .catch((err)=>{
       if(err.response ){
@@ -585,11 +589,11 @@ class GraphPath extends Component{
 
   changeNodeByStats(nodeId,stats=50){
     let color = '#000' ; 
-    if (stats >= 70){
+    if (stats >= 0.70){
         //green
         color = '#0d0'
     }
-    else if (stats >= 50){
+    else if (stats >= 0.50){
       color = '#dd0' ;
     }
     else{
