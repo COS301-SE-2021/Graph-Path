@@ -22,6 +22,10 @@
     color: #5d1;
 }
 
+#dropdown-title{
+    width: 147px;
+}
+
 #dropdown-div{
     position: absolute;
     top: 25%;
@@ -44,4 +48,20 @@
     border: 1px solid rgb(73,239,18);
     border-radius: 5px;
     width: 150px;
+}
+
+.dropdown-div-bar{
+    top: 11% !important;
+
+}
+
+.dropdown-div-bar-2{
+    top: 11% !important;
+    left: 25% !important;
+
+}
+
+.dropdown-div-bar-3{
+    top: 11% !important;
+    right: 5% !important;
 }
