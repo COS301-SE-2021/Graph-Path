@@ -5,28 +5,29 @@ import { KanbanComponent, ColumnsDirective, ColumnDirective } from '@syncfusion/
 import axios from 'axios';
 import PropTypes from 'prop-types' ;
 import {connect} from "react-redux";
-
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 
 class Kanban extends React.Component {
 
-   //
+    //
     constructor(props) {
-        super(props) ;
-        this.task=[];
-        this.myData2=[];
-        this.nyData3=[];
-        this.state={
+        super(props);
+        this.task = [];
+        this.myData2 = [];
+        this.nyData3 = [];
+        this.state = {
             loading: true,
             test: [[]],
             projectsByEmail: [],
-            projectsByEmail2:[],
+            projectsByEmail2: [],
             allTasks: [],
 
         };
-        this.fields=[ { text: 'Unique ID', key:'_id' },
-            {key:'status', type:'DropDown'},
-            {key: 'description', type:'TextArea'}]
+        this.fields = [{text: 'Unique ID', key: '_id'},
+            {key: 'status', type: 'DropDown'},
+            {key: 'description', type: 'TextArea'}]
     }
+
     columnTemplate(heading) {
         return (<div className="header-template-wrap">
             <div className={"header-icon e-icons " + heading.keyField}></div>
@@ -34,81 +35,81 @@ class Kanban extends React.Component {
         </div>);
     }
 
-  componentDidMount() {
-    this.firstSearch();
+    componentDidMount() {
+        this.firstSearch();
 
-   // this.secondSearch();
-   }
+        // this.secondSearch();
+    }
 
-   //http://localhost:9001/project/convertToKanbanBoard/mndebelelt@gmail.com
+    //http://localhost:9001/project/convertToKanbanBoard/mndebelelt@gmail.com
     //`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.loggedUser.email}`
-   firstSearch =()=>{
-     axios.get(`${this.props.api}/project/convertToKanbanBoard/${this.props.loggedUser.email}`,{
-         headers:{
-             authorization: this.props.user.token
-         }
-     })
-           .then((res)=> {
-               if (res.data !== undefined){
+    firstSearch = () => {
+        axios.get(`${this.props.api}/project/convertToKanbanBoard/${this.props.loggedUser.email}`, {
+            headers: {
+                authorization: this.props.user.token
+            }
+        })
+            .then((res) => {
+                if (res.data !== undefined) {
 
-                   // let newObj:Object[]=[{
-                   //     projectName: "Project 1",
-                   //     _id: 10,
-                   //     description:"Attempt 1",
-                   //     status:"complete"
-                   // },
-                   //     {
-                   //         projectName: "Project 2",
-                   //         _id: 11,
-                   //         description:"Attempt 2",
-                   //         status:"not started"
-                   //     },
-                   //     {
-                   //         projectName: "Project 3",
-                   //         _id: 12,
-                   //         description:"Attempt 3",
-                   //         status:"inProgress"
-                   //     }
-                   // ]
-                   // console.log('newObj data: ', newObj);
-                   //this.setState({projectsByEmail2: newObj})
+                    // let newObj:Object[]=[{
+                    //     projectName: "Project 1",
+                    //     _id: 10,
+                    //     description:"Attempt 1",
+                    //     status:"complete"
+                    // },
+                    //     {
+                    //         projectName: "Project 2",
+                    //         _id: 11,
+                    //         description:"Attempt 2",
+                    //         status:"not started"
+                    //     },
+                    //     {
+                    //         projectName: "Project 3",
+                    //         _id: 12,
+                    //         description:"Attempt 3",
+                    //         status:"inProgress"
+                    //     }
+                    // ]
+                    // console.log('newObj data: ', newObj);
+                    //this.setState({projectsByEmail2: newObj})
 
-                   //let array1=[];
-                   let tasks = []
-                   //let obj1={};
-                   let count=1;
-                   console.log('length 79',res.data.data.length );
-                   for(let i=0;i<res.data.data.length;i++) {
-                       console.log('project 81', res.data.data[i]);
-                       let project = res.data.data[i];
+                    //let array1=[];
+                    let tasks = []
+                    //let obj1={};
+                    let count = 1;
+                    console.log('length 79', res.data.data.length);
+                    for (let i = 0; i < res.data.data.length; i++) {
+                        console.log('project 81', res.data.data[i]);
+                        let project = res.data.data[i];
 
-                       for (let j = 0; j < project.tasks.length; j++) {
-                           let task = project.tasks[j];
-                           task.projectName = project.projectName;
-                           task.Priority = task.status;
-                           task.newID=count++;
-                           console.log('task 84', task);
-                           tasks.push(task);
+                        for (let j = 0; j < project.tasks.length; j++) {
+                            let task = project.tasks[j];
+                            task.projectName = project.projectName;
+                            task.Priority = task.status;
+                            task.newID = count++;
+                            console.log('task 84', task);
+                            tasks.push(task);
 
-                       }
+                        }
 
-               }
+                    }
 
-                   console.log('Tasks',tasks);
-                   //Attempt to change array into objects
-                          // Object.assign(obj1, array1);
-                   this.setState({projectsByEmail: tasks})
-                   //this.setState({projectsByEmail2: obj1})
-               }
-               console.log('projs',this.state.projectsByEmail);
-               //console.log('projs 2',this.state.projectsByEmail2 );
+                    console.log('Tasks', tasks);
+                    //Attempt to change array into objects
+                    // Object.assign(obj1, array1);
+                    this.setState({projectsByEmail: tasks})
+                    //this.setState({projectsByEmail2: obj1})
+                }
+                console.log('projs', this.state.projectsByEmail);
+                //console.log('projs 2',this.state.projectsByEmail2 );
 
-           })
-           .catch((err)=>{
-               console.log('error in initialization',err)
-           })
+            })
+            .catch((err) => {
+                console.log('error in initialization', err)
+            })
 
-   }
+    }
 
     // secondSearch =()=>{
     //       axios(`http://localhost:9001/task/getAllTasks`)
@@ -146,7 +147,7 @@ class Kanban extends React.Component {
 //
 // }
 
-    handler =(event)=>{
+    onDropHandler = (event) => {
         console.log(event.data)
     }
 
@@ -156,8 +157,8 @@ class Kanban extends React.Component {
             <div className="card-template-wrap">
                 <table className="card-template-wrap">
                     <colgroup>
-                        <col style={{ width: "55px" }}/>
-                        <col />
+                        <col style={{width: "55px"}}/>
+                        <col/>
                     </colgroup>
                     <tbody>
                     <tr>
@@ -166,27 +167,33 @@ class Kanban extends React.Component {
                             <div className="e-card-stacked">
                                 <div className="e-card-header">
                                     <div className="e-card-header-caption">
-                                        <div style={{color: "#1386d9"}} className="e-card-header-title e-tooltip-text">{props.title}</div>
+                                        <div style={{color: "#1386d9"}}
+                                             className="e-card-header-title e-tooltip-text">{props.title}</div>
                                     </div>
                                 </div>
-                                <div className="e-card-content" style={{ lineHeight: "2.75em" }}>
-                                    <table className="card-template-wrap" style={{ tableLayout: "auto" }}>
+                                <div className="e-card-content" style={{lineHeight: "2.75em"}}>
+                                    <table className="card-template-wrap" style={{tableLayout: "auto"}}>
                                         <tbody>
                                         <tr>
-                                            {( props.status === 'not started' || props.status === 'inProgress' || props.status==='complete') && <td colSpan={2}>
-                                                {props.status !== '' && <div className="e-description e-tooltip-text">{props.description}</div>}
+                                            {(props.status === 'not started' || props.status === 'inProgress' || props.status === 'complete') &&
+                                            <td colSpan={2}>
+                                                {props.status !== '' &&
+                                                <div className="e-description e-tooltip-text">{props.description}</div>}
 
                                             </td>}
-                                            {(props.status === 'complete' ) && <td className="card-content">
+                                            {(props.status === 'complete') && <td className="card-content">
 
                                             </td>}
                                         </tr>
                                         <tr>
 
                                             {props.status !== '' && <td className="card-content">
-                                                {props.status === 'not started' && <div className="e-preparingText e-tooltip-text">Not Started</div>}
-                                                {props.status === 'inProgress' && <div className="e-readyText e-tooltip-text">In Progress</div>}
-                                                {(props.status === 'complete' ) && <div className="e-deliveredText e-tooltip-text">Complete</div>}
+                                                {props.status === 'not started' &&
+                                                <div className="e-preparingText e-tooltip-text">Not Started</div>}
+                                                {props.status === 'inProgress' &&
+                                                <div className="e-readyText e-tooltip-text">In Progress</div>}
+                                                {(props.status === 'complete') &&
+                                                <div className="e-deliveredText e-tooltip-text">Complete</div>}
 
 
                                             </td>}
@@ -202,38 +209,59 @@ class Kanban extends React.Component {
             </div>
         </div>);
     }
+    //Event after moving the card...
+   onDragStop = (event) =>{
+        console.log('afterDrag data: ', event.data);
+
+    }
+
+    //Post clicking the save button
+    onDataBound = (event) => {
+        console.log('afterSave data:', event)
+    }
+
     render() {
         //console.log('break test 126',this.state.projectsByEmail2)
 
-          return (
-              <div className='schedule-control-section' >
-                  <div className='col-lg-12 control-section'>
-                            <div className='control-wrapper' >
-                                <KanbanComponent cssClass="kanban-card-template" id="kanban"  keyField="status" enableTooltip={true}
-                                                 dataSource={this.state.projectsByEmail} cardSettings={{contentField: "description", headerField: "_id", template: this.cardTemplate.bind(this)  }}
-                                                 swimlaneSettings={{ keyField: "projectName",textField: "projectName"}}
-                                                 cardClick={this.handler} style={{background: "black"}}
-                                    // drag={(prps)=>console.log(prps)}
-                                >
-                                    <ColumnsDirective >
-                                        <ColumnDirective headerText="Not Started" keyField="not started" template={this.columnTemplate.bind(this)}/>
-                                        <ColumnDirective headerText="In Progress" keyField="inProgress"  template={this.columnTemplate.bind(this)}/>
-                                        <ColumnDirective headerText="Complete" keyField="complete"  template={this.columnTemplate.bind(this)}/>
-                                    </ColumnsDirective>
-                                </KanbanComponent>
-                            </div>
+        return (
+            <div className='schedule-control-section'>
+                <div className='col-lg-12 control-section'>
+                    <div className='control-wrapper'>
+                        <KanbanComponent cssClass="kanban-card-template" id="kanban" keyField="status"
+                                         enableTooltip={true}
+                                         dataSource={this.state.projectsByEmail} cardSettings={{
+                            contentField: "description",
+                            headerField: "_id",
+                            template: this.cardTemplate.bind(this)
+                        }}
+                                         swimlaneSettings={{keyField: "projectName", textField: "projectName"}}
+                                         cardClick={this.handler} style={{background: "black"}}
+                                 dragStop={this.onDragStop.bind(this)}  dataBound={this.onDataBound.bind(this)}
+                        >
+                            <ColumnsDirective>
+                                <ColumnDirective headerText="Not Started" keyField="not started"
+                                                 template={this.columnTemplate.bind(this)}/>
+                                <ColumnDirective headerText="In Progress" keyField="inProgress"
+                                                 template={this.columnTemplate.bind(this)}/>
+                                <ColumnDirective headerText="Complete" keyField="complete"
+                                                 template={this.columnTemplate.bind(this)}/>
+                            </ColumnsDirective>
+                        </KanbanComponent>
+                    </div>
 
 
+                </div>
 
-                  </div>
-              </div>
 
+            </div>
 
 
         )
 
     }
+
 }
+
 
 
 Kanban.defaultProps = {
