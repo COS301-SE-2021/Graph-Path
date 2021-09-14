@@ -96,34 +96,52 @@ function makeProjectRoute(db) {
             TaskManagerService.getAllTasksByProject(db,projectID)
                 .then((tasks)=>{
                     responseObj.numTasks = tasks.length;
-                    let notStarted = 0 ;
-                    let inProgress = 0 ;
-                    let finished = 0 ;
+                    let notStarted = [] ;
+                    let inProgress = [] ;
+                    let finished = [] ;
+
 
                     for (let i = 0; i < tasks.length ; i++) {
 
                         if(tasks[i].status ==="complete") {
-                            finished++;}
+
+
+
+                            finished.push( {
+                                title: tasks[i].title,
+                                tasksMembers: tasks[i].taskMembers,
+                            });
+                           }
 
                         else if(tasks[i].status ==="in progress") {
-                            inProgress++
+                            inProgress.push( {
+                                title: tasks[i].title,
+                                tasksMembers: tasks[i].taskMembers,
+                            });
+
                         }
 
                         else if(tasks[i].status ==="not started") {
-                            notStarted++;
+                            notStarted.push( {
+                                title: tasks[i].title,
+                                tasksMembers: tasks[i].taskMembers,
+                            });
                         }
 
                     }
-                    const total = notStarted + inProgress +finished;
-                    notStarted = (notStarted/total)*100;
-                    inProgress = (inProgress/total)*100;
-                    finished = (finished/total)*100;
+                    const total = notStarted.length + inProgress.length +finished.length;
+                    let notStartedNum = (notStarted.length/total)*100;
+                    let inProgressNum = (inProgress.length/total)*100;
+                    let finishedNum   = (finished.length/total)*100;
 
                     responseObj.labels = ["not started","in-progress","complete"]
-                    responseObj.data = [notStarted,inProgress,finished]
+                    responseObj.data = [notStartedNum,inProgressNum,finishedNum]
+                    responseObj.notStartedTasks = notStarted;
+                    responseObj.inProgressTasks = inProgress;
+                    responseObj.finishedTasks = finished;
                     res.send({
                         message: "successful",
-                        data: responseObj
+                        data: responseObj,
                     })
 
                 })
