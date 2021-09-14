@@ -165,16 +165,17 @@ async function removeProjectByID(dbController, ID){
 async function removeProjectMember(dbController, id, email){
     const db = dbController.getConnectionInstance();
     return await new Promise(async (resolve,reject)=>{
+        //let proj = [];
+            await  getProjectByID(dbController, id).then(proj=>{
+                //resolve(proj);
+                console.log("This is proj: ",proj);
+                if(proj.data === undefined || proj.data === null){
+                    resolve("Could not find the project.");
+                }else if(proj === "No project"){
+                    resolve("Project does not exist.");
+                }
 
-        let proj = await  getProjectByID(dbController, id);
-
-        if(proj === undefined || proj === null){
-            resolve("Could not find the project.");
-        }else if(proj === "No project"){
-                resolve("Project does not exist.");
-        }
-
-        let memberList = proj.groupMembers;
+                let memberList = proj.groupMembers;
 
 
                 let newArray = memberList.filter((val)=>{
@@ -185,19 +186,28 @@ async function removeProjectMember(dbController, id, email){
 
 
 
-        db.collection('Projects').updateOne({
-            "_id":ObjectId(id)
-        },{
-            $set: {
-                groupMembers: newArray
-            }
-        })
-            .then(ans=>{
-                resolve(ans);
-            })
-            .catch(err=>{
+                db.collection('Projects').updateOne({
+                    "_id":ObjectId(id)
+                },{
+                    $set: {
+                        groupMembers: newArray
+                    }
+                })
+                    .then(ans=>{
+                        resolve(ans);
+                    })
+                    .catch(err=>{
+                        reject(err);
+                    })
+            }).catch(err=>{
                 reject(err);
-            })
+            });
+            //let proj = await getProjectByID(dbController, id);
+
+
+
+    }).catch(err=>{
+        reject(err);
     })
 }
 
