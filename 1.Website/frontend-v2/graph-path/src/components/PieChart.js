@@ -3,6 +3,7 @@ import {Doughnut} from 'react-chartjs-2';
 import axios from "axios";
 import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import Logo from "../img/Logo4.png";
+import '../css/Common.css'
 
 class PieChart extends React.Component{
 
@@ -96,7 +97,7 @@ class PieChart extends React.Component{
         return(
             <>
                 <div>
-                    <h3>Project Tasks Statistics</h3>
+                    <h3>Project Sub-Tasks Statistics</h3>
                     <Dropdown title={"Projects"}>
                         <Dropdown.Item style={{minWidth:"30vw",marginRight:"10%"}}>
                             <List hover>
@@ -166,11 +167,29 @@ class PieChart extends React.Component{
                             maintainAspectRatio: false,
                         }}
                     />
+                        <div id="dropdown-div">
+                            <Dropdown title={"Not Started"}>
+                                <Dropdown.Item>Task 1</Dropdown.Item>
+                                <Dropdown.Item>Task 6</Dropdown.Item>
+                                <Dropdown.Item>Task 3</Dropdown.Item>
+                            </Dropdown>
+                        </div>
+                        <div id="dropdown-div-2">
+                            <Dropdown title={"In-Progress"}>
+                                <Dropdown.Item>Task 4</Dropdown.Item>
+                            </Dropdown>
+                        </div>
+                        <div id="dropdown-div-3">
+                            <Dropdown title={"Complete"}>
+                                <Dropdown.Item>Task 5</Dropdown.Item>
+                                <Dropdown.Item>Task 7</Dropdown.Item>
+                            </Dropdown>
+                        </div>
                         </>
                         :
                         <>
                             <h4>
-                                Select project you want to view the tasks progress for.
+                                Select project you want to view the sub-tasks progress for.
                             </h4>
                             <img alt="graph logo" id="logoPic" src={Logo}/>
                         </>
