@@ -630,16 +630,16 @@ function  makeTaskRoute(db)
     router.patch('/updateEverythingTask',
 
         body('taskID').exists().notEmpty().isMongoId(),
-        body('assigner').exists().notEmpty().isJSON(),
+        body('assigner').exists().notEmpty().isArray(),
         body('description').exists().notEmpty().isString(),
         body('issued').exists().notEmpty().isDate(),
         body('due').notEmpty().isDate(),
         body('nodeID').exists().notEmpty(),
         body('status').exists().isIn(['not started' , 'in progress' , 'complete']),
-        body('project').exists().isMongoId(),
+        body('projectID').exists().isMongoId(),
+        authentication.authenticateToken,
+        // authorisation.AuthoriseDeleteTask,
         async (req, res)=>{
-
-
 
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
@@ -649,7 +649,8 @@ function  makeTaskRoute(db)
             })
         }
 
-            const nodeID = req.body.nodeID;
+            const taskID = req.body.taskID;
+            const nodeID = req.body.nodeID ; 
             let TaskObject = {
                 description:req.body.description,
                 title:req.body.title,
@@ -663,7 +664,7 @@ function  makeTaskRoute(db)
             }
             let responseObj = {}
 
-           await TaskManagerService.updateEverythingTask(db,TaskObject,ID)
+           await TaskManagerService.updateEverythingTask(db,taskID,TaskObject)
                 .then((ans)=>{
                 if(ans == null){
                    responseObj.message="The task was not updated.";

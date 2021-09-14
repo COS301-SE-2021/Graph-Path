@@ -80,11 +80,14 @@ class GraphPath extends Component{
       axios.get(`${this.props.api}/task/getAllTasksByProject/${projectId}`)
       .then((res)=>{
           console.log('Tasklist',res) ;
-            if (res.data.data !== undefined){
+          const allTasks = res.data.data ;
+            if (allTasks !== undefined && Array.isArray(allTasks)){
                 this.setState({
                     taskList:res.data.data ,
-                    loading:false 
+                    loading:false ,
+                    showTask:false
                 }) ;
+                
             }
             else{
                 this.setState({
@@ -92,7 +95,7 @@ class GraphPath extends Component{
                 }) ;
             }
       })
-        .catch((err)=>{
+      .catch((err)=>{
             console.log('Error',err)
             this.setState({
                 loading:false 
@@ -101,12 +104,6 @@ class GraphPath extends Component{
         })
 
         //update the task list if it was already showing
-        if (this.state.showTask&&this.props.project&& this.state.currNodeID.length>1){
-          let filt = this.filterByID(`${this.props.project}_ ${this.state.currNodeID}`)
-          this.setState({
-            nodeTask:filt
-          }) ;
-        }
     }
     else{
       this.setState({
@@ -122,22 +119,24 @@ class GraphPath extends Component{
     }) ;
   }
 
-  filterByID=(id)=>{
-    return this.state.taskList.filter(value=>value.nodeID === id ) ;
+  filterByID=(id,array)=>{
+    return array.filter(value=>value.nodeID === id ) ;
   }
+
+  
 
   showTaskModal=(nodeId)=>{
     let filter = this.state.nodeTasks ;
     
     if (typeof nodeId === 'string' && nodeId.length>1 &&this.props.project !== undefined){
-      filter= this.filterByID(`${this.props.project._id}_${nodeId}`) ;
+      filter= this.filterByID(`${this.props.project._id}_${nodeId}`,this.state.taskList) ;
       let selected = this.state.currGraph.nodes.find(node=>node.id === nodeId) ; 
       let nodeLabel = 'No Provided Name' ; 
       if (selected){
         nodeLabel = selected.label ;
       }
       this.setState({
-        // showTask:!this.state.showTask ,
+        showTask:!this.state.showTask ,
         nodeTasks:filter,
         currNodeID:nodeId,
         currNodeName:nodeLabel,
@@ -405,7 +404,7 @@ class GraphPath extends Component{
     const {project} =this.props ;
     nodeTask.projectID = project._id ;
     nodeTask.nodeID = `${project._id}_${this.state.currNodeID}` ;
-    nodeTask.assigner =[{
+    nodeTask.assigner = [{
       email:`${this.props.loggedUser.email}`,
       permissions:['owner']
     }] ;
@@ -414,8 +413,11 @@ class GraphPath extends Component{
 
     let label = this.state.currNodeName ;
     if (label.length<1){
-      label =  this.state.currGraph.nodes.find(node=>node.id === this.state.currNodeID) ;
-      nodeTask.title = label.label ;
+      let nodeFound =  this.state.currGraph.nodes.find(node=>node.id === this.state.currNodeID) ;
+      nodeTask.title = nodeFound.label ;
+    }
+    else{
+      nodeTask.title = label ;
     }
 
     console.log('saving',nodeTask)
@@ -433,7 +435,12 @@ class GraphPath extends Component{
       console.log('saved task',res) ;
       let taskRes = res.data ;
       if (taskRes.data){
-        PopUpMessage('Task Saved','success')
+        if (taskRes.data.errors){
+          PopUpMessage(taskRes.message,'error')
+        }
+        else{
+          PopUpMessage(taskRes.message,'success')
+        }
         this.viewAllTasksForProject() ;
       }
       else{
@@ -532,6 +539,9 @@ class GraphPath extends Component{
   }
 
   updateNode=(node)=>{
+    node.taskID = node._id ;
+    console.log('updated ',node) ; 
+
     axios.patch(`${this.props.api}/task/updateEverythingTask`,node,{
       headers:{
         authorization:this.props.loggedUser.token
@@ -539,6 +549,7 @@ class GraphPath extends Component{
     })
     .then((res)=>{
       console.log('update res',res); 
+      // let nodeId = 
     })
     .catch((err)=>{
       if(err.response ){
@@ -555,7 +566,8 @@ class GraphPath extends Component{
       
       <Modal.Header>
         <Modal.Title>
-          Provided tasks
+          Provided tasks - {"Node: "+this.state.currNodeName}
+
         </Modal.Title>
       </Modal.Header>
     <Modal.Body>
