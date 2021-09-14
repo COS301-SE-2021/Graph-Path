@@ -106,21 +106,11 @@ class PieChart extends React.Component{
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
                                                 colspan={6}
-                                                // style={{
-                                                //     flexDirection: 'column',
-                                                //     alignItems: 'flex-start',
-                                                //     overflow: 'hidden'
-                                                // }}
                                             >
                                                 <div>{item.projectName}</div>
                                             </FlexboxGrid.Item>
                                             <FlexboxGrid.Item
                                                 colspan={6}
-                                                // style={{
-                                                //     flexDirection: 'column',
-                                                //     alignItems: 'flex-start',
-                                                //     overflow: 'hidden'
-                                                // }}
                                             >
                                                 {/*<div>{item.projectOwner}</div>*/}
                                             </FlexboxGrid.Item>
@@ -168,19 +158,19 @@ class PieChart extends React.Component{
                         }}
                     />
                         <div id="dropdown-div">
-                            <Dropdown title={"Not Started"}>
-                                <Dropdown.Item>Task 1</Dropdown.Item>
+                            <Dropdown id="dropdown-title" title={"Not Started"}>
+                                <Dropdown.Item>Task 1 task 1</Dropdown.Item>
                                 <Dropdown.Item>Task 6</Dropdown.Item>
                                 <Dropdown.Item>Task 3</Dropdown.Item>
                             </Dropdown>
                         </div>
                         <div id="dropdown-div-2">
-                            <Dropdown title={"In-Progress"}>
+                            <Dropdown id="dropdown-title" title={"In-Progress"}>
                                 <Dropdown.Item>Task 4</Dropdown.Item>
                             </Dropdown>
                         </div>
                         <div id="dropdown-div-3">
-                            <Dropdown title={"Complete"}>
+                            <Dropdown id="dropdown-title" title={"Complete"}>
                                 <Dropdown.Item>Task 5</Dropdown.Item>
                                 <Dropdown.Item>Task 7</Dropdown.Item>
                             </Dropdown>
