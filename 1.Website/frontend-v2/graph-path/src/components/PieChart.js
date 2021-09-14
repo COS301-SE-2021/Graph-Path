@@ -178,7 +178,7 @@ class PieChart extends React.Component{
 
 
                                     <div id="dropdown-div-2">
-                                        <Dropdown id="dropdown-title" title={"Not Started"}>
+                                        <Dropdown id="dropdown-title" title={"In Progress"}>
                                             {this.state.task.inProgressTasks.map((item, index) => (
                                                 <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
                                             ))}
@@ -191,7 +191,7 @@ class PieChart extends React.Component{
 
 
                                     <div id="dropdown-div-3">
-                                        <Dropdown id="dropdown-title" title={"Not Started"}>
+                                        <Dropdown id="dropdown-title" title={"Complete"}>
                                             {this.state.task.finishedTasks.map((item, index) => (
                                                 <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
                                             ))}
