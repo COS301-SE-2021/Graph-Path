@@ -69,7 +69,7 @@ class GraphPath extends Component{
     
   }
 
-  viewAllTasksForProject = ()=>{
+  viewAllTasksForProject = (callback)=>{
     if (this.props.project !== undefined){
         
       this.setState({
@@ -86,6 +86,10 @@ class GraphPath extends Component{
                     taskList:res.data.data ,
                     loading:false ,
                     showTask:false
+                },()=>{
+                  if (typeof callback === 'function'){
+                    callback() ;
+                  }
                 }) ;
                 
             }
@@ -432,14 +436,19 @@ class GraphPath extends Component{
       }
     })
     .then((res)=>{
-      console.log('saved task',res) ;
       let taskRes = res.data ;
+      console.log('saved task',taskRes) ;
+
       if (taskRes.data){
+        let nodeId = '' ;
         if (taskRes.data.errors){
           PopUpMessage(taskRes.message,'error')
         }
         else{
+         nodeId= nodeTask.nodeID.split('_')[1] ;
+          console.log('updated id',nodeId,taskRes.nodeCompletionStatus)
           PopUpMessage(taskRes.message,'success')
+          this.changeNodeByStats(nodeId,taskRes.nodeCompletionStatus) ;
         }
         this.viewAllTasksForProject() ;
       }
@@ -553,7 +562,7 @@ class GraphPath extends Component{
       console.log('updated id',nodeId)
       PopUpMessage(res.data.message,'info')
 
-      this.changeNodeByStats(nodeId,res.data.nodeCompletetionStatus)
+      this.changeNodeByStats(nodeId,res.data.nodeCompletionStatus)
     })
     .catch((err)=>{
       if(err.response ){
@@ -587,9 +596,9 @@ class GraphPath extends Component{
 
   }
 
-  changeNodeByStats(nodeId,stats=50){
+  changeNodeByStats(nodeId,stats){
     let color = '#000' ; 
-    if (stats >= 0.70){
+    if (stats >= 0.90){
         //green
         color = '#0d0'
     }
@@ -601,6 +610,7 @@ class GraphPath extends Component{
     }
 
     let res = this.graphManager.changeColor(nodeId,color) ; 
+    console.log('change color',res) ;
     if (res){
       this.updateGraph() ;
     }
