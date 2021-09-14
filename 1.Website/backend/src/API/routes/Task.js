@@ -22,13 +22,14 @@ function  makeTaskRoute(db)
      */
 
 
-    router.get('/getStatusStats', (req,res)=>{
+    router.get('/getStatusStats',
+        (req,res)=>{
         // get NodeID
         //get Tasks for NodeID
         //separate by Status
         const nodeID = req.body.nodeID;
         TaskManagerService.getAllNodeTasks(db,nodeID).then((tasks)=>{
-            let notStarted = 1;
+            let notStarted = 0;
             let inProgress = 0;
             let completed =  0;
             for (let i = 0; i < tasks.length; i++) {
@@ -45,7 +46,17 @@ function  makeTaskRoute(db)
 
             }
 
-            let threshold = completed/(completed+inProgress+notStarted);
+            let total  = completed+inProgress+notStarted;
+            let threshold;
+            if(total === 0){
+                 threshold = 0;
+            }
+            else{
+                 threshold = completed/(completed+inProgress+notStarted);
+            }
+
+
+
             res.send({
                 message: "successfully sent",
                 nodeCompletionStatus: threshold
@@ -309,13 +320,6 @@ function  makeTaskRoute(db)
                         })
                     });
             }
-
-
-
-
-
-
-
 
 
 
@@ -682,7 +686,7 @@ function  makeTaskRoute(db)
                 })
                 })
             await TaskManagerService.getAllNodeTasks(db,nodeID).then((tasks)=>{
-                let notStarted = 1;
+                let notStarted = 0;
                 let inProgress = 0;
                 let completed =  0;
                 for (let i = 0; i < tasks.length; i++) {
@@ -698,8 +702,15 @@ function  makeTaskRoute(db)
                     }
 
                 }
+                let total  = completed+inProgress+notStarted;
+                let threshold;
+                if(total === 0){
+                    threshold = 0;
+                }
+                else{
+                    threshold = completed/(completed+inProgress+notStarted);
+                }
 
-                let threshold = completed/(completed+inProgress+notStarted);
                 responseObj.message= "successfully sent",
                     responseObj.nodeCompletetionStatus= threshold
 
