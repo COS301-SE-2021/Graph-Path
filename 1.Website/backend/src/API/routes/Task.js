@@ -280,7 +280,7 @@ function  makeTaskRoute(db)
         body('nodeID').exists().notEmpty().isString(),
         authentication.authenticateToken,
         authorisation.AuthoriseAddTask,
-        (req, res)=>{
+        async (req, res)=>{
 
             const validationFails = validationResult(req);
             if(!validationFails.isEmpty()){
@@ -304,13 +304,13 @@ function  makeTaskRoute(db)
                     nodeID: req.body.nodeID
                 }
                 console.log("Attempting to insert a new task...");
-                TaskManagerService.insertTask(db,TaskObject)
+                let insertTaskServiceResponse;
+                await TaskManagerService.insertTask(db,TaskObject)
                     .then((ans)=>{
                         console.log("Successfully added new task");
-                        res.send({
-                            message:"The task was saved successfully.",
-                            data:ans.ops
-                        })
+                        insertTaskServiceResponse = ans;
+
+
                     })
                     .catch(err=>{
                         console.log("failed to add new task due to server error...");
@@ -319,6 +319,55 @@ function  makeTaskRoute(db)
                             err:err
                         })
                     });
+
+                const nodeID = req.body.nodeID;
+
+                console.log("Attempting to get create node completion stats after insert Task...");
+                await TaskManagerService.getAllNodeTasks(db,nodeID)
+                    .then((tasks)=>{
+                        console.log("processing all tasks of node : " +req.body.title+"...");
+                        let notStarted = 0;
+                        let inProgress = 0;
+                        let completed =  0;
+                        for (let i = 0; i < tasks.length; i++) {
+
+                            if(tasks[i].status ==="not started"){
+                            notStarted++;
+                            }
+                            else if(tasks[i].status ==="in progress"){
+                                inProgress++;
+                            }
+                            else if(tasks[i].status ==="complete"){
+                                completed++;
+                            }
+
+                    }
+
+                    let total  = completed+inProgress+notStarted;
+                    let threshold;
+                    if(total === 0){
+                        threshold = 0;
+                    }
+                    else{
+                        threshold = completed/(completed+inProgress+notStarted);
+                    }
+
+                    console.log("Successfully generated node completion statsics");
+                    res.send({
+                        message:"The task was saved successfully.",
+                        data:ans.ops,
+                        nodeCompletionStatus: threshold
+                    })
+
+                })
+                    .catch(err=>{
+
+                        console.log("failed to get all tasks of node : " +req.body.title+"...");
+                        res.send({
+                            message:"err getting tasks of a node",
+                            data: err
+                        })
+                    })
             }
 
 
