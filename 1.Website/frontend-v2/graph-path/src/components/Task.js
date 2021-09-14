@@ -1,6 +1,6 @@
 import React from 'react' ;
 import PropTypes from 'prop-types' ;
-import {Schema,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
+import {Schema,CheckPicker,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
 import  '../css/Common.css' ;
 
@@ -104,18 +104,23 @@ class Task extends React.Component {
         }
     }
 
+    getDefaultFormState=()=>{
+        return {
+            description: '' , 
+            issued: new Date(this.now.getFullYear(),this.now.getMonth(),this.now.getDate()).toJSON().slice(0,10) ,
+            due: new Date(this.now.getFullYear(),this.now.getMonth()+1,this.now.getDate()).toJSON().slice(0,10),
+            status:'not started',
+            taskMembers:[]
+        }
+    }
+
     
     toogleScreen=()=>{
-        console.log('toggled')
+        // console.log('toggled')
+        let def = this.getDefaultFormState() ;
         this.setState({
             newTask: !this.state.newTask,
-            formValue:{
-                description: '' , 
-                issued: new Date(this.now.getFullYear(),this.now.getMonth(),this.now.getDate()).toJSON().slice(0,10) ,
-                due: new Date(this.now.getFullYear(),this.now.getMonth()+1,this.now.getDate()).toJSON().slice(0,10),
-                status:'not started',
-                taskMembers:[]
-            },
+            formValue:def,
             formError:{},
             editTask:{}
 
@@ -130,6 +135,10 @@ class Task extends React.Component {
             formValue2.description = taskObj.description ; 
             formValue2.due = taskObj.due ; 
             formValue2.taskMembers = taskObj.taskMembers ;
+            formValue2.status = taskObj.status ;
+        }
+        else{
+            formValue2 = this.getDefaultFormState() ;
         }
         this.setState({
             editTask:taskObj,
@@ -257,7 +266,7 @@ class Task extends React.Component {
                         <CustomField 
                                 name="taskMembers" 
                                 label={"Assign Task To Project Member"}    
-                                accepter={SelectPicker}
+                                accepter={CheckPicker}
                                 // error={}
                                 inline={'true'}
                                 data={projMembers}
