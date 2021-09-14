@@ -175,7 +175,7 @@ class Kanban extends React.Component {
                                     <table className="card-template-wrap" style={{tableLayout: "auto"}}>
                                         <tbody>
                                         <tr>
-                                            {(props.status === 'not started' || props.status === 'inProgress' || props.status === 'complete') &&
+                                            {(props.status === 'not started' || props.status === 'in progress' || props.status === 'complete') &&
                                             <td colSpan={2}>
                                                 {props.status !== '' &&
                                                 <div className="e-description e-tooltip-text">{props.description}</div>}
@@ -190,7 +190,7 @@ class Kanban extends React.Component {
                                             {props.status !== '' && <td className="card-content">
                                                 {props.status === 'not started' &&
                                                 <div className="e-preparingText e-tooltip-text">Not Started</div>}
-                                                {props.status === 'inProgress' &&
+                                                {props.status === 'in progress' &&
                                                 <div className="e-readyText e-tooltip-text">In Progress</div>}
                                                 {(props.status === 'complete') &&
                                                 <div className="e-deliveredText e-tooltip-text">Complete</div>}
@@ -212,7 +212,7 @@ class Kanban extends React.Component {
     //Event after moving the card...
    onDragStop = (event) =>{
         console.log('afterDrag data: ', event.data);
-
+    this.updateChanges(event.data[0]);
     }
 
     //Post clicking the save button
@@ -220,6 +220,26 @@ class Kanban extends React.Component {
         console.log('afterSave data:', event)
     }
 
+    updateChanges = (newData) =>{
+        newData.taskID = newData._id ;
+        console.log('updated ',newData) ;
+
+        axios.patch(`${this.props.api}/task/updateEverythingTask`,newData,{
+            headers:{
+                authorization:this.props.loggedUser.token
+            }
+        })
+       .then((response)=>{
+           console.log(response);
+       })
+       .catch((error)=>{
+           if(error.response)
+           {
+               console.log(error.response);
+           }
+
+       })
+    }
     render() {
         //console.log('break test 126',this.state.projectsByEmail2)
 
@@ -241,7 +261,7 @@ class Kanban extends React.Component {
                             <ColumnsDirective>
                                 <ColumnDirective headerText="Not Started" keyField="not started"
                                                  template={this.columnTemplate.bind(this)}/>
-                                <ColumnDirective headerText="In Progress" keyField="inProgress"
+                                <ColumnDirective headerText="In Progress" keyField="in progress"
                                                  template={this.columnTemplate.bind(this)}/>
                                 <ColumnDirective headerText="Complete" keyField="complete"
                                                  template={this.columnTemplate.bind(this)}/>
