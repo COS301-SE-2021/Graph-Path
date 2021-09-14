@@ -108,14 +108,14 @@ function makeProjectRoute(db) {
 
 
                             finished.push( {
-                                title: tasks[i].title,
+                                title: tasks[i].description,
                                 tasksMembers: tasks[i].taskMembers,
                             });
                            }
 
                         else if(tasks[i].status ==="in progress") {
                             inProgress.push( {
-                                title: tasks[i].title,
+                                title: tasks[i].description,
                                 tasksMembers: tasks[i].taskMembers,
                             });
 
@@ -123,7 +123,7 @@ function makeProjectRoute(db) {
 
                         else if(tasks[i].status ==="not started") {
                             notStarted.push( {
-                                title: tasks[i].title,
+                                title: tasks[i].description,
                                 tasksMembers: tasks[i].taskMembers,
                             });
                         }
@@ -149,6 +149,93 @@ function makeProjectRoute(db) {
                     res.send({
                         message: "Statistics: radar Graph failed, failed to generate stats ",
                         data: []
+                    })
+                })
+
+
+
+        })
+
+
+    router.get("/statistics/barchart/:projectID/:email",
+        //authentication.authenticateToken,
+        param("projectID").exists().notEmpty().isMongoId(),
+        async (req,res)=>{
+            const projectID = req.params.projectID;
+            const userEmail = req.params.email;
+            const responseObj = {
+                projectName: "",
+            }
+            await ProjectManagerService.getProjectByID(db,projectID)
+                .then((project)=>{
+                    responseObj.projectName = project.projectName;
+
+                })
+                .catch((err)=>{
+                    res.send({
+                        message: "Statistics barchart,failed to get project by ID ",
+                        data: err
+                    })
+                })
+
+            TaskManagerService.getAllTasksByProject(db,projectID)
+                .then((tasks)=>{
+                    const userTasks = tasks.filter(task => task.taskMembers.includes(userEmail.toString()));
+                    console.log(userTasks)
+                    responseObj.numTasks = userTasks.length;
+                    let notStarted = [] ;
+                    let inProgress = [] ;
+                    let finished = [] ;
+
+
+                    for (let i = 0; i < userTasks.length ; i++) {
+
+                        if(userTasks[i].status ==="complete") {
+
+
+
+                            finished.push( {
+                                title: userTasks[i].title,
+                                tasksMembers: userTasks[i].taskMembers,
+                            });
+                        }
+
+                        else if(userTasks[i].status ==="in progress") {
+                            inProgress.push( {
+                                title: userTasks[i].title,
+                                tasksMembers: userTasks[i].taskMembers,
+                            });
+
+                        }
+
+                        else if(userTasks[i].status ==="not started") {
+                            notStarted.push( {
+                                title: userTasks[i].title,
+                                tasksMembers: userTasks[i].taskMembers,
+                            });
+                        }
+
+                    }
+                    const total = notStarted.length + inProgress.length +finished.length;
+                    let notStartedNum = (notStarted.length/total)*100;
+                    let inProgressNum = (inProgress.length/total)*100;
+                    let finishedNum   = (finished.length/total)*100;
+
+                    responseObj.labels = ["not started","in-progress","complete"]
+                    responseObj.data = [notStartedNum,inProgressNum,finishedNum]
+                    responseObj.notStartedTasks = notStarted;
+                    responseObj.inProgressTasks = inProgress;
+                    responseObj.finishedTasks = finished;
+                    res.send({
+                        message: "successful",
+                        data: responseObj,
+                    })
+
+                })
+                .catch((err)=>{
+                    res.send({
+                        message: "Statistics: barchart Graph failed, failed to generate stats ",
+                        data: err
                     })
                 })
 

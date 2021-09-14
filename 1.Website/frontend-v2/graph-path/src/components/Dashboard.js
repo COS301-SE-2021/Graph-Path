@@ -5,7 +5,6 @@ import ProjectManager from './ProjectManager';
 import { Link,Switch,Route, withRouter, Redirect} from 'react-router-dom' ;
 import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/md'
-import Modal from "./Modal";
 import Profile from "./Profile";
 import Logout from "./Logout";
 import Logo from "../img/Logo4.png";
@@ -13,8 +12,8 @@ import Kanban from './Kanban';
 import { connect} from 'react-redux' ;
 import RadarChart from "./RadarChart";
 import PieChart from "./PieChart";
-import Statistics from "./Statistics";
 import Calendar from "./Calendar";
+import BarChart from "./BarChart";
 
 
 class Dashboard extends React.Component{
@@ -25,6 +24,7 @@ class Dashboard extends React.Component{
             showSideBar: true,
             redirect:true,
             createResponse:'',
+            viewOnly:false
             
         }
     }
@@ -103,7 +103,15 @@ class Dashboard extends React.Component{
                                                           icon={<Icon icon="dashboard"/>}
                                                           componentClass={Link}
                                                            to="/dashboard" >Dashboard</Nav.Item>
-
+                                                {
+                                                    this.state.viewOnly ?
+                                                    <Dropdown title="View Only">
+                                                        <Dropdown.Item>Own Project</Dropdown.Item>
+                                                        <Dropdown.Item>Shared Project</Dropdown.Item>
+                                                    </Dropdown>
+                                                        :
+                                                        <></>
+                                                }
 
                                                 <Nav.Item id="nav-option"
                                                           icon={<Icon icon="calendar"/>}
@@ -117,9 +125,11 @@ class Dashboard extends React.Component{
 
                                                 <Dropdown id="nav-option" title="Statistics" icon={<Icon icon="bar-chart"/>}>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
-                                                    to={`${match.url}/pieChart`}>Project Tasks</Dropdown.Item>
+                                                                   to={`${match.url}/radarChart`}>Project Tasks</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
-                                                                   to={`${match.url}/radarChart`}>Project Nodes</Dropdown.Item>
+                                                    to={`${match.url}/pieChart`}>Project Subtask</Dropdown.Item>
+                                                    <Dropdown.Item id="nav-option" componentClass={Link}
+                                                                   to={`${match.url}/barChart`}>Assigned Task</Dropdown.Item>
                                                 </Dropdown>
 
                                             </Nav>
@@ -136,9 +146,10 @@ class Dashboard extends React.Component{
                                 <Route path={`${match.path}/modal`} exact>
                                     {/*<Modal user={this.props.authUser} />*/}
                                     <Calendar user={this.props.authUser} />
+
                                 </Route>
                                 <Route path={`${match.path}/manager`} render={()=>{
-                                    return <ProjectManager /> 
+                                    return <ProjectManager />
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
                                     return <Kanban user={this.props.authUser}/> }}/>
@@ -147,6 +158,9 @@ class Dashboard extends React.Component{
                                 </Route>
                                 <Route path={`${match.path}/pieChart`} exact>
                                     <PieChart user={this.props.authUser} />
+                                </Route>
+                                <Route path={`${match.path}/barChart`} exact>
+                                    <BarChart user={this.props.authUser} />
                                 </Route>
                                     
                             {
