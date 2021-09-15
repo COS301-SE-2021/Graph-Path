@@ -107,10 +107,11 @@ async function insertUser(dbController, userObject){
     const newUser ={
         //_id:  new mongoose.mongo.ObjectID(),
         email: userObject.email,
-        name:  userObject.name,//full names
-        given_name: userObject.given_name,
+        fullNames:  userObject.name,//full names
+        username: userObject.given_name,
         picture: userObject.picture,//link to an image
         Notifications: [],
+        email_verified: userObject.email_verified
 
     };
 
