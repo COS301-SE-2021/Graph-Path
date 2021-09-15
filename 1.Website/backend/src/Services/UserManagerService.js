@@ -3,6 +3,7 @@ const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('./ProjectManagerService');
 const {nextObject} = require("mongodb/lib/operations/common_functions");
 const {reject} = require("bcrypt/promises");
+const mongoose = require("mongoose");
 
 async function getAllUsers(dbController){
 
@@ -101,56 +102,44 @@ async function getAllOtherUsers(dbController,email){
 }
 
 async function insertUser(dbController, userObject){
-
+    console.log("Attempting to insert/update User...");
     const db = dbController.getConnectionInstance();
+    const newUser ={
+        _id:  new mongoose.mongo.ObjectID(),
+        email: userObject.email,
+        name:  userObject.name,//full names
+        given_name: userObject.given_name,
+        picture: userObject.picture,//link to an image
+        Notifications: [],
 
-    return await new Promise((resolve, reject)=>{
-        db.collection('Users').findOne({email:userObject.email})
-            .then(async (ans)=>{
+    };
 
-                if(ans != null){
-                    resolve("user already exists");
-                }
-                else
-                {
-                    const salt = await bcrypt.genSalt(10);
-                    userObject.password = await  bcrypt.hash(userObject.password,salt);
-                        db.collection('Users').insertOne(userObject)
-                        .then((ans)=>{
+    const query = { email:userObject.email };
+    const update = { $set: newUser};
+    const options = { upsert: true };
+    try {
+        const result = await db.connection.updateOne(query, update, options);
+        if(result.matchedCount>0){
+            console.log("User already exists...no update happened");
+            return("success");
+        }
+        if(result.modifiedCount> 0){
+            console.log("User "+newUser.email+" successfully updated/inserted");
+            return("success");
+        }
 
-                            resolve(ans);
-                        })
-                            .catch((err)=>{
+    }
 
-                            reject(err);
-                        })
+    catch (err){
+        // something went wrong
+        console.log("Failed to update/insert user: ",err);
+        return("failed");
+    }
 
-
-                }
-            })
-            .catch((err)=>{
-            reject(err);
-            })
-    })
 
 }
 
 
-
-    //const salt = await bcrypt.genSalt(10);
-    //userObject.password = await  bcrypt.hash(userObject.password,salt);
-    /*return await new Promise((resolve, reject)=>{
-        db.collection('Users').insertOne(userObject)
-            .then((ans)=>{
-                resolve(ans);
-            },(ans)=>{
-                console.log('rejected',ans) ;
-                resolve(ans);
-            })
-            .catch(err=>{
-                reject(err);
-            })
-    });*/
 //***************************************************-delete-**************************************************************
 async function removeUserByID(dbController, id){
     const db = dbController.getConnectionInstance();
