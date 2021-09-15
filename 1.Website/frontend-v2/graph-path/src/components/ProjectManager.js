@@ -36,8 +36,13 @@ class ProjectManager extends Component {
             loading:false,
             currentProject:{},
             projects:[],
+            allProjects:[],
+            filterValue: 'all',
+            filteredProjects:{}
         }
     }
+
+
     componentDidMount(){
         this.viewProjectsFromAPI() ;
     }
@@ -62,7 +67,8 @@ When the request fails to retrieve any projects it alerts them.
             if (res.data.data !== undefined){
                 this.setState({
                     projects :res.data.data ,
-                    loading:false                                        
+                    allProjects: res.data.data ,
+                    loading:false
                         
                 }) ;
             }
@@ -184,6 +190,12 @@ The neccesary information for the request to go through follows:
         },()=>this.sortProjects()) ;
     }
 
+    handleFilterChange = (value)=>{
+        this.setState({
+            filterValue:value
+        }, ()=> this.filterProjects());
+    }
+
     sortProjects = ()=>{
         //if recent? newest last aceess date comes first
         //if alphabetical ? project name is used to sort alphabetically
@@ -204,7 +216,7 @@ The neccesary information for the request to go through follows:
                 return 0 ;
             }) ;
             this.setState({
-                projects:newArray , 
+                projects:newArray ,
             }) ;
         }
         else if (this.state.sortValue === 'alpha'){
@@ -224,18 +236,6 @@ The neccesary information for the request to go through follows:
                 projects:sortedArray
             }) ;
         }
-        else if(this.state.sortValue === 'email')
-        {
-            let projectsByEmail = this.state.projects.filter((myProjects)=>{
-                //console.log(myProjects)
-                if(myProjects!==undefined)
-                    return myProjects.projectOwner === this.props.loggedUser.email;
-            });
-
-            this.setState({
-                projects:projectsByEmail
-            })
-        }
         else{
             let newArray = this.state.projects.sort((v1,v2,)=>{
                 let date1=v1.startDate.toLowerCase();
@@ -251,13 +251,42 @@ The neccesary information for the request to go through follows:
                 return 0 ;
             }) ;
             this.setState({
-                projects:newArray , 
+                projects:newArray ,
             }) ;
             
 
         }
     }
 
+    //Filter Projects
+    filterProjects = ()=>{
+        //console.log('email: ', this.props.loggedUser.email)
+        if(this.state.filterValue === 'myOwn') {
+
+            let projectsByEmail1 = this.state.allProjects.filter((myProjects1)=>{
+                    return myProjects1.projectOwner === this.props.loggedUser.email;
+            });
+            this.setState({
+                projects:projectsByEmail1
+            })
+        }
+        else if(this.state.filterValue === 'shared'){
+            let projectsByEmail2 = this.state.allProjects.filter((myProjects2)=>{
+                    return myProjects2.projectOwner !== this.props.loggedUser.email;
+            });
+            this.setState({
+                projects:projectsByEmail2
+            })
+        }
+        else{
+            console.log('all')
+            this.setState({
+                projects: this.state.allProjects
+            })
+
+
+        }
+    }
     newProjectModalRef=(obj)=>{
         this.showModal = obj && obj.handleShow;
     }
@@ -321,7 +350,8 @@ The neccesary information for the request to go through follows:
 
 
         const options = [{
-            label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}, {label:'Projects I Own', value:'email'}] ;
+            label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
+        const filterOptions=[{label:'All Projects', value:'all'},{label:'Projects I Own', value:'myOwn'},{label:'Projects Shared with me', value:'shared'}];
         const {match} = this.props ;
         if (this.state.loading){
             return <Loader backdrop={false} speed={'slow'} size={'lg'} />
@@ -338,12 +368,14 @@ The neccesary information for the request to go through follows:
                         }}/>
                         <Route >
                             <div>
-                            Projects <br/>
+                            Sort Projects <br/>
                             <Button onClick={this.showM}>
                                 <Icon icon={'plus-circle'} title={"New Project"}/>
                             </Button>
 
+                                <SelectPicker data={filterOptions} value={this.state.filterValue} onChange={this.handleFilterChange}/>
                             <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
+
                             <div data-testid="tidProjList" id="projects-list">
                                 {
                                 this.state.projects.length > 0?
