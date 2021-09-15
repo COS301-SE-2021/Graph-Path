@@ -115,7 +115,7 @@ class RadarChart extends React.Component{
                         <Dropdown.Item style={{minWidth:"30vw",marginRight:"10%"}}>
                             <List hover>
                                 {this.state.projects.map((item,index)=>
-                                    item.projectOwner === this.props.user.email ?
+                                    item.projectOwner === this.props.user.email || item.permissions.includes("view statistics")?
                                     <List.Item key={item['projectName']} index={index}>
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
