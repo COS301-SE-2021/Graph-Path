@@ -272,6 +272,7 @@ class GraphManager{
         }
       }
     }
+
     getGraph=()=>{
       console.log('MGR get',this.graph)
       return this.graph ;
@@ -313,7 +314,7 @@ class GraphManager{
               to:tgt,
               label:`${ src} to ${tgt}` ,
               color:'#0ff',
-              size:2,
+              width:7
           }
         let nameSrc = this.graph.nodes.find(v=>v.id === src) ;
         let nameTgt = this.graph.nodes.find(v=>v.id === tgt) ;

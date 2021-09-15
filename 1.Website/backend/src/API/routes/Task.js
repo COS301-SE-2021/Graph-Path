@@ -762,7 +762,7 @@ function  makeTaskRoute(db)
                 }
 
                 responseObj.message= "successfully sent",
-                    responseObj.nodeCompletetionStatus= threshold
+                    responseObj.nodeCompletionStatus= threshold
 
 
             })

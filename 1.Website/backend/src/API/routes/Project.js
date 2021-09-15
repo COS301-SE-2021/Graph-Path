@@ -195,14 +195,14 @@ function makeProjectRoute(db) {
 
 
                             finished.push( {
-                                title: userTasks[i].title,
+                                title: userTasks[i].description,
                                 tasksMembers: userTasks[i].taskMembers,
                             });
                         }
 
                         else if(userTasks[i].status ==="in progress") {
                             inProgress.push( {
-                                title: userTasks[i].title,
+                                title: userTasks[i].description,
                                 tasksMembers: userTasks[i].taskMembers,
                             });
 
@@ -210,7 +210,7 @@ function makeProjectRoute(db) {
 
                         else if(userTasks[i].status ==="not started") {
                             notStarted.push( {
-                                title: userTasks[i].title,
+                                title: userTasks[i].description,
                                 tasksMembers: userTasks[i].taskMembers,
                             });
                         }

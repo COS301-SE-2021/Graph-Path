@@ -34,7 +34,8 @@ class CustomHeader extends Component{
         
             //get token
             let data = {
-                email: user.email 
+                email: user.email ,
+                userObject:user
             }
 
             axios.post(`http://localhost:9001/user/requestToken`,data)
