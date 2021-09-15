@@ -2,6 +2,7 @@ import  React from 'react' ;
 import '../css/NewProject.css';
 import CustomField from './Reusable/CustomField';
 import PropTypes from 'prop-types' ;
+import {format} from 'date-fns' ;
 import {
     Modal,
     Button,
@@ -13,19 +14,18 @@ import {
     HelpBlock,Schema
 } from 'rsuite';
 
-
 class NewProject extends React.Component{
     constructor(props){
         super(props);
         let now = new Date() ;
         this.state={
             show:false,
-             next:false,
+            next:false,
             formValue:{
                 projectName:'',
                 description:'',
                 startDate: new Date(now.getFullYear(),now.getMonth(),now.getDate()),//.toJSON().slice(0,10) ,
-                dueDate: new Date(now.getFullYear()+1,now.getMonth(),now.getDate()),//.toJSON().slice(0,10),
+                dueDate: new Date(now.getFullYear(),now.getMonth()+1,now.getDate()),//.toJSON().slice(0,10),
             },
             formError:{}
         }
@@ -42,7 +42,7 @@ class NewProject extends React.Component{
                projectName:'',
                description:'',
                startDate: new Date(now.getFullYear(),now.getMonth(),now.getDate()),//.toJSON().slice(0,10) ,
-               dueDate: new Date(now.getFullYear()+1,now.getMonth(),now.getDate()),//.toJSON().slice(0,10),
+               dueDate: new Date(now.getFullYear(),now.getMonth()+1,now.getDate()),//.toJSON().slice(0,10),
            },
            formError:{}
         })
@@ -53,24 +53,24 @@ class NewProject extends React.Component{
         const {formValue} = this.state ;
         let updated = {...formValue} ;
         if ( formValue.dueDate instanceof Date ){
-            updated.dueDate = formValue.dueDate.toJSON().slice(0,10) 
-            // console.log('yes Due is Date',updated)
-
+            
+            let d1 = format(updated.dueDate,'yyyy-MM-dd')
+            updated.dueDate = d1 ;
         }
 
         if (formValue.startDate instanceof Date ){
         // console.log('yes issued is Date')
-
-            updated.startDate = formValue.startDate.toJSON().slice(0,10) 
+            let d1 = format(updated.startDate,'yyyy-MM-dd')
+            updated.startDate = d1 ;
         }
-        console.log('yes issued is Date',updated)
+        // console.log('yes issued is Date',updated)
 
-        let project = Object.assign(updated,this.props.preInfo)
+        // let project = Object.assign(updated,this.props.preInfo)
         if (!this.form.check()){
             console.log('Form error')
         }
         else{
-        this.props.sendProjectInfo(project) ; //props
+            this.props.sendProjectInfo(updated) ; //props
         }
     }
 
@@ -109,9 +109,9 @@ class NewProject extends React.Component{
         const projectModel =Schema.Model({
             projectName: StringType().minLength(2,'Project name should have more than 2 letters')
                 .isRequired('This field is required.') ,
-            startDate:DateType().min(new Date(due.getFullYear()-2,due.getMonth(),due.getDate()-1),'The start date cannot be set to a date that has passed.')
+            startDate:DateType().min(new Date(due.getFullYear()-2,due.getMonth(),due.getDate()-1),'The start date cannot be set to a date that has passed by more than a day.')
                 .isRequired('This field is required.') ,
-            dueDate:DateType().range(new Date(),due,'The due date cannot be set to a date more than 24 months from now or a passed date.')
+            dueDate:DateType().min(this.state.formValue.startDate,'The due date cannot be before start date or a date in the past.')
                 .isRequired('This field is required.') ,
             description: StringType().minLength(5,'Please add more details on the description')
                 .isRequired('This field is required.') ,
