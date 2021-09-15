@@ -120,7 +120,7 @@ async function insertUser(dbController, userObject){
     try {
         const result = await db.connection.updateOne(query, update, options);
         if(result.matchedCount>0){
-            console.log("User already exists...no update happened");
+            console.log("User already exists...no update occurred");
             return("success");
         }
         if(result.modifiedCount> 0){
