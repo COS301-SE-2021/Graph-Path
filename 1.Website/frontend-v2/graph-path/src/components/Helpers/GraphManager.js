@@ -313,7 +313,7 @@ class GraphManager{
               from:src, 
               to:tgt,
               label:`${ src} to ${tgt}` ,
-              color:'#0ff',
+              color:'#000',
               width:7
           }
         let nameSrc = this.graph.nodes.find(v=>v.id === src) ;
