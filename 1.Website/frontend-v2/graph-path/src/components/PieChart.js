@@ -1,7 +1,7 @@
 import React from 'react' ;
 import {Doughnut} from 'react-chartjs-2';
 import axios from "axios";
-import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
+import {Button, Dropdown, FlexboxGrid, List, Tooltip} from "rsuite";
 import Logo from "../img/Logo4.png";
 import '../css/Common.css'
 
@@ -105,6 +105,7 @@ class PieChart extends React.Component{
                         <Dropdown.Item style={{minWidth:"30vw",marginRight:"10%"}}>
                             <List hover>
                                 {this.state.projects.map((item,index)=>
+                                    item.projectOwner === this.props.user.email || item.permissions.includes("view statistics") ?
                                     <List.Item key={item['projectName']} index={index}>
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
@@ -127,7 +128,8 @@ class PieChart extends React.Component{
                                             </FlexboxGrid.Item>
                                         </FlexboxGrid>
                                     </List.Item>
-                                )}
+                                :
+                                <></>)}
                             </List>
                         </Dropdown.Item>
                     </Dropdown>
@@ -167,7 +169,9 @@ class PieChart extends React.Component{
                                     <div id="dropdown-div">
                                         <Dropdown id="dropdown-title" title={"Not Started"}>
                                             {this.state.task.notStartedTasks.map((item, index) => (
-                                                <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
+                                                <>
+                                                    <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
+                                                </>
                                             ))}
                                         </Dropdown>
                                     </div>
