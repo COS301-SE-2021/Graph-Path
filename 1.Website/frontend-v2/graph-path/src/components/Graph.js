@@ -696,7 +696,20 @@ class GraphPath extends Component{
           },
           edges: {
             color: "#ff0000" , 
-            physics:false 
+            physics:false ,
+            font:{
+              size:20,
+              face:'calibri',
+              align:'middle',
+            },
+            arrowStrikethrough:false,
+            arrows:{
+              to:{
+                enabled:true,
+                imageHeight: 30,
+                type:'arrow'
+              }
+            },
           },
           // physics:{
             // enabled:true ,
@@ -752,7 +765,7 @@ class GraphPath extends Component{
                 events.externalRemoveEdge(currE)
               }
             }
-            else if (event.event.srcEvent.ctrlKey){
+            else if (event.event.srcEvent.ctrlKey || event.event.srcEvent.shiftKey){
               //add edge between node
               if (nodesAffected.length>0){
                 let curr = nodesAffected.shift() ;
