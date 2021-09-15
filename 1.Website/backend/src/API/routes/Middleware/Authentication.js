@@ -41,9 +41,8 @@ async function generateToken(req,res,db){
                 if(result !== "user not found" || (result !== "ServerDB")){
                     console.log("Preparing JW token: user successfully found by email");
                     const user = {
-                        username : result.firstName,
-                        lastName : result.lastName,
-                        username : result.username,
+                        username : result.name,
+                        lastName : result.given_name,
                         email    : result.email
                     }
                     console.log("Preparing JW token: Attempting to get all projects of user ...");
