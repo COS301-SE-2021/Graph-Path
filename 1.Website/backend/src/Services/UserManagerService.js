@@ -105,7 +105,7 @@ async function insertUser(dbController, userObject){
     console.log("Attempting to insert/update User...");
     const db = dbController.getConnectionInstance();
     const newUser ={
-        _id:  new mongoose.mongo.ObjectID(),
+        //_id:  new mongoose.mongo.ObjectID(),
         email: userObject.email,
         name:  userObject.name,//full names
         given_name: userObject.given_name,
@@ -118,7 +118,7 @@ async function insertUser(dbController, userObject){
     const update = { $set: newUser};
     const options = { upsert: true };
     try {
-        const result = await db.connection.updateOne(query, update, options);
+        const result = await db.collection('Users').updateOne(query, update, options);
         if(result.matchedCount>0){
             console.log("User already exists...no update occurred");
             return("success");
