@@ -674,10 +674,10 @@ function makeProjectRoute(db) {
      * @apiSuccess (200)
      */
     router.delete('/deleteProject',
-        authentication.authenticateToken,
-        authorisation.AuthoriseDeleteProject,
         body('email').exists().notEmpty().isEmail(),
         body('projectID').exists().notEmpty().isMongoId(),
+        authentication.authenticateToken,
+        authorisation.AuthoriseDeleteProject,
         (req,res)=>{
             const invalidFields = validationResult(req);
             if(!invalidFields.isEmpty()){
