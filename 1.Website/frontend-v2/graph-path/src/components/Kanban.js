@@ -5,7 +5,7 @@ import { KanbanComponent, ColumnsDirective, ColumnDirective } from '@syncfusion/
 import axios from 'axios';
 import PropTypes from 'prop-types' ;
 import {connect} from "react-redux";
-import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+import {Loader} from 'rsuite' ;
 
 class Kanban extends React.Component {
 
@@ -16,7 +16,7 @@ class Kanban extends React.Component {
         this.myData2 = [];
         this.nyData3 = [];
         this.state = {
-            loading: true,
+            loading: false,
             test: [[]],
             projectsByEmail: [],
             projectsByEmail2: [],
@@ -44,6 +44,9 @@ class Kanban extends React.Component {
     //http://localhost:9001/project/convertToKanbanBoard/mndebelelt@gmail.com
     //`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.loggedUser.email}`
     firstSearch = () => {
+        this.setState({
+            loading:true
+        }) ;
         axios.get(`${this.props.api}/project/convertToKanbanBoard/${this.props.loggedUser.email}`, {
             headers: {
                 authorization: this.props.user.token
@@ -51,32 +54,7 @@ class Kanban extends React.Component {
         })
             .then((res) => {
                 if (res.data !== undefined) {
-
-                    // let newObj:Object[]=[{
-                    //     projectName: "Project 1",
-                    //     _id: 10,
-                    //     description:"Attempt 1",
-                    //     status:"complete"
-                    // },
-                    //     {
-                    //         projectName: "Project 2",
-                    //         _id: 11,
-                    //         description:"Attempt 2",
-                    //         status:"not started"
-                    //     },
-                    //     {
-                    //         projectName: "Project 3",
-                    //         _id: 12,
-                    //         description:"Attempt 3",
-                    //         status:"inProgress"
-                    //     }
-                    // ]
-                    // console.log('newObj data: ', newObj);
-                    //this.setState({projectsByEmail2: newObj})
-
-                    //let array1=[];
                     let tasks = []
-                    //let obj1={};
                     let count = 1;
                     console.log('length 79', res.data.data.length);
                     for (let i = 0; i < res.data.data.length; i++) {
@@ -98,11 +76,13 @@ class Kanban extends React.Component {
                     console.log('Tasks', tasks);
                     //Attempt to change array into objects
                     // Object.assign(obj1, array1);
-                    this.setState({projectsByEmail: tasks})
+                    this.setState({projectsByEmail: tasks,  loading:false})
                     //this.setState({projectsByEmail2: obj1})
+                }else {
+                    this.setState({
+                        loading:false
+                    }) ;
                 }
-                console.log('projs', this.state.projectsByEmail);
-                //console.log('projs 2',this.state.projectsByEmail2 );
 
             })
             .catch((err) => {
@@ -243,40 +223,46 @@ class Kanban extends React.Component {
     render() {
         //console.log('break test 126',this.state.projectsByEmail2)
 
-        return (
-            <div className='schedule-control-section'>
-                <div className='col-lg-12 control-section'>
-                    <div className='control-wrapper'>
-                        <KanbanComponent cssClass="kanban-card-template" id="kanban" keyField="status"
-                                         enableTooltip={true}
-                                         dataSource={this.state.projectsByEmail} cardSettings={{
-                            contentField: "description",
-                            headerField: "_id",
-                            template: this.cardTemplate.bind(this)
-                        }}
-                                         swimlaneSettings={{keyField: "projectName", textField: "projectName"}}
-                                         cardClick={this.handler} style={{background: "black"}}
-                                 dragStop={this.onDragStop.bind(this)}  dataBound={this.onDataBound.bind(this)}
-                        >
-                            <ColumnsDirective>
-                                <ColumnDirective headerText="Not Started" keyField="not started"
-                                                 template={this.columnTemplate.bind(this)}/>
-                                <ColumnDirective headerText="In Progress" keyField="in progress"
-                                                 template={this.columnTemplate.bind(this)}/>
-                                <ColumnDirective headerText="Complete" keyField="complete"
-                                                 template={this.columnTemplate.bind(this)}/>
-                            </ColumnsDirective>
-                        </KanbanComponent>
+        if (this.state.loading){
+            return <Loader backdrop={false} speed={'slow'} size={'lg'} />
+        }
+        else{
+            return (
+                <div className='schedule-control-section'>
+                    <div className='col-lg-12 control-section'>
+                        <div className='control-wrapper'>
+                            <KanbanComponent cssClass="kanban-card-template" id="kanban" keyField="status"
+                                             enableTooltip={true}
+                                             dataSource={this.state.projectsByEmail} cardSettings={{
+                                contentField: "description",
+                                headerField: "_id",
+                                template: this.cardTemplate.bind(this)
+                            }}
+                                             swimlaneSettings={{keyField: "projectName", textField: "projectName"}}
+                                             cardClick={this.handler} style={{background: "black"}}
+                                             dragStop={this.onDragStop.bind(this)}  dataBound={this.onDataBound.bind(this)}
+                            >
+                                <ColumnsDirective>
+                                    <ColumnDirective headerText="Not Started" keyField="not started"
+                                                     template={this.columnTemplate.bind(this)}/>
+                                    <ColumnDirective headerText="In Progress" keyField="in progress"
+                                                     template={this.columnTemplate.bind(this)}/>
+                                    <ColumnDirective headerText="Complete" keyField="complete"
+                                                     template={this.columnTemplate.bind(this)}/>
+                                </ColumnsDirective>
+                            </KanbanComponent>
+                        </div>
+
+
                     </div>
 
 
                 </div>
 
 
-            </div>
+            )
+        }
 
-
-        )
 
     }
 

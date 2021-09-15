@@ -224,6 +224,18 @@ The neccesary information for the request to go through follows:
                 projects:sortedArray
             }) ;
         }
+        else if(this.state.sortValue === 'email')
+        {
+            let projectsByEmail = this.state.projects.filter((myProjects)=>{
+                //console.log(myProjects)
+                if(myProjects!==undefined)
+                    return myProjects.projectOwner === this.props.loggedUser.email;
+            });
+
+            this.setState({
+                projects:projectsByEmail
+            })
+        }
         else{
             let newArray = this.state.projects.sort((v1,v2,)=>{
                 let date1=v1.startDate.toLowerCase();
@@ -309,7 +321,7 @@ The neccesary information for the request to go through follows:
 
 
         const options = [{
-            label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
+            label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}, {label:'Projects I Own', value:'email'}] ;
         const {match} = this.props ;
         if (this.state.loading){
             return <Loader backdrop={false} speed={'slow'} size={'lg'} />

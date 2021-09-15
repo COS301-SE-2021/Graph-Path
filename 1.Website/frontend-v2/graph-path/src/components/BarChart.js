@@ -60,12 +60,12 @@ class BarChart extends React.Component{
             console.log("get proj id", this.state.projId)
 
 
-            axios.get(`${this.state.api}/project/statistics/donutChart/`+projId, {
+            axios.get(`${this.state.api}/project/statistics/barchart/`+projId+`/`+this.props.user.email, {
                 headers: {
                     authorization: this.props.user.token
                 }
             }).then((res) => {
-                console.log('Stats Success', res.data.data);
+                console.log('Stats Assigned Success', res.data.data);
                 if (res.data.data !== undefined) {
                     this.setState({
                         task: res.data.data,
@@ -118,8 +118,7 @@ class BarChart extends React.Component{
                 {
                     this.state.projects.length > 0 && this.state.showChart ?
                         <>
-                            {/*<h5>{this.state.task.projectName}</h5>*/}
-                            <h5>Show Project Name</h5>
+                            <h5>{this.state.task.projectName}</h5>
                             <Bar data={{
                                 labels: [
                                     'Not Started',
@@ -127,8 +126,8 @@ class BarChart extends React.Component{
                                     'Complete'
                                 ],
                                 datasets: [{
-                                    label:"project 1",
-                                    data: [20,30,100],
+                                    label: this.state.task.projectName,
+                                    data: this.state.task.data,
                                     backgroundColor: [
                                         'rgba(255, 99, 132, 0.2)',
                                         'rgba(255, 159, 64, 0.2)',
@@ -146,24 +145,68 @@ class BarChart extends React.Component{
                             }}
 
                             />
-                            <div className="dropdown-div-bar" id="dropdown-div">
-                                <Dropdown id="dropdown-title" title={"Not Started"}>
-                                    <Dropdown.Item>Task 1 task 1</Dropdown.Item>
-                                    <Dropdown.Item>Task 6</Dropdown.Item>
-                                    <Dropdown.Item>Task 3</Dropdown.Item>
-                                </Dropdown>
-                            </div>
-                            <div className="dropdown-div-bar-2" id="dropdown-div-3">
-                                <Dropdown id="dropdown-title" title={"In-Progress"}>
-                                    <Dropdown.Item>Task 4</Dropdown.Item>
-                                </Dropdown>
-                            </div>
-                            <div className="dropdown-div-bar-3" id="dropdown-div-3">
-                                <Dropdown id="dropdown-title" title={"Complete"}>
-                                    <Dropdown.Item>Task 5</Dropdown.Item>
-                                    <Dropdown.Item>Task 7</Dropdown.Item>
-                                </Dropdown>
-                            </div>
+                            {
+                                this.state.task.notStartedTasks !== undefined && this.state.task.notStartedTasks !== [] ?
+
+
+                                    <div className="dropdown-div-bar" id="dropdown-div">
+                                        <Dropdown id="dropdown-title" title={"Not Started"}>
+                                            {this.state.task.notStartedTasks.map((item, index) => (
+                                                <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
+                                            ))}
+                                        </Dropdown>
+                                    </div>
+                                    : <></>
+                            }
+                            {
+                                this.state.task.inProgressTasks !== undefined && this.state.task.inProgressTasks !== [] ?
+
+
+                                    <div className="dropdown-div-bar-2" id="dropdown-div-2">
+                                        <Dropdown id="dropdown-title" title={"In-Progress"}>
+                                            {this.state.task.inProgressTasks.map((item, index) => (
+                                                <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
+                                            ))}
+                                        </Dropdown>
+                                    </div>
+                                    : <></>
+                            }
+                            {
+                                this.state.task.finishedTasks !== undefined && this.state.task.finishedTasks !== [] ?
+
+
+                                    <div className="dropdown-div-bar-3" id="dropdown-div-3">
+                                        <Dropdown id="dropdown-title" title={"Complete"}>
+                                            {this.state.task.finishedTasks.map((item, index) => (
+                                                <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
+                                            ))}
+                                        </Dropdown>
+                                    </div>
+                                    : <></>
+                            }
+                            {/*{*/}
+
+                            {/*    <>*/}
+                            {/*    <div className="dropdown-div-bar" id="dropdown-div">*/}
+                            {/*        <Dropdown id="dropdown-title" title={"Not Started"}>*/}
+                            {/*            <Dropdown.Item>Task 1 task 1</Dropdown.Item>*/}
+                            {/*            <Dropdown.Item>Task 6</Dropdown.Item>*/}
+                            {/*            <Dropdown.Item>Task 3</Dropdown.Item>*/}
+                            {/*        </Dropdown>*/}
+                            {/*    </div>*/}
+                            {/*        <div className="dropdown-div-bar-2" id="dropdown-div-2">*/}
+                            {/*        <Dropdown id="dropdown-title" title={"In-Progress"}>*/}
+                            {/*        <Dropdown.Item>Task 4</Dropdown.Item>*/}
+                            {/*        </Dropdown>*/}
+                            {/*        </div>*/}
+                            {/*        <div className="dropdown-div-bar-3" id="dropdown-div-3">*/}
+                            {/*        <Dropdown id="dropdown-title" title={"Complete"}>*/}
+                            {/*        <Dropdown.Item>Task 5</Dropdown.Item>*/}
+                            {/*        <Dropdown.Item>Task 7</Dropdown.Item>*/}
+                            {/*        </Dropdown>*/}
+                            {/*        </div>*/}
+                            {/*    </>*/}
+                            {/*}*/}
                         </>
                         :
                         <>

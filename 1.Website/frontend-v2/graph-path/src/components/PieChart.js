@@ -94,6 +94,9 @@ class PieChart extends React.Component{
      *
      */
     render() {
+        if(this.state.task.notStartedTasks !== undefined ){
+            {console.log("tasks show", this.state.task.inProgressTasks)}
+        }
         return(
             <>
                 <div>
@@ -157,24 +160,46 @@ class PieChart extends React.Component{
                             maintainAspectRatio: false,
                         }}
                     />
-                        <div id="dropdown-div">
-                            <Dropdown id="dropdown-title" title={"Not Started"}>
-                                <Dropdown.Item>Task 1 task 1</Dropdown.Item>
-                                <Dropdown.Item>Task 6</Dropdown.Item>
-                                <Dropdown.Item>Task 3</Dropdown.Item>
-                            </Dropdown>
-                        </div>
-                        <div id="dropdown-div-2">
-                            <Dropdown id="dropdown-title" title={"In-Progress"}>
-                                <Dropdown.Item>Task 4</Dropdown.Item>
-                            </Dropdown>
-                        </div>
-                        <div id="dropdown-div-3">
-                            <Dropdown id="dropdown-title" title={"Complete"}>
-                                <Dropdown.Item>Task 5</Dropdown.Item>
-                                <Dropdown.Item>Task 7</Dropdown.Item>
-                            </Dropdown>
-                        </div>
+                            {
+                                this.state.task.notStartedTasks !== undefined && this.state.task.notStartedTasks !== [] ?
+
+
+                                    <div id="dropdown-div">
+                                        <Dropdown id="dropdown-title" title={"Not Started"}>
+                                            {this.state.task.notStartedTasks.map((item, index) => (
+                                                <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
+                                            ))}
+                                        </Dropdown>
+                                    </div>
+                                    : <></>
+                            }
+                            {
+                                this.state.task.inProgressTasks !== undefined && this.state.task.inProgressTasks !== [] ?
+
+
+                                    <div id="dropdown-div-2">
+                                        <Dropdown id="dropdown-title" title={"In Progress"}>
+                                            {this.state.task.inProgressTasks.map((item, index) => (
+                                                <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
+                                            ))}
+                                        </Dropdown>
+                                    </div>
+                                    : <></>
+                            }
+                            {
+                                this.state.task.finishedTasks !== undefined && this.state.task.finishedTasks !== [] ?
+
+
+                                    <div id="dropdown-div-3">
+                                        <Dropdown id="dropdown-title" title={"Complete"}>
+                                            {this.state.task.finishedTasks.map((item, index) => (
+                                                <Dropdown.Item key={item} index={index}>{item.title}</Dropdown.Item>
+                                            ))}
+                                        </Dropdown>
+                                    </div>
+                                    : <></>
+                            }
+
                         </>
                         :
                         <>
