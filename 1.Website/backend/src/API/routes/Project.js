@@ -108,14 +108,14 @@ function makeProjectRoute(db) {
 
 
                             finished.push( {
-                                title: tasks[i].title,
+                                title: tasks[i].description,
                                 tasksMembers: tasks[i].taskMembers,
                             });
                            }
 
                         else if(tasks[i].status ==="in progress") {
                             inProgress.push( {
-                                title: tasks[i].title,
+                                title: tasks[i].description,
                                 tasksMembers: tasks[i].taskMembers,
                             });
 
@@ -123,7 +123,7 @@ function makeProjectRoute(db) {
 
                         else if(tasks[i].status ==="not started") {
                             notStarted.push( {
-                                title: tasks[i].title,
+                                title: tasks[i].description,
                                 tasksMembers: tasks[i].taskMembers,
                             });
                         }
@@ -195,14 +195,14 @@ function makeProjectRoute(db) {
 
 
                             finished.push( {
-                                title: userTasks[i].title,
+                                title: userTasks[i].description,
                                 tasksMembers: userTasks[i].taskMembers,
                             });
                         }
 
                         else if(userTasks[i].status ==="in progress") {
                             inProgress.push( {
-                                title: userTasks[i].title,
+                                title: userTasks[i].description,
                                 tasksMembers: userTasks[i].taskMembers,
                             });
 
@@ -210,7 +210,7 @@ function makeProjectRoute(db) {
 
                         else if(userTasks[i].status ==="not started") {
                             notStarted.push( {
-                                title: userTasks[i].title,
+                                title: userTasks[i].description,
                                 tasksMembers: userTasks[i].taskMembers,
                             });
                         }

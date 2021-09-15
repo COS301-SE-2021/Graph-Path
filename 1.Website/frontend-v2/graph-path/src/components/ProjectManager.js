@@ -133,46 +133,52 @@ The neccesary information for the request to go through follows:
             alert('Can\'t delete Project. Project Invalid') ;
         }
         else{
+
+            let deleteAns = window.confirm('Are you sure you want to delete project ['+project.projectName+'] ?') ;
+            if (deleteAns){
            
-            this.setState({
-                loading:true,
-                // linkNumber:-1
-            }) ;
-            console.log('B4 del',project)
-            axios.delete(`${this.props.api}/project/deleteProject`,{
-                headers:{
-                    authorization:this.props.loggedUser.token
-                } ,
-                data:{
-                    email:this.props.loggedUser.email,
-                    projectID:project._id
-                }
-            })
-            .then((res)=>{
-                if (res.status >=400){
-                    throw res ;
-                }
-                if(res.data.message === undefined){
-                    alert('Network Error') ;
+                this.setState({
+                    loading:true,
+                    // linkNumber:-1
+                }) ;
+                console.log('B4 del',project)
+                axios.delete(`${this.props.api}/project/deleteProject`,{
+                    headers:{
+                        authorization:this.props.loggedUser.token
+                    } ,
+                    data:{
+                        email:this.props.loggedUser.email,
+                        projectID:project._id
+                    }
+                })
+                .then((res)=>{
+                    if (res.status >=400){
+                        throw res ;
+                    }
+                    if(res.data.message === undefined){
+                        alert('Network Error') ;
+                        this.setState({
+                            loading:false
+                        }) ;
+                    }
+                    else{
+                        this.setState({
+                            answer:res.data.message
+                        })//,()=>this.showPopUP()) ;
+                        ;
+                        this.viewProjectsFromAPI() ;
+                    }
+                })
+                .catch(err=>{
+                    console.log("error",err)
                     this.setState({
                         loading:false
                     }) ;
-                }
-                else{
-                    this.setState({
-                        answer:res.data.message
-                    })//,()=>this.showPopUP()) ;
-                    ;
-                    this.viewProjectsFromAPI() ;
-                }
-            })
-            .catch(err=>{
-                console.log("error",err)
-                this.setState({
-                    loading:false
                 }) ;
-            }) ;
-            
+            }
+            else{
+                PopUpMessage('Project not deleted','info')
+            }
         
         }
     }
@@ -223,6 +229,18 @@ The neccesary information for the request to go through follows:
             this.setState({
                 projects:sortedArray
             }) ;
+        }
+        else if(this.state.sortValue === 'email')
+        {
+            let projectsByEmail = this.state.projects.filter((myProjects)=>{
+                //console.log(myProjects)
+                if(myProjects!==undefined)
+                    return myProjects.projectOwner === this.props.loggedUser.email;
+            });
+
+            this.setState({
+                projects:projectsByEmail
+            })
         }
         else{
             let newArray = this.state.projects.sort((v1,v2,)=>{
@@ -309,7 +327,7 @@ The neccesary information for the request to go through follows:
 
 
         const options = [{
-            label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
+            label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}, {label:'Projects I Own', value:'email'}] ;
         const {match} = this.props ;
         if (this.state.loading){
             return <Loader backdrop={false} speed={'slow'} size={'lg'} />

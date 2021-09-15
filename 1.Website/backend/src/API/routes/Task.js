@@ -321,7 +321,10 @@ function  makeTaskRoute(db)
                     });
 
                 const nodeID = req.body.nodeID;
-
+                let responseObj = {
+                    data:insertTaskServiceResponse,
+                    message:"" ,
+                } ;
                 console.log("Attempting to get create node completion stats after insert Task...");
                 await TaskManagerService.getAllNodeTasks(db,nodeID)
                     .then((tasks)=>{
@@ -344,7 +347,7 @@ function  makeTaskRoute(db)
                     }
 
                     let total  = completed+inProgress+notStarted;
-                    let threshold;
+                    let threshold= 0;
                     if(total === 0){
                         threshold = 0;
                     }
@@ -353,21 +356,19 @@ function  makeTaskRoute(db)
                     }
 
                     console.log("Successfully generated node completion statsics");
-                    res.send({
-                        message:"The task was saved successfully.",
-                        data:ans.ops,
-                        nodeCompletionStatus: threshold
-                    })
-
+                    
+                        responseObj.message ="The task was saved successfully." ;
+                        responseObj.nodeCompletionStatus =  threshold
+                    
                 })
                     .catch(err=>{
 
                         console.log("failed to get all tasks of node : " +req.body.title+"...");
-                        res.send({
-                            message:"err getting tasks of a node",
-                            data: err
-                        })
+                            responseObj.message  = "err getting tasks of a node" ; 
+                            responseObj.data =  err
                     })
+                res.send(responseObj) ;
+                
             }
 
 
@@ -761,16 +762,13 @@ function  makeTaskRoute(db)
                 }
 
                 responseObj.message= "successfully sent",
-                    responseObj.nodeCompletetionStatus= threshold
+                    responseObj.nodeCompletionStatus= threshold
 
 
             })
                 .catch(err=>{
-                    console.log("err getting tasks of a node")
-                    res.send({
-                        message:"err getting tasks of a node",
-                        data: err
-                    })
+                    console.log("err getting tasks of a node, updateeverything")
+                   responseObj.message = "Failed to get generate completiion status of all tasks of node"
                 })
 
             res.send(
