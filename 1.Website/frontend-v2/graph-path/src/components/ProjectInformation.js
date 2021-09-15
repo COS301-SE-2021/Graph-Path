@@ -533,6 +533,7 @@ class ProjectInformation extends React.Component{
                                                         <Checkbox value="delete task">Delete Task</Checkbox>
                                                         <Checkbox value="remove members">Remove Members</Checkbox>
                                                         <Checkbox value="add members">Add Members</Checkbox>
+                                                        <Checkbox value="">View Statistics</Checkbox>
                                                     </CheckboxGroup>
 
                                                 </div>

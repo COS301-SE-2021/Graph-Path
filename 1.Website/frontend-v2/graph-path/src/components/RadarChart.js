@@ -110,11 +110,12 @@ class RadarChart extends React.Component{
             <>
 
                 <div>
-                    <h3>Project Nodes Statistics</h3>
+                    <h3>Project Tasks Statistics</h3>
                     <Dropdown title={"Projects"}>
                         <Dropdown.Item style={{minWidth:"30vw",marginRight:"10%"}}>
                             <List hover>
                                 {this.state.projects.map((item,index)=>
+                                    item.projectOwner === this.props.user.email ?
                                     <List.Item key={item['projectName']} index={index}>
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
@@ -147,6 +148,8 @@ class RadarChart extends React.Component{
                                             </FlexboxGrid.Item>
                                         </FlexboxGrid>
                                     </List.Item>
+                                        :
+                                        <></>
                                 )}
                             </List>
                         </Dropdown.Item>
@@ -205,7 +208,7 @@ class RadarChart extends React.Component{
                         :
                         <>
                             <h4>
-                                Select Project you want to view the nodes stats for.
+                                Select Project you want to view the Tasks stats for.
                             </h4>
                             <img alt="graph logo" id="logoPic" src={Logo}/>
                         </>
