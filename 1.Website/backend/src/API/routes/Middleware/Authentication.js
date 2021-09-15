@@ -22,20 +22,34 @@ function authenticateToken(req,res,next)
 
 
 async function generateToken(req,res,db){
-    console.log("Preparing JW token")
+    let responseObject= {};
+    const newUserObject = req.body.userObject;
+    await userManagementService.insertUser(db,newUserObject)
+        .then(result =>{
+            responseObject.message ="successfully update/inserted new user ";
+        })
+        .catch(err=>{
+            responseObject.message ="successfully update/inserted new user ";
+        })
+
+    console.log("Preparing JW token");
     const email = req.body.email;
     return await new Promise((resolve, reject)=>{
+        console.log("Preparing JW token: attempting to get user by email..");
         userManagementService.getUserByEmail(db,email)
             .then((result)=>{
                 if(result !== "user not found" || (result !== "ServerDB")){
+                    console.log("Preparing JW token: user successfully found by email");
                     const user = {
                         username : result.firstName,
                         lastName : result.lastName,
                         username : result.username,
                         email    : result.email
                     }
-
-                    ProjectManagerService.getAllProjectsByUserEmail(db ,email).then((projects)=>{
+                    console.log("Preparing JW token: Attempting to get all projects of user ...");
+                    ProjectManagerService.getAllProjectsByUserEmail(db ,email)
+                        .then((projects)=>{
+                            console.log("Preparing JW token: successfully found  all projects of user ");
                         const ProjectsAndPerms = []
                         if(projects !=="No matched projects"){
                             for( let i = 0 ; i < projects.length ; i ++){
@@ -67,9 +81,11 @@ async function generateToken(req,res,db){
                         }
 
                     })
-
-
+                        .catch((err)=>{
+                            console.log("Preparing JW token: failed to get all projects of user :",err);
+                        })
                 }
+                console.log("Preparing JW token: failed to find user by email...");
 
             }).catch((err)=>{
             reject("token generation failed")
