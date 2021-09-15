@@ -3,6 +3,7 @@ import PropTypes from 'prop-types' ;
 import {Schema,CheckPicker,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
 import  '../css/Common.css' ;
+import {format} from 'date-fns' ;
 
 
 
@@ -60,6 +61,7 @@ class Task extends React.Component {
             formValue:form
         }) ;
     }
+
     handleTaskErrors = (formError)=>{
         this.setState({
             formError
@@ -75,15 +77,15 @@ class Task extends React.Component {
         else{
             let updated = {...formValue} ;
             if ( formValue.due instanceof Date ){
-                updated.due = formValue.due.toJSON().slice(0,10) 
-                // console.log('yes Due is Date',updated)
-    
+                // console.log('yes Due is Date',updated)    
+                let d1 = format(updated.due,'yyyy-MM-dd')
+                updated.due = d1 ;
             }
     
             if (formValue.issued instanceof Date ){
-            // console.log('yes issued is Date')
-    
-                updated.issued = formValue.issued.toJSON().slice(0,10) 
+                // console.log('yes issued is Date')
+                let d1 = format(updated.issued,'yyyy-MM-dd')
+                updated.issued = d1 ; 
             }
     
             // alert('saved') ;
@@ -206,8 +208,6 @@ class Task extends React.Component {
             </div>
             )
     }
-    
-    
 
     listAllTasks =()=>{
         if (this.props.nodeTasks){

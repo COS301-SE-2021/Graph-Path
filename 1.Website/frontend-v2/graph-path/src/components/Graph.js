@@ -127,8 +127,6 @@ class GraphPath extends Component{
     return array.filter(value=>value.nodeID === id ) ;
   }
 
-  
-
   showTaskModal=(nodeId)=>{
     let filter = this.state.nodeTasks ;
     
@@ -170,10 +168,14 @@ class GraphPath extends Component{
     }) ;
   }
   
-  updateGraph=()=>{
+  updateGraph=(withsave)=>{
     
     this.setState({
       currGraph: this.graphManager.getGraph() 
+    },()=>{
+      if (withsave){
+        this.saveProjectGraph(this.props.project._id) ;
+      }
     }) ;
   }
 
@@ -239,7 +241,6 @@ class GraphPath extends Component{
 
   }
 
-
   removeNode =(id)=>{
     let result = this.graphManager.removeNode(id) ;
     if (result){
@@ -262,7 +263,6 @@ class GraphPath extends Component{
       console.log('Error when deleting edge')
     }
   }
-  
 
   cleanUpAfterEdgeAddition = ()=>{
     this.setState({
@@ -447,7 +447,7 @@ class GraphPath extends Component{
         else{
          nodeId= nodeTask.nodeID.split('_')[1] ;
           console.log('updated id',nodeId,taskRes.nodeCompletionStatus)
-          PopUpMessage(taskRes.message,'success')
+          PopUpMessage(taskRes.message,'success') ;
           this.changeNodeByStats(nodeId,taskRes.nodeCompletionStatus) ;
         }
         this.viewAllTasksForProject() ;
@@ -628,7 +628,7 @@ class GraphPath extends Component{
     let res = this.graphManager.changeColor(nodeId,color) ; 
     console.log('change color',res) ;
     if (res){
-      this.updateGraph() ;
+      this.updateGraph(true) ;
     }
     else{
       PopUpMessage('Could not change node color','info') ;
