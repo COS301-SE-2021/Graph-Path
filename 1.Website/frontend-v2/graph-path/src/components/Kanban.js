@@ -6,6 +6,10 @@ import axios from 'axios';
 import PropTypes from 'prop-types' ;
 import {connect} from "react-redux";
 import {Loader} from 'rsuite' ;
+import { Query } from '@syncfusion/ej2-data';
+import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
+import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 
 class Kanban extends React.Component {
 
@@ -220,6 +224,31 @@ class Kanban extends React.Component {
 
        })
     }
+
+    searchClick(userInput){
+        let searchValue=userInput.value;
+        let searchQuery=new Query();
+        if(searchValue !== ''){
+            searchQuery=new Query().search(searchValue,['_id', 'description', 'title'], 'contains', true);
+        }
+        this.kanbanObj.query=searchQuery;
+    }
+
+    reset(){
+        this.kanbanObj.query=new Query();
+    }
+
+    resetClick(){
+        document.getElementById('search_text').value='';
+        this.reset();
+    }
+
+    onFocus(element){
+        if (element.target.value === ''){
+            this.reset();
+        }
+    }
+
     render() {
         //console.log('break test 126',this.state.projectsByEmail2)
 
@@ -241,6 +270,7 @@ class Kanban extends React.Component {
                                              swimlaneSettings={{keyField: "projectName", textField: "projectName"}}
                                              cardClick={this.handler} style={{background: "black"}}
                                              dragStop={this.onDragStop.bind(this)}  dataBound={this.onDataBound.bind(this)}
+                                             ref={(kanban) => { this.kanbanObj = kanban; }}
                             >
                                 <ColumnsDirective>
                                     <ColumnDirective headerText="Not Started" keyField="not started"
@@ -256,7 +286,25 @@ class Kanban extends React.Component {
 
                     </div>
 
-
+                    <div className="col-lg-3 property-section">
+                        <div className="property-panel-section">
+                            <p className="property-panel-header">Searching</p>
+                            <div className="property-panel-content">
+                                <table className="e-filter-table">
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <TextBoxComponent id="search_text" ref={(kanban) => { this.textBoxObj = kanban; }} showClearButton={true} placeholder="Enter search text" onFocus={this.onFocus.bind(this)} input={this.searchClick.bind(this)} style={{color: "white"}}/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div className='e-reset-button'>
+                                    <ButtonComponent id='reset_filter' className="e-btn" onClick={this.resetClick.bind(this)}>Reset</ButtonComponent>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
