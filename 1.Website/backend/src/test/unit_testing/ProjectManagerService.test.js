@@ -1,5 +1,5 @@
-const MockDBController = require('../Controllers/MockDBController');
-const ProjectmanagerService = require('../Services/ProjectManagerService');
+const MockDBController = require('../../Controllers/MockDBController');
+const ProjectmanagerService = require('../../Services/ProjectManagerService');
 const {MongoClient} = require("mongodb");
 const mongoose = require("mongoose");
 
