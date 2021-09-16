@@ -40,7 +40,7 @@ class Task extends React.Component {
 
     DateType = Schema.Types.DateType ;
     StringType = Schema.Types.StringType ;
-    dueDate = new Date(this.now.getFullYear()+1) ;
+    dueDate = new Date(this.now.getFullYear()) ;
     minDate = new Date(this.now.getFullYear(),this.now.getMonth(),this.now.getDate()-1) ;
     
     taskModel = Schema.Model({
@@ -48,7 +48,7 @@ class Task extends React.Component {
             .isRequired('This field is required.') ,
         issued:this.DateType().min(this.minDate,'The issued date cannot be set to a date that has passed.')
             .isRequired('This field is required.') ,
-        due:this.DateType().min(this.minDate,'The due date cannot be set to a date that has passed.')
+        due:this.DateType().min(this.dueDate,'The due date cannot be set to a date that has passed.')
             .isRequired('This field is required.') ,
     })
     // EOF provate fields
