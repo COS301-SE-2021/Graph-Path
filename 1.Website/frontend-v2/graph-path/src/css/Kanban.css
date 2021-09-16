@@ -170,15 +170,11 @@
     padding-bottom: 10px
 }
 
-#EventLog b {
-    color: #388e3c;
-}
-
 hr {
     margin: 1px 10px 1px 0px;
     border-top: 1px solid #eee;
 }
 
-#search_id{
+#search_text{
     color: white;
 }

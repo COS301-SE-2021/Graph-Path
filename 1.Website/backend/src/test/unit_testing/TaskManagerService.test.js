@@ -685,26 +685,28 @@ describe('TaskManagerService.updateEverythingTask',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
         projectID: "6117f3aec5960d336cef32ec",
-        status: "complete"
+        status: "complete",
+        title: "Title"
     }
 
     let testTask={
-        _id: new mongoose.mongo.ObjectID(),
-        assignee: "tester@gmail.com",
+        //_id: new mongoose.mongo.ObjectID(),
+        taskMembers: ["tester@gmail.com"],
         assigner: "ntpnaane@gmail.com",
         description: "This is the new unit testing task",
         due: "2021-09-21",
         issued: "2021-08-17",
         nodeID: "6117f3aec5960d336cef32ec_n5",
         projectID: "6117f3aec5960d336cef32ec",
-        status: "in progress"
+        status: "in progress",
+        title: "This is tile"
     }
 
 
@@ -730,17 +732,18 @@ describe('TaskManagerService.updateEverythingTask',  ()=> {
         const Tasks = MockDB.getConnectionInstance().collection('Tasks');
         await Tasks.insertOne(mockTask);
 
-        let reply = await taskManagerService.updateEverythingTask(MockDB, mockTask._id, testTask.assignee, testTask.assigner, testTask.description, testTask.issued, testTask.due, testTask.nodeID, testTask.status, testTask.projectID );
+        let reply = await taskManagerService.updateEverythingTask(MockDB, mockTask._id, testTask);//.assignee, testTask.assigner, testTask.description, testTask.issued, testTask.due, testTask.nodeID, testTask.status, testTask.projectID
         let response =  await taskManagerService.getTaskByID(MockDB, mockTask._id);
         expect(response._id).toStrictEqual(mockTask._id);
-        expect(response.assignee).toStrictEqual(testTask.assignee);
+        expect(response.taskMembers).toStrictEqual(testTask.taskMembers);
         expect(response.assigner).toStrictEqual(testTask.assigner);
         expect(response.description).toStrictEqual(testTask.description);
         expect(response.issued).toStrictEqual(testTask.issued);
         expect(response.due).toStrictEqual(testTask.due);
         expect(response.nodeID).toStrictEqual(testTask.nodeID);
         expect(response.status).toStrictEqual(testTask.status);
-        expect(response.project).toStrictEqual(testTask.projectID);
+        expect(response.projectID).toStrictEqual(testTask.projectID);
+        expect(response.title).toStrictEqual(testTask.title);
 
         await taskManagerService.deleteTaskByID(MockDB, mockTask._id);
 
