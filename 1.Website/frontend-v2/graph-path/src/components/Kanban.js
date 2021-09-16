@@ -8,7 +8,6 @@ import {connect} from "react-redux";
 import {Loader} from 'rsuite' ;
 import { Query } from '@syncfusion/ej2-data';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
-import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 
 class Kanban extends React.Component {
@@ -41,12 +40,8 @@ class Kanban extends React.Component {
 
     componentDidMount() {
         this.firstSearch();
-
-        // this.secondSearch();
     }
 
-    //http://localhost:9001/project/convertToKanbanBoard/mndebelelt@gmail.com
-    //`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.loggedUser.email}`
     firstSearch = () => {
         this.setState({
             loading:true
@@ -70,18 +65,12 @@ class Kanban extends React.Component {
                             task.projectName = project.projectName;
                             task.Priority = task.status;
                             task.newID = count++;
-                            console.log('task 84', task);
                             tasks.push(task);
 
                         }
 
                     }
-
-                    console.log('Tasks', tasks);
-                    //Attempt to change array into objects
-                    // Object.assign(obj1, array1);
                     this.setState({projectsByEmail: tasks,  loading:false})
-                    //this.setState({projectsByEmail2: obj1})
                 }else {
                     this.setState({
                         loading:false
@@ -95,41 +84,6 @@ class Kanban extends React.Component {
 
     }
 
-    // secondSearch =()=>{
-    //       axios(`http://localhost:9001/task/getAllTasks`)
-    //             .then((res)=>{
-    //                 console.log('2nd',res)
-    //                 if (res.data !== undefined )
-    //                 {
-    //                     this.setState({allTasks: res.data.data},()=>this.sortProject())
-    //                 }})
-    //             .catch((err)=>{
-    //                 console.log('error in initialization',err)
-    //             })
-    // }
-
-// sortProject=()=>{
-//     if(this.state.allTasks.length > 0 && this.state.projectsByEmail.length>0){
-//       let temp=this.state.allTasks.filter((project)=>{
-//           let i=this.state.projectsByEmail.find(el=>el._id===project.projectID)
-//                     if(i!==undefined){
-//                         if(project.projectID===i._id){
-//                             let newTask=project
-//                             newTask['projectName']=i.projectName;
-//                             return newTask;
-//                         }
-//                         else return false;
-//
-//                     }
-//                     else return false;
-//             })
-//         this.setState({
-//                 test: temp
-//         })
-//         console.log(temp);
-//     }
-//
-// }
 
     onDropHandler = (event) => {
         console.log(event.data)
@@ -250,16 +204,17 @@ class Kanban extends React.Component {
     }
 
     render() {
-        //console.log('break test 126',this.state.projectsByEmail2)
-
         if (this.state.loading){
             return <Loader backdrop={false} speed={'slow'} size={'lg'} />
         }
         else{
             return (
+
                 <div className='schedule-control-section'>
+
                     <div className='col-lg-12 control-section'>
                         <div className='control-wrapper'>
+
                             <KanbanComponent cssClass="kanban-card-template" id="kanban" keyField="status"
                                              enableTooltip={true}
                                              dataSource={this.state.projectsByEmail} cardSettings={{
@@ -281,9 +236,8 @@ class Kanban extends React.Component {
                                                      template={this.columnTemplate.bind(this)}/>
                                 </ColumnsDirective>
                             </KanbanComponent>
+
                         </div>
-
-
                     </div>
 
                     <div className="col-lg-3 property-section">
