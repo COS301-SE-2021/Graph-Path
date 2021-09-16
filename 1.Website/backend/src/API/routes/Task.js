@@ -343,22 +343,26 @@ function  makeTaskRoute(db)
                             else if(tasks[i].status ==="complete"){
                                 completed++;
                             }
+                        }
 
-                    }
+                        let total  = completed+inProgress+notStarted;
+                        if( notStarted !== 0 && inProgress === 0){
+                            responseObj.nodeCompletionStatus = "not started";
+                        }
 
-                    let total  = completed+inProgress+notStarted;
-                    let threshold= 0;
-                    if(total === 0){
-                        threshold = 0;
-                    }
-                    else{
-                        threshold = completed/(completed+inProgress+notStarted);
-                    }
+                       else if(inProgress !== 0){
+                            responseObj.nodeCompletionStatus = "in progress";
+                        }
 
-                    console.log("Successfully generated node completion statsics");
+                       else if(notStarted === 0 && inProgress === 0 && completed === total ){
+                            responseObj.nodeCompletionStatus = "complete";
+
+                        }
+
+                    console.log("Successfully generated node completion statistics");
                     
                         responseObj.message ="The task was saved successfully." ;
-                        responseObj.nodeCompletionStatus =  threshold
+                        //responseObj.nodeCompletionStatus =  threshold
                     
                 })
                     .catch(err=>{
