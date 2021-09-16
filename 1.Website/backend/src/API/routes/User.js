@@ -47,12 +47,21 @@ const {isIn} = require("validator");
                          message:"No available users to retrieve."
                      })
                  }else{
+
+                     let users = [];
                      ans.forEach((user)=>{
-                         user.password = null;
+
+                         users.push({
+                             value: user.email,
+                             label: user.fullNames,
+                             picture: user.picture
+                         })
+
+
                      });
                      res.send({
                          message:"Users retrieved successfully.",
-                         data: ans
+                         data: users
                      })
                  }
          }).catch(err=>{
