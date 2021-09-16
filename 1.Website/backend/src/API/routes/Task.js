@@ -8,6 +8,8 @@ const mongo = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectID;
 const TaskManagerService = require('../../Services/TaskManagerService');
 const { body, validationResult, param,check} = require('express-validator');
+const ProjectManagerService = require("../../Services/ProjectManagerService");
+const mailer = require("../../Helpers/SendMail");
 
 function  makeTaskRoute(db)
 {
@@ -621,50 +623,54 @@ function  makeTaskRoute(db)
 
 
 
-    /**
-     * @api {patch}  /updateTaskAssignee'
-     * @apiName  update task Assignee
-     * @apiDescription This endpoint updates the assignee of the task matching the passed in ID
-     * @apiGroup Task
-     * @apiParam  {String} [id] task ID
-     * @apiParam  {object} [Assignee] '{email:"" , role:""}'
-     * @apiSuccess (200) {object}  message : "The task updated successfully"
-     */
-    router.patch('/updateTaskAssignee',
-        body('id').exists().notEmpty().isMongoId(),
-        body('assignee').exists().notEmpty(),
-        (req,res)=>{
-            const failedValidation = validationResult(req);
-            if(!failedValidation.isEmpty()){
+    router.post('/addToTaskGroupMembers',
+        authentication.authenticateToken,
+        authorisation.AuthoriseAddMembers,
+        body('email').exists().notEmpty().isEmail(),
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('groupMembers').exists().notEmpty(),
+        (req, res)=>{
+
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
                 res.status(420).send({
-                    message: "Bad request , invalid parameters",
-                    data: failedValidation
+                    message: "Bad request , invalid id",
+                    data: invalidFields
                 })
             }
+            let taskID = req.body.taskID;
+            let memberObjects = req.body.groupMembers;
 
-            let ID = req.body.id;
-            let assignee =req.body.assignee;
+            let MemberEmails = [];
+            for (const memberKey in memberObjects) {
 
-            TaskManagerService.updateTaskAssignee(db,ID, assignee)
-                .then(ans=>{
-                if(ans === "Success"){
+                MemberEmails.push(memberObjects[memberKey].email);
+            }
+
+            console.log("attempting to add new members...")
+            TaskManagerService.addTaskMembers(db,taskID,memberObjects)
+                .then((project)=>{
+                    const projectName = project.projectName;
+                    const projectOwner =project.owner;
+                    const projectDueDate =project.dueDate;
+                    const recipients =MemberEmails ;
+                    mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients);
+
+                    console.log("successfully added new members...")
                     res.send({
-                        message: "The task updated successfully"
+                        message:"successfully added members"
                     })
-                }else{
-                    res.send({
-                        message: "Could not update the task."
-                    })
-                }
-            })
-                .catch(err=>{
-                res.status(500).send({
-                    message: "Server error: could not update the task",
-                    err: err
                 })
-            })
+                .catch(err=>{
+                    res.send({
+                        message: "failed to add members",
+                        data: err
+                    })
+                })
 
-    });
+
+
+        });
 
 
     /**

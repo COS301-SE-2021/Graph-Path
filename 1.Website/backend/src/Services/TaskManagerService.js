@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const {Promise} = require("mongoose");
 const ObjectId = require('mongodb').ObjectID;
 
 /////////////////////////////////////////////////////-Task-//////////////////////////////////////////////////////////////
@@ -150,28 +151,7 @@ async function updateTaskStatus(dbController, id, newStat){
             })
     })
 }
-/*
-async function updateTaskDueDate(id, ddate){
-    return await new Promise((resolve,reject)=>{
-        db.collection('Tasks').updateOne({
-            "_id": ObjectId(id)
-        },{
-            $set:{status:ddate}
-        })
-            .then(ans=>{
-                if(ans.modifiedCount > 0){
-                    resolve("Success");
-                }else{
-                    resolve("Could not update the task");
-                }
-            })
-            .catch(err=>{
-                reject(err);
-            })
-    })
-}
 
- */
 
 async function deleteTaskByNodeID(dbController, id){
     const db = dbController.getConnectionInstance();
@@ -257,6 +237,51 @@ async function updateEverythingTask(dbController,id,taskObj){
     })
 }
 
+async function addTaskMembers(dbController, id, newMembers){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve,reject)=>{
+        getTaskByID(dbController,id)
+            .then((task)=>{
+                if(task===undefined || task ==null){
+                    resolve("The project does not exist");
+                }
+                let members = task.taskMembers;
+                for(let i =0 ; i < newMembers.length; i++){
+                if(!members.some(member => member.email === newMembers[i].email)){
+                    members.push(newMembers[i]);
+
+                }
+                else{
+                    console.log("Member '"+newMembers[i].email+"' already exists ,not added");
+                }
+            }
+
+            db.collection('Tasks').findOneAndUpdate({
+                    "_id":ObjectId(id)
+                }, {
+                    $set:{taskMembers: members}
+                }, {
+                    returnNewDocument: true }
+            ).then(result=>{
+                console.log("updated group members of this project");
+                resolve(result.value);
+
+
+            })
+                .catch(err=>{
+                    console.log("failed to update",err);
+                    reject(err)
+                })
+
+        }).catch((err)=>{
+            console.log(err);
+            reject("update failed")
+        })
+    })
+
+
+}
+
 module.exports={
     //Task
     getAllTasks,
@@ -272,4 +297,5 @@ module.exports={
     updateEverythingTask,
     deleteTaskByNodeID,
     getAllNodeTasks,
+    addTaskMembers
 }
