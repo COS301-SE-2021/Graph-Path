@@ -5,7 +5,10 @@ class GraphManager{
   /**
    * @member {Object} graph - the graph representation of project. 
    * */ 
-    graph = {} ; 
+    graph = {
+      nodes:[] ,
+      edges: []
+    } ; 
 
     /**
      * @member {Object} adjacencyList - adjacency representation of the graph 
@@ -34,7 +37,10 @@ class GraphManager{
         this.addVertex(source) ;
       }
 
-      this.adjacencyList[source].push(target) ;
+      if (this.adjacencyList[source].indexOf(target)<0){
+        this.adjacencyList[source].push(target) ;
+      }
+      // this.adjacencyList[source].sort((a,b)=>a-b) ;
 
     }
 
@@ -50,6 +56,7 @@ class GraphManager{
     }
 
     createTraversableGraph =()=>{
+      this.adjacencyList = {} ;
       const nodes = this.graph.nodes ;
       const edges = this.graph.edges ;
 
@@ -78,11 +85,11 @@ class GraphManager{
       }
     }
 
-
-    pathFromBFS=(start)=>{
+    pathFromBFS= async (start)=>{
       this.createTraversableGraph() ;
       //bfs -- queue ;FIFO
       var queue = [start] ;
+      var paths = [] ;
       var result = [] ; 
       var visited = {} ;
       visited[start] = true ;
@@ -90,6 +97,27 @@ class GraphManager{
       while (queue.length){
         currVertex = queue.shift() ;
         if (currVertex !== undefined){
+         console.log('curr',currVertex) ;
+
+          let currNode = this.graph.nodes.find(n=>n.id === currVertex ) ;
+        //  console.log('currNode',currNode) ;
+
+          if ( currNode === undefined){
+            if ( currNode.critical){
+              // let path = 
+              this.findFromTraversable(currVertex)
+              .then((path)=>{
+                console.log('path',path,currVertex) ;
+                if (path.length>0){
+                  paths.push(path) ;
+                }
+              }).catch((err)=>{
+                console.log('some error',err)
+              }) ;
+
+              
+            }
+          }
          console.log('prev',result[result.length-1],'curr',currVertex) ;
           result.push(currVertex) ;
           this.adjacencyList[currVertex].forEach((neighbor)=>{
@@ -102,9 +130,50 @@ class GraphManager{
         }
         
       }
-      return result ;
+      console.log('adja',this.adjacencyList) ;
+
+      return paths ;
 
     }
+
+    findFromTraversable= async (endNode)=>{
+      console.log('finding from traversable')
+
+      let result = [] ;
+      let found = false;
+      let queue = ['n0'] ; 
+      let visited = [] ;
+      while(found === false && queue.length){
+        let curr = queue.shift() ;
+        visited.push(curr) ;
+        if (this.adjacencyList[curr].indexOf(endNode)>=0){
+          found = true ;
+            console.log('push',endNode,visited)
+
+          result.push(endNode)
+        }
+        else{
+          for (let v of this.adjacencyList[curr]){
+            if (visited.indexOf(v)<0){
+              queue.push(v) ;
+            }
+          }
+          console.log('push',curr)
+
+          result.push(curr)
+        }
+      }
+      console.log('found?',found)
+
+      if (found){
+        return result ;
+      }
+      else{
+        return ['n0'] ;//was't found
+      }
+    }
+
+    
 
     pathFromDFS =(start)=>{
       this.createTraversableGraph() ;
@@ -157,17 +226,16 @@ class GraphManager{
       return paths ; 
     }
 
-    highlightCritical=(start)=>{
+    highlightGraphCritical=()=>{
 
-      if (typeof start === 'string'){
-        var path = this.pathFromBFS(start) ;
+        var path = this.pathFromBFS('n0') ;
         // console.log('colored edge',path)
 
         if (path.length){
           //edit the color to red
           const colorEdges = this.graph.edges.map((value)=>{
             var del = path.indexOf(value.to) ;
-            if (value.from === start){
+            if (value.from === 'n0'){
               if (del>=0){
                 path = path.splice(del,1) ;
                 let newE = {...value} ; 
@@ -220,10 +288,6 @@ class GraphManager{
           return true ;
 
         }
-      }
-      else{
-        return false ;
-      }
 
     }
 
@@ -427,20 +491,29 @@ class GraphManager{
             obj["color"] = '#f00000' ; //following nodes are blue
             if (len % 2 === 0){
                 obj["x"] = 2*len ; 
-                obj["y"] = 2*len ;
+                obj["y"] = -2*len ;
             }
             else{
                 obj["x"] = 2*len ; 
-                obj["y"] = -15*len ;
+                obj["y"] = 15*len ;
             }
         }
         else{
             // add node with edge depending on self
+            let startNode = {...obj}
+
             obj["id"]= `n1` ;
-            obj["color"] = '#ff0000' ; //start is red
+            obj["color"] = '#ea0000' ; //start is red
             obj["x"] = 0 ; 
             obj["y"] = 0 ;
 
+            startNode["id"]= `n0` ;
+            startNode["color"] = '#900' ; //start is red
+            startNode["x"] = 0 ; 
+            startNode["y"] = -160 ;
+            startNode["critical"] = false ;
+            startNode["label"] = 'Start' ;
+            this.graph.nodes.push(startNode) ;
         }
         
         this.graph.nodes.push(obj) ;

@@ -645,7 +645,7 @@ class GraphPath extends Component{
           //start rendering
           if (this.graphManager !== null){
             const graph = this.state.currGraph;
-            // console.log('curr',this.graphManager)
+            console.log('curr',this.graphManager)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
         
@@ -753,7 +753,7 @@ class GraphPath extends Component{
         events.externalCreateEdge = this.createEdgeBetweenNode
         events.viewTaskInfo = this.showTaskModal ;
         events.click = function(event){
-            // console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
+            console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
             const nodesAffected = event.nodes ;
             const edgesAffected = event.edges ;
             if (event.event.srcEvent.altKey){
