@@ -134,3 +134,51 @@
     color:white;
 }
 
+.property-panel-content .e-filter-table {
+    width: 100%;
+}
+
+.property-panel-content .e-filter-label {
+    width: 30%
+}
+
+.property-panel-content .e-reset-button {
+    padding-top: 13px;
+    text-align: center;
+}
+
+.property-panel-content td {
+    padding-top: 10px;
+}
+
+.property-panel-header {
+    padding-bottom: 0px;
+}
+
+
+/*The Search functionality*/
+.eventarea {
+    height: 245px;
+    overflow: auto
+}
+
+.EventLog {
+    word-break: normal;
+}
+
+.evtbtn {
+    padding-bottom: 10px
+}
+
+#EventLog b {
+    color: #388e3c;
+}
+
+hr {
+    margin: 1px 10px 1px 0px;
+    border-top: 1px solid #eee;
+}
+
+#search_id{
+    color: white;
+}
