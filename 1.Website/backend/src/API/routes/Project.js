@@ -280,17 +280,7 @@ function makeProjectRoute(db) {
 
 
 
-    router.get("/deleteTask",
-        authentication.authenticateToken,
-        authorisation.AuthoriseDeleteTask,
-        param('email').exists().isEmail(),
-        (req,res)=>{
 
-        res.send({
-            message: "token still works"
-        })
-
-    })
 
     /**
      * @api {get}  /project/convertToKanbanBoard
@@ -396,39 +386,6 @@ function makeProjectRoute(db) {
     */
         })
 
-    /**
-     * @api {get}  /project/listProjects
-     * @apiName list of Projects
-     * @apiDescription This endpoint returns a list of all Projects
-     * @apiGroup Project
-     * @apiSuccess (200) {List} list of Project objects
-     */
-    router.get('/listProjects',
-        authentication.authenticateToken,
-        (req, res) => {
-
-        ProjectManagerService.getAllProjects(db)
-            .then((ans) => {
-                if(ans ==="No projects"){
-                    res.send({
-                        message: "There are no projects.",
-                        data: []
-                    })
-                }else{
-                    res.send({
-                        message: "The retrieval of the projects was successful.",
-                        data:ans
-                    })
-                }
-
-                })
-            .catch(err => {
-                res.status(500).send({
-                    message: "Could not retrieve the projects."
-                })
-            })
-
-    })
 
 
     /**
@@ -811,7 +768,6 @@ function makeProjectRoute(db) {
         body('projectName').exists().notEmpty(),
         body('dueDate').exists().notEmpty().isDate(),
         body('startDate').exists().notEmpty().isDate(),
-        body('owner').exists().notEmpty(),
         body('graph').exists().notEmpty().isObject(),
 
         (req,res)=>{
@@ -854,87 +810,7 @@ function makeProjectRoute(db) {
         })
 });
 
-    /**
-     * @api {patch}
-     * @apiName
-     * @apiDescription
-     * @apiGroup Project
-     * @apiSuccess (200)
-     */
-    router.patch('/updateProjectOwner',
-        authentication.authenticateToken,
-        authorisation.AuthoriseUpdateProjectOwner,
-        body('email').exists().notEmpty().isEmail(),
-        body('projectID').exists().notEmpty().isMongoId(),
-        body('newOwnerEmail').exists().notEmpty().isEmail(),
-        (req,res)=>{
-            let ID = req.body.projectID;
-            let mail = req.body.newOwnerEmail;
 
-            ProjectManagerService.updateProjectOwner(db,ID,mail)
-            .then(ans=>{
-            if(ans == null || undefined){
-                res.send({
-                    message: "Could not update the project."
-                })
-            }else if(ans.modifiedCount > 0){
-                res.send({
-                    message: "The project was updated."
-                })
-            }else{
-                res.send({
-                    message: "The project was not updated."
-                })
-            }
-
-        })
-            .catch(err=>{
-            res.status(500).send({
-                message: "Server error: Could not update the project.",
-                err: err
-            })
-        })
-
-});
-
-
-    /**
-     * @api {post} /updateProjectAccessData
-     * @apiName update project access date
-     * @apiDescription  This endpoint updates the last time a user accessed a project.
-     * @apiGroup Project
-     * @apiSuccess (200) {object}  message : "The project updated successfully"
-     */
-    router.post('/updateProjectAccessData',
-        authentication.authenticateToken,
-        authorisation.AuthoriseUpdateProjectAccessData,
-        body('projectID').exists().notEmpty().isMongoId(),
-        body('lastDateAccessed').exists().notEmpty().isDate(),
-        (req,res)=>{
-            const ID = req.body.projectID;
-            let lastDate = req.body.lastDateAccessed;
-
-
-            ProjectManagerService.updateProjectAccessData(db,ID,lastDate)
-                .then(ans=>{
-                    if(ans.modifiedCount > 0){
-                        res.send({
-                            message: "The project was updated."
-                        })
-                    }else{
-                        res.send({
-                            message: "The project was not updated."
-                        })
-                    }
-
-                })
-                .catch(err=>{
-                    res.status(500).send({
-                        message: "Server error: Could not update the project.",
-                        err: err
-                    })
-                })
-        });
 
 
  return router;
