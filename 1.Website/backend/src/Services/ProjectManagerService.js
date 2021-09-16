@@ -236,8 +236,13 @@ async function addNewProjectMember(dbController, id, newMembers){
     const db = dbController.getConnectionInstance();
    return await new Promise((resolve,reject)=>{
         getProjectByID(dbController,id).then((project)=>{
+            console.log("This is the project inside addNewProjectMember: ",project);
+            if(project===undefined || project ==null){
+                resolve("The project does not exist");
+            }
 
             let members = project.groupMembers;
+            console.log("This is groupMembers",members);
 
             for(let i =0 ; i < newMembers.length; i++){
                 if(!members.some(member => member.email === newMembers[i].email)){
