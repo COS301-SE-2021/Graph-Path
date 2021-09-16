@@ -127,8 +127,6 @@ class GraphPath extends Component{
     return array.filter(value=>value.nodeID === id ) ;
   }
 
-  
-
   showTaskModal=(nodeId)=>{
     let filter = this.state.nodeTasks ;
     
@@ -170,10 +168,14 @@ class GraphPath extends Component{
     }) ;
   }
   
-  updateGraph=()=>{
+  updateGraph=(withsave)=>{
     
     this.setState({
       currGraph: this.graphManager.getGraph() 
+    },()=>{
+      if (withsave){
+        this.saveProjectGraph(this.props.project._id) ;
+      }
     }) ;
   }
 
@@ -239,7 +241,6 @@ class GraphPath extends Component{
 
   }
 
-
   removeNode =(id)=>{
     let result = this.graphManager.removeNode(id) ;
     if (result){
@@ -262,7 +263,6 @@ class GraphPath extends Component{
       console.log('Error when deleting edge')
     }
   }
-  
 
   cleanUpAfterEdgeAddition = ()=>{
     this.setState({
@@ -306,9 +306,11 @@ class GraphPath extends Component{
     }
     else{
         // the lengths must be different
-        let oldGSum = oldG.edges.length + oldG.nodes.length ;
-        let newGSSum = newG.edges.length + newG.nodes.length ;
-        if (oldGSum !== newGSSum){
+        // let oldGSum = oldG.edges.length + oldG.nodes.length ;
+        // let newGSSum = newG.edges.length + newG.nodes.length ;
+        let oldGSum = JSON.stringify(oldG) ;
+        let newGSum = JSON.stringify(newG)
+        if (oldGSum !== newGSum){
             diff = true ;
             return diff ;
         }
@@ -349,7 +351,7 @@ class GraphPath extends Component{
                   to: edge.target === undefined ?edge.to: edge.target,
                   label: edge.label,
                   color: edge.color,
-                  size: edge.size,
+                  width: edge.width,
               }
           })
           const minimalGraph = {
@@ -380,7 +382,8 @@ class GraphPath extends Component{
                   
               }) ;
               // this.viewProjectsFromAPI() ;
-              PopUpMessage(res.data.message,'info')
+              PopUpMessage(res.data.message,'info') ;
+              this.initialGraph = minimalGraph ;
           })
           .catch((err)=>{ 
             if (err.response){
@@ -447,7 +450,7 @@ class GraphPath extends Component{
         else{
          nodeId= nodeTask.nodeID.split('_')[1] ;
           console.log('updated id',nodeId,taskRes.nodeCompletionStatus)
-          PopUpMessage(taskRes.message,'success')
+          PopUpMessage(taskRes.message,'success') ;
           this.changeNodeByStats(nodeId,taskRes.nodeCompletionStatus) ;
         }
         this.viewAllTasksForProject() ;
@@ -628,7 +631,7 @@ class GraphPath extends Component{
     let res = this.graphManager.changeColor(nodeId,color) ; 
     console.log('change color',res) ;
     if (res){
-      this.updateGraph() ;
+      this.updateGraph(true) ;
     }
     else{
       PopUpMessage('Could not change node color','info') ;
@@ -697,11 +700,12 @@ class GraphPath extends Component{
           edges: {
             color: "#ff0000" , 
             physics:false ,
-            font:{
-              size:20,
-              face:'calibri',
-              align:'middle',
-            },
+            font:'false',
+            // {
+            //   size:20,
+            //   face:'calibri',
+            //   align:'middle',
+            // },
             arrowStrikethrough:false,
             arrows:{
               to:{
@@ -802,17 +806,19 @@ class GraphPath extends Component{
               </div>
 
                 <div id="graphbox">
-                    <div>
+                    {/* <div>
                  {this.state.currNodeID.length > 1 ?
                  
                         
                         <Avatar onClick={this.showTaskModal} className={'nodeView'} circle size={'lg'}>{
                         this.state.currNodeName===''?'click a node':this.state.currNodeName}</Avatar>
                  : <small>Click a node to add a task. To add node press, Add Node on top</small>}
-                      {
-                      this.newTaskModal()}
+                      
 
-                     </div>
+                     </div> */}
+
+                      {// return the modal
+                      this.newTaskModal()}
 
                      <Graph key={JSON.stringify(graph)}
                   graph={this.state.currGraph}
