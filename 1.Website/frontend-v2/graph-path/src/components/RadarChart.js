@@ -149,7 +149,9 @@ class RadarChart extends React.Component{
                                         </FlexboxGrid>
                                     </List.Item>
                                         :
-                                        <></>
+                                        <>
+                                            {/*<h6>No Projects</h6>*/}
+                                        </>
                                 )}
                             </List>
                         </Dropdown.Item>
