@@ -17,7 +17,7 @@ function makeProjectRoute(db) {
 
 
     router.get("/statistics/RadarGraph/:projectID",
-        //authentication.authenticateToken,
+        authentication.authenticateToken,
         param("projectID").exists().notEmpty().isMongoId(),
         async (req,res)=>{
             const projectID = req.params.projectID;
@@ -74,7 +74,7 @@ function makeProjectRoute(db) {
         })
 
     router.get("/statistics/donutChart/:projectID",
-        //authentication.authenticateToken,
+        authentication.authenticateToken,
         param("projectID").exists().notEmpty().isMongoId(),
         async (req,res)=>{
             const projectID = req.params.projectID;
@@ -158,7 +158,7 @@ function makeProjectRoute(db) {
 
 
     router.get("/statistics/barchart/:projectID/:email",
-        //authentication.authenticateToken,
+        authentication.authenticateToken,
         param("projectID").exists().notEmpty().isMongoId(),
         async (req,res)=>{
             const projectID = req.params.projectID;
