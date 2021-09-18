@@ -2,11 +2,12 @@ const makeApp = require('../../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb')
 const MockDBController = require('../../Controllers/MockDBController');
+const mongoose = require("mongoose");
+const ProjectmanagerService = require("../../Services/ProjectManagerService");
 
 describe('/statistics/RadarGraph/:projectID',()=> {
 
     describe("when requested", ()=>{
-
         let connection;
         let MockDB;
         beforeAll(async () => {
@@ -15,16 +16,22 @@ describe('/statistics/RadarGraph/:projectID',()=> {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
-            MockDB = await MockDBController.getConnectionInstance();
+            MockDB = await MockDBController;
+
+            const Projects = MockDB.getConnectionInstance().collection('Projects');
+            await Projects.insertOne(mockProject);
 
 
         });
         afterAll(async () => {
+            await  ProjectmanagerService.removeProjectByID(MockDB, mockProject._id)
             await connection.close();
             await MockDB.close();
         });
 
         it('it should return status code 200', async ()=> {
+
+
             let app = makeApp(MockDBController);
             let response  = await supertest(app)
                 .get('/task/getAllTasks')
@@ -87,5 +94,7 @@ describe('/statistics/RadarGraph/:projectID',()=> {
                     })
                 })
         });
+
+
     })
 });
