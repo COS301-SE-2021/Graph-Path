@@ -183,7 +183,7 @@ class Kanban extends React.Component {
         let searchValue=userInput.value;
         let searchQuery=new Query();
         if(searchValue !== ''){
-            searchQuery=new Query().search(searchValue,['_id', 'description', 'title'], 'contains', true);
+            searchQuery=new Query().search(searchValue,['_id', 'description', 'title','projectName'], 'contains', true);
         }
         this.kanbanObj.query=searchQuery;
     }

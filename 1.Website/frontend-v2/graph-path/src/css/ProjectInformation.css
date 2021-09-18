@@ -18,8 +18,10 @@
     border: none;
     border-bottom: 1px solid grey;
     padding: 3px;
-    margin-left: 30px;
+    /*margin-left: 30px;*/
     outline: none;
+    margin-bottom: 3%;
+    width: 230px;
 }
 
 #project-name h3{
@@ -29,6 +31,7 @@
 #add-member-btn{
     margin-left: 100%;
     margin-top: 10%;
+
 }
 
 #project-name{
@@ -45,17 +48,17 @@
 }
 
 #can-do-div{
-    max-width: 15vw;
+    max-width: 20vw;
     max-height: 30vh;
     /*background-color: blue;*/
     border: 1px solid grey;
     border-radius: 5px;
     margin-top: 3%;
-    margin-left: 10%;
+    /*margin-left: 3%;*/
 }
 
 #check-list{
-    max-width: 15vw;
+    max-width: 20vw;
     max-height: 19vh;
     overflow-y: scroll;
 }
