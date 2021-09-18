@@ -38,8 +38,8 @@ describe('/statistics/RadarGraph/:projectID',()=> {
                 useUnifiedTopology: true
             });
             MockDB = await MockDBController.getConnectionInstance();
-            const Projects =  MockDB.collection('Projects');
-            const Tasks    =  MockDB.collection('Tasks');
+            const Projects =  await MockDB.collection('Projects');
+            const Tasks    =  await MockDB.collection('Tasks');
             const Users    =  MockDB.collection('Users');
 
             const MockProjectCollection = await require('../MockCollections/mockProjects.json');
@@ -68,8 +68,8 @@ describe('/statistics/RadarGraph/:projectID',()=> {
             }
 
             await Projects.insertMany(test_n_projects);
-            await Projects.insertMany(test_n_users);
-            await Projects.insertMany(test_n_tasks);
+            await Users.insertMany(test_n_users);
+            await Tasks.insertMany(test_n_tasks);
 
 
         });
@@ -96,6 +96,7 @@ describe('/statistics/RadarGraph/:projectID',()=> {
             });
             /**TESTING VALIDATION**/
             it('return Bad request , invalid id when ProjectName is invalid', async ()=>{
+                let app = makeApp(MockDBController);
                 const endpointString = "/project/newProject";
                 let mockRequestToken ="";
                 const mockReqBody = {
