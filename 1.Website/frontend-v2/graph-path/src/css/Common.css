@@ -69,3 +69,7 @@
 #open-card:hover{
     text-decoration: none;
 }
+
+#pop-btn{
+    width: 120px;
+}

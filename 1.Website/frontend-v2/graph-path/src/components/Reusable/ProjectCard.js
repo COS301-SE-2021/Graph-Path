@@ -1,7 +1,8 @@
-import { React, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types' ;
 import { Panel,Icon, Popover, Button, Whisper, Divider } from 'rsuite';
 import { Link } from 'react-router-dom';
+import "../../css/Common.css"
 
 /*
 * ProjectCard is used to display the minimal description about the project
@@ -27,27 +28,31 @@ class ProjectCard extends Component {
         <br/>
 
         <div>
-          MEMBERS: {
-            project.groupMembers !== undefined && project.groupMembers.length > 0 
-            ? project.groupMembers.map((member,index)=>{
-              return <Divider key={index}>
-                <Divider><Icon icon={'user-info'}/>{`${member.email}`} </Divider>
-              </Divider> 
-            })
-            :<h5>No Members Yet</h5>
-          }
+          {/*Members: {*/}
+          {/*  project.groupMembers !== undefined && project.groupMembers.length > 0 */}
+          {/*  ? project.groupMembers.map((member,index)=>{*/}
+          {/*    return <div key={index}>*/}
+          {/*      <><Icon icon={'user-info'}/> { `${member.email}`} </>*/}
+          {/*    </div>*/}
+          {/*  })*/}
+          {/*  :<h5>No Members Yet</h5>*/}
+          {/*}*/}
+
+         <p>Project Owner: {project.projectOwner}</p>
         </div>
 
         <br/>
+        <div style={{textAlign:"right"}}>
+            <Link id="pop-btn" className="rs-btn rs-btn-default" to={`${link}/edit`}  onClick={()=>selectProject(project)}>
+                Edit Project
+            </Link>
+            <br/>
+            <Button id="pop-btn" onClick={()=>deleteProject(project)}>
+                Delete Project
+            </Button>
 
-        <Button onClick={()=>deleteProject(project)}>
-          DELETE PROJECT
-        </Button>
+        </div>
 
-        <br/>
-        <Link to={`${link}/edit`}  onClick={()=>selectProject(project)}>
-          EDIT PROJECT
-        </Link>
       </Popover>
     )
 
@@ -57,16 +62,17 @@ class ProjectCard extends Component {
         >
         <Panel id="projHeader" header={`${project.projectName}`}>
           <div>
-            <small>Due Date: <h6>{project.dueDate}</h6> </small>
+            {/*<small>Due Date: <h6>{project.dueDate}</h6> </small>*/}
+              <h6>Due Date: {project.dueDate}</h6>
           </div>
           <h6>
-              Last Editted: {project.lastAccessed}
+              Last Edited: {project.lastAccessed}
           </h6>
           <Whisper trigger={'click'} placement={'autoVertical'} speaker={projectInfo}>
           <Icon icon='info' onClick={()=>console.log('clicked')}/>
           </Whisper>
           <br/>
-          <Link onClick={()=>selectProject(project)} to={`${link}`}>Open</Link>
+          <Link id="open-card" onClick={()=>selectProject(project)} to={`${link}`}>Open</Link>
           <br/>
         </Panel>
       </Panel>
