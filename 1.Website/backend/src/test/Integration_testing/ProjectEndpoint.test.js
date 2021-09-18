@@ -2,10 +2,8 @@ const makeApp = require('../../app');
 const supertest = require('supertest');
 const {MongoClient} = require('mongodb')
 const MockDBController = require('../../Controllers/MockDBController');
-
 const mongoose = require("mongoose");
-const ProjectmanagerService = require("../../Services/ProjectManagerService");
-//const mockProjects = require("../../src/test/MockCollections/mockProjects.json");
+
 
 describe('/statistics/RadarGraph/:projectID',()=> {
 
@@ -96,65 +94,50 @@ describe('/statistics/RadarGraph/:projectID',()=> {
                     })
 
             });
-            it('')
+            /**TESTING VALIDATION**/
+            it('return Bad request , invalid id when ProjectName is invalid', async ()=>{
+                const endpointString = "/project/newProject";
+                let mockRequestToken ="";
+                const mockReqBody = {
+                    projectName: "",
+                    description: "",
+                    startDate: "",
+                    dueDate: "",
+                    email:"",
+                };
+                let mockReq = await supertest(app)
+                    .headers('Authorisation','Bearer '+mockRequestToken)
+                    .post(endpointString)
+                    .send(mockReqBody)
+                    .then(res=>{
+                        expect(res.status).toBe(200)
+                        expect(res.message).toBe("")
+                        expect(res.data).toStrictEqual([])
+                    })
+            });
+            it('return Bad request , invalid id description is invalid', async ()=>{});
+            it('return Bad request , invalid id startDate is invalid', async ()=>{});
+            it('return Bad request , invalid id dueDate is invalid', async ()=>{});
+            it('return Bad request , invalid id email is invalid', async ()=>{});
+
+            /**TESTING Authentication**/
+            it('return error when  token authentication fails', async ()=>{});
+
+
+            /**TESTING Authorisation**/
+            it('return error when token Authorisation fails', async ()=>{});
+
+            /**TESTING Business logic**/
+            //what is expected when,validation, Authentication and Authorisation passed
+
+
+
         })
 
-
-        it('it should return a JSON object', async ()=> {
-
-            let app = makeApp(MockDBController)
-            const response = await supertest(app)
-                .get('/task/getAllTasks')
-                .expect(200)
-                .then((res)=>{
-                    expect(res.headers['content-type']).toBe('application/json; charset=utf-8')
-                })
-        });
-        it('it should return JSON object with all the task\'s fields', async ()=> {
-            const Tasks = MockDB.collection('Tasks');
-            let MockTask = {
-                description: "Help Mark with his work",
-                status: "in-progress",
-                project: "Graph-Path",
-                tasknr: 1,
-                assignee: "Joe",
-                assigner: "Alistair",
-                due: Date.now(),
-                issued: Date.now()+48,
-            }
-            await Tasks.insertOne(MockTask);
-            let app = makeApp(MockDBController);
-            const response = await supertest(app)
-                .get('/task/getAllTasks')
-                .expect(200)
-                .then((res)=>{
-
-
-                    expect(res.body.data[0]['status']).toBeDefined()
-                    expect(res.body.data[0]['project']).toBeDefined()
-                    expect(res.body.data[0]['tasknr']).toBeDefined()
-                    expect(res.body.data[0]['assignee']).toBeDefined()
-                    expect(res.body.data[0]['assigner']).toBeDefined()
-                    expect(res.body.data[0]['due']).toBeDefined()
-                    expect(res.body.data[0]['issued']).toBeDefined()
-
-                })
-        });
-        it('it should return empty JSON object when there are no projects', async ()=>{
-            var Tasks = MockDB.collection('Tasks');
-            Tasks.deleteMany({})
-            let app = makeApp(MockDBController)
-            const response = await supertest(app)
-                .get('/task/getAllTasks')
-                .expect(200)
-                .then((res)=>{
-
-                    expect(res.body).toEqual({
-                        message: "The tasks were retrieved.",
-                        data: []
-                    })
-                })
-        });
+        //Step 1- write describe for each endpoint(here under the describe above,be careful not nest describes)
+        //Step 2- check what the end point's middleware validates then write it for each validation
+        //step 3- check what the business logic should return, write a an it for each case
+        //step 4 - repeat 1-3 for other endpoints
 
 
     })
