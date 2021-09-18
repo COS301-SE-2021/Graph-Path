@@ -341,7 +341,8 @@ class GraphPath extends Component{
                   x:node.x,
                   y:node.y,
                   size:node.size,
-                  color:node.color
+                  color:node.color,
+                  critical:node.critical 
               }
           }) ;
           const minimalEdges = this.state.currGraph.edges.map((edge)=>{
@@ -645,7 +646,7 @@ class GraphPath extends Component{
           //start rendering
           if (this.graphManager !== null){
             const graph = this.state.currGraph;
-            // console.log('curr',this.graphManager)
+            console.log('curr',this.graphManager)
             const speaker = (
             <Popover visible={this.state.showNode} title="ADD NODE TO GRAPH">
         
@@ -753,7 +754,7 @@ class GraphPath extends Component{
         events.externalCreateEdge = this.createEdgeBetweenNode
         events.viewTaskInfo = this.showTaskModal ;
         events.click = function(event){
-            // console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
+            console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
             const nodesAffected = event.nodes ;
             const edgesAffected = event.edges ;
             if (event.event.srcEvent.altKey){
@@ -802,6 +803,8 @@ class GraphPath extends Component{
                 <Button >Add Node</Button>
                 </Whisper> &nbsp;
                 <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>
+                <IconButton icon={<Icon icon={'charts-line'}/>}>Project Graph Critical Path</IconButton>
+                
                   </div>
               </div>
 

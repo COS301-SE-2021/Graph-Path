@@ -1,17 +1,23 @@
-import { node } from "prop-types";
 import isAcyclic from "./DAG";
+
+var jsgraph = require('js-graph-algorithms') ;// {TopologicalSortShortestPaths,WeightedDiGraph,Edge} from 'js-graph-algorithms' ;
 
 class GraphManager{
   /**
    * @member {Object} graph - the graph representation of project. 
    * */ 
-    graph = {} ; 
+    graph = {
+      nodes:[] ,
+      edges: []
+    } ; 
 
     /**
      * @member {Object} adjacencyList - adjacency representation of the graph 
      * 
     */
     adjacencyList = {} ; 
+
+    // criticalGraph = {} ;// jsgraph.WeightedDiGraph(0) ;
 
     constructor(graph){
       if (graph === undefined || graph.nodes === undefined || graph.edges === undefined){
@@ -34,7 +40,10 @@ class GraphManager{
         this.addVertex(source) ;
       }
 
-      this.adjacencyList[source].push(target) ;
+      if (this.adjacencyList[source].indexOf(target)<0){
+        this.adjacencyList[source].push(target) ;
+      }
+      // this.adjacencyList[source].sort((a,b)=>a-b) ;
 
     }
 
@@ -50,6 +59,7 @@ class GraphManager{
     }
 
     createTraversableGraph =()=>{
+      this.adjacencyList = {} ;
       const nodes = this.graph.nodes ;
       const edges = this.graph.edges ;
 
@@ -78,11 +88,11 @@ class GraphManager{
       }
     }
 
-
-    pathFromBFS=(start)=>{
+    pathFromBFS= (start)=>{
       this.createTraversableGraph() ;
       //bfs -- queue ;FIFO
       var queue = [start] ;
+      var paths = [] ;
       var result = [] ; 
       var visited = {} ;
       visited[start] = true ;
@@ -90,7 +100,19 @@ class GraphManager{
       while (queue.length){
         currVertex = queue.shift() ;
         if (currVertex !== undefined){
-         console.log('prev',result[result.length-1],'curr',currVertex) ;
+         console.log('curr',currVertex) ;
+
+        let currNode = this.graph.nodes.find(n=>n.id === currVertex ) ;
+        //  console.log('currNode',currNode) ;
+
+          if ( currNode !== undefined){
+            if ( currNode.critical){
+              currNode.color = '#880' ;
+              // console.log('path',path,currVertex) ;
+              paths.push(currNode.id) ;
+            }
+          }
+        //  console.log('prev',result[result.length-1],'curr',currVertex) ;
           result.push(currVertex) ;
           this.adjacencyList[currVertex].forEach((neighbor)=>{
             if (!visited[neighbor]){
@@ -98,12 +120,81 @@ class GraphManager{
               queue.push(neighbor) ;
             }
           })
-
         }
-        
       }
-      return result ;
+      // console.log('adja',this.adjacencyList) ;
 
+      return {
+        paths: paths,
+        result:result };
+
+    }
+
+    findShortestPath=(end)=>{
+      const numVertex = this.graph.nodes.length ;
+
+      var criticalGraph = new jsgraph.WeightedDiGraph(numVertex) ;
+
+      if (criticalGraph !== undefined){
+        // delete this.criticalGraph ;
+      
+        for (let edge of this.graph.edges){
+          const from = parseInt(edge.from.substr(1,edge.from.length-1)) ;
+          const to = parseInt(edge.to.substr(1,edge.to.length-1)) ;
+          // let newE = new jsgraph.Edge(from,to,10) ;
+          // console.log('add',from,'to',to) ;
+          criticalGraph.addEdge(new jsgraph.Edge(from,to,10)) ;
+        }
+        const endNumber = parseInt(end.substr(end.length-1)) ;
+        var critical = new jsgraph.Dijkstra(criticalGraph,0) ;
+        // console.log('endo',endNumber,critical) ;
+
+        if (critical.hasPathTo(endNumber)){
+          var path = critical.pathTo(endNumber) ;
+          // console.log('path to',path,endNumber) ;
+          return path ;
+        }
+        else{
+          return [] ;
+        }
+    }
+    }
+
+    findFromTraversable= async (endNode)=>{
+      // console.log('finding from traversable')
+
+      let result = [] ;
+      let found = false;
+      let queue = ['n0'] ; 
+      let visited = [] ;
+      while(found === false && queue.length){
+        let curr = queue.shift() ;
+        visited.push(curr) ;
+        if (this.adjacencyList[curr].indexOf(endNode)>=0){
+          found = true ;
+            // console.log('push',endNode,visited)
+
+          result.push(endNode)
+        }
+        else{
+          for (let v of this.adjacencyList[curr]){
+            if (visited.indexOf(v)<0){
+              queue.push(v) ;
+            }
+          }
+          console.log('push',curr)
+
+          result.push(curr)
+        }
+      }
+      // console.log('found?',found)
+
+      if (found){
+        return result ;
+      }
+      else{
+        return ['n0'] ;//was't found
+      }
     }
 
     pathFromDFS =(start)=>{
@@ -157,73 +248,70 @@ class GraphManager{
       return paths ; 
     }
 
-    highlightCritical=(start)=>{
+    
 
-      if (typeof start === 'string'){
-        var path = this.pathFromBFS(start) ;
-        // console.log('colored edge',path)
+    highlightGraphCritical=()=>{
+        var internalBFS = this.pathFromBFS('n0') ;
+        var paths = internalBFS.paths ;
+        // console.log('color to node',paths)
+        let ans = paths.length ; 
+        let color = [] ;
+        if (ans){
+          for (let node of paths){
+            let path = this.findShortestPath(node) ;
+            color.push(path) ;
+          }
+        // console.log('color the nodes',color) ;
+        this.changeEdgeColor(color,'#880')
 
-        if (path.length){
+          return color.length ;
           //edit the color to red
-          const colorEdges = this.graph.edges.map((value)=>{
-            var del = path.indexOf(value.to) ;
-            if (value.from === start){
-              if (del>=0){
-                path = path.splice(del,1) ;
-                let newE = {...value} ; 
-                newE['color'] = '#200' ;
-                // console.log('colored edge', newE)
-                return newE ;
-              }
-              else{
-                return value
-              }
-            }
-            else{
-              if (del>=0){
-                let newE = {...value} ; 
-                newE['color'] = '#200' ;
-                // console.log('colored edge', newE)
-                return newE ; 
-              }
-              else{
-                return value
-
-              }
-            }
-          }) ;
-
-          // for (let i = 0 ; i < path.length-1 ; i++){
-          //   let source = path[i] ;
-          //   let tar = path[i+1] ;
-          //   let ind = -1 ;
-          //   let colorEdge = this.graph.edges.find( (edge,index)=>{
-          //     ind = index ;
-          //     if (edge.from === source && edge.to === tar){
-          //       return edge ;
+          // const colorEdges = this.graph.edges.map((value)=>{
+          //   var del = path.indexOf(value.to) ;
+          //   if (value.from === 'n0'){
+          //     if (del>=0){
+          //       path = path.splice(del,1) ;
+          //       let newE = {...value} ; 
+          //       newE['color'] = '#200' ;
+          //       // console.log('colored edge', newE)
+          //       return newE ;
           //     }
           //     else{
-          //       return undefined
+          //       return value
           //     }
-          //   } ) ; 
-          //   if (colorEdge !== undefined && ind>=0){
-          //     colorEdge.color = '#200' ;
-          //     this.graph.edges[ind] = colorEdge ;
-          //     // console.log('Auth',this.graph.edges[ind],'after update')
           //   }
-          //   // console.log('Auth',this.graph.edges[ind],'after update')
+          //   else{
+          //     if (del>=0){
+          //       let newE = {...value} ; 
+          //       newE['color'] = '#200' ;
+          //       // console.log('colored edge', newE)
+          //       return newE ; 
+          //     }
+          //     else{
+          //       return value
 
-          // }
+          //     }
+          //   }
+          // }) ;
+
+          
 
 
-          this.graph.edges = colorEdges ;
-          return true ;
+          // this.graph.edges = colorEdges ;
+          // return true ;
 
         }
-      }
-      else{
-        return false ;
-      }
+        
+        /**
+         * @returns ans - number of critical nodes paths , if start node nofr connected it reurns -1
+         */
+        if (internalBFS.result.length > 1){
+          return color.length ;
+        }
+        else{
+          return -1;
+        }
+        
 
     }
 
@@ -258,6 +346,28 @@ class GraphManager{
       }
       return 0 ; 
     }
+    /**
+     * @param colorArray - an array of egdes to color
+    */
+    changeEdgeColor = (colorArray,color) =>{
+      var edges = this.graph.edges ;
+      if (Array.isArray(edges)){
+        // let criticalEdge = edges.map((value)=>{
+        //   if (value)
+        //   return value ; 
+        // })
+      
+        for (let path of colorArray){
+          for (let edg of path){
+            let ind = edges.find(value=>value.from === `n${edg.from()}` &&
+            value.to === `n${edg.to()}`) ;
+            ind.color = color ;
+          // console.log('color e',ind)
+
+          }
+        }
+      }
+    }
   
     setGraph = (graph)=>{
       console.log('MGR set old:',this.graph,'new:',graph) ;
@@ -274,7 +384,7 @@ class GraphManager{
     }
 
     getGraph=()=>{
-      console.log('MGR get',this.graph)
+      // console.log('MGR get',this.graph)
       return this.graph ;
     }
 
@@ -427,20 +537,29 @@ class GraphManager{
             obj["color"] = '#f00000' ; //following nodes are blue
             if (len % 2 === 0){
                 obj["x"] = 2*len ; 
-                obj["y"] = 2*len ;
+                obj["y"] = -2*len ;
             }
             else{
                 obj["x"] = 2*len ; 
-                obj["y"] = -15*len ;
+                obj["y"] = 15*len ;
             }
         }
         else{
             // add node with edge depending on self
+            let startNode = {...obj}
+
             obj["id"]= `n1` ;
-            obj["color"] = '#ff0000' ; //start is red
+            obj["color"] = '#ea0000' ; //start is red
             obj["x"] = 0 ; 
             obj["y"] = 0 ;
 
+            startNode["id"]= `n0` ;
+            startNode["color"] = '#900' ; //start is red
+            startNode["x"] = 0 ; 
+            startNode["y"] = -160 ;
+            startNode["critical"] = false ;
+            startNode["label"] = 'Start' ;
+            this.graph.nodes.push(startNode) ;
         }
         
         this.graph.nodes.push(obj) ;
@@ -465,3 +584,25 @@ class GraphManager{
 }
 
 export default GraphManager ;
+
+// for (let i = 0 ; i < path.length-1 ; i++){
+          //   let source = path[i] ;
+          //   let tar = path[i+1] ;
+          //   let ind = -1 ;
+          //   let colorEdge = this.graph.edges.find( (edge,index)=>{
+          //     ind = index ;
+          //     if (edge.from === source && edge.to === tar){
+          //       return edge ;
+          //     }
+          //     else{
+          //       return undefined
+          //     }
+          //   } ) ; 
+          //   if (colorEdge !== undefined && ind>=0){
+          //     colorEdge.color = '#200' ;
+          //     this.graph.edges[ind] = colorEdge ;
+          //     // console.log('Auth',this.graph.edges[ind],'after update')
+          //   }
+          //   // console.log('Auth',this.graph.edges[ind],'after update')
+
+          // }
