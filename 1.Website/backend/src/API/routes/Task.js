@@ -300,6 +300,7 @@ function  makeTaskRoute(db)
                            }
                        }
                        let taskObj = {
+                           projectID: tasks[i].projectID,
                            ProjectName:pName,
                            title: tasks[i].title,
                            description: tasks[i].description,
