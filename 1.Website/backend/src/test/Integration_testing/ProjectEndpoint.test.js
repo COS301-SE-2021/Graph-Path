@@ -83,20 +83,23 @@ describe('/statistics/RadarGraph/:projectID',()=> {
             await MockDB.close();
         });
 
-        describe('/projects/insert')
-        it('it should return status code 200', async ()=> {
+        describe("project/newProject",()=>{
+            it('it should return status code 200', async ()=> {
+
+                let app = makeApp(MockDBController);
+                const projectID = mockProject._id;
+                let response  = await supertest(app)
+                    .get('/project/statistics/donutChart/'+projectID)
+                    .expect(200)
+                    .then((res)=>{
+                        expect(res).toBe("null")
+                    })
+
+            });
+            it('')
+        })
 
 
-            let app = makeApp(MockDBController);
-            const projectID = mockProject._id;
-            let response  = await supertest(app)
-                .get('/project/statistics/donutChart/'+projectID)
-                .expect(200)
-                .then((res)=>{
-                    expect(res).toBe("null")
-                })
-
-        });
         it('it should return a JSON object', async ()=> {
 
             let app = makeApp(MockDBController)
