@@ -2,16 +2,17 @@ import React from 'react' ;
 import '../css/ProjectInformation.css'
 import {
     Button,
-    Checkbox, CheckboxGroup,
+    Checkbox, CheckboxGroup, CheckPicker,
     Divider,
     Drawer,
-    FlexboxGrid,
+    FlexboxGrid, Form,
     Icon,
     Modal,
     Notification
 } from "rsuite";
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
+import CustomField from "./Reusable/CustomField";
 
 // function Paragraph() {
 //     return null;
@@ -54,7 +55,15 @@ class ProjectInformation extends React.Component{
             MemberEditEmail:'',
             value:[],
             memberName:"",
+            allMembersFromDb:undefined,
+            projectMembers:[]
+
         }
+    }
+
+    componentDidMount(){
+        this.getAllUsers() ;
+        //this.getTodoList();
     }
 
     handleViewMembers = () =>{
@@ -72,22 +81,48 @@ class ProjectInformation extends React.Component{
     handleAddMembers = (e) =>{
         e.preventDefault();
         console.log("submitted",this.state)
-
-        const data={
-            email: this.props.user.email,
-            projectID: this.props.project._id,
-            groupMembers:[{
-                email:this.state.memberName,
-                role: "Developer",
-                permissions: this.state.value
-            }]
+        if(this.state.memberName.length > 5) {
+            const data = {
+                email: this.props.user.email,
+                projectID: this.props.project._id,
+                groupMembers: [{
+                    email: this.state.memberName,
+                    role: "Developer",
+                    permissions: this.state.value
+                }]
+            }
+            // console.log("add m",this.state)
+            this.setState({
+                showModal: false,
+                value: []
+            })
+            this.addMember(data)
         }
-        // console.log("add m",this.state)
-        this.setState({
-            showModal: false,
-            value:[]
-        })
-        this.addMember(data)
+        else if(this.state.projectMembers.length > 0){
+            let data ={
+                email: this.props.user.email,
+                projectID: this.props.project._id,
+                groupMembers:[]
+            }
+            this.state.projectMembers.map((item,index)=>
+                data.groupMembers[index] = {
+                    email: item,
+                    role: "Developer",
+                    permissions: this.state.value
+                }
+            )
+            console.log("p members",data)
+            this.setState({
+                showModal: false,
+                value: []
+            })
+            this.addMember(data)
+            // PopUpMessage("Adding", "warning")
+        }
+        else{
+            PopUpMessage("Provide Email", "warning")
+        }
+
     }
 
     addMember = (data)=>{
@@ -340,8 +375,57 @@ class ProjectInformation extends React.Component{
 
     }
 
+    getAllUsers=()=>{
+        try{
+            axios.get(`${this.state.api}/user/listOfAllUsers/`,{
+                headers:{
+                    authorization:this.props.user.token
+                }
+            })
+                .then((response)=>{
+                    if(response.status === 400){
+                        throw Error(response.statusText);
+                    }
+
+                    const res = response.data.data;
+                    console.log("all members",res)
+                    this.setState({
+                        allMembersFromDb: res
+                    })
+
+                    // this.setState({
+                    //     answer:res.message
+                    // },()=>{
+                    //     if(this.state.answer !== undefined){
+                    //
+                    //     }else{
+                    //         alert("something went wrong please remove again")
+                    //     }
+                    // })
+                },(response)=>{
+                    console.log('rejected',response);
+                    alert('Server Error, Please try again later')
+                })
+                .then(()=>{
+                    //instant update
+                })
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+
+    saveMember=(list)=>{
+        // e.preventDefault();
+        // console.log("Form",list)
+        this.setState({
+            projectMembers:list
+        })
+    }
+
     render() {
         const project = this.props.project;
+        const {formValue} = this.state;
          {console.log("proj",project)}
         return(
             <div data-testid="main-div-id" id="main-div">
@@ -503,6 +587,26 @@ class ProjectInformation extends React.Component{
                                                     {/*<label>Email</label>*/}
                                                     <input id="email-input" onChange={this.change} type="email" name="memberName" placeholder="Member Email"
                                                     />
+                                                        <br/>
+
+
+                                                        {
+
+                                                            this.state.allMembersFromDb !== undefined ?
+
+                                                                <CheckPicker
+                                                                    sticky
+                                                                    name="groupMembers"
+                                                                    data={this.state.allMembersFromDb}
+                                                                    appearance="default"
+                                                                    placeholder="Search Members"
+                                                                    style={{ width: 224 }}
+                                                                    onSelect={value => this.saveMember(value)}
+                                                                />
+                                                                :<></>
+
+                                                        }
+
                                                     </>
                                                 :
                                                     <>
@@ -513,7 +617,7 @@ class ProjectInformation extends React.Component{
                                             }
 
 
-                                            <FlexboxGrid.Item id="can-do-div" colspan={24} md={6} >Permissions
+                                        <FlexboxGrid.Item id="can-do-div" colspan={24} md={6} ><h6 style={{textAlign:"center"}}>Permissions</h6>
                                                 <Divider/>
                                                 <div id="check-list">
                                                     <CheckboxGroup
