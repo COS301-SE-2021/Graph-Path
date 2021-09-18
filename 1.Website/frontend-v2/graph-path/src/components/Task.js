@@ -223,7 +223,7 @@ class Task extends React.Component {
                     return taskMem ;
                 })
                 const {formError,formValue} = this.state ;
-                const options = [{label:"Not Started",value:"not started"},{label:"Complete",value:"complete"},{label:"In Progress",value:"in progress"}]
+                const options = [{label:"Not Started",value:"not started"},{label:"In Progress",value:"in progress"},{label:"Complete",value:"complete"}]
                 return <><Panel bordered header={'Edit Task '}>
                    <p> <Button onClick={()=>this.switchToEditTask({})}><Icon icon={'close'}/> Cancel</Button>
                    

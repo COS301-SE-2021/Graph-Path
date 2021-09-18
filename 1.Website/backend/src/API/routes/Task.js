@@ -8,6 +8,8 @@ const mongo = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectID;
 const TaskManagerService = require('../../Services/TaskManagerService');
 const { body, validationResult, param,check} = require('express-validator');
+const ProjectManagerService = require("../../Services/ProjectManagerService");
+const mailer = require("../../Helpers/SendMail");
 
 function  makeTaskRoute(db)
 {
@@ -343,22 +345,26 @@ function  makeTaskRoute(db)
                             else if(tasks[i].status ==="complete"){
                                 completed++;
                             }
+                        }
 
-                    }
+                        let total  = completed+inProgress+notStarted;
+                        if( notStarted !== 0 && inProgress === 0){
+                            responseObj.nodeCompletionStatus = "not started";
+                        }
 
-                    let total  = completed+inProgress+notStarted;
-                    let threshold= 0;
-                    if(total === 0){
-                        threshold = 0;
-                    }
-                    else{
-                        threshold = completed/(completed+inProgress+notStarted);
-                    }
+                       else if(inProgress !== 0){
+                            responseObj.nodeCompletionStatus = "in progress";
+                        }
 
-                    console.log("Successfully generated node completion statsics");
+                       else if(notStarted === 0 && inProgress === 0 && completed === total ){
+                            responseObj.nodeCompletionStatus = "complete";
+
+                        }
+
+                    console.log("Successfully generated node completion statistics");
                     
                         responseObj.message ="The task was saved successfully." ;
-                        responseObj.nodeCompletionStatus =  threshold
+                        //responseObj.nodeCompletionStatus =  threshold
                     
                 })
                     .catch(err=>{
@@ -388,25 +394,23 @@ function  makeTaskRoute(db)
         authentication.authenticateToken,
         authorisation.AuthoriseDeleteTask,
         param('id').isMongoId(),
-        (req, res)=>{
+       async (req, res)=>{
             const failedValidation = validationResult(req);
             if(!failedValidation.isEmpty()){
             res.status(420).send({
                 message: "Bad request , invalid parameters",
                 data: failedValidation
             })
-        }
+            }
             let ID = req.params.id ;
-            TaskManagerService.deleteTaskByID(db,ID)
+            let responseObj = {};
+            await TaskManagerService.deleteTaskByID(db,ID)
                 .then((ans)=>{
                 if(ans.deletedCount >0){
-                    res.send({
-                        message:"The task was successfully removed."
-                    });
+                    responseObj.message="The task was successfully removed.";
+
                 }else{
-                    res.send({
-                        message:"The task could not be removed."
-                    });
+                    responseObj.message="The task could not be removed.";
                 }
 
             })
@@ -416,6 +420,9 @@ function  makeTaskRoute(db)
                     err:err
                 })
             });
+
+
+           res.send(responseObj);
     })
 
     //Also add delete for all tasks by nodeid 
@@ -426,7 +433,7 @@ function  makeTaskRoute(db)
         body('projectID').exists().notEmpty(),
         body('email').exists().notEmpty().isEmail(),
         // param('nodeID').exists().notEmpty(),
-        (req, res)=>{
+        async (req, res)=>{
         console.log("attempting to delete all tasks of a Node...");
         const failedValidation = validationResult(req);
         if(!failedValidation.isEmpty()){
@@ -436,18 +443,16 @@ function  makeTaskRoute(db)
             })
         }
         let ID = req.params.id ;
-        TaskManagerService.deleteTaskByNodeID(db,ID)
+        let responseObj = {};
+
+        await TaskManagerService.deleteTaskByNodeID(db,ID)
             .then((ans)=>{
                 if(ans.deletedCount >0){
                     console.log("successfully deleted all tasks of a Node.");
-                    res.send({
-                        message:"The task was successfully removed."
-                    });
+                    responseObj.message="The task was successfully removed.";
                 }else{
                     console.log("failed to  delete all tasks of a Node.");
-                    res.send({
-                        message:"The task could not be removed."
-                    });
+                    responseObj.message="The task could not be removed.";
                 }
 
             })
@@ -458,6 +463,54 @@ function  makeTaskRoute(db)
                     err:err
                 })
             });
+
+        console.log("Attempting to get create node completion stats after delete task by ID...");
+        await TaskManagerService.getAllNodeTasks(db,ID)
+            .then((tasks)=>{
+                    console.log("processing all tasks of node : " +req.body.title+"...");
+                    let notStarted = 0;
+                    let inProgress = 0;
+                    let completed =  0;
+                    for (let i = 0; i < tasks.length; i++) {
+
+                        if(tasks[i].status ==="not started"){
+                            notStarted++;
+                        }
+                        else if(tasks[i].status ==="in progress"){
+                            inProgress++;
+                        }
+                        else if(tasks[i].status ==="complete"){
+                            completed++;
+                        }
+                    }
+
+                    let total  = completed+inProgress+notStarted;
+                    if( notStarted !== 0 && inProgress === 0 ){
+                        responseObj.nodeCompletionStatus = "not started";
+                    }
+
+                    else if(inProgress !== 0){
+                        responseObj.nodeCompletionStatus = "in progress";
+                    }
+
+                    else if(notStarted === 0 && inProgress === 0 && completed === total ){
+                        responseObj.nodeCompletionStatus = "complete";
+
+                    }
+
+                    console.log("Successfully generated node completion statistics");
+                    responseObj.message ="The task was saved successfully." ;
+                    //responseObj.nodeCompletionStatus =  threshold
+
+                })
+            .catch(err=>{
+
+                    console.log("failed to get all tasks of node : " +req.body.title+"...");
+                    responseObj.message  = "err getting tasks of a node" ;
+                    responseObj.data =  err
+                })
+
+            res.send(responseObj);
     })
 
     //and delete task by projectID, for when the project is deleted. - or you can just hook that up to when a project is deleted.
@@ -570,50 +623,54 @@ function  makeTaskRoute(db)
 
 
 
-    /**
-     * @api {patch}  /updateTaskAssignee'
-     * @apiName  update task Assignee
-     * @apiDescription This endpoint updates the assignee of the task matching the passed in ID
-     * @apiGroup Task
-     * @apiParam  {String} [id] task ID
-     * @apiParam  {object} [Assignee] '{email:"" , role:""}'
-     * @apiSuccess (200) {object}  message : "The task updated successfully"
-     */
-    router.patch('/updateTaskAssignee',
-        body('id').exists().notEmpty().isMongoId(),
-        body('assignee').exists().notEmpty(),
-        (req,res)=>{
-            const failedValidation = validationResult(req);
-            if(!failedValidation.isEmpty()){
+    router.post('/addToTaskGroupMembers',
+        authentication.authenticateToken,
+        authorisation.AuthoriseAddMembers,
+        body('email').exists().notEmpty().isEmail(),
+        body('projectID').exists().notEmpty().isMongoId(),
+        body('groupMembers').exists().notEmpty(),
+        (req, res)=>{
+
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
                 res.status(420).send({
-                    message: "Bad request , invalid parameters",
-                    data: failedValidation
+                    message: "Bad request , invalid id",
+                    data: invalidFields
                 })
             }
+            let taskID = req.body.taskID;
+            let memberObjects = req.body.groupMembers;
 
-            let ID = req.body.id;
-            let assignee =req.body.assignee;
+            let MemberEmails = [];
+            for (const memberKey in memberObjects) {
 
-            TaskManagerService.updateTaskAssignee(db,ID, assignee)
-                .then(ans=>{
-                if(ans === "Success"){
+                MemberEmails.push(memberObjects[memberKey].email);
+            }
+
+            console.log("attempting to add new members...")
+            TaskManagerService.addTaskMembers(db,taskID,memberObjects)
+                .then((project)=>{
+                    const projectName = project.projectName;
+                    const projectOwner =project.owner;
+                    const projectDueDate =project.dueDate;
+                    const recipients =MemberEmails ;
+                    mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients);
+
+                    console.log("successfully added new members...")
                     res.send({
-                        message: "The task updated successfully"
+                        message:"successfully added members"
                     })
-                }else{
-                    res.send({
-                        message: "Could not update the task."
-                    })
-                }
-            })
-                .catch(err=>{
-                res.status(500).send({
-                    message: "Server error: could not update the task",
-                    err: err
                 })
-            })
+                .catch(err=>{
+                    res.send({
+                        message: "failed to add members",
+                        data: err
+                    })
+                })
 
-    });
+
+
+        });
 
 
     /**
@@ -701,8 +758,7 @@ function  makeTaskRoute(db)
                 message: "Bad Request. Validation failed",
                 data: invalidFields
             })
-        }
-
+            }
             const taskID = req.body.taskID;
             const nodeID = req.body.nodeID ; 
             let TaskObject = {
@@ -716,9 +772,9 @@ function  makeTaskRoute(db)
                 issued:req.body.issued,
                 nodeID: req.body.nodeID
             }
-            let responseObj = {}
+            let responseObj = {};
 
-           await TaskManagerService.updateEverythingTask(db,taskID,TaskObject)
+            await TaskManagerService.updateEverythingTask(db,taskID,TaskObject)
                 .then((ans)=>{
                 if(ans == null){
                    responseObj.message="The task was not updated.";
@@ -735,42 +791,53 @@ function  makeTaskRoute(db)
                     err:err
                 })
                 })
-            await TaskManagerService.getAllNodeTasks(db,nodeID).then((tasks)=>{
-                let notStarted = 0;
-                let inProgress = 0;
-                let completed =  0;
-                for (let i = 0; i < tasks.length; i++) {
 
-                    if(tasks[i].status ==="not started"){
-                        notStarted++;
+            console.log("Attempting to get create node completion stats after update everything task...");
+            await TaskManagerService.getAllNodeTasks(db,nodeID)
+                .then((tasks)=>{
+                    console.log("processing all tasks of node : " +req.body.title+"...");
+                    let notStarted = 0;
+                    let inProgress = 0;
+                    let completed =  0;
+                    for (let i = 0; i < tasks.length; i++) {
+
+                        if(tasks[i].status ==="not started"){
+                            notStarted++;
+                        }
+                        else if(tasks[i].status ==="in progress"){
+                            inProgress++;
+                        }
+                        else if(tasks[i].status ==="complete"){
+                            completed++;
+                        }
                     }
-                    else if(tasks[i].status ==="in progress"){
-                        inProgress++;
+
+                    let total  = completed+inProgress+notStarted;
+                    if( notStarted !== 0 && inProgress === 0 ){
+                        responseObj.nodeCompletionStatus = "not started";
                     }
-                    else if(tasks[i].status ==="complete"){
-                        completed++;
+
+                    else if(inProgress !== 0){
+                        responseObj.nodeCompletionStatus = "in progress";
                     }
 
-                }
-                let total  = completed+inProgress+notStarted;
-                let threshold;
-                if(total === 0){
-                    threshold = 0;
-                }
-                else{
-                    threshold = completed/(completed+inProgress+notStarted);
-                }
+                    else if(notStarted === 0 && inProgress === 0 && completed === total ){
+                        responseObj.nodeCompletionStatus = "complete";
 
-                responseObj.message= "successfully sent",
-                    responseObj.nodeCompletionStatus= threshold
+                    }
 
+                    console.log("Successfully generated node completion statistics");
 
-            })
-                .catch(err=>{
-                    console.log("err getting tasks of a node, updateeverything")
-                   responseObj.message = "Failed to get generate completiion status of all tasks of node"
+                    responseObj.message ="The task was saved successfully." ;
+                    //responseObj.nodeCompletionStatus =  threshold
+
                 })
+                .catch(err=>{
 
+                    console.log("failed to get all tasks of node : " +req.body.title+"...");
+                    responseObj.message  = "err getting tasks of a node" ;
+                    responseObj.data =  err
+                })
             res.send(
                 responseObj
             )
