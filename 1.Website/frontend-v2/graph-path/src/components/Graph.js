@@ -341,7 +341,8 @@ class GraphPath extends Component{
                   x:node.x,
                   y:node.y,
                   size:node.size,
-                  color:node.color
+                  color:node.color,
+                  critical:node.critical 
               }
           }) ;
           const minimalEdges = this.state.currGraph.edges.map((edge)=>{
@@ -802,6 +803,8 @@ class GraphPath extends Component{
                 <Button >Add Node</Button>
                 </Whisper> &nbsp;
                 <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>
+                <IconButton icon={<Icon icon={'charts-line'}/>}>Project Graph Critical Path</IconButton>
+                
                   </div>
               </div>
 
