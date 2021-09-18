@@ -467,8 +467,12 @@ describe('ProjectManagerService.addNewProjectMember',  ()=> {
         email:"test@gmail.com",
         permissions: ['owner']
     }
+    let mockMemberObject2 = {
+        email:"tester2@gmail.com",
+        permissions: ['owner']
+    }
 
-    mockMembers = [mockMemberObject];
+    mockMembers = [mockMemberObject2];
 
     let mockProject ={
         _id:  new mongoose.mongo.ObjectID(),
@@ -515,10 +519,12 @@ describe('ProjectManagerService.addNewProjectMember',  ()=> {
         await MockDB.close();
     });
 
-    it('it should return modified count "0" if the project is not found',   async () => {
-
-        const response = await ProjectmanagerService.addNewProjectMember(MockDB,mockProject._id, mockMembers);
-        expect(response.modifiedCount).toBe(0);
+    it('it should be unsuccessful if the project is not found',   async () => {
+       await expect(async ()=>{
+            await ProjectmanagerService.addNewProjectMember(MockDB,mockProject._id, mockMembers);
+        }).rejects.toThrow("update failed");
+        // const response = await .addNewProjectMember(MockDB,mockProject._id, mockMembers);
+        // expect(response).toBeDefined();
 
     });
 
@@ -529,8 +535,9 @@ describe('ProjectManagerService.addNewProjectMember',  ()=> {
         const replies = await ProjectmanagerService.getProjectByID(MockDB, mockProject._id);
         expect(replies.projectOwner).toStrictEqual(mockProject.projectOwner);
 
-        const response = await ProjectmanagerService.addNewProjectMember(MockDB, mockProject._id, mockMembers);
-        //expect(response).toStrictEqual(1);
+        let inputArr = [mockMemberObject2];
+        const response = await ProjectmanagerService.addNewProjectMember(MockDB, mockProject._id, inputArr);
+        expect(response.groupMembers).toStrictEqual([mockMemberObject,mockMemberObject2]);
         const reply = await ProjectmanagerService.getProjectByID(MockDB, mockProject._id);
         expect(reply.groupMembers).toStrictEqual(mockProject.groupMembers);
 
