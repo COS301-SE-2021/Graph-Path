@@ -251,6 +251,80 @@ function  makeTaskRoute(db)
             })
     }) ;
 
+    router.get('/getUserTasks/:email',
+        authentication.authenticateToken,
+        param('email').exists().notEmpty().isEmail(),
+       async (req,res)=>{
+            const invalidFields = validationResult(req);
+            if(!invalidFields.isEmpty()){
+                res.status(420).send({
+                    message: "Bad request , invalid id",
+                    data: invalidFields
+                })
+            };
+
+           const userEmail = req.params.email;
+           let responseObj = {
+               message:"",
+               data: []
+           }
+
+           let projects = {
+               names: [],
+               IDs: []
+           };
+           await ProjectManagerService.getAllProjectsByUserEmail(db,userEmail)
+               .then((UserProjects)=>{
+                   for (const userProject of UserProjects) {
+                        projects.names.push(userProject.projectName);
+                        projects.IDs.push(userProject._id.toString());
+                   }
+
+               })
+               .catch((err)=>{
+                   responseObj.message= "failed to get projects by email";
+                   responseObj.data = err;
+               })
+
+             await TaskManagerService.getTasksMultipleProjects(db,projects.IDs)
+               .then((tasks)=>{
+                   responseObj.message = "successful";
+                   for (let i = 0; i < tasks.length ; i++) {
+                       let pName = "";
+                       for (let j = 0; j < projects.names.length; j++) {
+
+                           if(projects.IDs[j] === tasks[i].projectID.toString()){
+
+                               pName = projects.names[j];
+                               break;
+                           }
+                       }
+                       let taskObj = {
+                           ProjectName:pName,
+                           title: tasks[i].title,
+                           description: tasks[i].description,
+                           issued: tasks[i].issued,
+                           dueDate: tasks[i].due,
+
+                       }
+
+                      responseObj.data.push(taskObj);
+
+                   }
+
+
+               })
+               .catch(err=>{
+                   responseObj.message = "failed to get tasks of list of projects";
+                   responseObj.data = err
+               })
+
+           res.send(
+               responseObj,
+           )
+
+
+    })
 
     // all tasks
     // all tasks by node
