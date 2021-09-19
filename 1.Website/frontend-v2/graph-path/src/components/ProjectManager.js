@@ -379,7 +379,7 @@ The neccesary information for the request to go through follows:
                             </Button>
 
                                 <SelectPicker placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
-                            <SelectPicker placeholder="Sort By" searchable={false} data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
+                            <SelectPicker placeholder="Sort By" searchable={false} data={options}  onChange={this.handleSortChange}/>
 
                             <div data-testid="tidProjList" id="projects-list">
                                 {

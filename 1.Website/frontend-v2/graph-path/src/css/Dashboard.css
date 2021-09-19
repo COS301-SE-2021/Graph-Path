@@ -62,17 +62,17 @@
 
 #sidebar{
     width: 15%;
-    margin: 16px 16px 16px 0;
+    margin: 10px 7px 6px 0;
     background: #1a1d24;
 }
 
 #main-content{
     background: #1a1d24;
     width: 100%;
-    margin: 16px 0 2px 0;
+    margin: 10px 0 2px 0;
     padding: 16px;
      /*max-height: calc(90vh - calc(60px + 26px));*/
-    max-height: 88vh;
+    max-height: 90vh;
     overflow-y: scroll;
 }
 
