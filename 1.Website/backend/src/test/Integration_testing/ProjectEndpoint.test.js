@@ -5,9 +5,9 @@ const MockDBController = require('../../Controllers/MockDBController');
 const mongoose = require("mongoose");
 
 
-describe('/statistics/RadarGraph/:projectID',()=> {
+describe('Project endpoints',()=> {
 
-    describe("when requested", ()=>{
+    describe("when requesting", ()=>{
 
         let connection;
         let MockDB;
