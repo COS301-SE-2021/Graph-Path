@@ -14,7 +14,7 @@ describe('TaskManagerService.getTaskByID',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
@@ -96,7 +96,7 @@ describe('TaskManagerService.getAllTasks',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
@@ -159,7 +159,7 @@ describe('TaskManagerService.getAllTasksByProject',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
@@ -171,7 +171,7 @@ describe('TaskManagerService.getAllTasksByProject',  ()=> {
 
     let mockTask2={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "kgmonareng@gmail.com",
+        taskMembers: ["kgmonareng@gmail.com"],
         assigner: "test2@gmail.com",
         description: "This is a unit testing task, the second one",
         due: "2021-09-21",
@@ -270,7 +270,7 @@ describe('TaskManagerService.insertTask',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
@@ -334,7 +334,7 @@ describe('TaskManagerService.deleteTaskByID',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
@@ -388,7 +388,7 @@ describe('TaskManagerService.updateTaskDescription',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
@@ -400,7 +400,7 @@ describe('TaskManagerService.updateTaskDescription',  ()=> {
 
     let mockTask2={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
@@ -461,7 +461,7 @@ describe('TaskManagerService.updateTaskStatus',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
@@ -624,7 +624,7 @@ describe('TaskManagerService.updateTaskAssigner',  ()=> {
 
     let mockTask={
         _id: new mongoose.mongo.ObjectID(),
-        assignee: "ntpnaane@gmail.com",
+        taskMembers: ["ntpnaane@gmail.com"],
         assigner: "test@gmail.com",
         description: "This is a unit testing task.",
         due: "2021-09-21",
