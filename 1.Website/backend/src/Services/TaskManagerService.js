@@ -282,6 +282,25 @@ async function addTaskMembers(dbController, id, newMembers){
 
 }
 
+async function getTasksMultipleProjects(dbController,projectIDs){
+
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve,reject)=>{
+        db.collection('Tasks').find(
+            {projectID: {$in:projectIDs} }).toArray()
+            .then((ans)=>{
+                console.log("resolving");
+                resolve(ans);
+
+            })
+            .catch((err)=>{
+                console.log("Not resolving");
+                reject(err);
+            });
+    })
+
+}
+
 module.exports={
     //Task
     getAllTasks,
@@ -297,5 +316,6 @@ module.exports={
     updateEverythingTask,
     deleteTaskByNodeID,
     getAllNodeTasks,
-    addTaskMembers
+    addTaskMembers,
+    getTasksMultipleProjects
 }
