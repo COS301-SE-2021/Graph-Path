@@ -12,6 +12,8 @@ import createP from "../img/createp.jpg";
 import graph from "../img/graph.jpg";
 import stats1 from "../img/stats1.jpg";
 import stats2 from "../img/stats2.jpg";
+import stats3 from "../img/stats3.jpg";
+import kanban from "../img/kanban.jpg";
 
 function Landing({logInvalid}) {
 
@@ -32,8 +34,11 @@ function Landing({logInvalid}) {
                                 <img src={dashboard} />
                                 <img src={createP} />
                                 <img src={graph} />
+                                <img src={kanban} />
                                 <img src={stats1} />
                                 <img src={stats2} />
+                                <img src={stats3} />
+
 
                         </Carousel>
                 </div>
