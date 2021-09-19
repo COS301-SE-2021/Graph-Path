@@ -1,15 +1,18 @@
 const bcrypt = require("bcrypt");
+const {Promise} = require("mongoose");
 const ObjectId = require('mongodb').ObjectID;
 
 /////////////////////////////////////////////////////-Task-//////////////////////////////////////////////////////////////
 //***************************************************-get-**************************************************************
 
 async function getAllTasks(dbController){
+    //console.log(dbController.getConnectionInstance());
     const db = dbController.getConnectionInstance(dbController);
     return await new Promise((resolve,reject)=>{
         db.collection('Tasks').find({}).toArray()
             .then(ans=>{
                 if(ans == null){
+                    //console.log("No available tasks");
                     resolve("No available tasks");
                 }else{
                     resolve(ans);
@@ -29,8 +32,31 @@ async function getTaskByID(dbController, id){
         })
             .then(ans=>{
                 if(ans == null){
+
                     resolve("No available task");
                 }else{
+
+                    resolve(ans);
+                }
+            })
+            .catch(err=>{
+                reject(err);
+            })
+    })
+}
+
+async function getAllNodeTasks(dbController, nodeId){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject)=>{
+        db.collection('Tasks').find({
+            nodeID: nodeId
+        }).toArray()
+            .then(ans=>{
+                if(ans == null){
+
+                    resolve(ans);
+                }else{
+
                     resolve(ans);
                 }
             })
@@ -43,11 +69,12 @@ async function getTaskByID(dbController, id){
 async function getAllTasksByProject(dbController, id){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
-        db.collection('Tasks').find({project:id}).toArray()
+        db.collection('Tasks').find({projectID:id}).toArray()
             .then((ans)=>{
                 if(ans == null){
                     resolve("No tasks found");
                 }else{
+                    console.log(ans)
                     resolve(ans);
                 }
             })
@@ -61,11 +88,9 @@ async function getAllTasksByProject(dbController, id){
 async function insertTask(dbController, taskObject){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve, reject)=>{
-        if(taskObject==null){
-            resolve("Task object empty");
-        }
         db.collection('Tasks').insertOne(taskObject)
             .then((ans)=>{
+
                 resolve(ans);
             })
             .catch(err=>{
@@ -126,28 +151,22 @@ async function updateTaskStatus(dbController, id, newStat){
             })
     })
 }
-/*
-async function updateTaskDueDate(id, ddate){
-    return await new Promise((resolve,reject)=>{
-        db.collection('Tasks').updateOne({
-            "_id": ObjectId(id)
-        },{
-            $set:{status:ddate}
+
+
+async function deleteTaskByNodeID(dbController, id){
+    const db = dbController.getConnectionInstance();
+    return await  new Promise((resolve,reject)=>{
+        db.collection('Tasks').deleteMany ({
+            "nodeID":id
         })
             .then(ans=>{
-                if(ans.modifiedCount > 0){
-                    resolve("Success");
-                }else{
-                    resolve("Could not update the task");
-                }
+                resolve(ans);
             })
             .catch(err=>{
                 reject(err);
             })
     })
 }
-
- */
 
 async function updateTaskAssignee(dbController, id, assignee){
     const db = dbController.getConnectionInstance();
@@ -158,7 +177,7 @@ async function updateTaskAssignee(dbController, id, assignee){
             $set:{assignee:assignee}
         })
             .then(ans=>{
-                if(ans.modifiedCount > 0){
+                if(ans.modifiedCount >= 0){
                     resolve("Success");
                 }else{
                     resolve("Could not update the task");
@@ -191,22 +210,22 @@ async function updateTaskAssigner(dbController, id, assigner){
     })
 }
 
-async function updateEverythingTask(dbController,id, assignee, assigner, description, issued, due, nodeID, tasknr, status, project){
+async function updateEverythingTask(dbController,id,taskObj){
     const db = dbController.getConnectionInstance();
     return await new Promise((resolve,reject)=>{
         db.collection('Tasks').updateOne({
             "_id": ObjectId(id)
         },{
             $set:{
-                assignee: assignee,
-                assigner:assigner,
-                description: description,
-                issued: issued,
-                due : due,
-                nodeID : nodeID,
-                tasknr: tasknr,
-                status:status,
-                project: project
+                description:taskObj.description,
+                title:taskObj.title,
+                status:taskObj.status,
+                projectID:taskObj.projectID,
+                taskMembers:taskObj.taskMembers,
+                assigner:taskObj.assigner,
+                due:taskObj.due,
+                issued:taskObj.issued,
+                nodeID: taskObj.nodeID
             }
         })
             .then(ans=>{
@@ -216,6 +235,51 @@ async function updateEverythingTask(dbController,id, assignee, assigner, descrip
                 reject(err);
             })
     })
+}
+
+async function addTaskMembers(dbController, id, newMembers){
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve,reject)=>{
+        getTaskByID(dbController,id)
+            .then((task)=>{
+                if(task===undefined || task ==null){
+                    resolve("The project does not exist");
+                }
+                let members = task.taskMembers;
+                for(let i =0 ; i < newMembers.length; i++){
+                if(!members.some(member => member.email === newMembers[i].email)){
+                    members.push(newMembers[i]);
+
+                }
+                else{
+                    console.log("Member '"+newMembers[i].email+"' already exists ,not added");
+                }
+            }
+
+            db.collection('Tasks').findOneAndUpdate({
+                    "_id":ObjectId(id)
+                }, {
+                    $set:{taskMembers: members}
+                }, {
+                    returnNewDocument: true }
+            ).then(result=>{
+                console.log("updated group members of this project");
+                resolve(result.value);
+
+
+            })
+                .catch(err=>{
+                    console.log("failed to update",err);
+                    reject(err)
+                })
+
+        }).catch((err)=>{
+            console.log(err);
+            reject("update failed")
+        })
+    })
+
+
 }
 
 module.exports={
@@ -230,5 +294,8 @@ module.exports={
     //updateTaskDueDate,
     updateTaskAssigner,
     updateTaskAssignee,
-    updateEverythingTask
+    updateEverythingTask,
+    deleteTaskByNodeID,
+    getAllNodeTasks,
+    addTaskMembers
 }

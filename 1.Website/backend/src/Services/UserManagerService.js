@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
 const ObjectId = require('mongodb').ObjectID;
 const ProjectManagerService = require('./ProjectManagerService');
+const {nextObject} = require("mongodb/lib/operations/common_functions");
+const {reject} = require("bcrypt/promises");
+const mongoose = require("mongoose");
 
 async function getAllUsers(dbController){
 
@@ -99,56 +102,45 @@ async function getAllOtherUsers(dbController,email){
 }
 
 async function insertUser(dbController, userObject){
-
+    console.log("Attempting to insert/update User...");
     const db = dbController.getConnectionInstance();
+    const newUser ={
+        //_id:  new mongoose.mongo.ObjectID(),
+        email: userObject.email,
+        fullNames:  userObject.name,//full names
+        username: userObject.given_name,
+        picture: userObject.picture,//link to an image
+        Notifications: [],
+        email_verified: userObject.email_verified
 
-    return await new Promise((resolve, reject)=>{
-        db.collection('Users').findOne({email:userObject.email})
-            .then(async (ans)=>{
+    };
 
-                if(ans != null){
-                    resolve("user already exists");
-                }
-                else
-                {
-                    const salt = await bcrypt.genSalt(10);
-                    userObject.password = await  bcrypt.hash(userObject.password,salt);
-                        db.collection('Users').insertOne(userObject)
-                        .then((ans)=>{
+    const query = { email:userObject.email };
+    const update = { $set: newUser};
+    const options = { upsert: true };
+    try {
+        const result = await db.collection('Users').updateOne(query, update, options);
+        if(result.matchedCount>0){
+            console.log("User already exists...no update occurred");
+            return("success");
+        }
+        if(result.modifiedCount> 0){
+            console.log("User "+newUser.email+" successfully updated/inserted");
+            return("success");
+        }
 
-                            resolve(ans);
-                        })
-                            .catch((err)=>{
+    }
 
-                            reject(err);
-                        })
+    catch (err){
+        // something went wrong
+        console.log("Failed to update/insert user: ",err);
+        return("failed");
+    }
 
-
-                }
-            })
-            .catch((err)=>{
-            reject(err);
-            })
-    })
 
 }
 
 
-
-    //const salt = await bcrypt.genSalt(10);
-    //userObject.password = await  bcrypt.hash(userObject.password,salt);
-    /*return await new Promise((resolve, reject)=>{
-        db.collection('Users').insertOne(userObject)
-            .then((ans)=>{
-                resolve(ans);
-            },(ans)=>{
-                console.log('rejected',ans) ;
-                resolve(ans);
-            })
-            .catch(err=>{
-                reject(err);
-            })
-    });*/
 //***************************************************-delete-**************************************************************
 async function removeUserByID(dbController, id){
     const db = dbController.getConnectionInstance();
@@ -389,6 +381,125 @@ async function updateEverythingUser(dbController,id, mail,lastName, Notif, psw, 
 
 }
 
+async function getInvitesTo(dbController,id) {
+
+    const db = dbController.getConnectionInstance();
+    return await new Promise((resolve, reject) => {
+        db.collection('Users').findOne({
+            "_id": ObjectId(id)
+        })
+            .then((ans) => {
+                if(ans == null){
+                    resolve("No user found");
+                }else{
+                    //console.log(ans)
+                    resolve(ans.invitesTo);
+                }
+
+            })
+            .catch(err => {
+
+                reject(err);
+            });
+
+
+    })
+
+}
+
+async function appendInvitesTo(dbController, newInvites, id){
+
+    const db = dbController.getConnectionInstance();
+   return new Promise((resolve,reject)=>{
+
+       getInvitesTo(dbController,id)
+           .then((result)=>{
+               let invites = [];
+
+               for (let i =0 ; i < result.length ;i++){
+                   if(result !== '[]'){
+                       invites.push(result[i]);
+                   }
+
+               }
+               for (let i =0 ; i < newInvites.length ;i++){
+                   invites.push(newInvites[i]);
+               }
+
+               db.collection('Users').updateOne({
+                   "_id": ObjectId(id)
+               },{
+                   $set:{
+                       invitesTo:invites,
+
+                   }})
+                   .then(()=>{
+                       console.log("443");
+                       resolve("hello world");
+                       return "invites updated";
+
+                   })
+                   .catch(()=>{
+                       console.log(448);
+                   })
+
+
+           })
+           .catch((err)=>{
+               console.log(err)
+           })
+
+   })
+
+
+
+
+}
+
+
+async function appendInvitesFrom(dbController, newInvite, receviers){
+
+    const db = dbController.getConnectionInstance();
+    console.log(receviers);
+    for(let i =0 ; i < receviers.length ; i ++)
+    {
+
+        let email =receviers[i];
+        getUserByEmail(dbController,email)
+            .then((user)=>{
+                let InvitesFrom = user.invitesFrom;
+                if(invitesFrom === '[]')
+                {
+                    InvitesFrom = [];
+                }
+
+                InvitesFrom.append(newInvite);
+                db.collection('Users').updateOne({
+                   email: receviers[i]
+                },{
+                    $set:{
+                        invitesFrom:InvitesFrom,
+
+                    }})
+                    .then(()=>{
+                        console.log("489");
+                        return "invites updated";
+
+                    })
+                    .catch(()=>{
+                        console.log(494);
+                    })
+
+            })
+            .catch(()=>{
+                console.log("failed to get user");
+            })
+
+
+    }
+
+}
+
 module.exports = {
     getUserByID,
     getAllUsers,
@@ -400,7 +511,9 @@ module.exports = {
     updateUserUsername,
     updateUserPassword,
     updateUsernameAndPassword,
-    updateEverythingUser
+    updateEverythingUser,
+    appendInvitesTo,
+    appendInvitesFrom
 
 }
 

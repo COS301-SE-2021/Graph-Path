@@ -2,14 +2,14 @@ const express = require('express') ;
 const app = express();
 const cors = require('cors') ;
 const path = require('path') ;
-
+//apidoc -i /Users/kagisodiagengmonareng/IdeaProjects/Graph-Path/1.Website/backend/src/API/routes -o apidoc/
 const makeUserRoute = require('./API/routes/User');
 const makeTaskRoute = require('./API/routes/Task');
 const makeProjectRoute = require('./API/routes/Project');
 const makeNodeRoute = require('./API/routes/Node')
 const makeGraphRoute = require("./API/routes/graph");
 const Home = require('./API/routes/Home');
-
+const { auth, requiresAuth } = require('express-openid-connect');
 
 /*
     function MakeApp() makes  an app with a passed in Database.
@@ -23,8 +23,12 @@ function makeApp(InjectedDB)
 
     const DB = InjectedDB;
 
+
+    const corsOptions = {
+        exposedHeaders: 'Authorization',
+      };
     //----------------------middleware------------------------
-    app.use(cors());
+    app.use(cors(corsOptions));
     app.use(express.urlencoded({extended: true}));
     app.use(express.json());
     app.use(express.static(path.join(__dirname, 'public')));

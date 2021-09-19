@@ -1,0 +1,116 @@
+p.aboutText{
+    color: white;
+    text-transform: uppercase;
+    font-size: larger;
+    margin-top: 9%;
+    margin-left: 9%;
+}
+p.introText{
+    width: 90%;
+
+    padding: 10px;
+    font-size: 2em;
+}
+span{
+    display:inline;
+}
+
+#signup-btn {
+    position: absolute;
+    margin-top: 2%;
+    /*left: 80%;*/
+    margin-left: 40%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+#signup-btn:hover {
+    background-color: #1386d9;
+    color: white;
+}
+
+#signin-btn {
+    position: absolute;
+    top: 60%;
+    left: 76%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    color: black;
+    font-size: 16px;
+    padding: 16px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+    text-align: center;
+    float: right;
+}
+
+#signin-btn:hover {
+    background-color: #0c3b5c;
+    color: white;
+}
+
+#registerScreen{
+    background-color:#001122;
+}
+
+#landing-graph{
+    float: left;
+    width: 30vw;
+    border-radius: 3px;
+    margin: 3px;
+    margin-left: 20px;
+}
+
+#pageName{
+    /*color: #169DE0;*/
+    color: white;
+    margin-top: 7%;
+
+}
+
+#main-div-landing{
+    background: #0c3b5c;
+    width: 100%;
+    display: flex;
+
+}
+
+#left-div{
+    background-color: #0c3b5c;
+    max-width: 50vw;
+    min-height: 100vh;
+    flex-grow: 1;
+    border-radius: 0 0 0 0 ;
+
+}
+
+#right-div{
+    background-color: #001122;
+    max-width: 50vw;
+    min-height: 100vh;
+    flex-grow: 1;
+    border-radius: 0 0 0 100% ;
+}
+
+#graph-picture{
+    width: 70%;
+    margin-top: 10%;
+}
+
+#landing-btn{
+    background-color: pink;
+}
+
+#carousel-id{
+    width: 80%;
+    height: 45%;
+    margin-left: 10%;
+    margin-top: 10%;
+    border-radius: 5px;
+}

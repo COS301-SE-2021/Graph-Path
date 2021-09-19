@@ -1,0 +1,157 @@
+#main-div{
+    max-height: 60vh;
+    background-color: transparent !important;
+    max-width: 75vw;
+    position: relative;
+}
+
+#btn-form-div{
+    background-color: transparent;
+    /*position: absolute;*/
+    max-width: 30vw;
+    margin-left: 30%;
+
+}
+
+#email-input{
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid grey;
+    padding: 3px;
+    /*margin-left: 30px;*/
+    outline: none;
+    margin-bottom: 3%;
+    width: 230px;
+}
+
+#project-name h3{
+    text-align: center !important;
+}
+
+#add-member-btn{
+    margin-left: 100%;
+    margin-top: 10%;
+
+}
+
+#project-name{
+    background-color: transparent;
+    min-width: 20vw;
+    max-height: 5vh;
+    margin-left: 37%;
+    position: absolute;
+}
+
+#btn-info{
+    margin-left: 3%;
+
+}
+
+#can-do-div{
+    max-width: 20vw;
+    max-height: 30vh;
+    /*background-color: blue;*/
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-top: 3%;
+    /*margin-left: 3%;*/
+}
+
+#check-list{
+    max-width: 20vw;
+    max-height: 19vh;
+    overflow-y: scroll;
+}
+
+#project-information{
+    background-color: transparent;
+    min-height: 40vh;
+    margin-top: 40px;
+    text-align: left !important;
+}
+
+#btn-form{
+    width: 100px;
+    padding: 8px;
+    margin-left: 5%;
+    margin-top: 3%;
+}
+
+#second-div{
+    background-color: transparent;
+    margin-right: 15%;
+    margin-top: 100px;
+    position: relative;
+}
+
+#second-div #btn-info{
+    /*margin-top: 2%;*/
+    padding: 10px;
+}
+
+.profileForm input[type="text"], input[type="date"]{
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid #f3dfdf;
+    height: 40px;
+    padding-left: 4px;
+    color: darkgrey;
+    font-size: 14px;
+    outline: none;
+}
+
+.profileForm {
+    background-color: transparent;
+    margin-left: 25%;
+    width: 50%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid grey;
+    padding: 20px;
+    position: relative;
+}
+
+.profileForm label{
+    float: left;
+    font-weight: bold;
+}
+
+#remove-icon{
+    font-size: 20px;
+    margin-left: 80%;
+    /*position: absolute;*/
+    margin-top: 8%;
+}
+
+#remove-icon:hover{
+    color: red;
+    cursor: pointer;
+}
+
+#add-icon{
+    margin-left: 45%;
+    font-size: 25px;
+}
+
+#add-icon:hover{
+    color: #05436c;
+    cursor: pointer;
+}
+
+#change-icon{
+    position: absolute;
+    font-size: 20px;
+    margin-left: 80%;
+
+    /*background-color: yellow;*/
+}
+
+#change-icon:hover{
+    color: #05436c;
+    cursor: pointer;
+}
+
+#email-p{
+    /*position: absolute;*/
+}

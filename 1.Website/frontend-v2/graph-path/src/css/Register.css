@@ -1,0 +1,15 @@
+
+
+#signup-btn:hover {
+    background-color: black;
+    color: white;
+}
+
+#signin-btn:hover {
+    background-color: black;
+    color: white;
+}
+
+#registerScreen{
+    background-color:#001122;
+}

@@ -1,0 +1,38 @@
+#div-form{
+    background-color: transparent;
+    margin-left: 100px;
+    margin-top: 80px;
+    width: 45%;
+
+}
+
+#logo-pics{
+    width: 15%;
+    height: 15%;
+    margin-top: 5%;
+    margin-right: 6%;
+}
+
+#picture-div{
+    background-color: transparent;
+    width: 20%;
+    margin-left: 3%;
+}
+
+#picture-div h6{
+    text-align: center;
+}
+
+#picture-div img{
+    border-radius: 100%;
+    width: 50%;
+    margin-left: 80px;
+}
+
+#body-div{
+    display: flex;
+}
+
+#avatar-div{
+
+}

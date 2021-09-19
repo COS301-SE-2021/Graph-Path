@@ -1,0 +1,29 @@
+#projects-list{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+    flex-grow: 0;
+    flex-shrink:0 ;
+    max-width: calc(20%-20px);
+    width: fit-content;
+    margin: 10px;
+    padding-right: 2px;
+}
+#projects-list div{
+    margin: 2px;
+    /* width: 100%; */
+    position: relative;
+    clear: both;
+}
+
+.rs-panel-heading{
+    color: #34c3ff ; 
+    font-weight: bolder;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+
+#projectManager{
+    position: relative;
+}   

@@ -1,0 +1,154 @@
+.main-container{
+    background: green;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+}
+#content{
+    display: flex;
+    min-height: 92vh;
+    background: #100f0f;
+}
+
+#nav-bar{
+    background: #1a1d24;
+    height: 60px;
+    display: table;
+    width: 100vw;
+    /*position: relative;*/
+}
+
+
+#side-bar-button{
+    background-color: transparent;
+    position: absolute;
+    width: 13%;
+    margin-top: 8px;
+}
+
+#side-bar-button #btn-side-bar{
+    font-size: 35px;
+}
+
+#side-bar-button #btn-side-bar:hover{
+    cursor: pointer;
+}
+
+#power-off-div{
+    background-color: transparent;
+    position: absolute;
+    margin-left: 1450px;
+    width: 13px;
+    margin-top: 10px;
+}
+
+#power-off-div #power-off-icon{
+    font-size: 25px;
+}
+
+#power-off-icon:hover{
+    /*background-color: #990001;*/
+    cursor: pointer;
+}
+
+#nav-option{
+    text-align: left !important;
+    color: #34c3ff;
+}
+
+#nav-option:hover{
+    background-color: #1386d9;
+}
+
+#sidebar{
+    width: 15%;
+    margin: 16px 16px 16px 0;
+    background: #1a1d24;
+}
+
+#main-content{
+    background: #1a1d24;
+    width: 100%;
+    margin: 16px 0 2px 0;
+    padding: 16px;
+     /*max-height: calc(90vh - calc(60px + 26px));*/
+    max-height: 88vh;
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1386d9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #05436c;
+}
+
+#logo-pic{
+    width: 9%;
+    margin-top: 10px;
+}
+
+#two-btn{
+    background-color: #63ba3c;
+    display: table-cell;
+    /*float: right;*/
+    /*max-height: 5%;*/
+    /*display: flex;*/
+    /*margin-top: 2.5%;*/
+    /*width: 10%;*/
+    /*position: absolute;*/
+}
+
+#profile-btn{
+
+    position: absolute;
+    margin-top: 2%;
+    margin-left: 35%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+/*#signup-btn {*/
+/*    !*position: absolute;*!*/
+/*    !*margin-top: 2%;*!*/
+/*    !*left: 80%;*!*/
+/*    !*margin-left: 40%;*!*/
+/*    transform: translate(-50%, -50%);*/
+/*    -ms-transform: translate(-50%, -50%);*/
+/*    color: white;*/
+/*    border: none;*/
+/*    cursor: pointer;*/
+/*    text-align: center;*/
+/*}*/
+
+/*#signup-btn:hover {*/
+/*    background-color: #1386d9;*/
+/*    color: white;*/
+/*}*/
+
+#two-btn img{
+    border-radius: 100%;
+    width: 50%;
+    /*margin-left: 80px;*/
+}
+
+#logoPic{
+    width: 35%;
+    margin-top: 10%;
+}
+

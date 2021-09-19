@@ -1,0 +1,37 @@
+#graphbox {
+    width: 90%;
+    height: 75vh;
+
+    background-color: rgb(200, 214, 228,0.8);
+    text-align:left ;
+    
+}
+
+#graph-info{
+    display: flex ;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#graph-nav{
+    text-align: end;
+    margin: 3px;
+}
+
+/* canvas.sigma-scene{
+    position: relative !important;
+}
+canvas.sigma-mouse{
+    position: relative !important;
+} */
+
+
+.nodeView{
+    font-size: unset;
+    text-align: center;
+}
+
+.nodeView:hover{
+    cursor:pointer ;
+}
