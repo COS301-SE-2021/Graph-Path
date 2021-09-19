@@ -6,11 +6,12 @@ import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
-import { Popover,Avatar,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader} from 'rsuite' ;
+import { Popover,Avatar,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader, Dropdown} from 'rsuite' ;
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
 import Task from "./Task";
 import {connect} from 'react-redux' ;
+import DropdownMenuItem from "rsuite/lib/Dropdown/DropdownMenuItem";
 
 class GraphPath extends Component{
   graphManager = null ;
@@ -35,6 +36,7 @@ class GraphPath extends Component{
       currNodeName:''
     }
   }
+
   componentDidMount(){
     const {graph} = this.props.project
     var graphObj = JSON.parse(JSON.stringify(graph)) ;
@@ -640,6 +642,22 @@ class GraphPath extends Component{
 
   }
 
+  selectCriticalPath=(key,event)=>{
+    console.log('critical',key,event) ;
+    
+    if (key === 'graph'){
+      let highlight =  this.graphManager.highlightGraphCritical() ; 
+      if (highlight < 0 ){
+        PopUpMessage('Please connect the start node to another node','warning') ;
+      }
+      else if (highlight >= 0){
+        this.updateGraph() ;
+        PopUpMessage(`${highlight} critical paths found`,'info') ; 
+      }
+    }
+    
+  }
+
   render(){
     console.log(' graph',this.state.currGraph) 
           
@@ -802,9 +820,13 @@ class GraphPath extends Component{
                 <Whisper speaker={speaker} placement={'leftStart'} trigger={'active'}>
                 <Button >Add Node</Button>
                 </Whisper> &nbsp;
-                <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>
-                <IconButton icon={<Icon icon={'charts-line'}/>}>Project Graph Critical Path</IconButton>
-                
+                <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>                
+                  <Dropdown title={"Critical Path"} 
+                  icon={<Icon icon={'charts-line'}/>}>
+                    <Dropdown.Item onSelect={(event)=>this.selectCriticalPath('graph')}>
+                      Project Graph Critical Path
+                    </Dropdown.Item>
+                  </Dropdown>
                   </div>
               </div>
 
