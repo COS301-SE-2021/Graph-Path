@@ -357,7 +357,7 @@ The neccesary information for the request to go through follows:
 
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
-        const filterOptions=[{label:'All Projects', value:'all'},{label:'Projects I Own', value:'myOwn'},{label:'Projects Shared with me', value:'shared'}];
+        const filterOptions=[{label:'All Projects', value:'all'},{label:'Own Project', value:'myOwn'},{label:'Shared Project', value:'shared'}];
         const {match} = this.props ;
         if (this.state.loading){
             return <Loader backdrop={false} speed={'slow'} size={'lg'} />
@@ -374,13 +374,12 @@ The neccesary information for the request to go through follows:
                         }}/>
                         <Route >
                             <div>
-                            Sort Projects <br/>
                             <Button onClick={this.showM}>
                                 <Icon icon={'plus-circle'} title={"New Project"}/>
                             </Button>
 
-                                <SelectPicker data={filterOptions} value={this.state.filterValue} onChange={this.handleFilterChange}/>
-                            <SelectPicker data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
+                                <SelectPicker placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
+                            <SelectPicker placeholder="Sort By" searchable={false} data={options} value={this.state.sortValue} onChange={this.handleSortChange}/>
 
                             <div data-testid="tidProjList" id="projects-list">
                                 {

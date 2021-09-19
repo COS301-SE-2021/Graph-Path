@@ -10,13 +10,46 @@ class Calendar extends React.Component{
         this.state = {
             api: 'http://localhost:9001',
             projects: [],
+            tasks:[],
             date:undefined,
         }
     }
 
     componentDidMount(){
         this.getUserProjects() ;
-        //this.getTodoList();
+        this.getUserTasks();
+    }
+
+    getUserTasks=()=>{
+        axios.get(`${this.state.api}/task/getUserTasks/${this.props.user.email}`,{
+            headers:{
+                authorization: this.props.user.token
+            }
+        })
+            .then((res)=>{
+                if (res.data.data !== undefined){
+                    // console.log("tasks",res.data.data)
+                    this.setState({
+                        tasks :res.data.data ,
+
+                    }) ;
+                }
+                else{
+                    // this.setState({
+                    //     loading:false
+                    // }) ;
+                    // alert('No projects')
+                }
+
+            })
+            .catch((err)=>{
+
+                // this.setState({
+                //     loading:false
+                // }) ;
+                console.log('Error or Rejected',err)
+            })
+
     }
 
     getUserProjects=()=>{
@@ -27,6 +60,7 @@ class Calendar extends React.Component{
         })
             .then((res)=>{
                 if (res.data.data !== undefined){
+                    console.log("projects",res.data.data)
                     this.setState({
                         projects :res.data.data ,
 
@@ -50,28 +84,49 @@ class Calendar extends React.Component{
 
     }
 
+     getRandomColor=()=> {
+        let letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
     render() {
 
         if(this.state.projects.length > 0) {
-            console.log(this.state.projects)
-            let data =[];
-            this.state.projects.map((item,index)=>
-                data[index] = {title: this.state.projects[index].projectName, date: this.state.projects[index].dueDate}
-            )
+            let newD=[]
+            let projD=[]
+            let taskD=[]
 
-            // const data = [
-            //         {title: this.state.projects[0].projectName, date: this.state.projects[0].dueDate},
-            //         {title: 'event 2', date: '2021-09-11'}
-            // ]
-            console.log(data)
+            for(let index=0;index < this.state.projects.length; index++){
+                let c = this.getRandomColor()
+                projD[index] = {title: this.state.projects[index].projectName, date: this.state.projects[index].dueDate,backgroundColor:c,allDay:true}
+                if(this.state.tasks.length > 0){
+                    for(let t=0; t < this.state.tasks.length; t++){
+                        if(this.state.projects[index]._id === this.state.tasks[t].projectID){
+                            taskD[t] = {title: this.state.tasks[t].description, date: this.state.tasks[t].dueDate,color:c,allDay : false}
+                        }
+                    }
+                }
+
+            }
+
+            newD = [...projD,...taskD];
+
+            console.log("data proj",projD)
+            console.log("data task",taskD)
 
             return (
                 <div>
                     <FullCalendar
                         plugins={[dayGridPlugin]}
                         initialView="dayGridMonth"
+                        eventBorderColor="transparent"
                         weekends={true}
-                        events={data}
+                        events={ newD}
+
                     />
 
                 </div>

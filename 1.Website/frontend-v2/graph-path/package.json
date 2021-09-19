@@ -7,6 +7,7 @@
     "@auth0/auth0-react": "^1.6.0",
     "@fullcalendar/daygrid": "^5.9.0",
     "@fullcalendar/react": "^5.9.0",
+    "@fullcalendar/resource-timeline": "^5.9.0",
     "@syncfusion/ej2-react-buttons": "^19.2.55",
     "@syncfusion/ej2-react-dropdowns": "^19.2.57",
     "@syncfusion/ej2-react-inputs": "^19.2.60",
