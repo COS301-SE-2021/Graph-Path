@@ -618,11 +618,11 @@ class GraphPath extends Component{
 
   changeNodeByStats(nodeId,stats){
     let color = '#000' ; 
-    if (stats >= 0.90){
+    if (stats === 'complete'){
         //green
         color = '#0d0'
     }
-    else if (stats >= 0.50){
+    else if (stats === 'in progress'){
       color = '#dd0' ;
     }
     else{
