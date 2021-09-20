@@ -353,7 +353,7 @@ class GraphPath extends Component{
                   from: edge.source === undefined ? edge.from: edge.source,
                   to: edge.target === undefined ?edge.to: edge.target,
                   label: edge.label,
-                  color: edge.color,
+                  color: '#000'||edge.color,
                   width: edge.width,
               }
           })
