@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types' ;
-import { Panel,Icon, Popover, Button, Whisper, Divider } from 'rsuite';
+import { Panel,Icon, Popover, Button, Whisper, Divider, IconButton } from 'rsuite';
 import { Link } from 'react-router-dom';
 import "../../css/Common.css"
 
@@ -27,18 +27,9 @@ class ProjectCard extends Component {
         <p>Description: {project.projectDescription}</p>
         <br/>
 
-        <div>
-          {/*Members: {*/}
-          {/*  project.groupMembers !== undefined && project.groupMembers.length > 0 */}
-          {/*  ? project.groupMembers.map((member,index)=>{*/}
-          {/*    return <div key={index}>*/}
-          {/*      <><Icon icon={'user-info'}/> { `${member.email}`} </>*/}
-          {/*    </div>*/}
-          {/*  })*/}
-          {/*  :<h5>No Members Yet</h5>*/}
-          {/*}*/}
-
-         <p>Project Owner: {project.projectOwner}</p>
+        <div>            
+         <p>Project Owner: <br/>
+          <Icon icon={'user-info'}/> {project.projectOwner}</p>
         </div>
 
         <br/>
@@ -69,10 +60,17 @@ class ProjectCard extends Component {
               Last Edited: {project.lastAccessed}
           </h6>
           <Whisper trigger={'click'} placement={'autoVertical'} speaker={projectInfo}>
-          <Icon icon='info' onClick={()=>console.log('clicked')}/>
+              <IconButton icon={ <Icon icon='info' />} >Information</IconButton>
           </Whisper>
           <br/>
-          <Link id="open-card" onClick={()=>selectProject(project)} to={`${link}`}>Open</Link>
+          <br/>
+          <IconButton icon={<Icon icon={'folder-open-o'}/>}
+          componentClass={Link}
+          id="open-card" 
+          onClick={()=>selectProject(project)} 
+          to={`${link}`}
+          >Open</IconButton>
+          {/* <Link id="open-card" onClick={()=>selectProject(project)} to={`${link}`}>Open</Link> */}
           <br/>
         </Panel>
       </Panel>
