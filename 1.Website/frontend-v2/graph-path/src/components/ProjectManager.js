@@ -1,6 +1,6 @@
 import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
-import {Icon, SelectPicker, Loader, Button,Input,InputGroup} from 'rsuite' ;
+import {Icon, SelectPicker, Loader, Button,Input,InputGroup, IconButton} from 'rsuite' ;
 import "../css/ProjectManager.css"
 import { Route ,Switch, withRouter} from "react-router-dom";
 import axios from 'axios' ;
@@ -381,14 +381,6 @@ The neccesary information for the request to go through follows:
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
                     <NewProject ref={this.newProjectModalRef} sendProjectInfo={this.sendProjectInfo} api={this.props.api} />
-                    {/*<>*/}
-                    {/*    <InputGroup inside>*/}
-                    {/*        <Input />*/}
-                    {/*        <InputGroup.Button>*/}
-                    {/*            <Icon icon="search" />*/}
-                    {/*        </InputGroup.Button>*/}
-                    {/*    </InputGroup>*/}
-                    {/*</>*/}
 
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
@@ -397,9 +389,9 @@ The neccesary information for the request to go through follows:
                         }}/>
                         <Route >
                             <div>
-                            <Button onClick={this.showM}>
-                                <Icon icon={'plus-circle'} title={"New Project"}/>
-                            </Button>
+                            <IconButton onClick={this.showM}
+                              icon={ <Icon icon={'plus-circle'} title={"New Project"}/> } >New Project
+                            </IconButton>
 
                                 <SelectPicker placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
                             <SelectPicker placeholder="Sort By" searchable={false} data={options}  onChange={this.handleSortChange}/>
