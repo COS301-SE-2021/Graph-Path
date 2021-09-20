@@ -11,6 +11,7 @@ const kanbanBoard = require('../../Helpers/kanbanBoard');
 const { param,body, validationResult } = require('express-validator');
 const mailer = require('../../Helpers/SendMail');
 
+
 const { auth, requiresAuth } = require('express-openid-connect');
 const {projectCompletion} = require("../../Helpers/SendMail");
 function makeProjectRoute(db) {
