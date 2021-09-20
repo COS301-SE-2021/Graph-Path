@@ -14,6 +14,7 @@ import RadarChart from "./RadarChart";
 import PieChart from "./PieChart";
 import Calendar from "./Calendar";
 import BarChart from "./BarChart";
+import PropTypes from "prop-types";
 
 
 class Dashboard extends React.Component{
@@ -60,7 +61,7 @@ class Dashboard extends React.Component{
     render(){
         const {match} =this.props ;
         const picture = this.props.authUser.picture;
-        // console.log("match",match)
+        console.log("match",this.props.api)
         return(
             //  <Router>            
                 <div data-testid="main-container-id" className="main-container">
@@ -160,7 +161,7 @@ class Dashboard extends React.Component{
                                     <PieChart user={this.props.authUser} />
                                 </Route>
                                 <Route path={`${match.path}/barChart`} exact>
-                                    <BarChart user={this.props.authUser} />
+                                    <BarChart api={this.props.api} user={this.props.authUser} />
                                 </Route>
                                     
                             {
@@ -196,5 +197,10 @@ function mapStateToProps(state){
 const mapDispatchToProps = {
     updateUserToken,
   }
+
+Dashboard.propTypes = {
+    authUser:PropTypes.object.isRequired,
+    api:PropTypes.string ,
+}
 
 export default connect(mapStateToProps,mapDispatchToProps)(withRouter(Dashboard)) ;

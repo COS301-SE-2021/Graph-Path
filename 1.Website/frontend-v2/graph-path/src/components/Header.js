@@ -97,7 +97,7 @@ class CustomHeader extends Component{
                         <Route path='/dashboard' render={()=>{
                             return(
                                 <>
-                                    <Dashboard authUser={this.state.loggedUser}/>
+                                    <Dashboard api={this.props.api} authUser={this.state.loggedUser}/>
                                     {
                                         !this.state.logged?<Redirect to="/"/>:""
                                     }
@@ -139,5 +139,10 @@ function mapStateToProps(state){
 const mapDispatchToProps = {
     createUser
   }
+
+CustomHeader.defaultProps = {
+    api:'http://localhost:9001'
+}
+
 
 export default connect(mapStateToProps,mapDispatchToProps)(CustomHeader) ;
