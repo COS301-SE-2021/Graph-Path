@@ -75,7 +75,7 @@ class Project extends Component {
 
                     <Switch>
                         <Route exact path={`${match.path}`} render={()=>{
-                            return <GraphPath updateParent={this.props.selectProject} project={project} user={this.props.user}/>
+                            return <GraphPath api={this.props.api} updateParent={this.props.selectProject} project={project} user={this.props.user}/>
     
                         }} />
                         <Route path={`${match.path}/edit`} render={()=>{

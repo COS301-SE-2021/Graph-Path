@@ -920,10 +920,6 @@ class GraphPath extends Component{
   }
 }
 
-GraphPath.defaultProps = {
-  api:'http://localhost:9001'
-}
-
 GraphPath.propTypes = {
   // task:PropTypes.array,
   project:PropTypes.object.isRequired,

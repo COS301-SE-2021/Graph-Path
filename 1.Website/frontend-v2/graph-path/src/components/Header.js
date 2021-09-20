@@ -38,7 +38,7 @@ class CustomHeader extends Component{
                 userObject:user
             }
 
-            axios.post(`http://localhost:9001/user/requestToken`,data)
+            axios.post(`${this.props.api}/user/requestToken`,data)
             .then((res)=>{
                 // console.log('from token ',res)
                 
@@ -141,7 +141,7 @@ const mapDispatchToProps = {
   }
 
 CustomHeader.defaultProps = {
-    api:'http://localhost:9001'
+    api:'https://nocap-graphpath-backend.herokuapp.com'
 }
 
 
