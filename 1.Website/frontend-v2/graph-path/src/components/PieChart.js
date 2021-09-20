@@ -1,7 +1,7 @@
 import React from 'react' ;
 import {Doughnut} from 'react-chartjs-2';
 import axios from "axios";
-import {Button, Dropdown, FlexboxGrid, List, Tooltip} from "rsuite";
+import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import Logo from "../img/Logo4.png";
 import '../css/Common.css'
 import PropTypes from "prop-types";
