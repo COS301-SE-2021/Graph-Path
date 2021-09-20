@@ -41,7 +41,7 @@ class Project extends Component {
 
     render(){
         const {match} = this.props ;
-        // console.log('PRoj',this.props)
+        console.log('PRoj',this.props)
         const {project} = this.props
         if (project === undefined || project.projectName === undefined){
             return (<div>
@@ -79,7 +79,7 @@ class Project extends Component {
     
                         }} />
                         <Route path={`${match.path}/edit`} render={()=>{
-                           return <ProjectInformation project={project}  user={this.props.user}/>
+                           return <ProjectInformation api={this.props.api} project={project}  user={this.props.user}/>
                         }} 
                         />
                     </Switch>
@@ -89,9 +89,6 @@ class Project extends Component {
     }
 }
 
-Project.defaultProps = {
-    api:'http://localhost:9001'
-}
 
 Project.propTypes = {
     project : PropTypes.object.isRequired,

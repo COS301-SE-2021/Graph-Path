@@ -84,16 +84,6 @@ class PieChart extends React.Component{
         }
     }
 
-    /***
-     * - Task name
-     * - Node name
-     *
-     * Show Project Names, click one project, get all nodes,
-     * click on node and show tasks in a form of pie chart
-     *
-     * @returns {JSX.Element}
-     *
-     */
     render() {
         return(
             <>

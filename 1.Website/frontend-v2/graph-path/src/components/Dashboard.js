@@ -120,6 +120,7 @@ class Dashboard extends React.Component{
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
                                                     to={`${match.url}/pieChart`}>Project Subtask</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
+                                                                   replace
                                                                    to={`${match.url}/barChart`}>Assigned Task</Dropdown.Item>
                                                 </Dropdown>
 
@@ -140,7 +141,7 @@ class Dashboard extends React.Component{
 
                                 </Route>
                                 <Route path={`${match.path}/manager`} render={()=>{
-                                    return <ProjectManager />
+                                    return <ProjectManager api={this.props.api}  />
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
                                     return <Kanban api={this.props.api} user={this.props.authUser}/> }}/>
