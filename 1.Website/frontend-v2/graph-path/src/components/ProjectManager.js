@@ -1,6 +1,6 @@
 import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
-import {Icon, SelectPicker, Loader, Button} from 'rsuite' ;
+import {Icon, SelectPicker, Loader, Button,Input,InputGroup} from 'rsuite' ;
 import "../css/ProjectManager.css"
 import { Route ,Switch, withRouter} from "react-router-dom";
 import axios from 'axios' ;
@@ -338,6 +338,20 @@ The neccesary information for the request to go through follows:
         })
     }
 
+    searchProjects=(word)=>{
+        if (word){
+            word = word.toLowerCase() ; 
+            let filter = this.state.allProjects.filter((proj)=>proj.projectName.toLowerCase().indexOf(word)>= 0 ) ; 
+            this.setState({
+                projects:filter 
+            })
+        }
+        else{
+            this.setState({
+                projects:this.state.allProjects 
+            })
+        }
+    }
     
     
     render(){
@@ -389,7 +403,12 @@ The neccesary information for the request to go through follows:
 
                                 <SelectPicker placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
                             <SelectPicker placeholder="Sort By" searchable={false} data={options}  onChange={this.handleSortChange}/>
-
+                            <InputGroup inside >
+                                <Input onChange={this.searchProjects}/>
+                                <InputGroup.Button>
+                                    <Icon icon="search" />
+                                </InputGroup.Button>
+                                </InputGroup>
                             <div data-testid="tidProjList" id="projects-list">
                                 {
                                 this.state.projects.length > 0?
