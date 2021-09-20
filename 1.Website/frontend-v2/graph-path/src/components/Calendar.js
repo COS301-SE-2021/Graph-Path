@@ -3,12 +3,13 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import axios from "axios";
 import "../css/Calendar.css"
+import PropTypes from "prop-types";
+import BarChart from "./BarChart";
 
 class Calendar extends React.Component{
     constructor(props){
         super(props) ;
         this.state = {
-            api: 'http://localhost:9001',
             projects: [],
             tasks:[],
             date:undefined,
@@ -21,7 +22,7 @@ class Calendar extends React.Component{
     }
 
     getUserTasks=()=>{
-        axios.get(`${this.state.api}/task/getUserTasks/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/task/getUserTasks/${this.props.user.email}`,{
             headers:{
                 authorization: this.props.user.token
             }
@@ -53,7 +54,7 @@ class Calendar extends React.Component{
     }
 
     getUserProjects=()=>{
-        axios.get(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
             headers:{
                 authorization: this.props.user.token
             }
@@ -140,4 +141,10 @@ class Calendar extends React.Component{
         }
     }
 }
+
+Calendar.propTypes = {
+    user:PropTypes.object.isRequired,
+    api:PropTypes.string ,
+}
+
 export default Calendar;

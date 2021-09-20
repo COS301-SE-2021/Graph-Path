@@ -270,12 +270,6 @@ class Kanban extends React.Component {
 
 }
 
-
-
-Kanban.defaultProps = {
-    api:'http://localhost:9001'
-}
-
 Kanban.propTypes = {
     user: PropTypes.object, 
     api: PropTypes.string

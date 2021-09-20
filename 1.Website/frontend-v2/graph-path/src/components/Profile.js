@@ -1,18 +1,12 @@
 import React from 'react' ;
 import {
-    Avatar,
-    Button,
-    ButtonToolbar,
-    ControlLabel,
     Divider,
-    Drawer,
-    Form,
-    FormControl,
-    FormGroup,
-    HelpBlock
+    Drawer
 } from "rsuite";
 import '../css/Profile.css'
 import Logo from "../img/Logo3.png";
+import PropTypes from "prop-types";
+import RadarChart from "./RadarChart";
 class Profile extends React.Component{
     constructor(props) {
         super(props);
@@ -72,19 +66,6 @@ class Profile extends React.Component{
                                        disabled
                                        type='text'/>
 
-
-                                {/*<label>Password</label>*/}
-                                {/*<input*/}
-                                {/*       type='text'*/}
-                                {/*       name="dueDate"*/}
-                                {/*       onChange={this.change}*/}
-                                {/*       disabled = {!!(this.state.disabled)}/>*/}
-
-                                {/*<Button disabled = {(this.state.disabled) ? "" : "disabled"}*/}
-                                {/*        onClick={this.enableEdit}>Edit</Button>*/}
-                                {/*<Button disabled = {(this.state.disabled) ? "disabled" : ""}*/}
-                                {/*        onClick={this.enableEdit}>Cancel</Button>*/}
-
                             </form>
 
                         </div>
@@ -97,4 +78,9 @@ class Profile extends React.Component{
 
 
 }
+
+RadarChart.propTypes = {
+    user:PropTypes.object.isRequired,
+}
+
 export default Profile;
