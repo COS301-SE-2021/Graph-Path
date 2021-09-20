@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types' ;
-import { Panel,Icon, Popover, Button, Whisper, Divider } from 'rsuite';
+import { Panel,Icon, Popover, Button, Whisper } from 'rsuite';
 import { Link } from 'react-router-dom';
 import "../../css/Common.css"
 

@@ -1,15 +1,7 @@
 import React from 'react' ;
 import {
-    Avatar,
-    Button,
-    ButtonToolbar,
-    ControlLabel,
     Divider,
-    Drawer,
-    Form,
-    FormControl,
-    FormGroup,
-    HelpBlock
+    Drawer
 } from "rsuite";
 import '../css/Profile.css'
 import Logo from "../img/Logo3.png";
@@ -53,7 +45,7 @@ class Profile extends React.Component{
                     <Drawer.Body id="body-div">
                         <div id="picture-div">
 
-                            <img src={picture} />
+                            <img src={picture} alt=''/>
                             <Divider/>
                             <h6>{this.props.user.name}</h6>
 
@@ -88,7 +80,7 @@ class Profile extends React.Component{
                             </form>
 
                         </div>
-                        <img id="logo-pics" src={Logo}/>
+                        <img id="logo-pics" src={Logo} alt=''/>
                     </Drawer.Body>
                 </Drawer>
             </>

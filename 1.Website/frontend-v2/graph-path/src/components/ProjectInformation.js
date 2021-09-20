@@ -5,14 +5,13 @@ import {
     Checkbox, CheckboxGroup, CheckPicker,
     Divider,
     Drawer,
-    FlexboxGrid, Form,
+    FlexboxGrid,
     Icon,
-    Modal,
-    Notification
+    Modal
 } from "rsuite";
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
-import CustomField from "./Reusable/CustomField";
+//import CustomField from "./Reusable/CustomField";
 
 // function Paragraph() {
 //     return null;
@@ -425,8 +424,8 @@ class ProjectInformation extends React.Component{
 
     render() {
         const project = this.props.project;
-        const {formValue} = this.state;
-         {console.log("proj",project)}
+        //const {formValue} = this.state;
+         //{console.log("proj",project)}
         return(
             <div data-testid="main-div-id" id="main-div">
                 <div id="project-name"><h3>{project.projectName}</h3></div>

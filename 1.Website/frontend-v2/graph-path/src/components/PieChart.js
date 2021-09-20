@@ -1,7 +1,7 @@
 import React from 'react' ;
 import {Doughnut} from 'react-chartjs-2';
 import axios from "axios";
-import {Button, Dropdown, FlexboxGrid, List, Tooltip} from "rsuite";
+import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import Logo from "../img/Logo4.png";
 import '../css/Common.css'
 
@@ -95,7 +95,7 @@ class PieChart extends React.Component{
      */
     render() {
         if(this.state.task.notStartedTasks !== undefined ){
-            {console.log("tasks show", this.state.task.inProgressTasks)}
+            console.log("tasks show", this.state.task.inProgressTasks)
         }
         return(
             <>
