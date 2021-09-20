@@ -36,13 +36,12 @@ describe('ProjectManagerService.getProjectByID',  ()=> {
         });
         MockDB = await MockDBController;
 
-        const Projects = MockDB.getConnectionInstance().collection('Projects');
-        await Projects.insertOne(mockProject);
+        //const Projects = MockDB.getConnectionInstance().collection('Projects');
+        //await Projects.insertOne(mockProject);
 
 
     });
     afterAll(async () => {
-        await  ProjectmanagerService.removeProjectByID(MockDB, mockProject._id)
         await connection.close();
         await MockDB.close();
     });
@@ -56,14 +55,22 @@ describe('ProjectManagerService.getProjectByID',  ()=> {
     });
 
     it('it should return the project if it exist',   async () => {
+        const Projects = MockDB.getConnectionInstance().collection('Projects');
+        await Projects.insertOne(mockProject);
+
         const validID = mockProject._id;
         const response = await ProjectmanagerService.getProjectByID(MockDB,validID);
         expect(response._id).toStrictEqual(validID);
+
+        await  ProjectmanagerService.removeProjectByID(MockDB, mockProject._id);
 
     });
 
 
     it('it should return the full project object',   async () => {
+        const Projects = MockDB.getConnectionInstance().collection('Projects');
+        await Projects.insertOne(mockProject);
+
         const validID = mockProject._id;
         const response = await ProjectmanagerService.getProjectByID(MockDB,validID);
         expect(response.projectOwner).toStrictEqual(mockProject.projectOwner);
@@ -75,6 +82,8 @@ describe('ProjectManagerService.getProjectByID',  ()=> {
         expect(response.groupMembers).toStrictEqual(mockProject.groupMembers);
         expect(response.graph).toStrictEqual(mockProject.graph);
         expect(response.lastAccessed).toStrictEqual(mockProject.lastAccessed);
+
+        await  ProjectmanagerService.removeProjectByID(MockDB, mockProject._id);
 
     });
 
