@@ -60,7 +60,7 @@ class Calendar extends React.Component{
         })
             .then((res)=>{
                 if (res.data.data !== undefined){
-                    console.log("projects",res.data.data)
+                    // console.log("projects",res.data.data)
                     this.setState({
                         projects :res.data.data ,
 
@@ -115,8 +115,8 @@ class Calendar extends React.Component{
 
             newD = [...projD,...taskD];
 
-            console.log("data proj",projD)
-            console.log("data task",taskD)
+            // console.log("data proj",projD)
+            // console.log("data task",taskD)
 
             return (
                 <div>

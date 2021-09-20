@@ -93,7 +93,7 @@ class PieChart extends React.Component{
                             <List hover>
                                 {this.state.projects.map((item,index)=>
                                     item.projectOwner === this.props.user.email || item.permissions.includes("view statistics") ?
-                                    <List.Item key={item['projectName']} index={index}>
+                                    <List.Item key={index} index={index}>
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
                                                 colspan={6}

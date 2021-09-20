@@ -53,14 +53,14 @@ class Dashboard extends React.Component{
     }
 
     reloadProjectsInManager=(obj)=>{
-        console.log('ref',obj) ;
+        // console.log('ref',obj) ;
         
     }
 
     render(){
         const {match} =this.props ;
         // const picture = this.props.authUser.picture;
-        console.log("match",this.props.api)
+        // console.log("match",this.props.api)
         return(
             //  <Router>            
                 <div data-testid="main-container-id" className="main-container">
@@ -102,22 +102,27 @@ class Dashboard extends React.Component{
                                                          id="nav-option"
                                                           icon={<Icon icon="dashboard"/>}
                                                           componentClass={Link}
+                                                          replace
                                                            to="/dashboard" >Dashboard</Nav.Item>
 
                                                 <Nav.Item id="nav-option"
                                                           icon={<Icon icon="calendar"/>}
                                                           componentClass={Link}
+                                                          replace
                                                           to={`${match.url}/modal`} >Calendar</Nav.Item>
 
                                                 <Nav.Item id="nav-option"
                                                           icon={<Icon icon="tasks"/>}
                                                           componentClass={Link}
+                                                          replace
                                                           to={`${match.url}/kanban`} >Kanban</Nav.Item>
 
                                                 <Dropdown id="nav-option" title="Statistics" icon={<Icon icon="bar-chart"/>}>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
+                                                                   replace
                                                                    to={`${match.url}/radarChart`}>Project Tasks</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
+                                                                   replace
                                                     to={`${match.url}/pieChart`}>Project Subtask</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
                                                                    replace

@@ -80,7 +80,7 @@ class BarChart extends React.Component{
                         <Dropdown.Item style={{minWidth:"30vw",marginRight:"10%"}}>
                             <List hover>
                                 {this.state.projects.map((item,index)=>
-                                    <List.Item key={item['projectName']} index={index}>
+                                    <List.Item key={index} index={index}>
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
                                                 colspan={6}
