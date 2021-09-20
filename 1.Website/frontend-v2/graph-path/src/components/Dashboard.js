@@ -14,6 +14,7 @@ import RadarChart from "./RadarChart";
 import PieChart from "./PieChart";
 import Calendar from "./Calendar";
 import BarChart from "./BarChart";
+import PropTypes from "prop-types";
 
 
 class Dashboard extends React.Component{
@@ -24,7 +25,6 @@ class Dashboard extends React.Component{
             showSideBar: true,
             redirect:true,
             createResponse:'',
-            viewOnly:false
             
         }
     }
@@ -59,8 +59,8 @@ class Dashboard extends React.Component{
 
     render(){
         const {match} =this.props ;
-        const picture = this.props.authUser.picture;
-        // console.log("match",match)
+        // const picture = this.props.authUser.picture;
+        console.log("match",this.props.api)
         return(
             //  <Router>            
                 <div data-testid="main-container-id" className="main-container">
@@ -103,15 +103,6 @@ class Dashboard extends React.Component{
                                                           icon={<Icon icon="dashboard"/>}
                                                           componentClass={Link}
                                                            to="/dashboard" >Dashboard</Nav.Item>
-                                                {
-                                                    this.state.viewOnly ?
-                                                    <Dropdown title="View Only">
-                                                        <Dropdown.Item>Own Project</Dropdown.Item>
-                                                        <Dropdown.Item>Shared Project</Dropdown.Item>
-                                                    </Dropdown>
-                                                        :
-                                                        <></>
-                                                }
 
                                                 <Nav.Item id="nav-option"
                                                           icon={<Icon icon="calendar"/>}
@@ -129,6 +120,7 @@ class Dashboard extends React.Component{
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
                                                     to={`${match.url}/pieChart`}>Project Subtask</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
+                                                                   replace
                                                                    to={`${match.url}/barChart`}>Assigned Task</Dropdown.Item>
                                                 </Dropdown>
 
@@ -145,22 +137,22 @@ class Dashboard extends React.Component{
                             <Switch>
                                 <Route path={`${match.path}/modal`} exact>
                                     {/*<Modal user={this.props.authUser} />*/}
-                                    <Calendar user={this.props.authUser} />
+                                    <Calendar api={this.props.api} user={this.props.authUser} />
 
                                 </Route>
                                 <Route path={`${match.path}/manager`} render={()=>{
-                                    return <ProjectManager />
+                                    return <ProjectManager api={this.props.api}  />
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
-                                    return <Kanban user={this.props.authUser}/> }}/>
+                                    return <Kanban api={this.props.api} user={this.props.authUser}/> }}/>
                                 <Route path={`${match.path}/radarChart`} exact>
-                                    <RadarChart user={this.props.authUser} />
+                                    <RadarChart api={this.props.api} user={this.props.authUser} />
                                 </Route>
                                 <Route path={`${match.path}/pieChart`} exact>
-                                    <PieChart user={this.props.authUser} />
+                                    <PieChart api={this.props.api} user={this.props.authUser} />
                                 </Route>
                                 <Route path={`${match.path}/barChart`} exact>
-                                    <BarChart user={this.props.authUser} />
+                                    <BarChart api={this.props.api} user={this.props.authUser} />
                                 </Route>
                                     
                             {
@@ -196,5 +188,10 @@ function mapStateToProps(state){
 const mapDispatchToProps = {
     updateUserToken,
   }
+
+Dashboard.propTypes = {
+    authUser:PropTypes.object.isRequired,
+    api:PropTypes.string ,
+}
 
 export default connect(mapStateToProps,mapDispatchToProps)(withRouter(Dashboard)) ;

@@ -1,9 +1,11 @@
 import React from 'react' ;
 import {Doughnut} from 'react-chartjs-2';
 import axios from "axios";
-import {Button, Dropdown, FlexboxGrid, List, Tooltip} from "rsuite";
+import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import Logo from "../img/Logo4.png";
 import '../css/Common.css'
+import PropTypes from "prop-types";
+import BarChart from "./BarChart";
 
 class PieChart extends React.Component{
 
@@ -13,7 +15,6 @@ class PieChart extends React.Component{
             currentProject:{},
             projects:[],
             task:[],
-            api:'http://localhost:9001',
             showChart: false
         }
     }
@@ -25,7 +26,7 @@ class PieChart extends React.Component{
 
     getAllProjects=()=>{
 
-        axios.get(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
             headers:{
                 authorization: this.props.user.token
             }
@@ -63,7 +64,7 @@ class PieChart extends React.Component{
             console.log("get proj id", this.state.projId)
 
 
-            axios.get(`${this.state.api}/project/statistics/donutChart/`+projId, {
+            axios.get(`${this.props.api}/project/statistics/donutChart/`+projId, {
                 headers: {
                     authorization: this.props.user.token
                 }
@@ -83,20 +84,7 @@ class PieChart extends React.Component{
         }
     }
 
-    /***
-     * - Task name
-     * - Node name
-     *
-     * Show Project Names, click one project, get all nodes,
-     * click on node and show tasks in a form of pie chart
-     *
-     * @returns {JSX.Element}
-     *
-     */
     render() {
-        if(this.state.task.notStartedTasks !== undefined ){
-            {console.log("tasks show", this.state.task.inProgressTasks)}
-        }
         return(
             <>
                 <div>
@@ -217,4 +205,10 @@ class PieChart extends React.Component{
         )
     }
 }
+
+PieChart.propTypes = {
+    user:PropTypes.object.isRequired,
+    api:PropTypes.string ,
+}
+
 export default PieChart;

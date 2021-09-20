@@ -5,14 +5,14 @@ import {
     Checkbox, CheckboxGroup, CheckPicker,
     Divider,
     Drawer,
-    FlexboxGrid, Form,
+    FlexboxGrid,
     Icon,
-    Modal,
-    Notification
+    Modal
 } from "rsuite";
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
 import CustomField from "./Reusable/CustomField";
+import PropTypes from "prop-types";
 
 // function Paragraph() {
 //     return null;
@@ -49,7 +49,6 @@ class ProjectInformation extends React.Component{
             startD: '',
             dueD:'',
             projDescription:'',
-            api:'http://localhost:9001',
             answer:'',
             editMember:false,
             MemberEditEmail:'',
@@ -128,7 +127,7 @@ class ProjectInformation extends React.Component{
     addMember = (data)=>{
         console.log("submitted sent",data)
         try{
-            axios.post(`${this.state.api}/project/addToProjectGroupMembers/`,data,{
+            axios.post(`${this.props.api}/project/addToProjectGroupMembers/`,data,{
                 headers:{
                     authorization:this.props.user.token
                 }
@@ -224,7 +223,7 @@ class ProjectInformation extends React.Component{
     sendData = (data)=>{
         console.log("token",this.props.user)
         try{
-            axios.put(`${this.state.api}/project/updateEverythingProject/`,data,{
+            axios.put(`${this.props.api}/project/updateEverythingProject/`,data,{
                 headers:{
                     authorization:this.props.user.token
                 }
@@ -266,7 +265,7 @@ class ProjectInformation extends React.Component{
             email: email
         }
         try{
-            axios.patch(`${this.state.api}/project/removeProjectMember/`,data,{
+            axios.patch(`${this.props.api}/project/removeProjectMember/`,data,{
                 headers:{
                     authorization:this.props.user.token
                 }
@@ -310,11 +309,7 @@ class ProjectInformation extends React.Component{
                 i = index
             :
             <></>
-                // this.setState({
-                //     value:this.props.project.groupMembers[index].permissions
-                // })
-                // :
-                // <></>
+
         })
         console.log("index",i)
         this.setState({
@@ -377,7 +372,7 @@ class ProjectInformation extends React.Component{
 
     getAllUsers=()=>{
         try{
-            axios.get(`${this.state.api}/user/listOfAllUsers/`,{
+            axios.get(`${this.props.api}/user/listOfAllUsers/`,{
                 headers:{
                     authorization:this.props.user.token
                 }
@@ -425,8 +420,8 @@ class ProjectInformation extends React.Component{
 
     render() {
         const project = this.props.project;
-        const {formValue} = this.state;
-         {console.log("proj",project)}
+        //const {formValue} = this.state;
+         //{console.log("proj",project)}
         return(
             <div data-testid="main-div-id" id="main-div">
                 <div id="project-name"><h3>{project.projectName}</h3></div>
@@ -690,4 +685,11 @@ class ProjectInformation extends React.Component{
         )
     }
 }
+
+ProjectInformation.propTypes = {
+    user :PropTypes.object,
+    api:PropTypes.string
+
+}
+
 export default ProjectInformation;

@@ -6,12 +6,12 @@ import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
-import { Popover,Avatar,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader, Dropdown} from 'rsuite' ;
+import { Popover,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader, Dropdown} from 'rsuite' ;
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
 import Task from "./Task";
 import {connect} from 'react-redux' ;
-import DropdownMenuItem from "rsuite/lib/Dropdown/DropdownMenuItem";
+//import DropdownMenuItem from "rsuite/lib/Dropdown/DropdownMenuItem";
 
 class GraphPath extends Component{
   graphManager = null ;
@@ -750,7 +750,8 @@ class GraphPath extends Component{
         
         const events = {} ;
         events.select =  function(event) {
-            var { nodes, edges } = event;
+          //muted this for warnings
+           // var { nodes, edges } = event;
             console.log('sel',event)
           }  ;
         events.externalDragUpdate = this.graphManager.updatePosition ;

@@ -1,10 +1,10 @@
 import React from 'react'
-import landingSnap from "../img/landing.png";
-import {Button, Carousel, Loader, Modal} from "rsuite";
+//import landingSnap from "../img/landing.png";
+import {Button, Carousel, Loader} from "rsuite";
 import "rsuite/dist/styles/rsuite-dark.min.css"
 import '../css/Landing.css';
 import {useAuth0} from '@auth0/auth0-react';
-import JSONPretty from 'react-json-pretty';
+//import JSONPretty from 'react-json-pretty';
 import LoginBtn from "./LoginBtn";
 import Graph_Picture from "../img/graph_2.svg";
 import dashboard from "../img/dashboard.jpg";
@@ -28,16 +28,16 @@ function Landing({logInvalid}) {
 
             <div data-testid="main-landing-id" id="main-div-landing">
                 <div id="left-div">
-                        <img id="graph-picture" src={Graph_Picture} alt="graph-picture"/>
+                        <img id="graph-picture" src={Graph_Picture} alt="graph-pic"/>
 
                         <Carousel id="carousel-id" autoplay shape='bar' className="custom-slider">
-                                <img src={dashboard} />
-                                <img src={createP} />
-                                <img src={graph} />
-                                <img src={kanban} />
-                                <img src={stats1} />
-                                <img src={stats2} />
-                                <img src={stats3} />
+                                <img src={dashboard} alt='' />
+                                <img src={createP} alt=''/>
+                                <img src={graph} alt=''/>
+                                <img src={kanban} alt=''/>
+                                <img src={stats1} alt=''/>
+                                <img src={stats2} alt=''/>
+                                <img src={stats3} alt=''/>
 
 
                         </Carousel>

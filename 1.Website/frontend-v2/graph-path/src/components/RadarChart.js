@@ -3,6 +3,8 @@ import axios from "axios";
 import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import {Radar} from 'react-chartjs-2';
 import Logo from "../img/Logo4.png";
+import PropTypes from "prop-types";
+import BarChart from "./BarChart";
 
 class RadarChart extends React.Component{
     constructor(props){
@@ -11,7 +13,6 @@ class RadarChart extends React.Component{
             currentProject:{},
             projects:[],
             nodes:[],
-            api:'http://localhost:9001',
             showChart: false
         }
     }
@@ -29,7 +30,7 @@ class RadarChart extends React.Component{
             console.log("get proj id", this.state.projId)
 
 
-            axios.get(`${this.state.api}/project/statistics/RadarGraph/`+projId, {
+            axios.get(`${this.props.api}/project/statistics/RadarGraph/`+projId, {
                 headers: {
                     authorization: this.props.user.token
                 }
@@ -51,7 +52,7 @@ class RadarChart extends React.Component{
 
     getAllProjects=()=>{
 
-        axios.get(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
             headers:{
                 authorization: this.props.user.token
             }
@@ -98,14 +99,7 @@ class RadarChart extends React.Component{
         }
         console.log("nodes",this.state.nodes)
 
-        /***
-         * What project have
-         * show:
-         * name
-         * owner
-         * create an icon
-         * have view button
-         */
+
         return(
             <>
 
@@ -120,23 +114,14 @@ class RadarChart extends React.Component{
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
                                                 colspan={6}
-                                                // style={{
-                                                //     flexDirection: 'column',
-                                                //     alignItems: 'flex-start',
-                                                //     overflow: 'hidden'
-                                                // }}
                                             >
                                                 <div>{item.projectName}</div>
                                             </FlexboxGrid.Item>
                                             <FlexboxGrid.Item
                                                 colspan={6}
-                                                // style={{
-                                                //     flexDirection: 'column',
-                                                //     alignItems: 'flex-start',
-                                                //     overflow: 'hidden'
-                                                // }}
+
                                             >
-                                                {/*<div>{item.projectOwner}</div>*/}
+
                                             </FlexboxGrid.Item>
                                             <FlexboxGrid.Item
                                                 // colspan={6}
@@ -192,16 +177,11 @@ class RadarChart extends React.Component{
                                         }
                                     },
                                     scales:{
-                                        // gridLines:{
-                                        //     color: '#fff'
-                                        // },
                                         r:{
                                             angleLines:{
                                                 display: false
                                             },
 
-                                            // suggestedMin:50,
-                                            // suggestedMax: 100
                                         }
                                     },
                                 }}
@@ -219,5 +199,11 @@ class RadarChart extends React.Component{
         )
     }
 }
+
+RadarChart.propTypes = {
+    user:PropTypes.object.isRequired,
+    api:PropTypes.string ,
+}
+
 export default RadarChart;
 

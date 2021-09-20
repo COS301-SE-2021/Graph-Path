@@ -1,6 +1,6 @@
 import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
-import {Icon,SelectPicker, Loader, Button} from 'rsuite' ;
+import {Icon, SelectPicker, Loader, Button, InputGroup, Input} from 'rsuite' ;
 import "../css/ProjectManager.css"
 import { Route ,Switch, withRouter} from "react-router-dom";
 import axios from 'axios' ;
@@ -358,6 +358,7 @@ The neccesary information for the request to go through follows:
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
         const filterOptions=[{label:'All Projects', value:'all'},{label:'Own Project', value:'myOwn'},{label:'Shared Project', value:'shared'}];
+
         const {match} = this.props ;
         if (this.state.loading){
             return <Loader backdrop={false} speed={'slow'} size={'lg'} />
@@ -366,10 +367,18 @@ The neccesary information for the request to go through follows:
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
                     <NewProject ref={this.newProjectModalRef} sendProjectInfo={this.sendProjectInfo} api={this.props.api} />
+                    {/*<>*/}
+                    {/*    <InputGroup inside>*/}
+                    {/*        <Input />*/}
+                    {/*        <InputGroup.Button>*/}
+                    {/*            <Icon icon="search" />*/}
+                    {/*        </InputGroup.Button>*/}
+                    {/*    </InputGroup>*/}
+                    {/*</>*/}
 
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
-                                return <Project  user={this.props.loggedUser} project={this.state.currentProject} 
+                                return <Project api={this.props.api} user={this.props.loggedUser} project={this.state.currentProject}
                                 selectProject={this.selectCurrentProject}/>
                         }}/>
                         <Route >
@@ -416,12 +425,6 @@ ProjectManager.propTypes = {
 
 }
 
-ProjectManager.defaultProps = {
-    user: {
-        email : 'ntpnaane@gmail.com' 
-    } ,
-    api:'http://localhost:9001'
-}
 function updateUserToken(token){
     return {
       type:'UPDATE_TOKEN' ,

@@ -4,6 +4,7 @@ import axios from "axios";
 import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import Logo from "../img/Logo4.png";
 import '../css/Common.css'
+import PropTypes from "prop-types";
 
 class BarChart extends React.Component{
     constructor(props){
@@ -12,7 +13,6 @@ class BarChart extends React.Component{
             currentProject:{},
             projects:[],
             task:[],
-            api:'http://localhost:9001',
             showChart: false
         }
     }
@@ -22,8 +22,7 @@ class BarChart extends React.Component{
 
     }
     getAllProjects=()=>{
-
-        axios.get(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
             headers:{
                 authorization: this.props.user.token
             }
@@ -37,18 +36,11 @@ class BarChart extends React.Component{
 
                 }
                 else{
-                    // this.setState({
-                    //     loading:false
-                    // }) ;
                     alert('No projects')
                 }
 
             })
             .catch((err)=>{
-
-                // this.setState({
-                //     loading:false
-                // }) ;
                 console.log('Error or Rejected',err)
             })
     }
@@ -60,7 +52,7 @@ class BarChart extends React.Component{
             console.log("get proj id", this.state.projId)
 
 
-            axios.get(`${this.state.api}/project/statistics/barchart/`+projId+`/`+this.props.user.email, {
+            axios.get(`${this.props.api}/project/statistics/barchart/`+projId+`/`+this.props.user.email, {
                 headers: {
                     authorization: this.props.user.token
                 }
@@ -184,29 +176,6 @@ class BarChart extends React.Component{
                                     </div>
                                     : <></>
                             }
-                            {/*{*/}
-
-                            {/*    <>*/}
-                            {/*    <div className="dropdown-div-bar" id="dropdown-div">*/}
-                            {/*        <Dropdown id="dropdown-title" title={"Not Started"}>*/}
-                            {/*            <Dropdown.Item>Task 1 task 1</Dropdown.Item>*/}
-                            {/*            <Dropdown.Item>Task 6</Dropdown.Item>*/}
-                            {/*            <Dropdown.Item>Task 3</Dropdown.Item>*/}
-                            {/*        </Dropdown>*/}
-                            {/*    </div>*/}
-                            {/*        <div className="dropdown-div-bar-2" id="dropdown-div-2">*/}
-                            {/*        <Dropdown id="dropdown-title" title={"In-Progress"}>*/}
-                            {/*        <Dropdown.Item>Task 4</Dropdown.Item>*/}
-                            {/*        </Dropdown>*/}
-                            {/*        </div>*/}
-                            {/*        <div className="dropdown-div-bar-3" id="dropdown-div-3">*/}
-                            {/*        <Dropdown id="dropdown-title" title={"Complete"}>*/}
-                            {/*        <Dropdown.Item>Task 5</Dropdown.Item>*/}
-                            {/*        <Dropdown.Item>Task 7</Dropdown.Item>*/}
-                            {/*        </Dropdown>*/}
-                            {/*        </div>*/}
-                            {/*    </>*/}
-                            {/*}*/}
                         </>
                         :
                         <>
@@ -220,4 +189,10 @@ class BarChart extends React.Component{
         )
     }
 }
+
+BarChart.propTypes = {
+    user:PropTypes.object.isRequired,
+    api:PropTypes.string ,
+}
+
 export default BarChart
