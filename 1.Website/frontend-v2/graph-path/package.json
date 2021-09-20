@@ -1,7 +1,7 @@
 {
   "name": "graph-path",
   "version": "0.1.0",
-  "homepage": "https://cos301-se-2021.github.io/Graph-Path/",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^1.6.0",
