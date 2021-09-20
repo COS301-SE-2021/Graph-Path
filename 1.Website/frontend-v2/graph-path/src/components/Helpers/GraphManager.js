@@ -247,8 +247,7 @@ class GraphManager{
       // console.log('Result' ,paths)
       return paths ; 
     }
-
-    
+ 
 
     highlightGraphCritical=()=>{
         var internalBFS = this.pathFromBFS('n0') ;
@@ -303,7 +302,7 @@ class GraphManager{
         }
         
         /**
-         * @returns ans - number of critical nodes paths , if start node nofr connected it reurns -1
+         * @returns ans - number of critical nodes paths , if start node not connected it reurns -1
          */
         if (internalBFS.result.length > 1){
           return color.length ;

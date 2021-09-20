@@ -1,12 +1,13 @@
 {
   "name": "graph-path",
   "version": "0.1.0",
-  "homepage": ".",
+  "homepage": "https://cos301-se-2021.github.io/Graph-Path/",
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^1.6.0",
     "@fullcalendar/daygrid": "^5.9.0",
     "@fullcalendar/react": "^5.9.0",
+    "@fullcalendar/resource-timeline": "^5.9.0",
     "@syncfusion/ej2-react-buttons": "^19.2.55",
     "@syncfusion/ej2-react-dropdowns": "^19.2.57",
     "@syncfusion/ej2-react-inputs": "^19.2.60",
@@ -40,6 +41,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "predeploy":"npm run build",
+    "deploy":"gh-pages -d build" , 
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

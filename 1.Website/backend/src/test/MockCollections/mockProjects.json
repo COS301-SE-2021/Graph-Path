@@ -1,0 +1,1694 @@
+[{
+  "_id": {
+    "$oid": "6139ab35e0c11876048ab358"
+  },
+  "projectOwner": "mndebelelt@gmail.com",
+  "projectName": "BMW",
+  "projectDescription": "Create a new beemer",
+  "startDate": "2021-09-08",
+  "dueDate": "2022-09-08",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "mndebelelt@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Thu Sep 09 2021 08:35:33 "
+},{
+  "_id": {
+    "$oid": "6139b003e0c11876048ab35c"
+  },
+  "projectOwner": "mndebelelt@gmail.com",
+  "projectName": "Fix Unicadia",
+  "projectDescription": "House Renovations",
+  "startDate": "2021-09-08",
+  "dueDate": "2022-09-08",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "mndebelelt@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "ntpnaane@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "add members",
+        "update all project",
+        "update project owner"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Kitchen",
+        "x": -13.640625,
+        "y": 100.171875,
+        "size": 15,
+        "color": "#0000ff"
+      },
+      {
+        "id": "n2",
+        "label": "Bathroom",
+        "x": 2,
+        "y": -15,
+        "size": 15,
+        "color": "#0000ff"
+      }
+    ],
+    "edges": []
+  },
+  "lastAccessed": "Thu Sep 09 2021 08:56:03 "
+},{
+  "_id": {
+    "$oid": "6139d5eba8581f4d4d31dd3d"
+  },
+  "projectOwner": "u19016477@tuks.co.za",
+  "projectName": "Project 2",
+  "projectDescription": "This is project 2",
+  "startDate": "2021-09-08",
+  "dueDate": "2022-09-14",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "u19016477@tuks.co.za",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "mndebelelt@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "delete task",
+        "add members"
+      ]
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Thu Sep 09 2021 11:37:47 "
+},{
+  "_id": {
+    "$oid": "6139d836e0c11876048ab361"
+  },
+  "projectOwner": "mndebelelt@gmail.com",
+  "projectName": "Documents",
+  "projectDescription": "Read and Sign documents",
+  "startDate": "2021-09-08",
+  "dueDate": "2022-09-14",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "mndebelelt@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Thu Sep 09 2021 11:47:34 "
+},{
+  "_id": {
+    "$oid": "6139dcede3a8773a78307cf6"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "Soccer Stadium",
+  "projectDescription": "A process on building the worlds best stadium",
+  "startDate": "2021-09-08",
+  "dueDate": "2022-09-08",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "lbmuhali@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "view statistics",
+        "add members",
+        "remove members",
+        "delete task",
+        "delete project",
+        "update all project",
+        "update project owner"
+      ]
+    },
+    {
+      "email": "kgmonareng@gmail.com",
+      "role": "Developer",
+      "permissions": []
+    },
+    {
+      "email": "u19016477@tuks.co.za",
+      "role": "Developer",
+      "permissions": []
+    },
+    {
+      "email": "mndebelelt@gmail.com",
+      "role": "Developer",
+      "permissions": []
+    },
+    {
+      "email": "",
+      "role": "Developer",
+      "permissions": []
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Find a field ",
+        "x": -1060.8896145369108,
+        "y": -1313.413250577367,
+        "size": 20,
+        "color": "#dd0"
+      },
+      {
+        "id": "n6",
+        "label": "Building Material",
+        "x": -883.3373380255376,
+        "y": -1588.1408783553034,
+        "size": 20,
+        "color": "#dd0"
+      },
+      {
+        "id": "n2",
+        "label": "Security",
+        "x": -743.9742033220828,
+        "y": -1097.3590150056061,
+        "size": 20,
+        "color": "#d00"
+      },
+      {
+        "id": "n3",
+        "label": "Shops",
+        "x": -497.77030068898085,
+        "y": -1097.3590150056061,
+        "size": 20,
+        "color": "#dd0"
+      },
+      {
+        "id": "n4",
+        "label": "Home Team",
+        "x": -118.32803979041115,
+        "y": -1555.1338048498844,
+        "size": 20,
+        "color": "#d00"
+      },
+      {
+        "id": "n5",
+        "label": "Parking Lot",
+        "x": -555.8821892424401,
+        "y": -1453.416474284543,
+        "size": 20,
+        "color": "#d00"
+      },
+      {
+        "id": "n7",
+        "label": "Training",
+        "x": -291.1811476913591,
+        "y": -1090.78503813567,
+        "size": 20,
+        "color": "#dd0"
+      },
+      {
+        "id": "n8",
+        "label": "marketing",
+        "x": -383.8014808989562,
+        "y": -1485.2723729792147,
+        "size": 20,
+        "color": "#0d0"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n1",
+        "to": "n6",
+        "label": "Find a field  to -> Building Material",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e2",
+        "from": "n6",
+        "to": "n2",
+        "label": "Building Material to -> Security",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e4",
+        "from": "n2",
+        "to": "n3",
+        "label": "Security to -> Shops",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e5",
+        "from": "n6",
+        "to": "n5",
+        "label": "Building Material to -> Parking Lot",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e6",
+        "from": "n4",
+        "to": "n7",
+        "label": "Home Team to -> Training",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e3",
+        "from": "n6",
+        "to": "n3",
+        "label": "Building Material to -> Shops",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e7",
+        "from": "n8",
+        "to": "n3",
+        "label": "marketing to -> Shops",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e8",
+        "from": "n8",
+        "to": "n4",
+        "label": "marketing to -> Home Team",
+        "color": "#000",
+        "width": 7
+      }
+    ]
+  },
+  "lastAccessed": "Sat Sep 18 2021 20:11:03 "
+},{
+  "_id": {
+    "$oid": "613a0612f4396556600134f5"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "Baseball",
+  "projectDescription": "rules of the game ",
+  "startDate": "2021-09-08",
+  "dueDate": "2022-09-08",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n0",
+        "label": "Start",
+        "x": 0,
+        "y": -160,
+        "size": 20,
+        "color": "#900"
+      },
+      {
+        "id": "n1",
+        "label": "Filders",
+        "x": 4.753795191645596,
+        "y": -31.431848144531244,
+        "size": 20,
+        "color": "#ea0000"
+      },
+      {
+        "id": "n2",
+        "label": "Pitcher",
+        "x": -196.2916717529297,
+        "y": -3.1875,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n3",
+        "label": "BatsMan",
+        "x": 235.7083282470703,
+        "y": 46.8125,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n4",
+        "label": "Referee",
+        "x": 208.7083282470703,
+        "y": -23.1875,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n5",
+        "label": "Ball",
+        "x": -46.99425168335441,
+        "y": 192.1197143554688,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n6",
+        "label": "Win",
+        "x": 158.96297487914563,
+        "y": 217.1058471679688,
+        "size": 20,
+        "color": "#f00000",
+        "critical": true
+      },
+      {
+        "id": "n7",
+        "label": "Start",
+        "x": -213.2375880886721,
+        "y": 214.1130918013857,
+        "size": 20,
+        "color": "#f00000",
+        "critical": true
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n0",
+        "to": "n2",
+        "label": "Start to -> Pitcher",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e2",
+        "from": "n2",
+        "to": "n3",
+        "label": "Pitcher to -> BatsMan",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e3",
+        "from": "n2",
+        "to": "n5",
+        "label": "Pitcher to -> Ball",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e4",
+        "from": "n4",
+        "to": "n2",
+        "label": "Referee to -> Pitcher",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e5",
+        "from": "n0",
+        "to": "n4",
+        "label": "Start to -> Referee",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e6",
+        "from": "n4",
+        "to": "n3",
+        "label": "Referee to -> BatsMan",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e7",
+        "from": "n4",
+        "to": "n5",
+        "label": "Referee to -> Ball",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e8",
+        "from": "n3",
+        "to": "n5",
+        "label": "BatsMan to -> Ball",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e9",
+        "from": "n0",
+        "to": "n1",
+        "label": "Start to -> Filders",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e10",
+        "from": "n1",
+        "to": "n5",
+        "label": "Filders to -> Ball",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e11",
+        "from": "n5",
+        "to": "n6",
+        "label": "Ball to -> Win",
+        "color": "#080",
+        "width": 7
+      },
+      {
+        "id": "e12",
+        "from": "n5",
+        "to": "n7",
+        "label": "Ball to -> Start",
+        "color": "#080",
+        "width": 7
+      }
+    ]
+  },
+  "lastAccessed": "Sat Sep 18 2021 13:21:03 "
+},{
+  "_id": {
+    "$oid": "613a365ab58e236118dd4ada"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "New Project ",
+  "projectDescription": "Hope to get an email after creation",
+  "startDate": "2021-09-08",
+  "dueDate": "2022-09-08",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "u19016477@tuks.co.za",
+      "role": "Developer",
+      "permissions": [
+        "update all project",
+        "delete task"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "1",
+        "x": 0,
+        "y": 0,
+        "size": 20,
+        "color": "#ff0000"
+      }
+    ],
+    "edges": []
+  },
+  "lastAccessed": "Thu Sep 09 2021 18:29:14 "
+},{
+  "_id": {
+    "$oid": "613a378175d7638188c2bd25"
+  },
+  "projectOwner": "mndebelelt@gmail.com",
+  "projectName": "Add all members",
+  "projectDescription": "Testing the project",
+  "startDate": "2021-09-08",
+  "dueDate": "2022-09-16",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "mndebelelt@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "lbmuhali@gmail.com",
+      "role": "Developer",
+      "permissions": []
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Thu Sep 09 2021 18:34:09 "
+},{
+  "_id": {
+    "$oid": "614066461575d90a80a6e727"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "Change Color",
+  "projectDescription": "Change The color of the node as per the completion status",
+  "startDate": "2021-09-13",
+  "dueDate": "2022-09-14",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Tue Sep 14 2021 11:07:35 ",
+  "owner": "ntpnaane@gmail.com"
+},{
+  "_id": {
+    "$oid": "61408cedd2c02423741b48c7"
+  },
+  "projectOwner": "u17132330@tuks.co.za",
+  "projectName": "tested project",
+  "projectDescription": "Bomene",
+  "startDate": "2021-09-13",
+  "dueDate": "2022-09-13",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "u17132330@tuks.co.za",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "u19016477@tuks.co.za",
+      "role": "Developer",
+      "permissions": []
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Tue Sep 14 2021 13:52:13 "
+},{
+  "_id": {
+    "$oid": "6141fc6f0ad8444384b1e69a"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "Project Due Date Check",
+  "projectDescription": "checking if printed due date is the selected one",
+  "startDate": "2021-09-14",
+  "dueDate": "2021-10-06",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Wed Sep 15 2021 16:00:15 "
+},{
+  "_id": {
+    "$oid": "614201d356b91f4ebc4d532f"
+  },
+  "projectOwner": "lbmuhali@gmail.com",
+  "projectName": "Prepare Demo 4",
+  "projectDescription": "Implementing Nodes For D4",
+  "startDate": "2021-09-14",
+  "dueDate": "2021-09-20",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "lbmuhali@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "ntpnaane@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "view statistics"
+      ]
+    },
+    {
+      "email": [
+        "kgmonareng@gmail.com",
+        "mndebelelt@gmail.com"
+      ],
+      "role": "Developer",
+      "permissions": []
+    },
+    {
+      "email": "kgmonareng@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "update project owner"
+      ]
+    },
+    {
+      "email": "mndebelelt@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "update project owner"
+      ]
+    },
+    {
+      "email": "u19016477@tuks.co.za",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "update project owner"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Documentation",
+        "x": -410.9974670410156,
+        "y": -136.5,
+        "size": 20,
+        "color": "#0d0"
+      },
+      {
+        "id": "n2",
+        "label": "Presentation",
+        "x": 111.33749389648438,
+        "y": -151.5,
+        "size": 20,
+        "color": "#f00000"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n1",
+        "to": "n2",
+        "label": "Documentation to -> Presentation",
+        "color": "#0ff",
+        "size": 2
+      }
+    ]
+  },
+  "lastAccessed": "Sat Sep 18 2021 08:24:12 ",
+  "owner": "lbmuhali@gmail.com"
+},{
+  "_id": {
+    "$oid": "61421766d29d6b4113826903"
+  },
+  "projectOwner": "kgmonareng@gmail.com",
+  "projectName": "online sneaker auction App",
+  "projectDescription": "This is online web applications that allows user to auction their app",
+  "startDate": "2021-09-14",
+  "dueDate": "2022-10-28",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "kgmonareng@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "ntpnaane@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "update all project",
+        "remove members",
+        "add members",
+        "delete task"
+      ]
+    },
+    {
+      "email": "mndebelelt@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update project owner",
+        "update graph",
+        "update all project",
+        "remove members",
+        "add members",
+        "delete task"
+      ]
+    },
+    {
+      "email": "u19016477@tuks.co.za",
+      "role": "Developer",
+      "permissions": [
+        "update project owner",
+        "update graph",
+        "delete project",
+        "delete task",
+        "remove members",
+        "add members",
+        "update all project"
+      ]
+    },
+    {
+      "email": "u17132330@tuks.co.za",
+      "role": "Developer",
+      "permissions": [
+        "update project owner",
+        "update graph",
+        "update all project",
+        "remove members",
+        "add members"
+      ]
+    },
+    {
+      "email": "lbmuhali@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update project owner",
+        "update graph",
+        "update all project",
+        "add members",
+        "remove members"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Design stage",
+        "x": 10.08492560789752,
+        "y": -603.426929827818,
+        "size": 20,
+        "color": "#dd0"
+      },
+      {
+        "id": "n2",
+        "label": "Launch",
+        "x": 698.8018885320815,
+        "y": -633.3615580293321,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n3",
+        "label": "Development",
+        "x": 298.3971792523885,
+        "y": -595.1216385705692,
+        "size": 20,
+        "color": "#d00"
+      },
+      {
+        "id": "n4",
+        "label": "Documentation",
+        "x": -151.27501881864887,
+        "y": -1015.1320821514327,
+        "size": 20,
+        "color": "#d00"
+      },
+      {
+        "id": "n5",
+        "label": "Research",
+        "x": -171.44501187196718,
+        "y": -340.70704097472503,
+        "size": 20,
+        "color": "#0d0"
+      },
+      {
+        "id": "n6",
+        "label": "Testing",
+        "x": 476.36770619343235,
+        "y": -931.5691904189906,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n7",
+        "label": "User feedback",
+        "x": 413.48478667426355,
+        "y": -339.5205707951181,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n8",
+        "label": "Marketing",
+        "x": 1054.3270370299874,
+        "y": -614.2086880765829,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n9",
+        "label": "Brainstorm",
+        "x": -355.91845703125,
+        "y": -621.78125,
+        "size": 20,
+        "color": "#0d0"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n9",
+        "to": "n5",
+        "label": "Brainstorm to -> Research",
+        "color": "#000"
+      },
+      {
+        "id": "e2",
+        "from": "n9",
+        "to": "n4",
+        "label": "Brainstorm to -> Documentation",
+        "color": "#000"
+      },
+      {
+        "id": "e3",
+        "from": "n3",
+        "to": "n6",
+        "label": "Development to -> Testing",
+        "color": "#000"
+      },
+      {
+        "id": "e4",
+        "from": "n3",
+        "to": "n7",
+        "label": "Development to -> User feedback",
+        "color": "#000"
+      },
+      {
+        "id": "e5",
+        "from": "n6",
+        "to": "n2",
+        "label": "Testing to -> Launch",
+        "color": "#000"
+      },
+      {
+        "id": "e6",
+        "from": "n7",
+        "to": "n2",
+        "label": "User feedback to -> Launch",
+        "color": "#000"
+      },
+      {
+        "id": "e7",
+        "from": "n2",
+        "to": "n8",
+        "label": "Launch to -> Marketing",
+        "color": "#000"
+      },
+      {
+        "id": "e8",
+        "from": "n4",
+        "to": "n1",
+        "label": "Documentation to -> Design stage",
+        "color": "#000"
+      },
+      {
+        "id": "e9",
+        "from": "n5",
+        "to": "n1",
+        "label": "Research to -> Design stage",
+        "color": "#000"
+      },
+      {
+        "id": "e10",
+        "from": "n1",
+        "to": "n3",
+        "label": "Design stage to -> Development",
+        "color": "#000"
+      }
+    ]
+  },
+  "lastAccessed": "Wed Sep 15 2021 23:02:17 "
+},{
+  "_id": {
+    "$oid": "614226a00ad8444384b1e69b"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "Mokgola Salon",
+  "projectDescription": "Building a salon",
+  "startDate": "2021-09-14",
+  "dueDate": "2022-09-14",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "u19016477@tuks.co.za",
+      "role": "Developer",
+      "permissions": []
+    },
+    {
+      "email": "kgmonareng@gmail.com",
+      "role": "Developer",
+      "permissions": []
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "plan",
+        "x": 0,
+        "y": 0,
+        "size": 20,
+        "color": "#ff0000"
+      },
+      {
+        "id": "n2",
+        "label": "material",
+        "x": 39.729156494140625,
+        "y": -81.10417175292969,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n3",
+        "label": "construction",
+        "x": -86.27084350585938,
+        "y": 15.895828247070312,
+        "size": 20,
+        "color": "#0d0"
+      }
+    ],
+    "edges": []
+  },
+  "lastAccessed": "Wed Sep 15 2021 19:14:21 "
+},{
+  "_id": {
+    "$oid": "614243270ad8444384b1e6a1"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "tested project 2",
+  "projectDescription": "Testing dates",
+  "startDate": "2021-10-08",
+  "dueDate": "2021-10-08",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Wed Sep 15 2021 21:01:59 "
+},{
+  "_id": {
+    "$oid": "614244420ad8444384b1e6a2"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "tested project 2",
+  "projectDescription": "Description",
+  "startDate": "2021-09-14",
+  "dueDate": "2021-10-14",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {},
+  "lastAccessed": "Wed Sep 15 2021 21:06:42 "
+},{
+  "_id": {
+    "$oid": "61424fc80ad8444384b1e6a3"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "tested project",
+  "projectDescription": "Bomene",
+  "startDate": "2021-09-15",
+  "dueDate": "2021-10-15",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "1",
+        "x": 0,
+        "y": 0,
+        "size": 20,
+        "color": "#ff0000"
+      },
+      {
+        "id": "n2",
+        "label": "2",
+        "x": 119.20832824707031,
+        "y": -3.8541717529296875,
+        "size": 20,
+        "color": "#0d0"
+      }
+    ],
+    "edges": []
+  },
+  "lastAccessed": "Wed Sep 15 2021 22:55:37 "
+},{
+  "_id": {
+    "$oid": "614267d757ae440f45e034a1"
+  },
+  "projectOwner": "u19016477@tuks.co.za",
+  "projectName": "Spur restaurant upgrades",
+  "projectDescription": "This project is about the upgrading of the Spur I manage.",
+  "startDate": "2021-09-15",
+  "dueDate": "2022-12-28",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "u19016477@tuks.co.za",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "kgmonareng@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "delete task",
+        "add members",
+        "view statistics"
+      ]
+    },
+    {
+      "email": "mndebelelt@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "delete task",
+        "add members",
+        "view statistics"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Hire staff",
+        "x": -846.226768139222,
+        "y": -779.5511319517985,
+        "size": 20,
+        "color": "#d00"
+      },
+      {
+        "id": "n2",
+        "label": "Train the staff",
+        "x": -709.7374326160492,
+        "y": -683.5459213719397,
+        "size": 20,
+        "color": "#dd0"
+      },
+      {
+        "id": "n3",
+        "label": "New equipment",
+        "x": -1061.9850055851468,
+        "y": -623.0527004528642,
+        "size": 20,
+        "color": "#d00"
+      },
+      {
+        "id": "n4",
+        "label": "New furniture",
+        "x": -656.5297255476937,
+        "y": -492.6921894963168,
+        "size": 20,
+        "color": "#0d0"
+      },
+      {
+        "id": "n5",
+        "label": "Install equipment",
+        "x": -705.4064772426718,
+        "y": -372.20204347157613,
+        "size": 20,
+        "color": "#d00"
+      },
+      {
+        "id": "n6",
+        "label": "Tell customers",
+        "x": -291.0159117737734,
+        "y": -330.755689723061,
+        "size": 20,
+        "color": "#0d0"
+      },
+      {
+        "id": "n7",
+        "label": "New website",
+        "x": -162.62340123926342,
+        "y": -483.4386752235593,
+        "size": 20,
+        "color": "#dd0"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n1",
+        "to": "n2",
+        "label": "Hire staff to -> Train the staff",
+        "color": "#000"
+      },
+      {
+        "id": "e2",
+        "from": "n3",
+        "to": "n5",
+        "label": "New equipment to -> Install equipment",
+        "color": "#000"
+      },
+      {
+        "id": "e3",
+        "from": "n2",
+        "to": "n4",
+        "label": "Train the staff to -> New furniture",
+        "color": "#000"
+      },
+      {
+        "id": "e4",
+        "from": "n4",
+        "to": "n5",
+        "label": "New furniture to -> Install equipment",
+        "color": "#000"
+      },
+      {
+        "id": "e5",
+        "from": "n5",
+        "to": "n6",
+        "label": "Install equipment to -> Tell customers",
+        "color": "#000"
+      },
+      {
+        "id": "e6",
+        "from": "n6",
+        "to": "n7",
+        "label": "Tell customers to -> New website",
+        "color": "#000"
+      }
+    ]
+  },
+  "lastAccessed": "Wed Sep 15 2021 23:55:26 "
+},{
+  "_id": {
+    "$oid": "614275c274ae1a04c06ec8d1"
+  },
+  "projectOwner": "lbmuhali@gmail.com",
+  "projectName": "Mary's Salon",
+  "projectDescription": "A 24hrs Salon In Hatfield",
+  "startDate": "2021-09-16",
+  "dueDate": "2021-09-30",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "lbmuhali@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "ntpnaane@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "view statistics",
+        "update graph",
+        "delete task"
+      ]
+    },
+    {
+      "email": "kgmonareng@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "view statistics",
+        "delete task",
+        "update graph"
+      ]
+    },
+    {
+      "email": "mndebelelt@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "view statistics",
+        "delete task"
+      ]
+    },
+    {
+      "email": "u19016477@tuks.co.za",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "view statistics",
+        "delete task"
+      ]
+    },
+    {
+      "email": "u17262578@tuks.co.za",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "delete task",
+        "view statistics"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Find Location",
+        "x": -334.8312072753906,
+        "y": -301.5,
+        "size": 20,
+        "color": "#ff0000"
+      },
+      {
+        "id": "n2",
+        "label": "Find Equipments",
+        "x": 10.579023262547132,
+        "y": -462.9907886630741,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n3",
+        "label": "Find Supplier",
+        "x": -265.8312072753906,
+        "y": -58.5,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n4",
+        "label": "Register Business",
+        "x": -676.8312072753906,
+        "y": -301.5,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n5",
+        "label": "Find Employees",
+        "x": 12.168792724609375,
+        "y": -296.5,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n6",
+        "label": "Marketing",
+        "x": 10,
+        "y": -75,
+        "size": 20,
+        "color": "#d00"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n4",
+        "to": "n1",
+        "label": "Register Business to -> Find Location",
+        "color": "#000"
+      },
+      {
+        "id": "e3",
+        "from": "n1",
+        "to": "n5",
+        "label": "Find Location to -> Find Employees",
+        "color": "#000"
+      },
+      {
+        "id": "e2",
+        "from": "n5",
+        "to": "n2",
+        "label": "Find Employees to -> Find Equipments",
+        "color": "#000"
+      },
+      {
+        "id": "e4",
+        "from": "n1",
+        "to": "n3",
+        "label": "Find Location to -> Find Supplier",
+        "color": "#000"
+      }
+    ]
+  },
+  "lastAccessed": "Thu Sep 16 2021 06:13:23 ",
+  "owner": "lbmuhali@gmail.com"
+},{
+  "_id": {
+    "$oid": "6142bec04b3923587c0da09e"
+  },
+  "projectOwner": "mndebelelt@gmail.com",
+  "projectName": "Car Hub",
+  "projectDescription": "We sell and Service cars",
+  "startDate": "2021-09-16",
+  "dueDate": "2021-11-13",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "mndebelelt@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    },
+    {
+      "email": "ntpnaane@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "add members",
+        "update graph",
+        "update all project",
+        "delete project",
+        "delete task",
+        "remove members",
+        "view statistics"
+      ]
+    },
+    {
+      "email": "lbmuhali@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "update all project",
+        "delete project",
+        "delete task",
+        "remove members",
+        "add members",
+        "view statistics"
+      ]
+    },
+    {
+      "email": "kgmonareng@gmail.com",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "update all project",
+        "delete project",
+        "delete task",
+        "remove members",
+        "add members",
+        "view statistics"
+      ]
+    },
+    {
+      "email": "u19016477@tuks.co.za",
+      "role": "Developer",
+      "permissions": [
+        "update graph",
+        "update all project",
+        "delete project",
+        "delete task",
+        "remove members",
+        "add members",
+        "view statistics"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n0",
+        "label": "Start",
+        "x": 0,
+        "y": -160,
+        "size": 20,
+        "color": "#900"
+      },
+      {
+        "id": "n1",
+        "label": "Car Models",
+        "x": -54.29167175292969,
+        "y": -34.6875,
+        "size": 20,
+        "color": "#ea0000"
+      },
+      {
+        "id": "n2",
+        "label": "Coffe Area",
+        "x": 179.7083282470703,
+        "y": -29.6875,
+        "size": 20,
+        "color": "#f00000"
+      },
+      {
+        "id": "n3",
+        "label": "Show Ground",
+        "x": 65.57893371582031,
+        "y": 68.8125,
+        "size": 20,
+        "color": "#f00000"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n0",
+        "to": "n1",
+        "label": "Start to -> Car Models",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e2",
+        "from": "n1",
+        "to": "n2",
+        "label": "Car Models to -> Coffe Area",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e3",
+        "from": "n2",
+        "to": "n3",
+        "label": "Coffe Area to -> Show Ground",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e4",
+        "from": "n1",
+        "to": "n3",
+        "label": "Car Models to -> Show Ground",
+        "color": "#000",
+        "width": 7
+      }
+    ]
+  },
+  "lastAccessed": "Sat Sep 18 2021 11:28:59 "
+},{
+  "_id": {
+    "$oid": "61462c9562d7f158e04eeccc"
+  },
+  "projectOwner": "ntpnaane@gmail.com",
+  "projectName": "Rendani",
+  "projectDescription": "Smart Nanny Girl",
+  "startDate": "2021-09-18",
+  "dueDate": "2021-10-12",
+  "status": "not started",
+  "groupMembers": [
+    {
+      "email": "ntpnaane@gmail.com",
+      "permissions": [
+        "owner"
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "n0",
+        "label": "Start",
+        "x": 0.492584228515625,
+        "y": -230.1875,
+        "size": 20,
+        "color": "#900",
+        "critical": false
+      },
+      {
+        "id": "n1",
+        "label": "Koko",
+        "x": -15.567121060440957,
+        "y": -122.55915696885852,
+        "size": 20,
+        "color": "#d00",
+        "critical": false
+      },
+      {
+        "id": "n2",
+        "label": "Mama",
+        "x": 158.4085950853924,
+        "y": -33.34084099663628,
+        "size": 20,
+        "color": "#d00",
+        "critical": false
+      },
+      {
+        "id": "n3",
+        "label": "Manne",
+        "x": -109.00741577148438,
+        "y": -32.1875,
+        "size": 20,
+        "color": "#f00000",
+        "critical": false
+      },
+      {
+        "id": "n4",
+        "label": "Malome",
+        "x": -235.2672241420382,
+        "y": -37.80175679524739,
+        "size": 20,
+        "color": "#d00",
+        "critical": false
+      },
+      {
+        "id": "n5",
+        "label": "Nani",
+        "x": -139.00741577148438,
+        "y": 70.8125,
+        "size": 20,
+        "color": "#d00",
+        "critical": false
+      },
+      {
+        "id": "n6",
+        "label": "Thendo",
+        "x": 10.492584228515625,
+        "y": 60.8125,
+        "size": 20,
+        "color": "#f00000",
+        "critical": false
+      },
+      {
+        "id": "n7",
+        "label": "Kgato",
+        "x": -246.14293327372934,
+        "y": 78.47417184335214,
+        "size": 20,
+        "color": "#f00000",
+        "critical": false
+      },
+      {
+        "id": "n8",
+        "label": "Judah",
+        "x": 150.99258422851562,
+        "y": 74.8125,
+        "size": 20,
+        "color": "#f00000",
+        "critical": false
+      },
+      {
+        "id": "n9",
+        "label": "Rendani",
+        "x": 262.9925842285156,
+        "y": 72.8125,
+        "size": 20,
+        "color": "#d00",
+        "critical": false
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n0",
+        "to": "n1",
+        "label": "Start to -> Koko",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e2",
+        "from": "n1",
+        "to": "n4",
+        "label": "Koko to -> Malome",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e3",
+        "from": "n1",
+        "to": "n2",
+        "label": "Koko to -> Mama",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e4",
+        "from": "n1",
+        "to": "n3",
+        "label": "Koko to -> Manne",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e5",
+        "from": "n4",
+        "to": "n7",
+        "label": "Malome to -> Kgato",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e6",
+        "from": "n3",
+        "to": "n5",
+        "label": "Manne to -> Nani",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e7",
+        "from": "n2",
+        "to": "n6",
+        "label": "Mama to -> Thendo",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e8",
+        "from": "n2",
+        "to": "n9",
+        "label": "Mama to -> Rendani",
+        "color": "#000",
+        "width": 7
+      },
+      {
+        "id": "e9",
+        "from": "n2",
+        "to": "n8",
+        "label": "Mama to -> Judah",
+        "color": "#000",
+        "width": 7
+      }
+    ]
+  },
+  "lastAccessed": "Sat Sep 18 2021 20:22:36 "
+}]

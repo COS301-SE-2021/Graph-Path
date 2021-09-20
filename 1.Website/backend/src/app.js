@@ -6,8 +6,8 @@ const path = require('path') ;
 const makeUserRoute = require('./API/routes/User');
 const makeTaskRoute = require('./API/routes/Task');
 const makeProjectRoute = require('./API/routes/Project');
-const makeNodeRoute = require('./API/routes/Node')
-const makeGraphRoute = require("./API/routes/graph");
+//const makeNodeRoute = require('./API/routes/Node')
+//const makeGraphRoute = require("./API/routes/graph");
 const Home = require('./API/routes/Home');
 const { auth, requiresAuth } = require('express-openid-connect');
 
@@ -38,15 +38,15 @@ function makeApp(InjectedDB)
     const UserRoute = makeUserRoute(DB);
     const TaskRoute = makeTaskRoute(DB);
     const ProjectRoute = makeProjectRoute(DB);
-    const NodeRoute = makeNodeRoute(DB);
-    const GraphRoute = makeGraphRoute(DB);
+    //const NodeRoute = makeNodeRoute(DB);
+    //const GraphRoute = makeGraphRoute(DB);
 
     //----------- router setup  ------------------------//
     app.use('/project', ProjectRoute);
     app.use('/user', UserRoute);
-    app.use('/node', NodeRoute);
+    //app.use('/node', NodeRoute);
     app.use('/task', TaskRoute);
-    app.use('/graph',GraphRoute);
+    //app.use('/graph',GraphRoute);
 
     //default /GET
     app.use('/', Home);
