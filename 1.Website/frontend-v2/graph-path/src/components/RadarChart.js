@@ -4,7 +4,6 @@ import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import {Radar} from 'react-chartjs-2';
 import Logo from "../img/Logo4.png";
 import PropTypes from "prop-types";
-import BarChart from "./BarChart";
 
 class RadarChart extends React.Component{
     constructor(props){

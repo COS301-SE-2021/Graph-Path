@@ -4,7 +4,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import axios from "axios";
 import "../css/Calendar.css"
 import PropTypes from "prop-types";
-import BarChart from "./BarChart";
 
 class Calendar extends React.Component{
     constructor(props){
