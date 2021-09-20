@@ -332,58 +332,7 @@ function makeProjectRoute(db) {
                 responseObject
             )
 
-/*
-            const ProjectId = req.body.projectID;
-            kanbanBoard.getProjectGraph(db, ProjectId)
-                .then((project) => {
 
-                    kanbanBoard.updateNodesID(db, project).then(() => {
-                    })
-                    let projectNodes = kanbanBoard.getNodes(project);
-                    if (projectNodes.length === 0) {
-                        res.send({
-                            message: "this project graph has no nodes",
-                            data: []
-                        })
-                    } else {
-                        // pool all tasks of nodes
-                        //console.log(projectNodes);
-                        kanbanBoard.getTasks(db, projectNodes).then((AllTasks) => {
-                            if (AllTasks === "Tasks collection empty") {
-                                res.send({
-                                    message: AllTasks,
-                                    data: []
-                                })
-                            } else if (AllTasks.length == 0) {
-                                res.send({
-                                    message: "This project has no tasks",
-                                    data: []
-                                })
-                            } else {
-                                res.send({
-                                    message: "success",
-                                    data: kanbanBoard.splitTasksByStatus(AllTasks),
-                                })
-                            }
-
-                        })
-                            .catch((err) => {
-                                res.send({
-                                    message: "error",
-                                    data: err
-                                })
-                            });
-
-
-                    }
-
-
-                })
-                .catch((err) => {
-
-                })
-
-    */
         })
 
 
