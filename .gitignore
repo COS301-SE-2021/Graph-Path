@@ -19,7 +19,6 @@
 
 #build folders
 1.Website/frontend/build
-1.Website/frontend-v2/graph-path/build
 
 node_modules
 node_modules
