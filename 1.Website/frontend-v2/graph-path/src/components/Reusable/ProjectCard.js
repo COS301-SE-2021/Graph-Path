@@ -24,10 +24,15 @@ class ProjectCard extends Component {
     let {selectProject,deleteProject,project,link}= this.props ;
     const projectInfo = (
       <Popover title={`Project: ${project.projectName}`}>
-        <p>Description: {project.projectDescription}</p>
-        <br/>
-
         <div>            
+        
+        <p> Description: <br/>
+        <Icon icon={'info-circle'}/> {project.projectDescription}</p>
+        <br/>
+        <p>Start Date: <br/>
+        
+        <Icon icon={'clock-o'}/>  {project.startDate}</p>
+
          <p>Project Owner: <br/>
           <Icon icon={'user-info'}/> {project.projectOwner}</p>
         </div>
@@ -53,12 +58,12 @@ class ProjectCard extends Component {
         >
         <Panel id="projHeader" header={`${project.projectName}`}>
           <div>
-            {/*<small>Due Date: <h6>{project.dueDate}</h6> </small>*/}
-              <h6>Due Date: {project.dueDate}</h6>
-          </div>
+              <h6><span className={"card-title"}>Due Date: </span> {project.dueDate}</h6>
           <h6>
-              Last Edited: {project.lastAccessed}
+          <span className={"card-title"}>Last Edited:</span> {project.lastAccessed}
           </h6>
+          </div>
+
           <Whisper trigger={'click'} placement={'autoVertical'} speaker={projectInfo}>
               <IconButton icon={ <Icon icon='info' />} >Information</IconButton>
           </Whisper>
