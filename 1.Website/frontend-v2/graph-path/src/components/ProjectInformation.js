@@ -308,7 +308,7 @@ class ProjectInformation extends React.Component{
                 i = index
             :
             <></>
-
+            return null ;
         })
         console.log("index",i)
         this.setState({
@@ -339,6 +339,7 @@ class ProjectInformation extends React.Component{
                 // this.props.project.groupMembers[index].permissions.map((value))
                 :
                 <></>
+                return null;
         })
 
         this.setState({

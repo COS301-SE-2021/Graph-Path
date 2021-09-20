@@ -332,10 +332,15 @@ class GraphManager{
       var nodes = this.graph.nodes ;
       if (nodes && Array.isArray(nodes)){
         let ind = -1 ;
-        let found = nodes.find((value,i)=>{if (value.id === id){
+        let found = nodes.find((value,i)=>{
+          if (value.id === id){
           ind = i ;
           return value ; 
-        }}) ;
+          }
+          else{
+            return false ;
+          }
+        }) ;
         if (found && ind >= 0 ){
           found.color = color ;
           nodes.splice(ind,1,found) ;
@@ -570,7 +575,9 @@ class GraphManager{
       let ind = -1 ;
       let node = this.graph.nodes.find((value,i)=>{if (value.id === nodeID){
         ind = i ;
-        return value ; }}) ; 
+        return value ; }
+        return false ;
+      }) ; 
       if (node && ind >=0 ){
         node.x =  x ; 
         node.y = y ;

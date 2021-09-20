@@ -5,7 +5,6 @@ import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import Logo from "../img/Logo4.png";
 import '../css/Common.css'
 import PropTypes from "prop-types";
-import BarChart from "./BarChart";
 
 class PieChart extends React.Component{
 
