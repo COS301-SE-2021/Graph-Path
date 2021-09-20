@@ -55,9 +55,7 @@ class Kanban extends React.Component {
                 if (res.data !== undefined) {
                     let tasks = []
                     let count = 1;
-                    console.log('length 79', res.data.data.length);
                     for (let i = 0; i < res.data.data.length; i++) {
-                        console.log('project 81', res.data.data[i]);
                         let project = res.data.data[i];
 
                         for (let j = 0; j < project.tasks.length; j++) {
@@ -83,12 +81,6 @@ class Kanban extends React.Component {
             })
 
     }
-
-
-    onDropHandler = (event) => {
-        console.log(event.data)
-    }
-
 
     cardTemplate(props) {
         return (<div className="card-template">
@@ -149,18 +141,14 @@ class Kanban extends React.Component {
     }
     //Event after moving the card...
    onDragStop = (event) =>{
-        console.log('afterDrag data: ', event.data);
+
     this.updateChanges(event.data[0]);
     }
 
-    //Post clicking the save button
-    onDataBound = (event) => {
-        console.log('afterSave data:', event)
-    }
 
     updateChanges = (newData) =>{
         newData.taskID = newData._id ;
-        console.log('updated ',newData) ;
+
 
         axios.patch(`${this.props.api}/task/updateEverythingTask`,newData,{
             headers:{
@@ -224,7 +212,7 @@ class Kanban extends React.Component {
                             }}
                                              swimlaneSettings={{keyField: "projectName", textField: "projectName"}}
                                              cardClick={this.handler} style={{background: "black"}}
-                                             dragStop={this.onDragStop.bind(this)}  dataBound={this.onDataBound.bind(this)}
+                                             dragStop={this.onDragStop.bind(this)}  
                                              ref={(kanban) => { this.kanbanObj = kanban; }}
                             >
                                 <ColumnsDirective>
