@@ -47,7 +47,7 @@ This provides a visual stimuli of how the project flows from node to node.
 </tr>
 <tr>
 <td style="border: 2px solid black;text-align: left; padding: 8px;" >
-<img src="https://drive.google.com/file/d/1owzChvI4Hd-cjEC4yAuudiOsQbJE8-cz/view?usp=sharing" width="200" height="200" >
+<img src="https://drive.google.com/uc?export=view&id=16Q80ZgZa3kM59FwoYOQJ64SOQNOBrLFT" width="200" height="200" >
 <p> Aliandro Pretorius </p>
 <p> Student Number : u19016477 </p>
 <p> email : u19016477@tuks.co.za </p>
@@ -170,3 +170,64 @@ This provides a visual stimuli of how the project flows from node to node.
 </td>											    
 </tr>											    
 </table>
+							
+<table  >
+		<tr >
+
+		<th>Name</th>
+		<th>Contribution</th>
+		</tr>
+		
+		<tr>
+			<td>
+				Kagiso Monareng
+			</td>
+
+			<td>
+				Backend;Routes;Testing;Deploying;DB setup
+			</td>
+
+		</tr>
+
+		<tr>
+			<td>
+				Thabo Mndebele
+			</td>
+
+			<td>
+				Frontend;Kanban; Testing;
+			</td>
+
+		</tr>
+
+		<tr>
+			<td>
+				Livhu Muhali
+			</td>
+
+			<td>
+				Frontend;Statistics;Testing;Calender; setup
+			</td>
+
+		</tr>
+		<tr>
+			<td>
+				Aliandro Pretorius
+			</td>
+
+			<td>
+				Backend;Routes;Testing;Documentation;DB setup
+			</td>
+
+		</tr>
+		<tr>
+			<td>
+				Godiragetse Naane
+			</td>
+
+			<td>
+				Frontend;Backend;Graph;Testing;Documentation;DB setup ; 
+			</td>
+
+		</tr>
+	</table>
