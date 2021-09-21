@@ -25,4 +25,25 @@
 
 #projectManager{
     position: relative;
-}   
+}
+
+#search-div{
+    /*position: absolute;*/
+    width: 100%;
+    margin-top: 1%;
+    background-color: transparent;
+}
+
+#search-bar{
+    width: 25%;
+    margin-left: 38%;
+}
+
+
+#sort{
+    margin-left: 10%;
+}
+
+#newProj{
+    margin-right: 1%;
+}

@@ -31,7 +31,7 @@ class PieChart extends React.Component{
             }
         })
             .then((res)=>{
-                console.log('Success',res) ;
+                // console.log('Success',res) ;
                 if (res.data.data !== undefined){
                     this.setState({
                         projects :res.data.data ,
@@ -60,7 +60,7 @@ class PieChart extends React.Component{
             this.setState({
                 showChart:true
             })
-            console.log("get proj id", this.state.projId)
+            // console.log("get proj id", this.state.projId)
 
 
             axios.get(`${this.props.api}/project/statistics/donutChart/`+projId, {
@@ -68,7 +68,7 @@ class PieChart extends React.Component{
                     authorization: this.props.user.token
                 }
             }).then((res) => {
-                console.log('Stats Success', res.data.data);
+                // console.log('Stats Success', res.data.data);
                 if (res.data.data !== undefined) {
                     this.setState({
                         task: res.data.data,

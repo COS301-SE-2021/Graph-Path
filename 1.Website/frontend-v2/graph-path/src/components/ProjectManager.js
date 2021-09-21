@@ -380,7 +380,7 @@ The neccesary information for the request to go through follows:
         else{
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
-                    <NewProject ref={this.newProjectModalRef} sendProjectInfo={this.sendProjectInfo} api={this.props.api} />
+                    <NewProject  ref={this.newProjectModalRef} sendProjectInfo={this.sendProjectInfo} api={this.props.api} />
 
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
@@ -389,18 +389,20 @@ The neccesary information for the request to go through follows:
                         }}/>
                         <Route >
                             <div>
-                            <IconButton onClick={this.showM}
+                            <IconButton id="newProj" onClick={this.showM}
                               icon={ <Icon icon={'plus-circle'} title={"New Project"}/> } >New Project
                             </IconButton>
 
-                                <SelectPicker placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
-                            <SelectPicker placeholder="Sort By" searchable={false} data={options}  onChange={this.handleSortChange}/>
-                            <InputGroup inside >
-                                <Input onChange={this.searchProjects}/>
-                                <InputGroup.Button>
-                                    <Icon icon="search" />
-                                </InputGroup.Button>
+                                <SelectPicker id="filter" placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
+                            <SelectPicker id="sort" placeholder="Sort By" searchable={false} data={options}  onChange={this.handleSortChange}/>
+                            <div id="search-div" >
+                                <InputGroup id="search-bar" inside >
+                                    <Input onChange={this.searchProjects}/>
+                                    <InputGroup.Button>
+                                        <Icon icon="search" />
+                                    </InputGroup.Button>
                                 </InputGroup>
+                            </div>
                             <div data-testid="tidProjList" id="projects-list">
                                 {
                                 this.state.projects.length > 0?
