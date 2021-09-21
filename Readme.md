@@ -176,56 +176,54 @@ This provides a visual stimuli of how the project flows from node to node.
 <th>Name</th>
 <th>Contribution</th>
 </tr>
-		
-		<tr>
-			<td>
+<tr>
+<td>
 				Kagiso Monareng
-			</td>
+</td>
 
-			<td>
+<td>
 				Backend;Routes;Testing;Deploying;DB setup
-			</td>
+</td>
 
-		</tr>
+</tr>
 
-		<tr>
-			<td>
-				Thabo Mndebele
-			</td>
+<tr>
+<td>
+Thabo Mndebele
+</td>
 
-			<td>
-				Frontend;Kanban; Testing;
-			</td>
+<td>
+Frontend;Kanban; Testing;
+</td>
 
-		</tr>
+</tr>
 
-		<tr>
-			<td>
-				Livhu Muhali
-			</td>
+<tr>
+<td>
+		Livhu Muhali
+</td>
 
-			<td>
-				Frontend;Statistics;Testing;Calender; setup
-			</td>
+<td>
+	Frontend;Statistics;Testing;Calender; setup
+</td>
+</tr>
+<tr>
+<td>
+		Aliandro Pretorius
+</td>
 
-		</tr>
-		<tr>
-			<td>
-				Aliandro Pretorius
-			</td>
+<td>
+	Backend;Routes;Testing;Documentation;DB setup
+</td>
 
-			<td>
-				Backend;Routes;Testing;Documentation;DB setup
-			</td>
+</tr>
+<tr>
+<td>
+		Godiragetse Naane
+</td>
 
-		</tr>
-		<tr>
-			<td>
-				Godiragetse Naane
-			</td>
-
-			<td>
-				Frontend;Backend;Graph;Testing;Documentation;DB setup ; 
-			</td>
+<td>
+	Frontend;Backend;Graph;Testing;Documentation;DB setup ; 
+</td>
 
 </tr></table>
