@@ -11,6 +11,7 @@ import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
 import Task from "./Task";
 import {connect} from 'react-redux' ;
+import GraphHelp from "./Reusable/GraphHelp";
 //import DropdownMenuItem from "rsuite/lib/Dropdown/DropdownMenuItem";
 
 class GraphPath extends Component{
@@ -659,7 +660,7 @@ class GraphPath extends Component{
   }
 
   render(){
-    console.log(' graph',this.state.currGraph) 
+    console.log('project,',this.props.project) 
           
           //start rendering
           if (this.graphManager !== null){
@@ -831,17 +832,11 @@ class GraphPath extends Component{
                   </div>
               </div>
 
-                <div id="graphbox">
-                    {/* <div>
-                 {this.state.currNodeID.length > 1 ?
-                 
-                        
-                        <Avatar onClick={this.showTaskModal} className={'nodeView'} circle size={'lg'}>{
-                        this.state.currNodeName===''?'click a node':this.state.currNodeName}</Avatar>
-                 : <small>Click a node to add a task. To add node press, Add Node on top</small>}
-                      
 
-                     </div> */}
+                <div id="graphbox">
+                    <div>
+                        <GraphHelp />
+                     </div>
 
                       {// return the modal
                       this.newTaskModal()}
