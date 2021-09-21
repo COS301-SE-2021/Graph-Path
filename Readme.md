@@ -34,7 +34,7 @@ This provides a visual stimuli of how the project flows from node to node.
 </tr>
 <tr>
 <td style="border: 2px solid black;text-align: left; padding: 8px;" >
-<img src="https://media-exp1.licdn.com/dms/image/C4D03AQGJqebCY-XVWA/profile-displayphoto-shrink_200_200/0/1618732785194?e=1628121600&v=beta&t=ltY7hxsXI95m-Pnpz710vnmowd0iR4UI1Iz_LKFRa6k" >
+<img src="https://media-exp1.licdn.com/dms/image/C4D03AQFB0yRuanqyNw/profile-displayphoto-shrink_200_200/0/1632207133388?e=1637798400&v=beta&t=wmVdKqslVwziLh77Rw6R1koObqzu4GZ8G27EAfpUanM" >
 <p> Kagiso Monareng </p>
 <p> Student Number : u17049106 </p>
 <p> email : u17049106@tuks.co.za </p>
@@ -43,7 +43,7 @@ This provides a visual stimuli of how the project flows from node to node.
 <p><a href="https://www.linkedin.com/in/kagiso-monareng-23a684a1/"> Linkedin </a></p>
 <p> <a href="https://github.com/Kage-001/Kage-001.github.io"> Github</a> </p>
 </td>
-<td style="border: 2px solid black;text-align: left; padding: 8px;" >Interests</td>
+<td style="border: 2px solid black;text-align: left; padding: 8px;" >Machine learning,fitness, environments with great people ,good food, relaxed music and just fun times...honestly</td>
 </tr>
 <tr>
 <td style="border: 2px solid black;text-align: left; padding: 8px;" >
