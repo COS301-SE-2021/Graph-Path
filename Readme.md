@@ -172,11 +172,10 @@ This provides a visual stimuli of how the project flows from node to node.
 </table>
 							
 <table  >
-		<tr >
-
-		<th>Name</th>
-		<th>Contribution</th>
-		</tr>
+<tr >
+<th>Name</th>
+<th>Contribution</th>
+</tr>
 		
 		<tr>
 			<td>
@@ -229,5 +228,4 @@ This provides a visual stimuli of how the project flows from node to node.
 				Frontend;Backend;Graph;Testing;Documentation;DB setup ; 
 			</td>
 
-		</tr>
-	</table>
+</tr></table>
