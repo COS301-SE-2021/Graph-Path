@@ -47,7 +47,7 @@ This provides a visual stimuli of how the project flows from node to node.
 </tr>
 <tr>
 <td style="border: 2px solid black;text-align: left; padding: 8px;" >
-<img src="https://drive.google.com/uc?export=view&id=16Q80ZgZa3kM59FwoYOQJ64SOQNOBrLFT" width="200" height="200" >
+<img src="https://drive.google.com/file/d/16Q80ZgZa3kM59FwoYOQJ64SOQNOBrLFT/view?usp=sharing" width="200" height="200" >
 <p> Aliandro Pretorius </p>
 <p> Student Number : u19016477 </p>
 <p> email : u19016477@tuks.co.za </p>
