@@ -3,12 +3,12 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import axios from "axios";
 import "../css/Calendar.css"
+import PropTypes from "prop-types";
 
 class Calendar extends React.Component{
     constructor(props){
         super(props) ;
         this.state = {
-            api: 'http://localhost:9001',
             projects: [],
             tasks:[],
             date:undefined,
@@ -21,7 +21,7 @@ class Calendar extends React.Component{
     }
 
     getUserTasks=()=>{
-        axios.get(`${this.state.api}/task/getUserTasks/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/task/getUserTasks/${this.props.user.email}`,{
             headers:{
                 authorization: this.props.user.token
             }
@@ -53,14 +53,14 @@ class Calendar extends React.Component{
     }
 
     getUserProjects=()=>{
-        axios.get(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
             headers:{
                 authorization: this.props.user.token
             }
         })
             .then((res)=>{
                 if (res.data.data !== undefined){
-                    console.log("projects",res.data.data)
+                    // console.log("projects",res.data.data)
                     this.setState({
                         projects :res.data.data ,
 
@@ -96,7 +96,7 @@ class Calendar extends React.Component{
     render() {
 
         if(this.state.projects.length > 0) {
-            let newD=[]
+            let newD
             let projD=[]
             let taskD=[]
 
@@ -115,8 +115,8 @@ class Calendar extends React.Component{
 
             newD = [...projD,...taskD];
 
-            console.log("data proj",projD)
-            console.log("data task",taskD)
+            // console.log("data proj",projD)
+            // console.log("data task",taskD)
 
             return (
                 <div>
@@ -140,4 +140,10 @@ class Calendar extends React.Component{
         }
     }
 }
+
+Calendar.propTypes = {
+    user:PropTypes.object.isRequired,
+    api:PropTypes.string ,
+}
+
 export default Calendar;

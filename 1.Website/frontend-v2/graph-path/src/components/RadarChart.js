@@ -3,6 +3,7 @@ import axios from "axios";
 import {Button, Dropdown, FlexboxGrid, List} from "rsuite";
 import {Radar} from 'react-chartjs-2';
 import Logo from "../img/Logo4.png";
+import PropTypes from "prop-types";
 
 class RadarChart extends React.Component{
     constructor(props){
@@ -11,7 +12,6 @@ class RadarChart extends React.Component{
             currentProject:{},
             projects:[],
             nodes:[],
-            api:'http://localhost:9001',
             showChart: false
         }
     }
@@ -26,15 +26,15 @@ class RadarChart extends React.Component{
             this.setState({
                 showChart:true
             })
-            console.log("get proj id", this.state.projId)
+            // console.log("get proj id", this.state.projId)
 
 
-            axios.get(`${this.state.api}/project/statistics/RadarGraph/`+projId, {
+            axios.get(`${this.props.api}/project/statistics/RadarGraph/`+projId, {
                 headers: {
                     authorization: this.props.user.token
                 }
             }).then((res) => {
-                console.log('Stats Success', res.data.data);
+                // console.log('Stats Success', res.data.data);
                 if (res.data.data !== undefined) {
                     this.setState({
                         nodes: res.data.data,
@@ -51,13 +51,13 @@ class RadarChart extends React.Component{
 
     getAllProjects=()=>{
 
-        axios.get(`${this.state.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
+        axios.get(`${this.props.api}/project/getAllProjectsByUserEmail/${this.props.user.email}`,{
             headers:{
                 authorization: this.props.user.token
             }
         })
             .then((res)=>{
-                console.log('Success',res) ;
+                // console.log('Success',res) ;
                 if (res.data.data !== undefined){
                     this.setState({
                         projects :res.data.data ,
@@ -90,22 +90,15 @@ class RadarChart extends React.Component{
     render() {
         // console.log('stats proj',this.state.projects.length)
         if(this.state.projects.length > 0){
-            console.log('stats proj',this.state.projId)
+            // console.log('stats proj',this.state.projId)
             // const data = {
             //     labels
             // }
 
         }
-        console.log("nodes",this.state.nodes)
+        // console.log("nodes",this.state.nodes)
 
-        /***
-         * What project have
-         * show:
-         * name
-         * owner
-         * create an icon
-         * have view button
-         */
+
         return(
             <>
 
@@ -116,27 +109,18 @@ class RadarChart extends React.Component{
                             <List hover>
                                 {this.state.projects.map((item,index)=>
                                     item.projectOwner === this.props.user.email || item.permissions.includes("view statistics")?
-                                    <List.Item key={item['projectName']} index={index}>
+                                    <List.Item key={index} index={index}>
                                         <FlexboxGrid>
                                             <FlexboxGrid.Item
                                                 colspan={6}
-                                                // style={{
-                                                //     flexDirection: 'column',
-                                                //     alignItems: 'flex-start',
-                                                //     overflow: 'hidden'
-                                                // }}
                                             >
                                                 <div>{item.projectName}</div>
                                             </FlexboxGrid.Item>
                                             <FlexboxGrid.Item
                                                 colspan={6}
-                                                // style={{
-                                                //     flexDirection: 'column',
-                                                //     alignItems: 'flex-start',
-                                                //     overflow: 'hidden'
-                                                // }}
+
                                             >
-                                                {/*<div>{item.projectOwner}</div>*/}
+
                                             </FlexboxGrid.Item>
                                             <FlexboxGrid.Item
                                                 // colspan={6}
@@ -178,10 +162,11 @@ class RadarChart extends React.Component{
                                         pointBorderColor: '#fff',
                                         pointHoverBackgroundColor: '#fff',
                                         pointHoverBorderColor: 'rgb(255, 99, 132)'
-                                    },
-                                    ]
+                                    }],
+
 
                                 }}
+
                                 height={400}
                                 width={600}
                                 options={{
@@ -192,18 +177,30 @@ class RadarChart extends React.Component{
                                         }
                                     },
                                     scales:{
-                                        // gridLines:{
-                                        //     color: '#fff'
-                                        // },
                                         r:{
                                             angleLines:{
                                                 display: false
                                             },
-
-                                            // suggestedMin:50,
-                                            // suggestedMax: 100
+                                            grid:{
+                                                color: "#c4b2b2"
+                                            },
+                                            pointLabels:{
+                                                color: "#34c3ff",
+                                                font:{
+                                                    size:15
+                                                }
+                                            }
                                         }
                                     },
+                                    plugins:{
+                                        legend:{
+                                            labels:{
+                                                font:{
+                                                    size:15
+                                                }
+                                            }
+                                        }
+                                    }
                                 }}
                             />
                         </>
@@ -219,5 +216,11 @@ class RadarChart extends React.Component{
         )
     }
 }
+
+RadarChart.propTypes = {
+    user:PropTypes.object.isRequired,
+    api:PropTypes.string ,
+}
+
 export default RadarChart;
 

@@ -1,6 +1,6 @@
 import {React,Component} from "react";
 import PropTypes from 'prop-types' ;
-import {Icon,SelectPicker, Loader, Button} from 'rsuite' ;
+import {Icon, SelectPicker, Loader,Input,InputGroup, IconButton} from 'rsuite' ;
 import "../css/ProjectManager.css"
 import { Route ,Switch, withRouter} from "react-router-dom";
 import axios from 'axios' ;
@@ -338,6 +338,20 @@ The neccesary information for the request to go through follows:
         })
     }
 
+    searchProjects=(word)=>{
+        if (word){
+            word = word.toLowerCase() ; 
+            let filter = this.state.allProjects.filter((proj)=>proj.projectName.toLowerCase().indexOf(word)>= 0 ) ; 
+            this.setState({
+                projects:filter 
+            })
+        }
+        else{
+            this.setState({
+                projects:this.state.allProjects 
+            })
+        }
+    }
     
     
     render(){
@@ -358,6 +372,7 @@ The neccesary information for the request to go through follows:
         const options = [{
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
         const filterOptions=[{label:'All Projects', value:'all'},{label:'Own Project', value:'myOwn'},{label:'Shared Project', value:'shared'}];
+
         const {match} = this.props ;
         if (this.state.loading){
             return <Loader backdrop={false} speed={'slow'} size={'lg'} />
@@ -365,22 +380,29 @@ The neccesary information for the request to go through follows:
         else{
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
-                    <NewProject ref={this.newProjectModalRef} sendProjectInfo={this.sendProjectInfo} api={this.props.api} />
+                    <NewProject  ref={this.newProjectModalRef} sendProjectInfo={this.sendProjectInfo} api={this.props.api} />
 
                    <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
-                                return <Project  user={this.props.loggedUser} project={this.state.currentProject} 
+                                return <Project api={this.props.api} user={this.props.loggedUser} project={this.state.currentProject}
                                 selectProject={this.selectCurrentProject}/>
                         }}/>
                         <Route >
                             <div>
-                            <Button onClick={this.showM}>
-                                <Icon icon={'plus-circle'} title={"New Project"}/>
-                            </Button>
+                            <IconButton id="newProj" onClick={this.showM}
+                              icon={ <Icon icon={'plus-circle'} title={"New Project"}/> } >New Project
+                            </IconButton>
 
-                                <SelectPicker placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
-                            <SelectPicker placeholder="Sort By" searchable={false} data={options}  onChange={this.handleSortChange}/>
-
+                                <SelectPicker id="filter" placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
+                            <SelectPicker id="sort" placeholder="Sort By" searchable={false} data={options}  onChange={this.handleSortChange}/>
+                            <div id="search-div" >
+                                <InputGroup id="search-bar" inside >
+                                    <Input onChange={this.searchProjects}/>
+                                    <InputGroup.Button>
+                                        <Icon icon="search" />
+                                    </InputGroup.Button>
+                                </InputGroup>
+                            </div>
                             <div data-testid="tidProjList" id="projects-list">
                                 {
                                 this.state.projects.length > 0?
@@ -416,12 +438,6 @@ ProjectManager.propTypes = {
 
 }
 
-ProjectManager.defaultProps = {
-    user: {
-        email : 'ntpnaane@gmail.com' 
-    } ,
-    api:'http://localhost:9001'
-}
 function updateUserToken(token){
     return {
       type:'UPDATE_TOKEN' ,

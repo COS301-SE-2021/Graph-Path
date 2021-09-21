@@ -6,12 +6,13 @@ import  PropTypes  from "prop-types";
 import { withRouter} from "react-router-dom";
 import '../css/Graph.css' ;
 import GraphManager from "./Helpers/GraphManager";
-import { Popover,Avatar,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader, Dropdown} from 'rsuite' ;
+import { Popover,Whisper, Button,Form,FormGroup,FormControl,ControlLabel, Modal, Checkbox, IconButton, Icon, Loader, Dropdown} from 'rsuite' ;
 import axios from "axios";
 import PopUpMessage from "./Reusable/PopUpMessage";
 import Task from "./Task";
 import {connect} from 'react-redux' ;
-import DropdownMenuItem from "rsuite/lib/Dropdown/DropdownMenuItem";
+import GraphHelp from "./Reusable/GraphHelp";
+//import DropdownMenuItem from "rsuite/lib/Dropdown/DropdownMenuItem";
 
 class GraphPath extends Component{
   graphManager = null ;
@@ -507,7 +508,7 @@ class GraphPath extends Component{
     }
   }
 
-  deleteOneTask=(taskId)=>{
+  deleteOneTask=(taskId,nodeID)=>{
     let deleteAns = window.confirm('Are you sure you want to delete all tasks?') ;
     if (deleteAns){
     
@@ -522,6 +523,8 @@ class GraphPath extends Component{
       })
       .then((res)=>{
         PopUpMessage(res.data.message,'info') ; 
+        let nodeId = nodeID.split('_')[1] ;
+        this.changeNodeByStats(nodeId,res.data.nodeCompletionStatus) ;
         this.viewAllTasksForProject() ;
 
       })
@@ -554,6 +557,9 @@ class GraphPath extends Component{
       })
       .then((res)=>{
         PopUpMessage(res.data.message,'info')
+        let nodeId = nodeID.split('_')[1] ;
+        // console.log('delete',res,nodeId)
+        this.changeNodeByStats(nodeId,res.data.nodeCompletionStatus) ;
         this.viewAllTasksForProject() ;
       })
       .catch((err)=>{
@@ -594,6 +600,12 @@ class GraphPath extends Component{
   }
 
   newTaskModal=()=>{
+
+    let crit = this.graphManager.getNodeCriticality(this.state.currNodeID) ; 
+    if (crit === undefined){
+      crit = false ; 
+    }
+
     return <Modal show={this.state.showTask} 
     keyboard={true}
     onHide={this.showTaskModal}
@@ -612,9 +624,23 @@ class GraphPath extends Component{
       deleteNodeTasks={this.deleteAllNodeTask} 
       deleteTask={this.deleteOneTask} 
       updateNode={this.updateNode}
-      sendTaskInfo={this.saveNodeTask}/>
+      sendTaskInfo={this.saveNodeTask}
+      editCritical={this.changeNodeCritical}
+      critical = {crit} 
+      />
     </Modal.Body>
     </Modal>
+
+  }
+
+  changeNodeCritical =(value)=>{
+    let result = this.graphManager.editNodeCriticality(this.state.currNodeID,value) ; 
+    if (result){
+      this.updateGraph() ;
+    }
+    else{
+
+    }
 
   }
 
@@ -659,7 +685,7 @@ class GraphPath extends Component{
   }
 
   render(){
-    console.log(' graph',this.state.currGraph) 
+    console.log('project,',this.props.project) 
           
           //start rendering
           if (this.graphManager !== null){
@@ -750,7 +776,8 @@ class GraphPath extends Component{
         
         const events = {} ;
         events.select =  function(event) {
-            var { nodes, edges } = event;
+          //muted this for warnings
+           // var { nodes, edges } = event;
             console.log('sel',event)
           }  ;
         events.externalDragUpdate = this.graphManager.updatePosition ;
@@ -830,17 +857,11 @@ class GraphPath extends Component{
                   </div>
               </div>
 
-                <div id="graphbox">
-                    {/* <div>
-                 {this.state.currNodeID.length > 1 ?
-                 
-                        
-                        <Avatar onClick={this.showTaskModal} className={'nodeView'} circle size={'lg'}>{
-                        this.state.currNodeName===''?'click a node':this.state.currNodeName}</Avatar>
-                 : <small>Click a node to add a task. To add node press, Add Node on top</small>}
-                      
 
-                     </div> */}
+                <div id="graphbox">
+                    <div>
+                        <GraphHelp />
+                     </div>
 
                       {// return the modal
                       this.newTaskModal()}
@@ -917,10 +938,6 @@ class GraphPath extends Component{
           }
         
   }
-}
-
-GraphPath.defaultProps = {
-  api:'http://localhost:9001'
 }
 
 GraphPath.propTypes = {

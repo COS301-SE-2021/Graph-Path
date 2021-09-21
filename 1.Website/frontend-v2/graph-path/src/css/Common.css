@@ -73,3 +73,12 @@
 #pop-btn{
     width: 120px;
 }
+
+.card-title{
+    color: #34c3ff !important ;
+    font-size: medium;
+}
+
+h6 {
+    font-size: 13px;
+}

@@ -48,13 +48,28 @@ class GraphManager{
     }
 
     editNodeCriticality=(nodeId,critical)=>{
-      var nodeFound = this.graph.nodes.filter(node => node.id === nodeId) ;
-      if (nodeFound.length){
-        nodeFound[0][`critical`]=critical ;
+      var nodeFound = this.graph.nodes.find(node => node.id === nodeId) ;
+      if (nodeFound){
+          nodeFound.critical=critical ;
         return true ;
       }
       else{
         return false ;
+      }
+    }
+
+    getNodeCriticality = (nodeId)=>{
+      var nodeFound = this.graph.nodes.find(node => node.id === nodeId) ;
+      if (nodeFound){
+       if(nodeFound.critical){
+        return true ;
+       }
+       else{
+         return false
+       }
+      }
+      else{
+        return undefined ;
       }
     }
 
@@ -96,9 +111,9 @@ class GraphManager{
       var result = [] ; 
       var visited = {} ;
       visited[start] = true ;
-      let currVertex ;
+      // let currVertex ;
       while (queue.length){
-        currVertex = queue.shift() ;
+        let currVertex = queue.shift() ;
         if (currVertex !== undefined){
          console.log('curr',currVertex) ;
 
@@ -252,7 +267,7 @@ class GraphManager{
     highlightGraphCritical=()=>{
         var internalBFS = this.pathFromBFS('n0') ;
         var paths = internalBFS.paths ;
-        // console.log('color to node',paths)
+        console.log('color to node',paths)
         let ans = paths.length ; 
         let color = [] ;
         if (ans){
@@ -260,7 +275,7 @@ class GraphManager{
             let path = this.findShortestPath(node) ;
             color.push(path) ;
           }
-        // console.log('color the nodes',color) ;
+        console.log('color the nodes',color) ;
         this.changeEdgeColor(color,'#880')
 
           return color.length ;
@@ -332,10 +347,15 @@ class GraphManager{
       var nodes = this.graph.nodes ;
       if (nodes && Array.isArray(nodes)){
         let ind = -1 ;
-        let found = nodes.find((value,i)=>{if (value.id === id){
+        let found = nodes.find((value,i)=>{
+          if (value.id === id){
           ind = i ;
           return value ; 
-        }}) ;
+          }
+          else{
+            return false ;
+          }
+        }) ;
         if (found && ind >= 0 ){
           found.color = color ;
           nodes.splice(ind,1,found) ;
@@ -570,7 +590,9 @@ class GraphManager{
       let ind = -1 ;
       let node = this.graph.nodes.find((value,i)=>{if (value.id === nodeID){
         ind = i ;
-        return value ; }}) ; 
+        return value ; }
+        return false ;
+      }) ; 
       if (node && ind >=0 ){
         node.x =  x ; 
         node.y = y ;

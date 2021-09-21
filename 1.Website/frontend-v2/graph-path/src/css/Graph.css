@@ -35,3 +35,15 @@ canvas.sigma-mouse{
 .nodeView:hover{
     cursor:pointer ;
 }
+
+#help-bar{
+    padding: 2px;
+}
+
+#help-bar > button{
+    margin: 2px;
+}
+
+.rs-help-block{
+    color: black;
+}

@@ -1,18 +1,12 @@
 import React from 'react' ;
 import {
-    Avatar,
-    Button,
-    ButtonToolbar,
-    ControlLabel,
     Divider,
-    Drawer,
-    Form,
-    FormControl,
-    FormGroup,
-    HelpBlock
+    Drawer
 } from "rsuite";
 import '../css/Profile.css'
 import Logo from "../img/Logo3.png";
+import PropTypes from "prop-types";
+import RadarChart from "./RadarChart";
 class Profile extends React.Component{
     constructor(props) {
         super(props);
@@ -53,7 +47,7 @@ class Profile extends React.Component{
                     <Drawer.Body id="body-div">
                         <div id="picture-div">
 
-                            <img src={picture} />
+                            <img src={picture} alt='user'/>
                             <Divider/>
                             <h6>{this.props.user.name}</h6>
 
@@ -72,23 +66,10 @@ class Profile extends React.Component{
                                        disabled
                                        type='text'/>
 
-
-                                {/*<label>Password</label>*/}
-                                {/*<input*/}
-                                {/*       type='text'*/}
-                                {/*       name="dueDate"*/}
-                                {/*       onChange={this.change}*/}
-                                {/*       disabled = {!!(this.state.disabled)}/>*/}
-
-                                {/*<Button disabled = {(this.state.disabled) ? "" : "disabled"}*/}
-                                {/*        onClick={this.enableEdit}>Edit</Button>*/}
-                                {/*<Button disabled = {(this.state.disabled) ? "disabled" : ""}*/}
-                                {/*        onClick={this.enableEdit}>Cancel</Button>*/}
-
                             </form>
 
                         </div>
-                        <img id="logo-pics" src={Logo}/>
+                        <img id="logo-pics" src={Logo} alt='logo'/>
                     </Drawer.Body>
                 </Drawer>
             </>
@@ -97,4 +78,9 @@ class Profile extends React.Component{
 
 
 }
+
+RadarChart.propTypes = {
+    user:PropTypes.object.isRequired,
+}
+
 export default Profile;
