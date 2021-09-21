@@ -508,7 +508,7 @@ class GraphPath extends Component{
     }
   }
 
-  deleteOneTask=(taskId)=>{
+  deleteOneTask=(taskId,nodeID)=>{
     let deleteAns = window.confirm('Are you sure you want to delete all tasks?') ;
     if (deleteAns){
     
@@ -523,6 +523,8 @@ class GraphPath extends Component{
       })
       .then((res)=>{
         PopUpMessage(res.data.message,'info') ; 
+        let nodeId = nodeID.split('_')[1] ;
+        this.changeNodeByStats(nodeId,res.data.nodeCompletionStatus) ;
         this.viewAllTasksForProject() ;
 
       })
@@ -555,6 +557,9 @@ class GraphPath extends Component{
       })
       .then((res)=>{
         PopUpMessage(res.data.message,'info')
+        let nodeId = nodeID.split('_')[1] ;
+        // console.log('delete',res,nodeId)
+        this.changeNodeByStats(nodeId,res.data.nodeCompletionStatus) ;
         this.viewAllTasksForProject() ;
       })
       .catch((err)=>{
@@ -595,6 +600,12 @@ class GraphPath extends Component{
   }
 
   newTaskModal=()=>{
+
+    let crit = this.graphManager.getNodeCriticality(this.state.currNodeID) ; 
+    if (crit === undefined){
+      crit = false ; 
+    }
+
     return <Modal show={this.state.showTask} 
     keyboard={true}
     onHide={this.showTaskModal}
@@ -613,9 +624,23 @@ class GraphPath extends Component{
       deleteNodeTasks={this.deleteAllNodeTask} 
       deleteTask={this.deleteOneTask} 
       updateNode={this.updateNode}
-      sendTaskInfo={this.saveNodeTask}/>
+      sendTaskInfo={this.saveNodeTask}
+      editCritical={this.changeNodeCritical}
+      critical = {crit} 
+      />
     </Modal.Body>
     </Modal>
+
+  }
+
+  changeNodeCritical =(value)=>{
+    let result = this.graphManager.editNodeCriticality(this.state.currNodeID,value) ; 
+    if (result){
+      this.updateGraph() ;
+    }
+    else{
+
+    }
 
   }
 

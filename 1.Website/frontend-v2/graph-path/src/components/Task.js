@@ -1,6 +1,6 @@
 import React from 'react' ;
 import PropTypes from 'prop-types' ;
-import {Schema,CheckPicker,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup} from 'rsuite' ;
+import {Schema,CheckPicker,SelectPicker,Icon,FormControl,Button,Form,FormGroup,HelpBlock,DatePicker,ControlLabel, RadioGroup, Radio, Panel, PanelGroup, Checkbox} from 'rsuite' ;
 import CustomField from './Reusable/CustomField';
 import  '../css/Common.css' ;
 import {format} from 'date-fns' ;
@@ -30,7 +30,9 @@ class Task extends React.Component {
                 status:'not started',
                 taskMembers:[]
             },
-            formError:{}
+            formError:{},
+            critical: false
+
 
         }
     }
@@ -54,6 +56,13 @@ class Task extends React.Component {
     // EOF provate fields
 
 
+    componentDidMount(){
+        let critical = this.props.critical ; 
+        this.setState({
+            formValue : critical 
+        }) ;
+
+    }
     handleTaskCreation =(form,event)=>{
         console.log('Form ',form)
 
@@ -291,7 +300,7 @@ class Task extends React.Component {
                         <b>Status </b>: {task.status}
                         <br/>
                     </small>
-                    <Button onClick={()=>this.props.deleteTask(task._id)}> <Icon icon={'trash'}/>
+                    <Button onClick={()=>this.props.deleteTask(task._id,task.nodeID)}> <Icon icon={'trash'}/>
                     </Button>
 
                     <Button onClick={()=>this.switchToEditTask(task)}><Icon icon={'pencil-square'}/>Edit Task</Button>
@@ -328,14 +337,33 @@ class Task extends React.Component {
         }
     }
 
+    editNodeCritcality=(e,r)=>{
+        let formValue2 = !this.state.critical ; 
+        console.log(e,r,'changed to ',formValue2)
+        this.setState({
+            critical : formValue2 
+        },()=>{
+            if (typeof this.props.editCritical === 'function'){
+                this.props.editCritical(this.state.critical)
+            } 
+        })
+    }
+
     render(){
         // console.log('Tasks pros',this.props)
         return <div id="tidTask" data-testid="tidTask">
             <div>
                 <Button onClick={this.toogleScreen}  appearance={'ghost'}>
-                {this.state.newTask?"Close":"ADD TASK"}
+                {this.state.newTask?"Close":"ADD SUBTASK"}
                 </Button> | <Button onClick={this.deleteAll}
                  appearance={'subtle'}>DELETE ALL TASKS</Button>
+                 | 
+               <Checkbox className={'not-started'} 
+               checked={this.state.critical} 
+               inline
+               onChange={this.editNodeCritcality}
+               >Critical Node ?</Checkbox>
+                
             </div>
             <div>
                 {

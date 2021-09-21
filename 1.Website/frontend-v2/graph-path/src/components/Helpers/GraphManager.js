@@ -48,13 +48,28 @@ class GraphManager{
     }
 
     editNodeCriticality=(nodeId,critical)=>{
-      var nodeFound = this.graph.nodes.filter(node => node.id === nodeId) ;
-      if (nodeFound.length){
-        nodeFound[0][`critical`]=critical ;
+      var nodeFound = this.graph.nodes.find(node => node.id === nodeId) ;
+      if (nodeFound){
+          nodeFound.critical=critical ;
         return true ;
       }
       else{
         return false ;
+      }
+    }
+
+    getNodeCriticality = (nodeId)=>{
+      var nodeFound = this.graph.nodes.find(node => node.id === nodeId) ;
+      if (nodeFound){
+       if(nodeFound.critical){
+        return true ;
+       }
+       else{
+         return false
+       }
+      }
+      else{
+        return undefined ;
       }
     }
 
