@@ -52,7 +52,7 @@ class Dashboard extends React.Component{
         this.showProfile();
     }
 
-    reloadProjectsInManager=(obj)=>{
+    reloadProjectsInManager=()=>{
         // console.log('ref',obj) ;
         
     }
