@@ -18,7 +18,7 @@ import kanban from "../img/kanban.jpg";
 function Landing({logInvalid}) {
 
         const {user, isAuthenticated, isLoading} = useAuth0();
-        console.log("user", user)
+        // console.log("user", user)
         
 
         if(isLoading) return <Loader speed="fast" content="Loading" />

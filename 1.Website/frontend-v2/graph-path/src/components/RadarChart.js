@@ -26,7 +26,7 @@ class RadarChart extends React.Component{
             this.setState({
                 showChart:true
             })
-            console.log("get proj id", this.state.projId)
+            // console.log("get proj id", this.state.projId)
 
 
             axios.get(`${this.props.api}/project/statistics/RadarGraph/`+projId, {
@@ -34,7 +34,7 @@ class RadarChart extends React.Component{
                     authorization: this.props.user.token
                 }
             }).then((res) => {
-                console.log('Stats Success', res.data.data);
+                // console.log('Stats Success', res.data.data);
                 if (res.data.data !== undefined) {
                     this.setState({
                         nodes: res.data.data,
@@ -57,7 +57,7 @@ class RadarChart extends React.Component{
             }
         })
             .then((res)=>{
-                console.log('Success',res) ;
+                // console.log('Success',res) ;
                 if (res.data.data !== undefined){
                     this.setState({
                         projects :res.data.data ,
@@ -90,13 +90,13 @@ class RadarChart extends React.Component{
     render() {
         // console.log('stats proj',this.state.projects.length)
         if(this.state.projects.length > 0){
-            console.log('stats proj',this.state.projId)
+            // console.log('stats proj',this.state.projId)
             // const data = {
             //     labels
             // }
 
         }
-        console.log("nodes",this.state.nodes)
+        // console.log("nodes",this.state.nodes)
 
 
         return(
@@ -162,10 +162,11 @@ class RadarChart extends React.Component{
                                         pointBorderColor: '#fff',
                                         pointHoverBackgroundColor: '#fff',
                                         pointHoverBorderColor: 'rgb(255, 99, 132)'
-                                    },
-                                    ]
+                                    }],
+
 
                                 }}
+
                                 height={400}
                                 width={600}
                                 options={{
@@ -180,9 +181,26 @@ class RadarChart extends React.Component{
                                             angleLines:{
                                                 display: false
                                             },
-
+                                            grid:{
+                                                color: "#c4b2b2"
+                                            },
+                                            pointLabels:{
+                                                color: "#34c3ff",
+                                                font:{
+                                                    size:15
+                                                }
+                                            }
                                         }
                                     },
+                                    plugins:{
+                                        legend:{
+                                            labels:{
+                                                font:{
+                                                    size:15
+                                                }
+                                            }
+                                        }
+                                    }
                                 }}
                             />
                         </>

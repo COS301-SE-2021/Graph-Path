@@ -96,7 +96,7 @@ class Calendar extends React.Component{
     render() {
 
         if(this.state.projects.length > 0) {
-            let newD=[]
+            let newD
             let projD=[]
             let taskD=[]
 
