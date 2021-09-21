@@ -163,7 +163,7 @@ This provides a visual stimuli of how the project flows from node to node.
 <a href="https://www.overleaf.com/read/pmccdyrknktx"> Architecture Documentation(version 4)</a><br>
 <a href="https://www.overleaf.com/read/ckxzjfyjhrhj">Coding standard documentation</a><br>
 <a href="https://www.overleaf.com/4365253962wjhgkfhqcbbc">User Manual</a><br>
-<a href="https://www.overleaf.com/read/xfmjnqqhbmxv">Technical Installation Manual</a><br>						    
+<a href="https://www.overleaf.com/read/xfmjnqqhbmxv">Technical Installation Manual</a><br>
 <a href="https://drive.google.com/file/d/1iiVKZ4ZyJqb8ujIhDQFJD1YBFRl-dFWj/view?usp=sharing"> Demo video 4</a><br>
 <br>
 <a href="https://nocap-graphpath-frontend.herokuapp.com"> Web app link </a><br>
