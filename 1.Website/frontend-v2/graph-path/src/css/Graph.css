@@ -2,9 +2,10 @@
     width: 90%;
     height: 75vh;
 
-    background-color: rgb(200, 214, 228,0.8);
+    /* background-color: rgb(200, 214, 228,0.8); */
     text-align:left ;
-    
+    border: solid ;
+    margin: 1px;
 }
 
 #graph-info{
@@ -42,6 +43,12 @@ canvas.sigma-mouse{
 
 #help-bar > button{
     margin: 2px;
+}
+
+#help-tip{
+    margin: 8px;
+    position: relative;
+    bottom: 100%;
 }
 
 .rs-help-block{

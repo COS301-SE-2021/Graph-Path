@@ -83,7 +83,7 @@ class GraphHelp extends React.Component{
         return (
             <div id="help-tip">
             <Whisper placement={'auto'} trigger={'active'} speaker={helpers}>
-                <HelpBlock tooltip>Help</HelpBlock>
+                <Icon icon={'help-o'} size={'2x'}/>
             </Whisper>
             </div>
         )
