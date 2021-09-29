@@ -34,7 +34,7 @@ This provides a visual stimuli of how the project flows from node to node.
 </tr>
 <tr>
 <td style="border: 2px solid black;text-align: left; padding: 8px;" >
-<img src="https://media-exp1.licdn.com/dms/image/C4D03AQGJqebCY-XVWA/profile-displayphoto-shrink_200_200/0/1618732785194?e=1628121600&v=beta&t=ltY7hxsXI95m-Pnpz710vnmowd0iR4UI1Iz_LKFRa6k" >
+<img src="https://media-exp1.licdn.com/dms/image/C4D03AQFB0yRuanqyNw/profile-displayphoto-shrink_200_200/0/1632207133388?e=1637798400&v=beta&t=wmVdKqslVwziLh77Rw6R1koObqzu4GZ8G27EAfpUanM" >
 <p> Kagiso Monareng </p>
 <p> Student Number : u17049106 </p>
 <p> email : u17049106@tuks.co.za </p>
@@ -43,7 +43,7 @@ This provides a visual stimuli of how the project flows from node to node.
 <p><a href="https://www.linkedin.com/in/kagiso-monareng-23a684a1/"> Linkedin </a></p>
 <p> <a href="https://github.com/Kage-001/Kage-001.github.io"> Github</a> </p>
 </td>
-<td style="border: 2px solid black;text-align: left; padding: 8px;" >Interests</td>
+<td style="border: 2px solid black;text-align: left; padding: 8px;" >Machine learning,fitness, environments with great people ,good food, relaxed music and just fun times...honestly</td>
 </tr>
 <tr>
 <td style="border: 2px solid black;text-align: left; padding: 8px;" >
@@ -143,9 +143,87 @@ This provides a visual stimuli of how the project flows from node to node.
 <a href="https://www.overleaf.com/read/ckxzjfyjhrhj">Coding standard documentation</a><br>
 <a href="https://www.overleaf.com/read/nfmzjdsgktzp">User Manual</a><br>						    
 <a href="https://drive.google.com/file/d/1PpUW2COb4vC6YD81CyfUWm-cq5AB0IKl/view?usp=sharing"> Demo video 2</a><br>
+											    </td>
+</tr>			
+</td>											    
+ <td>Demo 3 </td>
+<td>			
+<a href="https://www.overleaf.com/read/sptkmhgcpntx"> SRS documentation (version 3)</a><br>
+<a href="https://www.overleaf.com/read/pmccdyrknktx"> Architecture Documentation(version 2)</a><br>
+<a href="https://www.overleaf.com/read/ckxzjfyjhrhj">Coding standard documentation</a><br>
+<a href="https://www.overleaf.com/read/ptgqsntrtzts">User Manual</a><br>
+<a href="https://www.overleaf.com/read/gfjqhvndgmsr">Technical Installation Manual</a><br>						    
+<a href="https://drive.google.com/file/d/1fL6IqvE6biPZwztkgGWjVSys8z0gjamx/view?usp=sharing"> Demo video 3</a><br>			
+</td>											    
+</tr>
+<tr>
+<td> Demo 4 </td>
+<td>											    
+<a href="https://www.overleaf.com/3648386517hzrndyqbvfsr"> SRS documentation (version 4)</a><br>
+<a href="https://www.overleaf.com/read/pmccdyrknktx"> Architecture Documentation(version 4)</a><br>
+<a href="https://www.overleaf.com/read/ckxzjfyjhrhj">Coding standard documentation</a><br>
+<a href="https://www.overleaf.com/4365253962wjhgkfhqcbbc">User Manual</a><br>
+<a href="https://www.overleaf.com/read/xfmjnqqhbmxv">Technical Installation Manual</a><br>
+<a href="https://drive.google.com/file/d/1iiVKZ4ZyJqb8ujIhDQFJD1YBFRl-dFWj/view?usp=sharing"> Demo video 4</a><br>
+<br>
+<a href="https://nocap-graphpath-frontend.herokuapp.com"> Web app link </a><br>
+</td>											    
+</tr>											    
+</table>
+							
+<table  >
+<tr >
+<th>Name</th>
+<th>Contribution</th>
+</tr>
+<tr>
+<td>
+				Kagiso Monareng
+</td>
 
-			
+<td>
+				Backend;Routes;Testing;Deploying;DB setup
 </td>
 
 </tr>
-</table>
+
+<tr>
+<td>
+Thabo Mndebele
+</td>
+
+<td>
+Frontend;Kanban; Testing;
+</td>
+
+</tr>
+
+<tr>
+<td>
+		Livhu Muhali
+</td>
+
+<td>
+	Frontend;Statistics;Testing;Calender; setup
+</td>
+</tr>
+<tr>
+<td>
+		Aliandro Pretorius
+</td>
+
+<td>
+	Backend;Routes;Testing;Documentation;DB setup
+</td>
+
+</tr>
+<tr>
+<td>
+		Godiragetse Naane
+</td>
+
+<td>
+	Frontend;Backend;Graph;Testing;Documentation;DB setup ; 
+</td>
+
+</tr></table>

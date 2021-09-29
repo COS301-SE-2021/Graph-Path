@@ -858,10 +858,7 @@ class GraphPath extends Component{
               </div>
 
 
-                <div id="graphbox">
-                    <div>
-                        <GraphHelp />
-                     </div>
+                <div id="graphbox">                     
 
                       {// return the modal
                       this.newTaskModal()}
@@ -876,55 +873,7 @@ class GraphPath extends Component{
                     network.stabilize(2000);
                   }}
               />
-
-               {/* <Sigma renderer="canvas"  id="SigmaParent" key={JSON.stringify(graph)}
-                  graph={graph}
-                  style={{
-                    // position:"relative", 
-                    height:"92%", width:"100%" ,  
-                  }}
-                  settings={{
-                    clone: false, // do not clone the nodes
-                    immutable:false,// cannot updated id of node
-                    // labelSizeRatio:1,
-                    labelThreshold:0.5,
-                    scalingMode:"inside",
-                    sideMargin:100,
-                    minNodeSize:3,
-                    maxNodeSize:10,
-                    minEdgeSize:0.1,
-                    font:"calibri",
-                    defaultLabelSize:30,
-                    defaultLabelColor:"#000",
-                    labelSizeRatio:4,
-                    defaultEdgeHoverColor:'#000',
-                    maxEdgeSize:4,
-                    drawNodes:true, //draw node ?
-                    drawLabels:true, //node label
-                    drawEdges: true, //draw edge?
-                    drawEdgeLabels:true,
-                    minArrowSize:10,
-                    enableEdgeHovering:true,
-                    edgeHoverPrecision:100,
-                    // doubleClickEnabled:false,
-                    // zoomMax:1,
-                    autoResize:true ,
-                    autoRescale:false
-                  }}    
-                onClickNode={this.clickNodeHandler}
-                clickStage={()=>console.log('stage')}
-                  // options={options}
-                  // events={events}
-              >
-                <EdgeShapes default="arrow"/>
-                <NodeShapes default="def"/>
-                <DragNodes />
-                {/* <Dagre directed={false}/> 
-                {/* <RandomizeNodePositions seed={20} /> 
-                {/* <RelativeSize size={30} /> 
-                
-              </Sigma>
-            */}
+                <GraphHelp />
 
               </div>
               </div>
