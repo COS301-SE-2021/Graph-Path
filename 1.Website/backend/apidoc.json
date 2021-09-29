@@ -1,0 +1,7 @@
+{
+  "name": "example",
+  "version": "0.1.0",
+  "description": "apiDoc for the routes in the backend",
+  "title": "Alternative UI",
+  "url" : "http://localhost:9001/"
+}
