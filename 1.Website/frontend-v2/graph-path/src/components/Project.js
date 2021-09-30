@@ -2,9 +2,10 @@ import {React,Component} from 'react' ;
 import PropTypes from 'prop-types';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import GraphPath from './Graph';
-import { Icon, Nav, Sidebar, Sidenav } from 'rsuite';
+import {Divider, Drawer, Icon, Nav, Sidebar, Sidenav} from 'rsuite';
 import '../css/Common.css'
 import ProjectInformation from "./ProjectInformation";
+import ProjectChat from "./ProjectChat";
 
 /*
 *   Project provides a view to the graph of the project
@@ -29,7 +30,8 @@ class Project extends Component {
     constructor(props){
         super(props) ; 
         this.state = {
-            taskList : []
+            taskList : [],
+            showChat:false
         }
     }
     componentWillUnmount() {
@@ -37,6 +39,18 @@ class Project extends Component {
         this.setState = (state,callback)=>{
             return;
         };
+    }
+
+    handleChatRoom=()=>{
+        this.setState({
+            showChat:false
+        })
+    }
+
+    showChatRoom=()=>{
+        this.setState({
+            showChat:true
+        })
     }
 
     render(){
@@ -50,6 +64,23 @@ class Project extends Component {
         }
         else{
             return (
+                <>
+
+                    <Drawer
+                        size={"sm"}
+                        placement={"right"}
+                        show={this.state.showChat}
+                        onHide={this.handleChatRoom}
+                    >
+                        <Drawer.Header>
+                            <Drawer.Title>{project.projectName} Chat Room</Drawer.Title>
+                            <Divider />
+                        </Drawer.Header>
+                        <Drawer.Body>
+                            <ProjectChat api={this.props.api} project={project} user={this.props.user} />
+                        </Drawer.Body>
+                    </Drawer>
+
                 <div data-testid="tidProjectView" id="projectView">
                     {/* EDIT|VIEW GRAPH|ADD MEMBERS */}
                     <Sidebar  id="projectNav" collapsible={true}>
@@ -68,6 +99,12 @@ class Project extends Component {
                             componentClass={Link}
                             to={`${match.url}`}>View Graph
                         </Nav.Item>
+                            <Nav.Item
+                                title="Open Chat"
+                                icon={<Icon icon={'wechat'}/>}
+                                onSelect={this.showChatRoom}
+                                >Open Chat
+                            </Nav.Item>
                     </Nav>
                         </Sidenav.Body>
                     </Sidebar>
@@ -84,6 +121,8 @@ class Project extends Component {
                         />
                     </Switch>
                 </div>
+
+                </>
             )
         }
     }

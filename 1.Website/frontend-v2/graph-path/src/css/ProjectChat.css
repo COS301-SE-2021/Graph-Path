@@ -1,0 +1,121 @@
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    /*background-color: rgb(45, 45, 47);*/
+    background-color: transparent;
+}
+
+#chat-room-div main {
+    padding: 10px;
+    height: 80vh;
+    margin: 10vh 0 10vh;
+    /*overflow-y: scroll;*/
+    display: flex;
+    flex-direction: column;
+}
+
+/*main::-webkit-scrollbar {*/
+/*    width: 0.25rem;*/
+/*}*/
+
+/*main::-webkit-scrollbar-track {*/
+/*    background: #1e1e24;*/
+/*}*/
+
+/*main::-webkit-scrollbar-thumb {*/
+/*    background: #6649b8;*/
+/*}*/
+
+#chat-room-div form {
+    height: 8vh;
+    position: fixed;
+    bottom: 10px;
+    /*background-color: rgb(24, 23, 23);*/
+    width: 100%;
+    max-width: 550px;
+    display: flex;
+    font-size: 1.2rem;
+}
+
+#chat-room-div form button {
+    width: 10%;
+    /*background-color: rgb(56, 56, 143);*/
+    background: rgb(58, 58, 58);
+}
+
+#chat-icon{
+    font-size: 25px;
+}
+
+#chat-room-div input {
+    line-height: 1.5;
+    width: 100%;
+    font-size: 1.2rem;
+    background: rgb(58, 58, 58);
+    color: white;
+    outline: none;
+    border: none;
+    padding: 0 10px;
+    border-radius: 3px 0 0 3px;
+}
+
+#chat-room-div button {
+    background-color: #282c34;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.25rem;
+    border-radius: 0 3px 3px 0;
+}
+
+#chat-room-div button:disabled {
+    opacity: 0.5;
+    cursor: none;
+}
+
+/*ul, li {*/
+/*    text-align: left;*/
+/*    list-style: none;*/
+/*}*/
+
+#chat-room-div p {
+    max-width: 500px;
+    margin-bottom: 12px;
+    line-height: 24px;
+    padding: 6px 18px;
+    border-radius: 25px;
+    position: relative;
+    color: white;
+    text-align: center;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+}
+
+
+.sent {
+    flex-direction: row-reverse;
+}
+
+.sent p {
+    color: white;
+    background: #0b93f6;
+    align-self: flex-end;
+}
+.received p {
+    background: #5a5a65;
+    color: black;
+}
+
+#chat-room-div img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 10px 5px;
+}
