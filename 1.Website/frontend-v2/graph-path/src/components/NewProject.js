@@ -151,6 +151,8 @@ class NewProject extends React.Component{
                             oneTap={true}
                             format={'YYYY-MM-DD'}
                             error={formError.startDate}
+                            placement={'auto'}
+
                         />
 
                         <CustomField 
@@ -160,6 +162,7 @@ class NewProject extends React.Component{
                             oneTap={true}
                             format={'YYYY-MM-DD'}
                             error={formError.dueDate}
+                            placement={'auto'}
                         />
 
                     </Form>

@@ -63,7 +63,11 @@ class Task extends React.Component {
         }) ;
 
     }
-    handleTaskCreation =(form,event)=>{
+    handleTaskCreation =(form,start)=>{
+        
+        if (typeof start === 'string'){
+            form.issued = start ;
+        }
         console.log('Form ',form)
 
         this.setState({
@@ -77,7 +81,6 @@ class Task extends React.Component {
         }) ;
     }
 
-  
     handleTaskSubmit =()=>{
         const {formValue} = this.state ;
         if (!this.form.check()){
@@ -124,7 +127,6 @@ class Task extends React.Component {
             taskMembers:[]
         }
     }
-
     
     toogleScreen=()=>{
         // console.log('toggled')
@@ -184,9 +186,8 @@ class Task extends React.Component {
                    name={"issued"} 
                    label={"Start Date"}
                    oneTap={true}
-                    // format={'YYYY-MM-DD'}
                     error={formError.issued}
-    
+                    placement={'auto'}
                />
                 {/* <HelpBlock tooltip>Required</HelpBlock> */}
     
@@ -196,7 +197,8 @@ class Task extends React.Component {
                     label={"Due Date"}
                     error={formError.due}
                     oneTap={true}
-                    // format={'YYYY-MM-DD'}
+                    placement={'auto'}
+                    
                 />
                 <CustomField 
                     name="status" 
@@ -220,7 +222,7 @@ class Task extends React.Component {
 
     listAllTasks =()=>{
         if (this.props.nodeTasks){
-        // console.log('task props',this.props)
+        console.log('task props',this.props,this.state)
             if(this.state.editTask.status !== undefined){
                 const task = this.state.editTask ;
                 // the edit button pressed
@@ -245,7 +247,7 @@ class Task extends React.Component {
                             model={this.taskModel}
                             ref ={ ref =>(this.form = ref)}
                             onCheck={formError=>this.handleTaskErrors(formError)} 
-                            onChange={this.handleTaskCreation}> 
+                            onChange={(f)=>this.handleTaskCreation(f,task.issued)}> 
                             
                         <FormGroup >
                             <ControlLabel>Description</ControlLabel>
