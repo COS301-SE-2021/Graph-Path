@@ -112,7 +112,10 @@ class GraphManager{
 
     removeNode = (id)=>{
       if (id==='n0'){
-        return -1 ;
+        if (this.graph.nodes.length > 1){
+          //if  2 nodes are in graph can't delete n0
+          return -1 ;
+        }
       }
 
 
@@ -181,7 +184,7 @@ class GraphManager{
           }
 
           obj["id"]= `n${nodeId}` ;
-          obj["color"] = '#f00000' ; //following nodes are blue
+          obj["color"] = '#8e2626' ; //following nodes are blue
           if (len % 2 === 0){
               obj["x"] = 2*len ; 
               obj["y"] = -2*len ;
@@ -196,12 +199,12 @@ class GraphManager{
           let startNode = {...obj}
         
           obj["id"]= `n1` ;
-          obj["color"] = '#8e2a2a' ; //start is red
+          obj["color"] = '#8e2626' ; //start is red
           obj["x"] = 0 ; 
           obj["y"] = 0 ;
 
           startNode["id"]= `n0` ;
-          startNode["color"] = '#900' ; //start is red
+          startNode["color"] = '#eee' ; //start is red
           startNode["x"] = 0 ; 
           startNode["y"] = -160 ;
           startNode["critical"] = false ;

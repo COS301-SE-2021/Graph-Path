@@ -140,12 +140,15 @@ class GraphPath extends Component{
       if (selected){
         nodeLabel = selected.label ;
       }
-      this.setState({
-        showTask:!this.state.showTask ,
-        nodeTasks:filter,
-        currNodeID:nodeId,
-        currNodeName:nodeLabel,
-      }) ;      
+      if (nodeId!=='n0'){
+        this.setState({
+          showTask:!this.state.showTask ,
+          nodeTasks:filter,
+          currNodeID:nodeId,
+          currNodeName:nodeLabel,
+        }) ;
+      }
+            
     }
     else{
       
@@ -249,7 +252,9 @@ class GraphPath extends Component{
     let result = this.graphManager.removeNode(id) ;
     if (result === true){
       this.updateGraph() ;
-      this.deleteAllNodeTask(`${this.props.project._id}_${id}`) ; 
+      if (id !== 'n0'){
+        this.deleteAllNodeTask(`${this.props.project._id}_${id}`) ; 
+      }
 
     }
     else{
@@ -357,7 +362,7 @@ class GraphPath extends Component{
                   from: edge.source === undefined ? edge.from: edge.source,
                   to: edge.target === undefined ?edge.to: edge.target,
                   label: edge.label,
-                  color: '#000'||edge.color,
+                  color: '#eee',
                   width: edge.width,
               }
           })
