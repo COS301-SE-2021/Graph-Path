@@ -467,7 +467,7 @@ describe('ProjectManagerService.updateProjectGraph',  ()=> {
     });
 
 });
-
+/*
 describe('ProjectManagerService.addNewProjectMember',  ()=> {
 
     let connection;
@@ -554,7 +554,7 @@ describe('ProjectManagerService.addNewProjectMember',  ()=> {
     });
 
 });
-
+*/
 describe('ProjectManagerService.updateEverythingProject',  ()=> {
 
     let connection;
