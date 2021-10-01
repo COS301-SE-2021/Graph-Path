@@ -423,8 +423,7 @@ The neccesary information for the request to go through follows:
             return( 
                 <div data-testid="tidProjectManager" id="projectManager">
                     <NewProject  ref={this.newProjectModalRef} sendProjectInfo={this.sendProjectInfo} api={this.props.api} />
-
-                   <Switch>
+                      <Switch>
                         <Route path={`${match.path}/project`} render={()=>{
                                 return <Project api={this.props.api} user={this.props.loggedUser} project={this.state.currentProject}
                                 selectProject={this.selectCurrentProject}/>
@@ -454,12 +453,11 @@ The neccesary information for the request to go through follows:
                                 link={`${match.url}/project`} 
                                 selectProject={this.selectCurrentProject}
                                 deleteProject={this.deleteProject} />    
-                            })
-                            :<div>
-                                <h1>No Projects found please refresh</h1>
-                            </div>
-                                            
-                        }
+                                })
+                                :<div>
+                                    <h1>No Projects found please refresh</h1>
+                                </div>                
+                            }
                             
                                 </div>
                     

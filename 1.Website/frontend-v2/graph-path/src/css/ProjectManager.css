@@ -11,7 +11,6 @@
 }
 #projects-list div{
     margin: 2px;
-    /* width: 100%; */
     position: relative;
     clear: both;
 }
@@ -46,4 +45,12 @@
 
 #newProj{
     margin-right: 1%;
+}
+
+.onlineProject{
+    border-block-color: blue;
+}
+
+.offlineProject{
+    border-block-color: red
 }

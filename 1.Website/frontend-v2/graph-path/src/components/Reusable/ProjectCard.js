@@ -52,11 +52,21 @@ class ProjectCard extends Component {
       </Popover>
     )
 
+    const date = new Date().toString().toLowerCase() ;
+    var colorClass = '';
+    if (project.dueDate.toLowerCase()<date){
+      colorClass = 'onlineProject'
+    }
+    else{
+      colorClass = 'offlineProject';
+    }
+
     return (
     <div>
-        <Panel  shaded bordered bodyFill={false} style={{ display: 'inline-block', width: 240 }}
+        <Panel  shaded bordered bodyFill={true} style={{ display: 'inline-block', width: 240 }}
+          className={`${colorClass}`}
         >
-        <Panel id="projHeader" header={`${project.projectName}`}>
+        <Panel shaded id="projHeader" header={`${project.projectName}`}>
           <div>
               <h6><span className={"card-title"}>Due Date: </span> {project.dueDate}</h6>
           <h6>
