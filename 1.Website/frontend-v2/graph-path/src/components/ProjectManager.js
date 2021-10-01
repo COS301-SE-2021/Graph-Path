@@ -42,9 +42,33 @@ class ProjectManager extends Component {
         }
     }
 
-
     componentDidMount(){
-        this.viewProjectsFromAPI() ;
+        var filtV = localStorage.getItem('filtV') ;
+        var sortV = localStorage.getItem('sortV') ;
+        
+        if (filtV !== null){    
+            let filtVs = ['myOwn','shared','all'] ;
+            if (filtVs.indexOf(filtV)<0){
+               filtV = 'all' ;
+            }
+        }
+        
+        if (sortV === null){
+            
+        }
+        else{
+            let sortVs=['recent','alpha','date']
+            let sortQ = sortVs.indexOf(sortV) ;
+
+            if (sortQ < 0){
+                sortV = 'recent' 
+            }
+        }        
+
+        this.setState({
+            filterValue:filtV ,
+            sortValue:sortV
+        }, ()=>this.viewProjectsFromAPI(true)) ;
     }
  /**
 A method that requests for all the projects of the logged user and sets the result to Project Manager state.projects.
@@ -52,7 +76,7 @@ When the request fails to retrieve any projects it alerts them.
 * @returns {void} The method updates the state of Project
 
 */
-    viewProjectsFromAPI=()=>{
+    viewProjectsFromAPI=(filt)=>{
         this.setState({
             loading:true 
         }) ;
@@ -70,7 +94,9 @@ When the request fails to retrieve any projects it alerts them.
                     allProjects: res.data.data ,
                     loading:false
                         
-                }) ;
+                },()=>{
+                    this.sortProjects() ; 
+                    this.filterProjects()}) ; 
             }
             else{
                 this.setState({
@@ -263,6 +289,8 @@ The neccesary information for the request to go through follows:
             
 
         }
+
+        localStorage.setItem('sortV',this.state.sortValue) ;
     }
 
     //Filter Projects
@@ -290,9 +318,9 @@ The neccesary information for the request to go through follows:
             this.setState({
                 projects: this.state.allProjects
             })
-
-
         }
+
+        localStorage.setItem('filtV',this.state.filterValue) ;
     }
     newProjectModalRef=(obj)=>{
         this.showModal = obj && obj.handleShow;
@@ -374,6 +402,19 @@ The neccesary information for the request to go through follows:
             label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Due Date',value:'date'}] ;
         const filterOptions=[{label:'All Projects', value:'all'},{label:'Own Project', value:'myOwn'},{label:'Shared Project', value:'shared'}];
 
+        const filterSelected = filterOptions.find((val)=>val.value === this.state.filterValue) ;
+        let filterPlaceholder = 'Filter: ' ;
+        if (filterSelected){
+            filterPlaceholder = 'Filter: '+filterSelected.label ;
+        }
+
+        const sortSelected = options.find(val=>val.value === this.state.sortValue) ;
+        let sortPlaceholder = 'Sort: ' ;
+        if (sortSelected){
+            sortPlaceholder = 'Sort: '+sortSelected.label ;
+
+        }
+
         const {match} = this.props ;
         if (this.state.loading){
             return <Loader backdrop={false} speed={'slow'} size={'lg'} />
@@ -394,8 +435,8 @@ The neccesary information for the request to go through follows:
                               icon={ <Icon icon={'plus-circle'} title={"New Project"}/> } >New Project
                             </IconButton>
 
-                                <SelectPicker id="filter" placeholder="Filter Projects" searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
-                            <SelectPicker id="sort" placeholder="Sort By" searchable={false} data={options}  onChange={this.handleSortChange}/>
+                                <SelectPicker id="filter" placeholder={`${filterPlaceholder}`} searchable={false} data={filterOptions} onChange={this.handleFilterChange}/>
+                            <SelectPicker id="sort" placeholder={`${sortPlaceholder}`} searchable={false} data={options}  onChange={this.handleSortChange}/>
                             <div id="search-div" >
                                 <InputGroup id="search-bar" inside >
                                     <Input onChange={this.searchProjects}/>
