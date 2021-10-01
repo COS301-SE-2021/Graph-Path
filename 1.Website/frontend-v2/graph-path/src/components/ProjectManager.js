@@ -244,15 +244,16 @@ The neccesary information for the request to go through follows:
         }
         else{
             let newArray = this.state.projects.sort((v1,v2,)=>{
-                let date1=v1.startDate.toLowerCase();
-                let date2 = v2.startDate.toLowerCase();
+                let date1=v1.dueDate.toLowerCase();
+                let date2 = v2.dueDate.toLowerCase();
 
                 if(date1<date2){
-                    //date1 came first, put last
-                    return 1 ;
+                    return -1 ;
                 }
                 if (date1>date2){
-                    return -1 ;
+                    //date1 came first, put last
+
+                    return 1 ;
                 }
                 return 0 ;
             }) ;
@@ -370,7 +371,7 @@ The neccesary information for the request to go through follows:
 
 
         const options = [{
-            label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Date Created',value:'date'}] ;
+            label:'Recently Accessed',value:'recent'},{label:'Alphabetical',value:'alpha'},{label:'Due Date',value:'date'}] ;
         const filterOptions=[{label:'All Projects', value:'all'},{label:'Own Project', value:'myOwn'},{label:'Shared Project', value:'shared'}];
 
         const {match} = this.props ;
