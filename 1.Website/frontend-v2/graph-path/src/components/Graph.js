@@ -245,14 +245,17 @@ class GraphPath extends Component{
   }
 
   removeNode =(id)=>{
+    
     let result = this.graphManager.removeNode(id) ;
-    if (result){
+    if (result === true){
       this.updateGraph() ;
       this.deleteAllNodeTask(`${this.props.project._id}_${id}`) ; 
 
     }
     else{
-      //could not delete
+      if (result === -1){
+        PopUpMessage('Cannot delete start node','warning')
+      }
     }
     return result ;
   }

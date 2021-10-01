@@ -17,6 +17,12 @@ class GraphManager{
     */
     adjacencyList = {} ; 
 
+    colorByStatus = {
+      complete:'#',
+      progress:'#',
+      started:'#'
+    }
+
     // criticalGraph = {} ;// jsgraph.WeightedDiGraph(0) ;
 
     constructor(graph){
@@ -44,7 +50,168 @@ class GraphManager{
         this.adjacencyList[source].push(target) ;
       }
       // this.adjacencyList[source].sort((a,b)=>a-b) ;
+    }
+    
+    removeEdge=(source,target)=>{
+      this.adjacencyList[source] = this.adjacencyList[source].filter(vertex =>
+        vertex !== target 
+      ) ;
+    }
 
+    addEdge=(src,tgt)=>{
+     
+      let edgeId = 1;
+      let edgeAlreadyInGraph = false ;
+      let allIds = this.graph.edges.map((value)=>{
+        if (value.from === src && value.to ===tgt ){
+          edgeAlreadyInGraph = true ;
+        }
+        return value.id ;
+      });
+
+      if (edgeAlreadyInGraph === true){
+        //edge exists
+        return 2 ;
+      }
+      else{
+        while (allIds.indexOf(`e${edgeId}`)>=0){
+          edgeId = edgeId+1 ;
+        }
+  
+        var edg = {
+              id:`e${edgeId}`, // give edge an id
+              from:src, 
+              to:tgt,
+              label:`${ src} to ${tgt}` ,
+              color:'#fff',
+              width:7
+          }
+        let nameSrc = this.graph.nodes.find(v=>v.id === src) ;
+        let nameTgt = this.graph.nodes.find(v=>v.id === tgt) ;
+        if(nameSrc !== undefined && nameTgt !== undefined){
+              edg["label"] = `${ nameSrc.label} to -> ${nameTgt.label}` ;
+        }
+          this.graph.edges.push(edg) ; 
+  
+        if (!isAcyclic(this.graph)){   
+          this.graph.edges.pop() ; 
+          
+          //cyclic edge
+          return 0 ;
+        }
+        else{
+        //  this.graph = copy ; 
+          //true - add 
+          return 1 ;
+        }
+  
+      }
+
+      
+    }
+
+    removeNode = (id)=>{
+      if (id==='n0'){
+        return -1 ;
+      }
+
+
+      var newNodes = this.graph.nodes.filter((node)=>{
+        if (node.id !== id){
+          return true ;
+        }
+        return false ;
+      }) ;
+      if (this.graph.nodes.length === newNodes.length){
+        return false ;
+      }
+      else{
+        //delete edges where node with id is source || target
+        var newGraph = {nodes:[],edges:[]} ;
+        newGraph.nodes = newNodes ;
+        if (this.graph.edges.length>0){
+          var newEdges = this.graph.edges.filter((edge)=>{
+            if (edge.from === id ){
+              return false
+            }
+            else if ( edge.to === id){
+              return false ;
+            }
+            else{
+              return true ;
+
+            }
+          }) ;
+          // console.log('new edges',newEdges)
+            newGraph.edges = newEdges ;
+            this.graph = newGraph ;
+          return true ;
+          
+        }
+        else{
+
+          this.graph = newGraph ;
+          return true ;
+
+        }
+
+      };
+
+    }
+
+    addNode = (fromTask) =>{
+      // add the node and give it an id
+      var curr = this.graph ; 
+      var obj = {
+          label:fromTask.label , // give it lable fromTask
+          size:20,
+          critical:fromTask.critical
+      }; 
+    // console.log('Manager:addNode',fromTask,obj) ; 
+
+      // if there was already a node?
+      let len = curr.nodes.length ;
+      if (len>0){
+          let nodeId = 1;
+          let allIds = this.graph.nodes.map((value)=>{
+            return value.id ;
+          })
+          while (allIds.indexOf(`n${nodeId}`)>=0){
+            nodeId = nodeId+1 ;
+          }
+
+          obj["id"]= `n${nodeId}` ;
+          obj["color"] = '#f00000' ; //following nodes are blue
+          if (len % 2 === 0){
+              obj["x"] = 2*len ; 
+              obj["y"] = -2*len ;
+          }
+          else{
+              obj["x"] = 2*len ; 
+              obj["y"] = 15*len ;
+          }
+      }
+      else{
+          // add node with edge depending on self
+          let startNode = {...obj}
+        
+          obj["id"]= `n1` ;
+          obj["color"] = '#8e2a2a' ; //start is red
+          obj["x"] = 0 ; 
+          obj["y"] = 0 ;
+
+          startNode["id"]= `n0` ;
+          startNode["color"] = '#900' ; //start is red
+          startNode["x"] = 0 ; 
+          startNode["y"] = -160 ;
+          startNode["critical"] = false ;
+          startNode["label"] = 'Start' ;
+          this.graph.nodes.push(startNode) ;
+      }
+      
+      this.graph.nodes.push(obj) ;
+      // console.log('Manager:',this.graph) ; 
+    
     }
 
     editNodeCriticality=(nodeId,critical)=>{
@@ -262,7 +429,6 @@ class GraphManager{
       // console.log('Result' ,paths)
       return paths ; 
     }
- 
 
     highlightGraphCritical=()=>{
         var internalBFS = this.pathFromBFS('n0') ;
@@ -327,12 +493,6 @@ class GraphManager{
         }
         
 
-    }
-
-    removeEdge=(source,target)=>{
-      this.adjacencyList[source] = this.adjacencyList[source].filter(vertex =>
-        vertex !== target 
-      ) ;
     }
 
     removeVertex=(vertex)=>{
@@ -417,104 +577,6 @@ class GraphManager{
       }
     }
 
-    addEdge=(src,tgt)=>{
-     
-      let edgeId = 1;
-      let edgeAlreadyInGraph = false ;
-      let allIds = this.graph.edges.map((value)=>{
-        if (value.from === src && value.to ===tgt ){
-          edgeAlreadyInGraph = true ;
-        }
-        return value.id ;
-      });
-
-      if (edgeAlreadyInGraph === true){
-        //edge exists
-        return 2 ;
-      }
-      else{
-        while (allIds.indexOf(`e${edgeId}`)>=0){
-          edgeId = edgeId+1 ;
-        }
-  
-        var edg = {
-              id:`e${edgeId}`, // give edge an id
-              from:src, 
-              to:tgt,
-              label:`${ src} to ${tgt}` ,
-              color:'#000',
-              width:7
-          }
-        let nameSrc = this.graph.nodes.find(v=>v.id === src) ;
-        let nameTgt = this.graph.nodes.find(v=>v.id === tgt) ;
-        if(nameSrc !== undefined && nameTgt !== undefined){
-              edg["label"] = `${ nameSrc.label} to -> ${nameTgt.label}` ;
-        }
-          this.graph.edges.push(edg) ; 
-  
-        if (!isAcyclic(this.graph)){   
-          this.graph.edges.pop() ; 
-          
-          //cyclic edge
-          return 0 ;
-        }
-        else{
-        //  this.graph = copy ; 
-          //true - add 
-          return 1 ;
-        }
-  
-      }
-
-      
-    }
-
-    removeNode = (id)=>{
-
-
-      var newNodes = this.graph.nodes.filter((node)=>{
-        if (node.id !== id){
-          return true ;
-        }
-        return false ;
-      }) ;
-      if (this.graph.nodes.length === newNodes.length){
-        return false ;
-      }
-      else{
-        //delete edges where node with id is source || target
-        var newGraph = {nodes:[],edges:[]} ;
-        newGraph.nodes = newNodes ;
-        if (this.graph.edges.length>0){
-          var newEdges = this.graph.edges.filter((edge)=>{
-            if (edge.from === id ){
-              return false
-            }
-            else if ( edge.to === id){
-              return false ;
-            }
-            else{
-              return true ;
-
-            }
-          }) ;
-          // console.log('new edges',newEdges)
-            newGraph.edges = newEdges ;
-            this.graph = newGraph ;
-          return true ;
-          
-        }
-        else{
-
-          this.graph = newGraph ;
-          return true ;
-
-        }
-
-      };
-
-    }
-
     removeEdgeWithEdgeId = (edgeId)=>{
       var edgesAfter = this.graph.edges.filter((edge)=>{
         if (edge.id !== edgeId){
@@ -531,60 +593,6 @@ class GraphManager{
       }
     }
     
-    addNode = (fromTask) =>{
-        // add the node and give it an id
-        var curr = this.graph ; 
-        var obj = {
-            label:fromTask.label , // give it lable fromTask
-            size:20,
-            critical:fromTask.critical
-        }; 
-      // console.log('Manager:addNode',fromTask,obj) ; 
-
-        // if there was already a node?
-        let len = curr.nodes.length ;
-        if (len>0){
-            let nodeId = 1;
-            let allIds = this.graph.nodes.map((value)=>{
-              return value.id ;
-            })
-            while (allIds.indexOf(`n${nodeId}`)>=0){
-              nodeId = nodeId+1 ;
-            }
-
-            obj["id"]= `n${nodeId}` ;
-            obj["color"] = '#f00000' ; //following nodes are blue
-            if (len % 2 === 0){
-                obj["x"] = 2*len ; 
-                obj["y"] = -2*len ;
-            }
-            else{
-                obj["x"] = 2*len ; 
-                obj["y"] = 15*len ;
-            }
-        }
-        else{
-            // add node with edge depending on self
-            let startNode = {...obj}
-
-            obj["id"]= `n1` ;
-            obj["color"] = '#ea0000' ; //start is red
-            obj["x"] = 0 ; 
-            obj["y"] = 0 ;
-
-            startNode["id"]= `n0` ;
-            startNode["color"] = '#900' ; //start is red
-            startNode["x"] = 0 ; 
-            startNode["y"] = -160 ;
-            startNode["critical"] = false ;
-            startNode["label"] = 'Start' ;
-            this.graph.nodes.push(startNode) ;
-        }
-        
-        this.graph.nodes.push(obj) ;
-        // console.log('Manager:',this.graph) ; 
-      
-    }
 
     updatePosition=(nodeID,x,y)=>{
       let ind = -1 ;
