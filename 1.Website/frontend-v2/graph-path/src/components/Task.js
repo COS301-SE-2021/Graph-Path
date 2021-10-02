@@ -222,7 +222,7 @@ class Task extends React.Component {
 
     listAllTasks =()=>{
         if (this.props.nodeTasks){
-        console.log('task props',this.props,this.state)
+        // console.log('task props',this.props,this.state)
             if(this.state.editTask.status !== undefined){
                 const task = this.state.editTask ;
                 // the edit button pressed

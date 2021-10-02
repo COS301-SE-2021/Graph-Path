@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types' ;
 import {IconButton, Panel,Icon, Popover, Button, Whisper } from 'rsuite';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import "../../css/Common.css"
 
 /*
@@ -52,9 +53,11 @@ class ProjectCard extends Component {
       </Popover>
     )
 
-    const date = new Date().toString().toLowerCase() ;
+    const today = new Date() ;
+    const date = format(today,'yyyy-MM-dd').toLowerCase() ;
+
     var colorClass = '';
-    if (project.dueDate.toLowerCase()<date){
+    if (project.dueDate.toLowerCase()>date){
       colorClass = 'onlineProject'
     }
     else{

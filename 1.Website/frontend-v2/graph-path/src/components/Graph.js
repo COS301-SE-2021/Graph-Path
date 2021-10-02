@@ -353,14 +353,15 @@ class GraphPath extends Component{
                   y:node.y,
                   size:node.size,
                   color:node.color,
-                  critical:node.critical 
+                  critical:node.critical,
+                  status: node.status
               }
           }) ;
           const minimalEdges = this.state.currGraph.edges.map((edge)=>{
               return {
                   id: edge.id,
-                  from: edge.source === undefined ? edge.from: edge.source,
-                  to: edge.target === undefined ?edge.to: edge.target,
+                  from:  edge.from,
+                  to:edge.to,
                   label: edge.label,
                   color: '#eee',
                   width: edge.width,
@@ -653,19 +654,8 @@ class GraphPath extends Component{
   }
 
   changeNodeByStats(nodeId,stats){
-    let color = '#000' ; 
-    if (stats === 'complete'){
-        //green
-        color = '#0d0'
-    }
-    else if (stats === 'in progress'){
-      color = '#dd0' ;
-    }
-    else{
-      color = '#d00'
-    }
 
-    let res = this.graphManager.changeColor(nodeId,color) ; 
+    let res = this.graphManager.changeColor(nodeId,stats) ; 
     console.log('change color',res) ;
     if (res){
       this.updateGraph(true) ;
@@ -687,6 +677,12 @@ class GraphPath extends Component{
       else if (highlight >= 0){
         this.updateGraph() ;
         PopUpMessage(`${highlight} critical paths found`,'info') ; 
+      }
+    }
+    else if(key === 'reset'){
+      let reset = this.graphManager.resetColorByStatus() ;
+      if (reset){
+        this.updateGraph() ;
       }
     }
     
@@ -856,12 +852,17 @@ class GraphPath extends Component{
                 <Button >Add Node</Button>
                 </Whisper> &nbsp;
                 <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>                
-                  <Dropdown title={"Critical Path"} 
+                <Dropdown title={"Critical Path"} 
                   icon={<Icon icon={'charts-line'}/>}>
                     <Dropdown.Item onSelect={(event)=>this.selectCriticalPath('graph')}>
                       Project Graph Critical Path
                     </Dropdown.Item>
+                    <Dropdown.Item icon={<Icon icon={'refresh'}/>} onSelect={(event)=>this.selectCriticalPath('reset')}>
+                      Reset Graph
+                    </Dropdown.Item>
                   </Dropdown>
+                
+                  
                   </div>
               </div>
 

@@ -1,3 +1,4 @@
+import { node } from "prop-types";
 import isAcyclic from "./DAG";
 
 var jsgraph = require('js-graph-algorithms') ;// {TopologicalSortShortestPaths,WeightedDiGraph,Edge} from 'js-graph-algorithms' ;
@@ -168,7 +169,8 @@ class GraphManager{
       var obj = {
           label:fromTask.label , // give it lable fromTask
           size:20,
-          critical:fromTask.critical
+          critical:fromTask.critical,
+          status:'not started'
       }; 
     // console.log('Manager:addNode',fromTask,obj) ; 
 
@@ -209,6 +211,7 @@ class GraphManager{
           startNode["y"] = -160 ;
           startNode["critical"] = false ;
           startNode["label"] = 'Start' ;
+          startNode['status'] ='start'
           this.graph.nodes.push(startNode) ;
       }
       
@@ -249,11 +252,15 @@ class GraphManager{
       const edges = this.graph.edges ;
 
       if (nodes !== undefined && edges !== undefined){
-        for (let x of nodes.map(node => node.id)){
+        const nodeList = nodes.map((node) =>{ 
+          node.color = '#356' ;
+
+          return node.id}) ;
+        for (let x of nodeList){
           this.addVertex(x) ;
           const edgesFiltered = this.graph.edges.filter((edge,index) =>{
             let y = {...edge} ;
-            y['color'] ='#080' ;
+            y['color'] ='#000' ;
             this.graph.edges[index] = y ;
           
             if ( edge.from=== x){
@@ -285,16 +292,19 @@ class GraphManager{
       while (queue.length){
         let currVertex = queue.shift() ;
         if (currVertex !== undefined){
-         console.log('curr',currVertex) ;
+        //  console.log('curr',currVertex) ;
 
         let currNode = this.graph.nodes.find(n=>n.id === currVertex ) ;
         //  console.log('currNode',currNode) ;
 
           if ( currNode !== undefined){
             if ( currNode.critical){
-              currNode.color = '#880' ;
+              currNode.color = '#380' ;
               // console.log('path',path,currVertex) ;
               paths.push(currNode.id) ;
+            }
+            else{
+              currNode.color = '#677' ;
             }
           }
         //  console.log('prev',result[result.length-1],'curr',currVertex) ;
@@ -330,7 +340,7 @@ class GraphManager{
           // console.log('add',from,'to',to) ;
           criticalGraph.addEdge(new jsgraph.Edge(from,to,10)) ;
         }
-        const endNumber = parseInt(end.substr(end.length-1)) ;
+        const endNumber = parseInt(end.substr(1,end.length-1)) ;
         var critical = new jsgraph.Dijkstra(criticalGraph,0) ;
         // console.log('endo',endNumber,critical) ;
 
@@ -506,7 +516,22 @@ class GraphManager{
       delete this.adjacencyList[vertex] ;
     }
 
-    changeColor=(id,color)=>{
+    getColorByStatus=(stats)=>{
+      let color = '#fff' ; 
+      if (stats === 'complete'){
+          //green
+          color = '#0d0'
+      }
+      else if (stats === 'in progress'){
+        color = '#dd0' ;
+      }
+      else if (stats === 'not started'){
+        color = '#d00'
+      }
+      return color ;
+    }
+
+    changeColor=(id,status)=>{
       var nodes = this.graph.nodes ;
       if (nodes && Array.isArray(nodes)){
         let ind = -1 ;
@@ -520,14 +545,31 @@ class GraphManager{
           }
         }) ;
         if (found && ind >= 0 ){
+          let color = this.getColorByStatus(status)
           found.color = color ;
-          nodes.splice(ind,1,found) ;
+          found.status = status ;
+          nodes.splice(ind,1,found) ; //remove and replace w/ new value
           this.graph.nodes = nodes ;
           return 1 ;
         }
       }
       return 0 ; 
     }
+
+    resetColorByStatus=()=>{
+      const nodes = this.graph.nodes ; 
+      if (nodes !== undefined && nodes.length > 0){
+        let changed = 0 ;
+        for (let node of nodes){
+          changed = this.changeColor(node.id,node.status) ;
+        }
+        return changed ;
+      }
+      else{
+        return 0 ;
+      }
+    }
+
     /**
      * @param colorArray - an array of egdes to color
     */
@@ -596,7 +638,6 @@ class GraphManager{
       }
     }
     
-
     updatePosition=(nodeID,x,y)=>{
       let ind = -1 ;
       let node = this.graph.nodes.find((value,i)=>{if (value.id === nodeID){

@@ -105,11 +105,10 @@ class NewProject extends React.Component{
         const {formError,formValue} = this.state ;
         const {DateType,StringType} = Schema.Types ;
         let due = new Date() ;
-        due.setFullYear(due.getFullYear()+2)
         const projectModel =Schema.Model({
             projectName: StringType().minLength(2,'Project name should have more than 2 letters')
                 .isRequired('This field is required.') ,
-            startDate:DateType().min(new Date(due.getFullYear()-2,due.getMonth(),due.getDate()-1),'The start date cannot be set to a date that has passed by more than a day.')
+            startDate:DateType().min(new Date(due.getFullYear(),due.getMonth(),due.getDate()-1),'The start date cannot be set to a date that has passed by more than a day.')
                 .isRequired('This field is required.') ,
             dueDate:DateType().min(this.state.formValue.startDate,'The due date cannot be before start date or a date in the past.')
                 .isRequired('This field is required.') ,
