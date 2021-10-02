@@ -2,18 +2,19 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
     /*background-color: rgb(45, 45, 47);*/
     background-color: transparent;
 }
 
 #chat-room-div main {
     padding: 10px;
-    height: 80vh;
-    margin: 10vh 0 10vh;
+    /*height: 80vh;*/
+    /*margin: 10vh 0 10vh;*/
     /*overflow-y: scroll;*/
     display: flex;
     flex-direction: column;
+    background-color: transparent;
 }
 
 /*main::-webkit-scrollbar {*/
@@ -43,6 +44,10 @@ section {
     width: 10%;
     /*background-color: rgb(56, 56, 143);*/
     background: rgb(58, 58, 58);
+}
+
+#btn-delete{
+    position: fixed;
 }
 
 #chat-icon{
@@ -81,6 +86,10 @@ section {
 /*    text-align: left;*/
 /*    list-style: none;*/
 /*}*/
+
+#chat-message-div{
+    /*background-color: green;*/
+}
 
 #chat-message-div p {
     max-width: 500px;

@@ -1,10 +1,10 @@
 import React, {useRef, useState} from "react";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import firebase from "firebase/compat";
-import {Icon} from "rsuite";
+import {Button, Icon} from "rsuite";
 import 'firebase/firestore';
 
-import "../../css/MainChat.css"
+// import "../../css/MainChat.css"
 import "../../css/ProjectChat.css"
 
 
@@ -25,7 +25,7 @@ function ChatRoom(props){
 
     const dummy = useRef();
     const messagesRef = firestore.collection('messages');
-    const query = messagesRef.orderBy('createdAt').limit(25);
+    const query = messagesRef.orderBy('createdAt').limit(100);
 
     const [messages] = useCollectionData(query, {idField: 'id'})
 
@@ -47,34 +47,50 @@ function ChatRoom(props){
 
         setFormValue('');
         dummy.current.scrollIntoView({behavior: 'smooth'});
+
+    }
+
+    const deleteAllChats = async (projId)=>{
+        const snapshot = await firestore
+            .collection("messages")
+            .limit(100)
+            .where("projectId","==",projId)
+            .get();
+
+            const doc = snapshot.docs;
+           for (let x =0;x<doc.length;x++){
+               await doc[x].ref.delete()
+           }
+
     }
 
     return (
-        <div id="chat-room-div" className="main-chat-message">
-            <main>
+        <>
+            <div id="chat-room-div" className="main-chat-message">
+                <Button id="btn-delete" onClick={() => deleteAllChats(props.project._id)}>Delete All Chats</Button>
+                <main>
 
-                {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} user={props.user} project={props.project} />)}
+                    {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} user={props.user} project={props.project} />)}
 
-                <span ref={dummy}></span>
+                    <span ref={dummy}></span>
 
-            </main>
+                </main>
 
-            <form onSubmit={sendMessage}>
+                <form onSubmit={sendMessage}>
 
-                <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Type a message" />
+                    <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Type a message" />
 
-                <button type="submit" disabled={!formValue}><Icon id="chat-icon" icon={'send'}/></button>
+                    <button type="submit" disabled={!formValue}><Icon id="chat-icon" icon={'send'}/></button>
 
-            </form>
-        {/*<h1>Hello</h1>*/}
-        </div>
+                </form>
+            </div>
+        </>
     )
 
 }
 
 function ChatMessage(props) {
-    const { textDate, text, email, picture, projectId } = props.message;
-    console.log("time",textDate)
+    const {  text, email, picture, projectId } = props.message;
 
     const messageClass = email === props.user.email ? 'sent' : 'received';
 
@@ -84,7 +100,6 @@ function ChatMessage(props) {
             <div id="chat-message-div" className="main-chat-message">
                 <div className={`message ${messageClass}`}>
                     <img src={picture} title={email} />
-                    {/*<p>{createdAt}</p>*/}
                     <p>{text}</p>
                 </div>
             </div>
