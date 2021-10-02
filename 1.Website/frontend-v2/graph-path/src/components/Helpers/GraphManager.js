@@ -299,7 +299,7 @@ class GraphManager{
 
           if ( currNode !== undefined){
             if ( currNode.critical){
-              currNode.color = '#380' ;
+              currNode.color = '#1f0' ;
               // console.log('path',path,currVertex) ;
               paths.push(currNode.id) ;
             }

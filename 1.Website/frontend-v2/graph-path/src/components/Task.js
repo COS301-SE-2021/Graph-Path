@@ -59,7 +59,7 @@ class Task extends React.Component {
     componentDidMount(){
         let critical = this.props.critical ; 
         this.setState({
-            formValue : critical 
+            critical : critical 
         }) ;
 
     }
@@ -391,6 +391,6 @@ Task.propType = {
     sendTaskInfo:PropTypes.func.isRequired,
     deleteTask :PropTypes.func.isRequired, 
     deleteNodeTasks:PropTypes.func.isRequired, 
-    
+    critical:PropTypes.bool.isRequired,//if selected node is critical
 }
 export default (Task) ;

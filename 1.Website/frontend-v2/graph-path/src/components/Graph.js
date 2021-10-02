@@ -59,16 +59,39 @@ class GraphPath extends Component{
 
   }
   componentWillUnmount(){
-    let semiUpdate = this.props.project ;
+    // let semiUpdate = this.props.project ;
     if (this.graphManager !== null){
-        semiUpdate.graph = this.graphManager.getGraph() ;
-        // this.setState({
-         delete this.graphManager  
-        // }) ;
-    }
+      var difference =this.validateGraphDifference(this.initialGraph,this.state.currGraph)
+        if (difference){
+          let save = window.confirm('Save changes before leaving?') ;
+          if (save){
+            const data = {} ; //{ ...this.props.project}  ;
+            data.graph = this.state.currGraph ;
+            data.projectID = this.props.project._id ;
+            data.email = this.props.loggedUser.email ; 
+  
+            axios.patch(`${this.props.api}/project/updateProjectGraph`,data,{
+              headers:{
+                authorization:this.props.loggedUser.token
+              }
+            })
+            .then((res)=>{
+              PopUpMessage(res.data.message,'info') ;
+            })
+            .catch((err)=>{
+              console.log('Error:',err) ;
+            })
+          }
+          else{
+            this.props.project.graph = this.initialGraph ;
+          }
+        }
+        delete this.graphManager  
+
+      }
     //update parent
-    this.props.updateParent(semiUpdate) ;
-    console.log('update parent',semiUpdate)
+    // this.props.updateParent(semiUpdate) ;
+    console.log('update parent',this.initialGraph)
     
   }
 
@@ -248,21 +271,37 @@ class GraphPath extends Component{
   }
 
   removeNode =(id)=>{
-    
-    let result = this.graphManager.removeNode(id) ;
-    if (result === true){
-      this.updateGraph() ;
-      if (id !== 'n0'){
-        this.deleteAllNodeTask(`${this.props.project._id}_${id}`) ; 
-      }
-
+    let nodeID = `${this.props.project._id}_${id}` ;
+    let filter=this.state.taskList.filter(value=>value.nodeID === nodeID ) ;
+    let removeAns ;
+    let removeTasks = false;
+    if (filter.length > 0){
+     removeAns = window.confirm('removing the task will delete all subtasks, continue?') ;
+     removeTasks = removeAns ;
     }
     else{
-      if (result === -1){
-        PopUpMessage('Cannot delete start node','warning')
-      }
+      removeTasks = false ;
+      removeAns = true ;
     }
-    return result ;
+
+    if (removeAns === true){
+      let result = this.graphManager.removeNode(id) ;
+      if (result === true){
+        this.updateGraph() ;
+        if (id !== 'n0'){
+          this.deleteAllNodeTask(nodeID,removeTasks) ; 
+        }
+  
+      }
+      else{
+        if (result === -1){
+          PopUpMessage('Cannot delete start node','warning')
+        }
+      }
+      return result ;
+    }
+
+   
   }
 
   removeEdge = (id)=>{
@@ -518,7 +557,7 @@ class GraphPath extends Component{
   }
 
   deleteOneTask=(taskId,nodeID)=>{
-    let deleteAns = window.confirm('Are you sure you want to delete all tasks?') ;
+    let deleteAns = window.confirm('Are you sure you want to delete subtask?') ;
     if (deleteAns){
     
       axios.delete(`${this.props.api}/task/deleteTaskByID/${taskId}`,{
@@ -550,11 +589,15 @@ class GraphPath extends Component{
     }
   }
 
-  deleteAllNodeTask=(nodeID)=>{
-    let deleteAns = window.confirm('Are you sure you want to delete all tasks?') ;
+  deleteAllNodeTask=(nodeID, preAns)=>{
+    let deleteAns ;
+    if (preAns === undefined){
+      deleteAns = window.confirm('Are you sure you want to delete all tasks?') ;
+    }
+    else{
+      deleteAns = preAns ;
+    }
     if (deleteAns){
-    
-
       axios.delete(`${this.props.api}/task/deleteTaskByNodeID/${nodeID}`,{
         data: { 
           projectID:this.props.project._id ,
@@ -568,7 +611,9 @@ class GraphPath extends Component{
         PopUpMessage(res.data.message,'info')
         let nodeId = nodeID.split('_')[1] ;
         // console.log('delete',res,nodeId)
-        this.changeNodeByStats(nodeId,res.data.nodeCompletionStatus) ;
+        if (preAns === undefined){
+          this.changeNodeByStats(nodeId,res.data.nodeCompletionStatus) ;
+        }
         this.viewAllTasksForProject() ;
       })
       .catch((err)=>{
@@ -580,7 +625,9 @@ class GraphPath extends Component{
       
     }
     else{
-      PopUpMessage('All tasks not deleted','info')
+      if (preAns === undefined){
+        PopUpMessage('All tasks not deleted','info')
+      }
     }
   }
 
@@ -668,22 +715,28 @@ class GraphPath extends Component{
 
   selectCriticalPath=(key,event)=>{
     console.log('critical',key,event) ;
+    const nodes = this.state.currGraph.nodes ;
+    if (nodes !== undefined && nodes.length>0){
+      if (key === 'graph'){
+        let highlight =  this.graphManager.highlightGraphCritical() ; 
+        if (highlight < 0 ){
+          PopUpMessage('Please connect the start node to another node','warning') ;
+        }
+        else if (highlight >= 0){
+          this.updateGraph() ;
+          PopUpMessage(`${highlight} critical paths found`,'info') ; 
+        }
+      }
+      else if(key === 'reset'){
+        let reset = this.graphManager.resetColorByStatus() ;
+        if (reset){
+          this.updateGraph() ;
+        }
+      }
     
-    if (key === 'graph'){
-      let highlight =  this.graphManager.highlightGraphCritical() ; 
-      if (highlight < 0 ){
-        PopUpMessage('Please connect the start node to another node','warning') ;
-      }
-      else if (highlight >= 0){
-        this.updateGraph() ;
-        PopUpMessage(`${highlight} critical paths found`,'info') ; 
-      }
     }
-    else if(key === 'reset'){
-      let reset = this.graphManager.resetColorByStatus() ;
-      if (reset){
-        this.updateGraph() ;
-      }
+    else{
+      PopUpMessage('Please create a graph','warning')
     }
     
   }
@@ -802,6 +855,7 @@ class GraphPath extends Component{
         events.externalRemoveEdge = this.removeEdge ;
         events.externalCreateEdge = this.createEdgeBetweenNode
         events.viewTaskInfo = this.showTaskModal ;
+        events.cleanup = this.cleanUpAfterEdgeAddition ;
         events.click = function(event){
             console.log('clicked',event,'ctrl',event.event.srcEvent.ctrlKey) ;
             const nodesAffected = event.nodes ;
@@ -834,9 +888,19 @@ class GraphPath extends Component{
                 events.viewTaskInfo(node) ;
 
               }
+              else{
+                // cleanup
+                events.cleanup() ;
+              }
             }
             
         } 
+        var message = 'click on the ? for more help details. ' ;
+        if (this.state.currGraph.nodes.length > 0){
+          this.state.source === 'from'
+                ?message = "To make a line, press and hold Ctrl ,then select source task":
+                message = "Keep Holding Ctrl and select end task, click graph stage to cancel selection"
+        }
       
             return (
               <div >
@@ -848,13 +912,13 @@ class GraphPath extends Component{
                 <h3>{this.props.project.projectName}</h3>
 
                 <div id="graph-nav">
-                <Whisper speaker={speaker} placement={'leftStart'} trigger={'active'}>
-                <Button >Add Node</Button>
+                <Whisper speaker={speaker} placement={'autoVerticalStart'} trigger={'active'}>
+                <IconButton icon={<Icon icon={'task'}/>} >Add Task</IconButton>
                 </Whisper> &nbsp;
-                <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}/>                
+                <IconButton onClick={()=>this.checkSavePermissions()} title={"Save Graph"} icon={<Icon icon={'save'}/>}>Save Graph</IconButton>                
                 <Dropdown title={"Critical Path"} 
                   icon={<Icon icon={'charts-line'}/>}>
-                    <Dropdown.Item onSelect={(event)=>this.selectCriticalPath('graph')}>
+                    <Dropdown.Item icon={<Icon icon={'road'}/>} onSelect={(event)=>this.selectCriticalPath('graph')}>
                       Project Graph Critical Path
                     </Dropdown.Item>
                     <Dropdown.Item icon={<Icon icon={'refresh'}/>} onSelect={(event)=>this.selectCriticalPath('reset')}>
@@ -882,7 +946,7 @@ class GraphPath extends Component{
                     network.stabilize(2000);
                   }}
               />
-                <GraphHelp text={'Click the ? for more details.'}/>
+                <GraphHelp text={message}/>
 
               </div>
               </div>
