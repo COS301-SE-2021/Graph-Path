@@ -85,6 +85,7 @@ class GraphHelp extends React.Component{
             <Whisper placement={'auto'} trigger={'active'} speaker={helpers}>
                 <Icon icon={'help-o'} size={'2x'}/>
             </Whisper>
+            <span className={'graphMessage'}>{this.props.text}</span>
             </div>
         )
     }

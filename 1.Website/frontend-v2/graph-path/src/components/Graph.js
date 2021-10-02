@@ -882,7 +882,7 @@ class GraphPath extends Component{
                     network.stabilize(2000);
                   }}
               />
-                <GraphHelp />
+                <GraphHelp text={'Click the ? for more details.'}/>
 
               </div>
               </div>
