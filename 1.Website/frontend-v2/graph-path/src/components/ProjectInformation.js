@@ -367,8 +367,19 @@ class ProjectInformation extends React.Component{
 
                     const res = response.data.data;
                     // console.log("all members",res)
+                    let labelUser =  res.map((user)=>{
+                        if (user.value === undefined){
+                            return -1 ;
+                        }
+                        else if (user.label === undefined){
+                            user['label'] = user.value ;
+                            return user ;
+                        }
+                        return user ;
+                        
+                    })
                     this.setState({
-                        allMembersFromDb: res
+                        allMembersFromDb: labelUser
                     })
 
                     // this.setState({
@@ -563,7 +574,6 @@ class ProjectInformation extends React.Component{
                                                 this.state.editMember === false ?
                                                     <>
 
-                                                    {/*<label>Email</label>*/}
                                                     <input id="email-input" onChange={this.change} type="email" name="memberName" placeholder="Member Email"
                                                     />
                                                         <br/>

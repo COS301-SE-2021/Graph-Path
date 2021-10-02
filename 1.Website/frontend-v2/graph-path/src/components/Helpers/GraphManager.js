@@ -299,7 +299,7 @@ class GraphManager{
 
           if ( currNode !== undefined){
             if ( currNode.critical){
-              currNode.color = '#380' ;
+              currNode.color = '#1f0' ;
               // console.log('path',path,currVertex) ;
               paths.push(currNode.id) ;
             }
@@ -558,16 +558,27 @@ class GraphManager{
 
     resetColorByStatus=()=>{
       const nodes = this.graph.nodes ; 
+      const edges = this.graph.edges ;
+      let changed = 0 ;
+
       if (nodes !== undefined && nodes.length > 0){
-        let changed = 0 ;
         for (let node of nodes){
           changed = this.changeColor(node.id,node.status) ;
         }
-        return changed ;
       }
       else{
-        return 0 ;
+        changed = 0 ;
       }
+
+      if(edges.length>0){
+        for (let edge of edges){
+          edge.color = '#fff' ;
+        }
+        changed = 1
+      }
+
+      return changed ;
+
     }
 
     /**
@@ -576,11 +587,6 @@ class GraphManager{
     changeEdgeColor = (colorArray,color) =>{
       var edges = this.graph.edges ;
       if (Array.isArray(edges)){
-        // let criticalEdge = edges.map((value)=>{
-        //   if (value)
-        //   return value ; 
-        // })
-      
         for (let path of colorArray){
           for (let edg of path){
             let ind = edges.find(value=>value.from === `n${edg.from()}` &&

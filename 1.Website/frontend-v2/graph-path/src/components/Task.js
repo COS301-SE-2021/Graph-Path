@@ -59,7 +59,7 @@ class Task extends React.Component {
     componentDidMount(){
         let critical = this.props.critical ; 
         this.setState({
-            formValue : critical 
+            critical : critical 
         }) ;
 
     }
@@ -228,7 +228,7 @@ class Task extends React.Component {
                 // the edit button pressed
                 const projMembers = this.props.members.map((mem)=>{
                     let taskMem = {
-                        label : mem.email,
+                        label : mem.label === undefined?mem.email:mem.label,
                         value : mem.email
                     }
                     return taskMem ;
@@ -263,6 +263,8 @@ class Task extends React.Component {
                             error={formError.due}
                             oneTap={true}
                             format={'YYYY-MM-DD'}
+                        placement={'auto'}
+
                         />
                         
                         <CustomField 
@@ -281,6 +283,8 @@ class Task extends React.Component {
                                 // error={}
                                 inline={'true'}
                                 data={projMembers}
+                                placement={'auto'}
+
                             ></CustomField>  
                             
                         </Form >
@@ -387,6 +391,6 @@ Task.propType = {
     sendTaskInfo:PropTypes.func.isRequired,
     deleteTask :PropTypes.func.isRequired, 
     deleteNodeTasks:PropTypes.func.isRequired, 
-    
+    critical:PropTypes.bool.isRequired,//if selected node is critical
 }
 export default (Task) ;

@@ -1,5 +1,5 @@
 import React from 'react' ;
-import {Button, Icon, HelpBlock, Popover, Whisper} from 'rsuite' ;
+import {Button, Icon,IconButton, Dropdown, Popover, Whisper} from 'rsuite' ;
 /**
  * When you click on the help button it shows different help sections
  * 1. Adding and Deleting Node
@@ -26,7 +26,9 @@ class GraphHelp extends React.Component{
         switch (this.state.section) {
             case 'node': return (<>
               To add Node/Task use the                 
-                <Button appearance={'link'} >Add Node</Button> button on top . <br/>
+              <IconButton icon={<Icon icon={'task'}/>} >Add Task</IconButton>
+
+                 button on top . <br/>
                 Give the task a name/label and whether it is
                 import (critical) or not. 
             <br/>
@@ -56,6 +58,23 @@ class GraphHelp extends React.Component{
               while holding, click the line you want to delete.
      
                 </>)
+            case 'critical':
+                return(<>    
+                To find the critical paths use:
+                <Dropdown disabled title={"Critical Path"} 
+                  icon={<Icon icon={'charts-line'}/>}/> dropdown option.
+                  <br/>
+                1.1  Use  <Dropdown.Item icon={<Icon icon={'road'}/>} disabled>
+                      Project Graph Critical Path
+                    </Dropdown.Item> to find the paths to all critical nodes.
+                <br/>
+                1.2 Use  <Dropdown.Item disabled icon={<Icon icon={'refresh'}/>}>
+                      Reset Graph
+                    </Dropdown.Item>
+                    to reset the graph after finding the critical paths
+                    <br/>
+
+                </>)
             default :   return (
                 <>
             Choose a category
@@ -74,6 +93,8 @@ class GraphHelp extends React.Component{
                 onClick={(e)=>this.chageHelpSection('edge')}>Lines</Button>
                 <Button appearance={'primary'}
                 onClick={(e)=>this.chageHelpSection('task')}>Sub-Tasks</Button>
+                <Button appearance={'primary'}
+                onClick={(e)=>this.chageHelpSection('critical')}>Critical Path</Button>
             </div>
             
             {this.nodeHelper()}
@@ -85,6 +106,7 @@ class GraphHelp extends React.Component{
             <Whisper placement={'auto'} trigger={'active'} speaker={helpers}>
                 <Icon icon={'help-o'} size={'2x'}/>
             </Whisper>
+            <span className={'graphMessage'}>{this.props.text}</span>
             </div>
         )
     }
