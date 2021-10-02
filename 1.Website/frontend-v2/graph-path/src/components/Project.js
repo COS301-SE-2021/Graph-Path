@@ -73,7 +73,7 @@ class Project extends Component {
                         onHide={this.handleChatRoom}
                     >
                         <Drawer.Header>
-                            <Drawer.Title>{project.projectName} Chat Room</Drawer.Title>
+                            <Drawer.Title>{project.projectName} Collaborative Space</Drawer.Title>
                             <Divider />
                         </Drawer.Header>
                         <Drawer.Body>

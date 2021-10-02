@@ -82,7 +82,7 @@ section {
 /*    list-style: none;*/
 /*}*/
 
-#chat-room-div p {
+#chat-message-div p {
     max-width: 500px;
     margin-bottom: 12px;
     line-height: 24px;
@@ -113,7 +113,7 @@ section {
     color: black;
 }
 
-#chat-room-div img {
+#chat-message-div img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
