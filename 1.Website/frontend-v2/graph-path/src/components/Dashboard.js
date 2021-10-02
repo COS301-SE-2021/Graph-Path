@@ -118,11 +118,11 @@ class Dashboard extends React.Component{
                                                           replace
                                                           to={`${match.url}/kanban`} >Kanban</Nav.Item>
 
-                                                <Nav.Item id="nav-option"
-                                                          icon={<Icon icon="wechat"/>}
-                                                          componentClass={Link}
-                                                          replace
-                                                          to={`${match.url}/chat`} >Chat</Nav.Item>
+                                                {/*<Nav.Item id="nav-option"*/}
+                                                {/*          icon={<Icon icon="wechat"/>}*/}
+                                                {/*          componentClass={Link}*/}
+                                                {/*          replace*/}
+                                                {/*          to={`${match.url}/chat`} >Chat</Nav.Item>*/}
 
                                                 <Dropdown id="nav-option" title="Statistics" icon={<Icon icon="bar-chart"/>}>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
@@ -157,8 +157,8 @@ class Dashboard extends React.Component{
                                 }} />
                                 <Route path={`${match.path}/kanban`} render={()=>{
                                     return <Kanban api={this.props.api} user={this.props.authUser}/> }}/>
-                                <Route path={`${match.path}/chat`} render={()=>{
-                                    return <MainChat api={this.props.api} user={this.props.authUser}/> }}/>
+                                {/*<Route path={`${match.path}/chat`} render={()=>{*/}
+                                {/*    return <MainChat api={this.props.api} user={this.props.authUser}/> }}/>*/}
 
                                 <Route path={`${match.path}/radarChart`} exact>
                                     <RadarChart api={this.props.api} user={this.props.authUser} />
