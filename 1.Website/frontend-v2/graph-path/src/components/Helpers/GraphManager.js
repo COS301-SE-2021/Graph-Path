@@ -455,7 +455,7 @@ class GraphManager{
             color.push(path) ;
           }
         console.log('color the nodes',color) ;
-        this.changeEdgeColor(color,'#880')
+        this.changeEdgeColor(color,'#a00')
 
           return color.length ;
           //edit the color to red
