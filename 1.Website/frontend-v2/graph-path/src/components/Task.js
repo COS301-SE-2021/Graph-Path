@@ -228,7 +228,7 @@ class Task extends React.Component {
                 // the edit button pressed
                 const projMembers = this.props.members.map((mem)=>{
                     let taskMem = {
-                        label : mem.email,
+                        label : mem.label === undefined?mem.email:mem.label,
                         value : mem.email
                     }
                     return taskMem ;
@@ -263,6 +263,8 @@ class Task extends React.Component {
                             error={formError.due}
                             oneTap={true}
                             format={'YYYY-MM-DD'}
+                        placement={'auto'}
+
                         />
                         
                         <CustomField 
@@ -281,6 +283,8 @@ class Task extends React.Component {
                                 // error={}
                                 inline={'true'}
                                 data={projMembers}
+                                placement={'auto'}
+
                             ></CustomField>  
                             
                         </Form >
