@@ -58,4 +58,6 @@ canvas.sigma-mouse{
 
 .graphMessage{
     margin: 5px;
+    color: #34C3FF;
+    font-weight: bolder;
 }

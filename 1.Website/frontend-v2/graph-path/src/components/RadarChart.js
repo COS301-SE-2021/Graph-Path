@@ -104,7 +104,7 @@ class RadarChart extends React.Component{
 
                 <div>
                     <h3>Project Tasks Statistics</h3>
-                    <Dropdown title={"Projects"}>
+                    <Dropdown  title={"Select Project"}>
                         <Dropdown.Item style={{minWidth:"30vw",marginRight:"10%"}}>
                             <List hover>
                                 {this.state.projects.map((item,index)=>

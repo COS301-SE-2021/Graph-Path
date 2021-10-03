@@ -90,20 +90,20 @@ class Project extends Component {
                             title="Edit Project"
                             icon={<Icon icon={'pencil'}/>}
                             componentClass={Link}
-                            to={`${match.url}/edit`}>Edit Project
+                            to={`${match.url}/edit`}>Edit 
 
                         </Nav.Item>
                         <Nav.Item
                             title="View Graph"
                             icon={<Icon icon={'views-authorize'}/>}
                             componentClass={Link}
-                            to={`${match.url}`}>View Graph
+                            to={`${match.url}`}> Graph
                         </Nav.Item>
                             <Nav.Item
                                 title="Open Chat"
                                 icon={<Icon icon={'wechat'}/>}
                                 onSelect={this.showChatRoom}
-                                >Open Chat
+                                > Collab
                             </Nav.Item>
                     </Nav>
                         </Sidenav.Body>
