@@ -81,12 +81,10 @@ class Project extends Component {
                     >
                         <Drawer.Header>
                             <Drawer.Title>{project.projectName} Collaborative Space</Drawer.Title>
-                            {/*<Button id="btn-delete" onClick={() => chat.current.deleteAllChats(project._id)}>Delete All Chats</Button>*/}
                             <div id="chat-info" >
                                 <Whisper placement={'auto'} trigger={'active'} speaker={helpers}>
                                     <Icon title="To delete text, double click on the text" icon={'help-o'} size={'1x'}/>
                                 </Whisper>
-
                             </div>
                             <Divider />
                         </Drawer.Header>

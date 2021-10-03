@@ -107,6 +107,7 @@ function ChatMessage(props) {
             .limit(2000)
             .where("textId","==",text)
             .where('email',"==", props.user.email)
+            .where('projectId','==',props.project._id)
             .get();
 
         const doc = snapshot.docs;
