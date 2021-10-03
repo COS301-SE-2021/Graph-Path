@@ -126,7 +126,7 @@ function  makeTaskRoute(db)
 
 
     /**
-     * @api {get} task/getAllTasks
+     * @api {get} /task/getAllTasks
      * @apiName get all Tasks
      * @apiPermission admin
      * @apiGroup Task

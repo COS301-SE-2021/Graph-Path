@@ -1,0 +1,16 @@
+define({
+  "name": "Graph-Path",
+  "version": "0.1.0",
+  "description": "apiDoc for the routes in the backend",
+  "title": "Alternative UI",
+  "url": "http://localhost:9001/",
+  "sampleUrl": false,
+  "defaultVersion": "0.0.0",
+  "apidoc": "0.3.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2021-10-03T17:32:08.693Z",
+    "url": "https://apidocjs.com",
+    "version": "0.29.0"
+  }
+});
