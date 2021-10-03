@@ -246,7 +246,7 @@ function makeProjectRoute(db) {
     router.get('/requestToken',
 
         (req,res)=>{
-            // Authentication Uuser
+            // Authentication User
 
             authentication.generateToken(req,res,db)
                 .then((token)=>{
@@ -278,15 +278,12 @@ function makeProjectRoute(db) {
 
     })
 
-
-
-
-
     /**
      * @api {get}  /project/convertToKanbanBoard
      * @apiName return as given project as datasourse for kanban
      * @apiDescription This endpoint creates a datasourse for a kanban board
      * @apiGroup Project
+     * @apiParam {String} [email] Email used for the kanban
      * @apiSuccess (200) {object} datasourse for kanban
      */
     router.get('/convertToKanbanBoard/:email',
@@ -343,6 +340,7 @@ function makeProjectRoute(db) {
      * @apiDescription This endpoint returns a list of all Projects belonging to the user
      *                 mathing the passed in email
      * @apiGroup Project
+     * @apiParam {String} [email] Email of the user the projects belong to
      * @apiSuccess (200) {List} list of Project objects
      */
     router.get('/getAllProjectsByUserEmail/:email',
@@ -392,8 +390,9 @@ function makeProjectRoute(db) {
      * @api {get}  /project/getProjectByID/:id
      * @apiName list projects owned by email
      * @apiDescription This endpoint returns a list of all Projects belonging to the user
-     *                 mathing the passed in email
+     *                 matching the passed in ID
      * @apiGroup Project
+     * @apiParam {String} [id] ID of the project being retrieved
      * @apiSuccess (200) {List} list of Project objects
      */
     router.get('/getProjectByID/:id',
@@ -438,12 +437,18 @@ function makeProjectRoute(db) {
 
 
     /**
-     * @api {post}
-     * @apiName
-     * @apiDescription
+     * @api {post} /project/newProject
+     * @apiName Create a new project.
+     * @apiDescription This endpoint creates a new project.
      * @apiGroup Project
-     * @apiSuccess (200)
+     * @apiParam {String} [projectName] Name of the project
+     * @apiParam {String} [description] Description of the project
+     * @apiParam {Date} [startDate] Starting date of the project
+     * @apiParam {Date} [dueDate] Ending date of the project
+     * @apiParam {String} [email] Owner of the project's email
+     * @apiSuccess (200) {object} message: "The Project has been created."
      */
+
     router.post('/newProject',
         body('projectName').exists().notEmpty().isString(),
         body('description').exists().notEmpty().isString(),
@@ -518,12 +523,15 @@ function makeProjectRoute(db) {
 
 
     /**
-     * @api {post}
-     * @apiName
-     * @apiDescription
+     * @api {post} /project/addToProjectGroupMembers
+     * @apiName Add new group member to project
+     * @apiDescription Adds a user to the project's list of members.
      * @apiGroup Project
-     * @apiSuccess (200)
+     * @apiParam {String} [email] Email of the group member being added
+     * @apiParam {String} [projectID] ID of the project the member is added to
+     * @apiSuccess (200) message: "successfully added members."
      */
+
     router.post('/addToProjectGroupMembers',
         authentication.authenticateToken,
         authorisation.AuthoriseAddMembers,
@@ -556,7 +564,7 @@ function makeProjectRoute(db) {
                 const recipients =MemberEmails ;
                 mailer.sendInvites(projectName,projectOwner,projectDueDate,recipients);
 
-                    console.log("successfully added new members...")
+                    //console.log("successfully added new members...")
                 res.send({
                     message:"successfully added members"
                 })
@@ -573,12 +581,15 @@ function makeProjectRoute(db) {
     });
 
     /**
-     * @api {delete}
-     * @apiName
-     * @apiDescription
+     * @api {delete} /project/deleteProject
+     * @apiName Delete a project.
+     * @apiDescription Gets rid of a project using the user's email and the projectID.
      * @apiGroup Project
-     * @apiSuccess (200)
+     * @apiParam {String} [email] Email of the owner of the project
+     * @apiParam {String} [projectID] ID of the project being deleted.
+     * @apiSuccess (200) message: "Project was removed successfully"
      */
+    //Is the email parameter necessary or used?
     router.delete('/deleteProject',
         body('email').exists().notEmpty().isEmail(),
         body('projectID').exists().notEmpty().isMongoId(),
@@ -616,12 +627,16 @@ function makeProjectRoute(db) {
 });
 
     /**
-     * @api {patch}
-     * @apiName
-     * @apiDescription
+     * @api {patch} /project/updateProjectGraph
+     * @apiName Update the graph of the current project.
+     * @apiDescription Endpoint replaces the graph of the project with a newer version.
      * @apiGroup Project
-     * @apiSuccess (200)
+     * @apiParam {String} [projectID] ID of the project's graph that is being updated
+     * @apiParam {String} [email] Email of the user updating the graph
+     * @apiParam {object} [graph] Graph that is being updated
+     * @apiSuccess (200) message: "The graph was updated."
      */
+    //Is the email being used? Is it necessary?
     router.patch('/updateProjectGraph',
         authentication.authenticateToken,
         authorisation.AuthoriseUpdateGraph,
@@ -661,12 +676,15 @@ function makeProjectRoute(db) {
 });
 
     /**
-     * @api {patch}
-     * @apiName
-     * @apiDescription
+     * @api {patch} /project/removeProjectMember
+     * @apiName Removes a member from a project
+     * @apiDescription This endpoint removes a member from a project using the provided email and project ID
      * @apiGroup Project
-     * @apiSuccess (200)
+     * @apiParam {String} [projectID] The ID of the project from which the member is being removed.
+     * @apiParam {String} [email] The ID of the member that is being removed from the project.
+     * @apiSuccess (200) message: "Member removed successfully."
      */
+
     router.patch('/removeProjectMember',
         authentication.authenticateToken,
         authorisation.AuthoriseRemoveMembers,
@@ -703,12 +721,20 @@ function makeProjectRoute(db) {
     });
 
     /**
-     * @api {put}
-     * @apiName
-     * @apiDescription
+     * @api {put} /project/updateEverythingProject
+     * @apiName Updates all of the project details
+     * @apiDescription This endpoint takes in all the details of a project and updates the existing one with the new information
+     *                  using the project ID
      * @apiGroup Project
-     * @apiSuccess (200)
+     * @apiParam {String} [projectID] ID of the project being updated.
+     * @apiParam {String} [email] Email
+     * @apiParam {String} [projectName] New name of the project
+     * @apiParam {date} [dueDate] New due date of the project
+     * @apiParam {date} [startDate] New start date of the project
+     * @apiParam {object} [graph] New project graph
+     * @apiSuccess (200) message: "The project was updated."
      */
+
     router.put('/updateEverythingProject',
         authentication.authenticateToken,
         authorisation.AuthoriseUpdateAllProject,

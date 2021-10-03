@@ -1,0 +1,1395 @@
+define({ "api": [
+  {
+    "type": "post",
+    "url": "/project/addToProjectGroupMembers",
+    "title": "",
+    "name": "Add_new_group_member_to_project",
+    "description": "<p>Adds a user to the project's list of members.</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Email of the group member being added</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "projectID",
+            "description": "<p>ID of the project the member is added to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "message:",
+            "description": "<p>&quot;successfully added members.&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "post",
+    "url": "/project/newProject",
+    "title": "",
+    "name": "Create_a_new_project.",
+    "description": "<p>This endpoint creates a new project.</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "projectName",
+            "description": "<p>Name of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>Description of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "startDate",
+            "description": "<p>Starting date of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "dueDate",
+            "description": "<p>Ending date of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Owner of the project's email</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message:",
+            "description": "<p>&quot;The Project has been created.&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "delete",
+    "url": "/project/deleteProject",
+    "title": "",
+    "name": "Delete_a_project.",
+    "description": "<p>Gets rid of a project using the user's email and the projectID.</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Email of the owner of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "projectID",
+            "description": "<p>ID of the project being deleted.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "message:",
+            "description": "<p>&quot;Project was removed successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "patch",
+    "url": "/project/removeProjectMember",
+    "title": "",
+    "name": "Removes_a_member_from_a_project",
+    "description": "<p>This endpoint removes a member from a project using the provided email and project ID</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "projectID",
+            "description": "<p>The ID of the project from which the member is being removed.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>The ID of the member that is being removed from the project.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "message:",
+            "description": "<p>&quot;Member removed successfully.&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "patch",
+    "url": "/project/updateProjectGraph",
+    "title": "",
+    "name": "Update_the_graph_of_the_current_project.",
+    "description": "<p>Endpoint replaces the graph of the project with a newer version.</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "projectID",
+            "description": "<p>ID of the project's graph that is being updated</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Email of the user updating the graph</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": true,
+            "field": "graph",
+            "description": "<p>Graph that is being updated</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "message:",
+            "description": "<p>&quot;The graph was updated.&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "put",
+    "url": "/project/updateEverythingProject",
+    "title": "",
+    "name": "Updates_all_of_the_project_details",
+    "description": "<p>This endpoint takes in all the details of a project and updates the existing one with the new information using the project ID</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "projectID",
+            "description": "<p>ID of the project being updated.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Email</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "projectName",
+            "description": "<p>New name of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "date",
+            "optional": true,
+            "field": "dueDate",
+            "description": "<p>New due date of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "date",
+            "optional": true,
+            "field": "startDate",
+            "description": "<p>New start date of the project</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": true,
+            "field": "graph",
+            "description": "<p>New project graph</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "optional": false,
+            "field": "message:",
+            "description": "<p>&quot;The project was updated.&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "get",
+    "url": "/project/getAllProjectsByUserEmail/:email",
+    "title": "",
+    "name": "list_projects_owned_by_email",
+    "description": "<p>This endpoint returns a list of all Projects belonging to the user mathing the passed in email</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Email of the user the projects belong to</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "List",
+            "optional": false,
+            "field": "list",
+            "description": "<p>of Project objects</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "get",
+    "url": "/project/getProjectByID/:id",
+    "title": "",
+    "name": "list_projects_owned_by_email",
+    "description": "<p>This endpoint returns a list of all Projects belonging to the user matching the passed in ID</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>ID of the project being retrieved</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "List",
+            "optional": false,
+            "field": "list",
+            "description": "<p>of Project objects</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "get",
+    "url": "/project/convertToKanbanBoard",
+    "title": "",
+    "name": "return_as_given_project_as_datasourse_for_kanban",
+    "description": "<p>This endpoint creates a datasourse for a kanban board</p>",
+    "group": "Project",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>Email used for the kanban</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "datasourse",
+            "description": "<p>for kanban</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Project.js",
+    "groupTitle": "Project"
+  },
+  {
+    "type": "delete",
+    "url": "/task/deleteTaskByID/:id",
+    "title": "",
+    "name": "delete_task_by_task_ID",
+    "description": "<p>This endpoint deletes a task matching the passed in ID</p>",
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>task ID</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "get",
+    "url": "/task/getTasksByDescription",
+    "title": "",
+    "name": "get_All_tasks_by_Description",
+    "description": "<p>This endpoint returns a list of task objects matching the given description</p>",
+    "permission": [
+      {
+        "name": "authorised user"
+      }
+    ],
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>Description</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "mixed",
+            "description": "<p><code>User</code> object</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "get",
+    "url": "/task/getTasksByProject",
+    "title": "",
+    "name": "get_All_tasks_by_Project_ID",
+    "description": "<p>This endpoint returns a list of task objects matching the given project ID</p>",
+    "permission": [
+      {
+        "name": "authorised user"
+      }
+    ],
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>Description</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "list",
+            "optional": false,
+            "field": "list",
+            "description": "<p>of task objects</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "get",
+    "url": "/task/getTaskByID/:id",
+    "title": "",
+    "name": "get_All_tasks_by_task_ID",
+    "description": "<p>This endpoint returns a single task object matching the given task ID</p>",
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>task id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "mixed",
+            "description": "<p>'task' object</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "get",
+    "url": "/task/getAllTasks",
+    "title": "",
+    "name": "get_all_Tasks",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "group": "Task",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Array",
+            "optional": false,
+            "field": "an",
+            "description": "<p>array of all the tasks in a project.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "post",
+    "url": "/task/insertTask",
+    "title": "",
+    "name": "insert_new_task",
+    "description": "<p>This endpoint inserts a new task to the Project</p>",
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>Description</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "status",
+            "description": "<p>'not started' ,'in progress', 'complete' , 'back-log'</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "project",
+            "description": "<p>projectID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": true,
+            "field": "assignee",
+            "description": "<p>{email: &quot;user email address&quot;,role: &quot;user role}</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "assigner",
+            "description": "<p>email of assigner</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "due",
+            "description": "<p>due date of task</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "issued",
+            "description": "<p>issued date of task</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "list",
+            "optional": false,
+            "field": "list",
+            "description": "<p>of task objects</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "patch",
+    "url": "/updateEverythingTask'",
+    "title": "",
+    "name": "update_all_details_of_a_task_object",
+    "description": "<p>This endpoint updates all fields of the task matching the passed in ID</p>",
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>task ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": true,
+            "field": "Assignee",
+            "description": "<p>'{email:&quot;&quot; , role:&quot;&quot;}'</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": true,
+            "field": "Assigner",
+            "description": "<p>'{email:&quot;&quot; , role:&quot;&quot;}'</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>&quot;description&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "issued",
+            "description": "<p>YYYY/MM/DD</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "due",
+            "description": "<p>YYYY/MM/DD</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "nodeID",
+            "description": "<p>&quot;&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "stats",
+            "description": "<p>'not started' ,'in progress', 'complete' , 'back-log'</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "project",
+            "description": "<p>project ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The task updated successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "patch",
+    "url": "/updateTaskAssigner'",
+    "title": "",
+    "name": "update_task_Assigner",
+    "description": "<p>This endpoint updates the assigner of the task matching the passed in ID</p>",
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>task ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": true,
+            "field": "Assignee",
+            "description": "<p>'{email:&quot;&quot; , role:&quot;&quot;}'</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The task updated successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "patch",
+    "url": "/updateTaskDescription'",
+    "title": "",
+    "name": "update_task_description",
+    "description": "<p>This endpoint updates the description of the task matching the passed in ID</p>",
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>task ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "description",
+            "description": "<p>&quot; &quot;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The task updated successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "patch",
+    "url": "/updateTaskStatus'",
+    "title": "",
+    "name": "update_task_status",
+    "description": "<p>This endpoint updates the status of the task matching the passed in ID</p>",
+    "group": "Task",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>task ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "status",
+            "description": "<p>'not started' ,'in progress', 'complete' , 'back-log'</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The task updated successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./Task.js",
+    "groupTitle": "Task"
+  },
+  {
+    "type": "patch",
+    "url": "/updateUserPassword'",
+    "title": "",
+    "name": "changes_password_of_a_user_object",
+    "description": "<p>This endpoint updates the password field of the user matching the passed in email</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>&quot;email&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "password",
+            "description": "<p>''</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user updated successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "patch",
+    "url": "/updateUserUsernameAndPassword'",
+    "title": "",
+    "name": "changes_username_and_password_of_a_user_object",
+    "description": "<p>This endpoint updates username and password fields of the user matching the passed in email</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>&quot;email&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "username",
+            "description": "<p>&quot;username&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "password",
+            "description": "<p>''</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user updated successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "patch",
+    "url": "/updateUserUsername'",
+    "title": "",
+    "name": "changes_username_of_a_user_object",
+    "description": "<p>This endpoint updates username field of the user matching the passed in email</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>&quot;email&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "username",
+            "description": "<p>&quot;username&quot;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user updated successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/newUser'",
+    "title": "",
+    "name": "create_new_user_object",
+    "description": "<p>This endpoint creates a user object</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>user ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "firstName",
+            "description": "<p>&quot;firstName&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "lastName",
+            "description": "<p>&quot;lastName&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "username",
+            "description": "<p>&quot;username&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>&quot;email&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "notification",
+            "description": "<p>&quot;Notification&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "type",
+            "description": "<p>&quot;type&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "password",
+            "description": "<p>''</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user created successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/listOfAllUsersExceptYourself'",
+    "title": "",
+    "name": "get_all_other_users",
+    "description": "<p>This endpoint gets all other users a user object</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>&quot;email&quot;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user created successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/listOfAllUsers'",
+    "title": "",
+    "name": "get_all_users",
+    "description": "<p>This endpoint retrieves all user objects</p>",
+    "group": "User",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The users retrieved successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/login'",
+    "title": "",
+    "name": "login_a_user",
+    "description": "<p>This endpoint logs in a user object</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>&quot;email&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "password",
+            "description": "<p>''</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user logged in successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "delete",
+    "url": "/deleteUserByID'",
+    "title": "",
+    "name": "removes_an_user_object_based_on_its_id",
+    "description": "<p>This endpoint removes the user matching the passed in ID</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>user ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user removed successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/getUserByID'",
+    "title": "",
+    "name": "retrieve_user_object",
+    "description": "<p>This endpoint retrieves a user object based on ID</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>user ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user retrieved successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "put",
+    "url": "/updateEverythingUser'",
+    "title": "",
+    "name": "update_all_details_of_a_user_object",
+    "description": "<p>This endpoint updates all fields of the user matching the passed in ID</p>",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>user ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "firstName",
+            "description": "<p>&quot;firstName&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "lastName",
+            "description": "<p>&quot;lastName&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "username",
+            "description": "<p>&quot;username&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>&quot;email&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "notification",
+            "description": "<p>&quot;Notification&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "type",
+            "description": "<p>&quot;type&quot;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "password",
+            "description": "<p>''</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "object",
+            "optional": false,
+            "field": "message",
+            "description": "<p>: &quot;The user updated successfully&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./User.js",
+    "groupTitle": "User"
+  }
+] });

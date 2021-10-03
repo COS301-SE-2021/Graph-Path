@@ -7,7 +7,7 @@ const mongoose = require('mongoose') ;
 
 let db ;
 
-console.log(DB_URI);
+//console.log(DB_URI);
 mongClient.connect(DB_URI, {useNewUrlParser:true,useUnifiedTopology:true},(err,clientDB)=>{
     if(err){
         return console.log("Could not connect to the DB: ",err)
