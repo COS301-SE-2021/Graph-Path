@@ -5,12 +5,15 @@ import { Notification } from 'rsuite';
 
 
 function PopUpMessage(text,type ){
-
+    let dur = 3000 ; //default
+    if (type === 'warning'){
+        dur = 7000 ;
+    }
     if (['info','success','warning','error'].indexOf(type.toString())>0 ){
         Notification[type]({
             title: type.toUpperCase() ,
             description:text  ,
-            duration:3000, 
+            duration:dur, 
             placement:'topEnd' 
         }) ;
     }

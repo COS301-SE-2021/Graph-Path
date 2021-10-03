@@ -58,6 +58,7 @@ class GraphPath extends Component{
     
 
   }
+
   componentWillUnmount(){
     // let semiUpdate = this.props.project ;
     if (this.graphManager !== null){
@@ -410,8 +411,12 @@ class GraphPath extends Component{
               nodes:minimalNodes,
               edges:minimalEdges
           }
+
+          this.graphManager.resetColorByStatus() ;
+          const defaultGraph = this.graphManager.getGraph() ;
+
           const data = {} ; //{ ...this.props.project}  ;
-          data.graph = minimalGraph
+          data.graph = defaultGraph ;
           data.projectID = projectId ;
           data.email = this.props.loggedUser.email ; 
           console.log('b4',data)
@@ -435,7 +440,7 @@ class GraphPath extends Component{
               }) ;
               // this.viewProjectsFromAPI() ;
               PopUpMessage(res.data.message,'info') ;
-              this.initialGraph = minimalGraph ;
+              this.initialGraph = defaultGraph ;
           })
           .catch((err)=>{ 
             if (err.response){
@@ -656,8 +661,8 @@ class GraphPath extends Component{
   }
 
   newTaskModal=()=>{
-
-    let crit = this.graphManager.getNodeCriticality(this.state.currNodeID) ; 
+    let curr = this.state.currNodeID ;
+    let crit = this.graphManager.getNodeCriticality(curr) ; 
     if (crit === undefined){
       crit = false ; 
     }
@@ -685,6 +690,12 @@ class GraphPath extends Component{
       critical = {crit} 
       />
     </Modal.Body>
+    <Modal.Footer>
+    <IconButton icon={<Icon icon={'road'}/>} onClick={(event)=>this.selectCriticalPath('node',curr)}>
+      Path to node on the graph.
+      </IconButton>
+
+    </Modal.Footer>
     </Modal>
 
   }
@@ -713,8 +724,8 @@ class GraphPath extends Component{
 
   }
 
-  selectCriticalPath=(key,event)=>{
-    console.log('critical',key,event) ;
+  selectCriticalPath=(key,nodeEnd)=>{
+    console.log('critical',key,nodeEnd) ;
     const nodes = this.state.currGraph.nodes ;
     if (nodes !== undefined && nodes.length>0){
       if (key === 'graph'){
@@ -724,7 +735,7 @@ class GraphPath extends Component{
         }
         else if (highlight >= 0){
           this.updateGraph() ;
-          PopUpMessage(`${highlight} critical paths found`,'info') ; 
+          PopUpMessage(`${highlight} critical paths found`,'success') ; 
         }
       }
       else if(key === 'reset'){
@@ -732,6 +743,24 @@ class GraphPath extends Component{
         if (reset){
           this.updateGraph() ;
         }
+      }
+      else if (key === 'node'){
+        if (nodeEnd === undefined || typeof nodeEnd !== 'string'){
+          PopUpMessage('something went wrong, please try again.','error') ;
+        }
+        else{
+        let highlight =  this.graphManager.highlightNodeCritical(nodeEnd) ;
+        if (highlight){
+          PopUpMessage('Path found','success') ;
+          this.updateGraph() ;
+        }
+        else{
+          PopUpMessage('No path found to task, from the start node','warning') ;
+        } 
+        this.showTaskModal() ;
+          
+        }
+
       }
     
     }

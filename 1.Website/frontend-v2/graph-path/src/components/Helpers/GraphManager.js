@@ -1,4 +1,3 @@
-import { node } from "prop-types";
 import isAcyclic from "./DAG";
 
 var jsgraph = require('js-graph-algorithms') ;// {TopologicalSortShortestPaths,WeightedDiGraph,Edge} from 'js-graph-algorithms' ;
@@ -355,6 +354,52 @@ class GraphManager{
     }
     }
 
+    highlightGraphCritical=()=>{
+      var internalBFS = this.pathFromBFS('n0') ;
+      var paths = internalBFS.paths ;
+      console.log('color to node',paths)
+      let ans = paths.length ; 
+      let color = [] ;
+      if (ans){
+        for (let node of paths){
+          let path = this.findShortestPath(node) ;
+          color.push(path) ;
+        }
+      console.log('color the nodes',color) ;
+      this.changeEdgeColor(color,'#a00')
+
+        return color.length ;
+
+      }
+      
+      /**
+       * @returns ans - number of critical nodes paths , if start node not connected it reurns -1
+       */
+      if (internalBFS.result.length > 1){
+        return color.length ;
+      }
+      else{
+        return -1;
+      }
+      
+
+    }
+
+    highlightNodeCritical=(endNode)=>{
+      this.resetColorByStatus() ;
+      if (typeof endNode !== 'string'){
+        return false ;
+      }
+      else{
+        let pathToEnd = this.findShortestPath(endNode) ;
+        if (pathToEnd.length>0){
+          this.changeEdgeColor([pathToEnd],'#900') ;
+          return true ;
+        }
+        return false ;
+      }
+    }
+
     findFromTraversable= async (endNode)=>{
       // console.log('finding from traversable')
 
@@ -388,7 +433,7 @@ class GraphManager{
         return result ;
       }
       else{
-        return ['n0'] ;//was't found
+        return ['n0'] ;//wasn't found
       }
     }
 
@@ -441,71 +486,6 @@ class GraphManager{
       }
       // console.log('Result' ,paths)
       return paths ; 
-    }
-
-    highlightGraphCritical=()=>{
-        var internalBFS = this.pathFromBFS('n0') ;
-        var paths = internalBFS.paths ;
-        console.log('color to node',paths)
-        let ans = paths.length ; 
-        let color = [] ;
-        if (ans){
-          for (let node of paths){
-            let path = this.findShortestPath(node) ;
-            color.push(path) ;
-          }
-        console.log('color the nodes',color) ;
-        this.changeEdgeColor(color,'#a00')
-
-          return color.length ;
-          //edit the color to red
-          // const colorEdges = this.graph.edges.map((value)=>{
-          //   var del = path.indexOf(value.to) ;
-          //   if (value.from === 'n0'){
-          //     if (del>=0){
-          //       path = path.splice(del,1) ;
-          //       let newE = {...value} ; 
-          //       newE['color'] = '#200' ;
-          //       // console.log('colored edge', newE)
-          //       return newE ;
-          //     }
-          //     else{
-          //       return value
-          //     }
-          //   }
-          //   else{
-          //     if (del>=0){
-          //       let newE = {...value} ; 
-          //       newE['color'] = '#200' ;
-          //       // console.log('colored edge', newE)
-          //       return newE ; 
-          //     }
-          //     else{
-          //       return value
-
-          //     }
-          //   }
-          // }) ;
-
-          
-
-
-          // this.graph.edges = colorEdges ;
-          // return true ;
-
-        }
-        
-        /**
-         * @returns ans - number of critical nodes paths , if start node not connected it reurns -1
-         */
-        if (internalBFS.result.length > 1){
-          return color.length ;
-        }
-        else{
-          return -1;
-        }
-        
-
     }
 
     removeVertex=(vertex)=>{
@@ -582,7 +562,7 @@ class GraphManager{
     }
 
     /**
-     * @param colorArray - an array of egdes to color
+     * @param colorArray - an array of egdes(from,to) to color
     */
     changeEdgeColor = (colorArray,color) =>{
       var edges = this.graph.edges ;
