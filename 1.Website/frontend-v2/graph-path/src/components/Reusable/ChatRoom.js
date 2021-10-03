@@ -42,7 +42,8 @@ function ChatRoom(props){
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             email,
             picture,
-            projectId: props.project._id
+            projectId: props.project._id,
+            textId:  10 + (Math.random() * (10000 - 100))
         })
 
         setFormValue('');
@@ -90,18 +91,38 @@ function ChatRoom(props){
 }
 
 function ChatMessage(props) {
-    const {  text, email, picture, projectId } = props.message;
+    const {  text, email, picture, projectId,textId } = props.message;
 
     const messageClass = email === props.user.email ? 'sent' : 'received';
+
+    const deleteSingleChat= async (text)=>{
+        console.log("text",text)
+        const snapshot = await firestore
+            .collection("messages")
+            .limit(100)
+            .where("textId","==",text)
+            .where('email',"==", props.user.email)
+            .get();
+
+        const doc = snapshot.docs;
+        console.log("doc",doc)
+        for (let x =0;x<doc.length;x++){
+            await doc[x].ref.delete()
+        }
+    }
 
     return (
         props.project._id === projectId
         &&
             <div id="chat-message-div" className="main-chat-message">
-                <div className={`message ${messageClass}`}>
-                    <img src={picture} title={email} />
-                    <p>{text}</p>
+                <div onDoubleClick={()=>deleteSingleChat(textId)}>
+                    <div className={`message ${messageClass}`}>
+                        <img src={picture} title={email} />
+                        <p>{text}</p>
+                    </div>
+
                 </div>
+
             </div>
 
     )

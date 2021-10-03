@@ -1,11 +1,12 @@
-import {React,Component} from 'react' ;
+import {React, Component, useRef} from 'react' ;
 import PropTypes from 'prop-types';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import GraphPath from './Graph';
-import {Divider, Drawer, Icon, Nav, Sidebar, Sidenav} from 'rsuite';
+import {Button, Divider, Drawer, Icon, Nav, Sidebar, Sidenav} from 'rsuite';
 import '../css/Common.css'
 import ProjectInformation from "./ProjectInformation";
 import ProjectChat from "./ProjectChat";
+import ChatRoom from "./Reusable/ChatRoom";
 
 /*
 *   Project provides a view to the graph of the project
@@ -74,10 +75,14 @@ class Project extends Component {
                     >
                         <Drawer.Header>
                             <Drawer.Title>{project.projectName} Collaborative Space</Drawer.Title>
+                            {/*<Button id="btn-delete" onClick={() => chat.current.deleteAllChats(project._id)}>Delete All Chats</Button>*/}
                             <Divider />
                         </Drawer.Header>
                         <Drawer.Body>
-                            <ProjectChat api={this.props.api} project={project} user={this.props.user} />
+                            {/*<ProjectChat api={this.props.api} project={project} user={this.props.user} />*/}
+                            <section>
+                                <ChatRoom project={this.props.project} user={this.props.user} />
+                            </section>
                         </Drawer.Body>
                     </Drawer>
 
