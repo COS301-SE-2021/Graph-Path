@@ -14,7 +14,6 @@ import RadarChart from "./RadarChart";
 import PieChart from "./PieChart";
 import Calendar from "./Calendar";
 import BarChart from "./BarChart";
-import MainChat from "./MainChat"
 import PropTypes from "prop-types";
 
 

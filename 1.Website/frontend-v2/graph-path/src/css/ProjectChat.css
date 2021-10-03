@@ -29,6 +29,12 @@ section {
 /*    background: #6649b8;*/
 /*}*/
 
+#chat-info{
+    position: absolute;
+    right: 30px;
+    bottom: 48px;
+}
+
 #chat-room-div form {
     height: 8vh;
     position: fixed;
@@ -48,6 +54,13 @@ section {
 
 #btn-delete{
     position: fixed;
+    /*bottom: 0px;*/
+    bottom: 708px;
+    right: 68px;
+}
+
+#trash-icon{
+    background-color: transparent;
 }
 
 #chat-icon{

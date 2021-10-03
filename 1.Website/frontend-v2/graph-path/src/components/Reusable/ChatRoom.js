@@ -3,9 +3,8 @@ import {useCollectionData} from "react-firebase-hooks/firestore";
 import firebase from "firebase/compat";
 import {Button, Icon} from "rsuite";
 import 'firebase/firestore';
-
-// import "../../css/MainChat.css"
 import "../../css/ProjectChat.css"
+import PropTypes from "prop-types";
 
 
 firebase.initializeApp({
@@ -21,11 +20,11 @@ firebase.initializeApp({
 const firestore = firebase.firestore();
 
 function ChatRoom(props){
-    console.log("props chat", props.project)
+    console.log("props chat", props.user)
 
     const dummy = useRef();
     const messagesRef = firestore.collection('messages');
-    const query = messagesRef.orderBy('createdAt').limit(100);
+    const query = messagesRef.orderBy('createdAt').limit(2000);
 
     const [messages] = useCollectionData(query, {idField: 'id'})
 
@@ -54,7 +53,7 @@ function ChatRoom(props){
     const deleteAllChats = async (projId)=>{
         const snapshot = await firestore
             .collection("messages")
-            .limit(100)
+            .limit(2000)
             .where("projectId","==",projId)
             .get();
 
@@ -68,7 +67,13 @@ function ChatRoom(props){
     return (
         <>
             <div id="chat-room-div" className="main-chat-message">
-                <Button id="btn-delete" onClick={() => deleteAllChats(props.project._id)}>Delete All Chats</Button>
+                {
+                    props.project.projectOwner === props.user.email ?
+                        <Button id="btn-delete" onClick={() => deleteAllChats(props.project._id)} title="Delete all chats" ><Icon id="trash-icon" icon={'trash-o'}/> </Button>
+                        :
+                        ""
+                }
+
                 <main>
 
                     {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} user={props.user} project={props.project} />)}
@@ -99,7 +104,7 @@ function ChatMessage(props) {
         console.log("text",text)
         const snapshot = await firestore
             .collection("messages")
-            .limit(100)
+            .limit(2000)
             .where("textId","==",text)
             .where('email',"==", props.user.email)
             .get();
@@ -126,6 +131,11 @@ function ChatMessage(props) {
             </div>
 
     )
+}
+
+ChatRoom.propTypes = {
+    project : PropTypes.object.isRequired,
+    user:PropTypes.object.isRequired
 }
 
 export default ChatRoom;
