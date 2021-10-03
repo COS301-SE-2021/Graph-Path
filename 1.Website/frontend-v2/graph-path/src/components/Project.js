@@ -1,11 +1,11 @@
-import {React,Component} from 'react' ;
+import React,{ Component, } from 'react' ;
 import PropTypes from 'prop-types';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import GraphPath from './Graph';
-import {Divider, Drawer, Icon, Nav, Sidebar, Sidenav} from 'rsuite';
+import { Divider, Drawer, Icon, Nav, Popover, Sidebar, Sidenav, Whisper} from 'rsuite';
 import '../css/Common.css'
 import ProjectInformation from "./ProjectInformation";
-import ProjectChat from "./ProjectChat";
+import ChatRoom from "./Reusable/ChatRoom";
 
 /*
 *   Project provides a view to the graph of the project
@@ -57,6 +57,13 @@ class Project extends Component {
         const {match} = this.props ;
         console.log('PRoj',this.props)
         const {project} = this.props
+        const helpers = (<Popover>
+            <div id="help-bar">
+                <p>To delete text, double click on the text</p>
+            </div>
+
+
+        </Popover>)
         if (project === undefined || project.projectName === undefined){
             return (<div>
                 Please Select Project
@@ -74,10 +81,17 @@ class Project extends Component {
                     >
                         <Drawer.Header>
                             <Drawer.Title>{project.projectName} Collaborative Space</Drawer.Title>
+                            <div id="chat-info" >
+                                <Whisper placement={'auto'} trigger={'active'} speaker={helpers}>
+                                    <Icon title="To delete text, double click on the text" icon={'help-o'} size={'1x'}/>
+                                </Whisper>
+                            </div>
                             <Divider />
                         </Drawer.Header>
                         <Drawer.Body>
-                            <ProjectChat api={this.props.api} project={project} user={this.props.user} />
+                            <section>
+                                <ChatRoom project={this.props.project} user={this.props.user} />
+                            </section>
                         </Drawer.Body>
                     </Drawer>
 
