@@ -415,7 +415,7 @@ class ProjectInformation extends React.Component{
     render() {
         const project = this.props.project;
         //const {formValue} = this.state;
-         //{console.log("proj",project)}
+         {console.log("proj",project)}
         // console.log("state new",this.props.loggedUser)
         return(
             <div data-testid="main-div-id" id="main-div">

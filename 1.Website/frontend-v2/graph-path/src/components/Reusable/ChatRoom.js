@@ -20,7 +20,7 @@ firebase.initializeApp({
 const firestore = firebase.firestore();
 
 function ChatRoom(props){
-    console.log("props chat", props.user)
+    console.log("props chat", props.project)
 
     const dummy = useRef();
     const messagesRef = firestore.collection('messages');
@@ -123,7 +123,7 @@ function ChatMessage(props) {
             <div id="chat-message-div" className="main-chat-message">
                 <div onDoubleClick={()=>deleteSingleChat(textId)}>
                     <div className={`message ${messageClass}`}>
-                        <img src={picture} title={email} />
+                        <img src={picture} title={email} alt="icon" />
                         <p>{text}</p>
                     </div>
 

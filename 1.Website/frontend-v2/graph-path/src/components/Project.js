@@ -83,7 +83,7 @@ class Project extends Component {
                             <Drawer.Title>{project.projectName} Collaborative Space</Drawer.Title>
                             <div id="chat-info" >
                                 <Whisper placement={'auto'} trigger={'active'} speaker={helpers}>
-                                    <Icon title="To delete text, double click on the text" icon={'help-o'} size={'1x'}/>
+                                    <Icon title="To delete text, double click on the text" icon={'help-o'}/>
                                 </Whisper>
                             </div>
                             <Divider />
