@@ -1,5 +1,12 @@
 import React from 'react';
 import {Button, ButtonGroup, Divider, Modal, Panel, Steps} from "rsuite";
+import AddEdge from "../img/gif/AddEdge.gif";
+import AddMembers from "../img/gif/AddMembers.gif";
+import AddSubtask from "../img/gif/AddSubtask.gif";
+import AssignTask from "../img/gif/AssignTask.gif";
+import CreateProject from "../img/gif/CreateProject.gif";
+import CreateTask from "../img/gif/CreateTask.gif";
+import SearchKanban from "../img/gif/SearchKanban.gif";
 
 class Tooltip extends React.Component{
     constructor(props) {
@@ -42,35 +49,63 @@ class Tooltip extends React.Component{
                     <Modal.Body>
                         <div>
                             <Steps current={this.state.step} >
-                                <Steps.Item title="Start" />
-                                <Steps.Item title="Progress" />
-                                <Steps.Item title="Finish" />
-                                <Steps.Item title="Start" />
-                                <Steps.Item title="Progress" />
-                                <Steps.Item title="Finish" />
-                                <Steps.Item title="Start" />
-                                <Steps.Item title="Progress" />
-                                <Steps.Item title="Finish" />
+                                <Steps.Item  />
+                                <Steps.Item  />
+                                <Steps.Item  />
+                                <Steps.Item  />
+                                <Steps.Item  />
+                                <Steps.Item  />
+                                <Steps.Item  />
                             </Steps>
                             <Divider />
-                            <Panel header={`Step: ${this.state.step + 1}`} >
+                            {/*header={`Step: ${this.state.step + 1}`}*/}
+                            <Panel  >
                                 {
                                     this.state.step === 0 ?
-                                        <p>Create Project</p>
+                                        <>
+                                            {/*<h6>Create Project</h6>*/}
+                                            <img src={CreateProject} />
+                                        </>
+
                                         :this.state.step === 1?
-                                            <p>Add and Delete Nodes</p>
+                                            <>
+                                                {/*<h6>Create Project</h6>*/}
+                                                <img src={CreateTask} />
+                                            </>
                                             :this.state.step === 2?
-                                                <p>Add and Delete Edges</p>
+                                                <>
+                                                    {/*<h6>Create Project</h6>*/}
+                                                    <img src={AddEdge} />
+                                                </>
                                                 :this.state.step === 3?
-                                                    <p>Critical Path</p>
-                                                    :""
+                                                    <>
+                                                        {/*<h6>Create Project</h6>*/}
+                                                        <img src={AddSubtask} />
+                                                    </>
+                                                    :this.state.step === 4?
+                                                        <>
+                                                            {/*<h6>Create Project</h6>*/}
+                                                            <img src={AddMembers} />
+                                                        </>
+                                                        :this.state.step === 5?
+                                                            <>
+                                                                {/*<h6>Create Project</h6>*/}
+                                                                <img src={AssignTask} />
+                                                            </>
+                                                            :this.state.step === 6?
+                                                                <>
+                                                                    {/*<h6>Create Project</h6>*/}
+                                                                    <img src={SearchKanban} />
+                                                                </>
+                                                            :""
 
 
                                 }
                             </Panel>
                             <ButtonGroup>
                                 <Button onClick={this.onPrevious} disabled={this.state.step === 0} >Previous</Button>
-                                <Button onClick={this.onNext} disabled={this.state.step === 3} >Next</Button>
+                                <Button onClick={this.onNext} disabled={this.state.step === 6} >Next</Button>
+                                <Button onClick={this.handleClose}>Close</Button>
                             </ButtonGroup>
                         </div>
                     </Modal.Body>
