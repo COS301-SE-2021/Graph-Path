@@ -1,5 +1,6 @@
 import React from 'react' ;
 import {
+    Button,
     Divider,
     Drawer
 } from "rsuite";
@@ -7,6 +8,7 @@ import '../css/Profile.css'
 import Logo from "../img/Logo3.png";
 import PropTypes from "prop-types";
 import RadarChart from "./RadarChart";
+import Tooltip from "./Tooltip";
 class Profile extends React.Component{
     constructor(props) {
         super(props);
@@ -34,11 +36,23 @@ class Profile extends React.Component{
         })
     }
 
+    tooltipModalRef=(obj)=>{
+        // console.log('ref0',obj) ;
+
+        this.showTooltip = obj && obj.handleOpen;
+    }
+
+    showT=()=>{
+
+        this.showTooltip();
+    }
+
     render() {
         const picture = this.props.user.picture;
         const user = this.props.user;
         return(
             <>
+                <Tooltip ref={this.tooltipModalRef} />
                 <Drawer full placement={"top"} backdrop={"static"} show={this.state.show} onHide={this.handleClose}>
                     <Drawer.Header>
                         <Drawer.Title style={{textAlign:"center"}}>Profile</Drawer.Title>
@@ -70,6 +84,7 @@ class Profile extends React.Component{
 
                         </div>
                         <img id="logo-pics" src={Logo} alt='logo'/>
+                        <Button onClick={this.showT}>Tool Tips</Button>
                     </Drawer.Body>
                 </Drawer>
             </>
