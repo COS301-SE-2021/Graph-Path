@@ -102,3 +102,26 @@ h6 {
     width: 70%;
     background-color: red;
 }
+
+#panel-img h4{
+    text-align: center;
+
+}
+
+#panel-img p{
+    position: absolute;
+    top: 160px;
+    text-align: center;
+    font-size: 1.2em;
+    right: 0;
+    width: 30%;
+    background-color: transparent;
+
+}
+
+#tooltip-btn-profile{
+    position: absolute;
+    left: 49%;
+    top:55%;
+    border: 1px solid white;
+}

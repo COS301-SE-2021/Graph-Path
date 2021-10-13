@@ -84,7 +84,7 @@ class Profile extends React.Component{
 
                         </div>
                         <img id="logo-pics" src={Logo} alt='logo'/>
-                        <Button onClick={this.showT}>Tool Tips</Button>
+                        <Button id="tooltip-btn-profile" onClick={this.showT}>Tool Tips</Button>
                     </Drawer.Body>
                 </Drawer>
             </>
