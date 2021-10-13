@@ -69,6 +69,12 @@ class Project extends Component {
                 Please Select Project
             </div>)
         }
+        else if (project._id.length < 8){
+            return (<>
+            <h1>Example Project</h1>
+            <GraphPath project={project} />
+            </>)
+        }
         else{
             return (
                 <>

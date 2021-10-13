@@ -9,6 +9,7 @@ import PopUpMessage from './Reusable/PopUpMessage';
 import Project from "./Project";
 import ProjectCard from './Reusable/ProjectCard' ;
 import NewProject from "./NewProject";
+import ExampleProject from './Reusable/ExampleProject';
 
 /**
 *   A component that will make async request to peer server for all projects of the logged user, provided in the props   
@@ -380,21 +381,18 @@ The neccesary information for the request to go through follows:
                 projects:this.state.allProjects 
             })
         }
-    }
-    
+    } 
     
     render(){
-        // let fullProject = {}
-        // fullProject.owner = this.props.user.email ;
-        // fullProject.graph = {} ;
-        // fullProject.groupMembers = [{
-        //     email:this.props.user.email,
-        //     role:"owner",
-        //     label:this.props.user.name === undefined ?this.props.user.email :this.props.user.name,
-        //     permissions:[
-        //         "owner"
-        //     ]
-        // }]
+        let fullProject = ExampleProject() ;
+        fullProject. groupMembers = [{
+            email:this.props.loggedUser.email,
+            label:this.props.loggedUser.name === undefined ?this.props.loggedUser.email :this.props.loggedUser.name,
+            permissions:[
+                "owner"
+            ]
+        }]
+        
         // console.log('mgr',this.props)
 
 
@@ -412,7 +410,6 @@ The neccesary information for the request to go through follows:
         let sortPlaceholder = 'Sort: ' ;
         if (sortSelected){
             sortPlaceholder = 'Sort: '+sortSelected.label ;
-
         }
 
         const {match} = this.props ;
@@ -455,10 +452,15 @@ The neccesary information for the request to go through follows:
                                 deleteProject={this.deleteProject} />    
                                 })
                                 :<div>
-                                    <h1>No Projects found please refresh</h1>
+                                    <h1>No projects found please create new projects </h1>
+                                    <ProjectCard project={fullProject}
+                                     link={`${match.url}/project`} 
+                                     selectProject={this.selectCurrentProject}
+                                    
+                                    />
+                                    <h6>Take a tour through the example project and start creating managing new projects</h6>
                                 </div>                
                             }
-                            
                                 </div>
                     
                             </div>
@@ -473,7 +475,7 @@ The neccesary information for the request to go through follows:
 }
 
 ProjectManager.propTypes = {
-    user :PropTypes.object,
+    loggedUser :PropTypes.object,
     api:PropTypes.string
 
 }
@@ -499,32 +501,3 @@ const mapDispatchToProps = {
   }
 
 export default connect(mapStateToProps,mapDispatchToProps)(withRouter(ProjectManager)) ; 
-
-// def:[{
-//     projectName:"T1",
-//     lastDateAccessed: new Date().toJSON().slice(0,17) ,
-// },{
-//     projectName:"T2",
-//     lastDateAccessed: new Date("2021-08-22T16:00").toJSON().slice(0,17) ,
-// },{
-//     projectName:"S2",
-//     lastDateAccessed: new Date("2021-08-12T16:00").toJSON().slice(0,17) ,
-// },{
-//     projectName:"T1",
-//     lastDateAccessed: new Date().toJSON().slice(0,17) ,
-// },{
-//     projectName:"T2 2",
-//     lastDateAccessed: new Date("2021-05-22T16:00").toJSON().slice(0,17) ,
-// },{
-//     projectName:"S2 65",
-//     lastDateAccessed: new Date("2021-06-15T16:00").toJSON().slice(0,17) ,
-// },{
-//     projectName:"T56",
-//     lastDateAccessed: new Date().toJSON().slice(0,17) ,
-// },{
-//     projectName:"T2 3",
-//     lastDateAccessed: new Date("2021-03-23T16:00").toJSON().slice(0,17) ,
-// },{
-//     projectName:"S2 45",
-//     lastDateAccessed: new Date("2021-08-15T16:00").toJSON().slice(0,17) ,
-// }]
