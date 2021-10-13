@@ -59,6 +59,11 @@ function Landing({logInvalid}) {
                        <div >
                                <h1>Features</h1>
                                <br/> <br/>
+
+                               <h3>Graph View</h3>
+                               <p className="landingText">Tasks are organized as an interactive acyclic graph. The graph is user-friendly allowing for node linkage and dragging as the user wishes.</p><br/><br/>
+                               <img src={graphDrag} alt='GraphGIF'/> <br/><br/>
+
                                <h3>Collaborative Chat</h3>
                                <p className="landingText">The Graph Path has a Collaborative Chat intended for project users to interact with one another</p> <br/> <br/>
                                <img src={sendMessage} alt-='ChatGIF' /> <br/><br/>
@@ -67,14 +72,10 @@ function Landing({logInvalid}) {
                                <p className="landingText">Traditionally, the Kanban Board is used to display a single project. The Graph Path Kanban has an overview of all projects.</p> <br/> <br/>
                                <img src={kanbanBoard} alt='KanbanGIF' /> <br/><br/>
 
-                               <h3>Graph View</h3>
-                               <p className="landingText">Tasks are organized as an interactive acyclic graph. The graph is user-friendly allowing for node linkage and dragging as the user wishes.</p>
-                               <img src={graphDrag} alt='GraphGIF'/> <br/><br/>
-
                                <h3>Statistics</h3>
                                <p className='landingText'>
                                        Graph Path has different statistical views.
-                               </p>
+                               </p><br/><br/>
                                <img src={statts1} alt='StatsGIF'/> <br/><br/>
                        </div>
 
@@ -103,65 +104,11 @@ function Landing({logInvalid}) {
 
                 </div>
                     <div id="footer-div">
-                            <p>Graph Path &copy; 2021</p>
+                            <p style={{"fontWeight":"bold"}}>Graph Path &copy; 2021</p>
                     </div>
 
             </div>
 
-
-
-
-           // <div>
-           //     <div  >
-           //         <h1 id="pageName">GRAPH PATH </h1>
-           //         <p className="aboutText introText" >
-           //             Graph path is an interactive graph based project Management tool. <br/>
-           //             It aims to organise tasks of a project on a interactive and user friendly graph.
-           //           </p>
-           //         <img id="landing-graph" src={landingSnap} alt="Logo"/>
-           //
-           //         <p className="aboutText">
-           //             This system provides a way to have all the tasks of a project that needs to be done  represented as a graph.
-           //              <br/><br/>
-           //
-           //             The graph aims to make it easier to understand the dependencies between the task of the project.
-           //             <br/><br/>
-           //             The specific type of graph should be a Directed Acyclic Graph since it would be easy to read,
-           //             understand and it would provide a very user friendly interface to interact with.
-           //         </p>
-           //
-           //     </div>
-           //
-           //     {/*<Carousel autoplay className="custom-slider">*/}
-           //     {/*     <div>*/}
-           //     {/*         <p>1</p>*/}
-           //     {/*         <p>11</p>*/}
-           //     {/*     </div>*/}
-           //     {/*    <div>*/}
-           //     {/*        <p>2</p>*/}
-           //     {/*        <p>22</p>*/}
-           //     {/*    </div>*/}
-           //     {/*    <div>*/}
-           //     {/*        <p>3</p>*/}
-           //     {/*        <p>33</p>*/}
-           //
-           //     {/*    </div>*/}
-           //
-           //
-           //
-           //     {/*</Carousel>*/}
-           //
-           //
-           //
-
-           //
-           //
-           //
-
-           //
-           //     {console.log(user)}
-           //
-           // </div>
         );
 }
 

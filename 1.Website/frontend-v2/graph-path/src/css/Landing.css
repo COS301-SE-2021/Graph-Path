@@ -81,6 +81,7 @@ span{
     background: #0c3b5c;
     width: 100%;
     display: flex;
+    padding-bottom: 20px;
     /*overflow:scroll;*/
 }
 
@@ -103,7 +104,7 @@ span{
 
 #graph-picture{
     width: 70%;
-    margin-top: 20%;
+    margin-top: 30%;
 }
 
 #landing-btn{
@@ -124,8 +125,9 @@ span{
 /*}*/
 
 p.landingText{
-    width: 80%;
-
+    width: 75%;
+    /*background: pink;*/
+    margin-left: 95px;
     padding: 5px;
     font-size: 1.5em;
 }
