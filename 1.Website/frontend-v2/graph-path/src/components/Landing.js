@@ -7,6 +7,7 @@ import {useAuth0} from '@auth0/auth0-react';
 //import JSONPretty from 'react-json-pretty';
 import LoginBtn from "./LoginBtn";
 import Graph_Picture from "../img/graph_2.svg";
+import Log from "../img/Logo3.png";
 //import dashboard from "../img/dashboard.jpg";
 //import createP from "../img/createp.jpg";
 //import graph from "../img/graph.jpg";
@@ -18,6 +19,7 @@ import sendMessage from "../img/landing/SendMessage.gif"
 import kanbanBoard from "../img/landing/SearchKanban.gif"
 import graphDrag from "../img/landing/GraphDrag.gif"
 import statts1 from "../img/landing/statistics1.gif";
+import Logo from "../img/Logo3.png";
 
 function Landing({logInvalid}) {
 
@@ -32,6 +34,24 @@ function Landing({logInvalid}) {
         return(
 
             <div data-testid="main-landing-id" id="main-div-landing">
+                    <div id="landing-btn">
+                            <img id="logo-pi" src={Log} alt='logo'/>
+                            {
+                                    !isAuthenticated && (
+                                        <LoginBtn/>
+                                    )
+                            }
+                            {
+                                    isAuthenticated && user.email_verified && (
+                                        <>
+                                                {/*<JSONPretty data={user} />*/}
+                                                <Button onClick={()=>logInvalid(user)} id='signin-btn'>Proceed</Button>
+
+                                        </>
+                                    )
+
+                            }
+                    </div>
                 <div id="left-div">
 
                         <img id="graph-picture" src={Graph_Picture} alt="graph-pic"/>
@@ -80,27 +100,11 @@ function Landing({logInvalid}) {
                                 It aims to organise tasks of a project on a interactive and user friendly graph.
                         </p>
 
-                        <div id="landing-btn">
-                                {
-                                        !isAuthenticated && (
-                                            <LoginBtn/>
-                                        )
-                                }
-                                {
-                                        isAuthenticated && user.email_verified && (
-                                            <>
-                                                    {/*<JSONPretty data={user} />*/}
-                                                    <Button onClick={()=>logInvalid(user)} id='signin-btn'>Proceed</Button>
-
-                                            </>
-                                        )
-
-                                }
-                        </div>
-
-
 
                 </div>
+                    <div id="footer-div">
+                            <p>Graph Path &copy; 2021</p>
+                    </div>
 
             </div>
 

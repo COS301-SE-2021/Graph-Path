@@ -5,7 +5,7 @@ import {Button} from "rsuite";
 const LoginBtn=()=>{
     const {loginWithRedirect} = useAuth0();
     return(
-        <Button onClick={()=>loginWithRedirect()} id='signin-btn'>Sign In or Sign Up</Button>
+        <Button onClick={()=>loginWithRedirect()} id='signin-btn'>Sign In</Button>
     )
 }
 export default LoginBtn;
