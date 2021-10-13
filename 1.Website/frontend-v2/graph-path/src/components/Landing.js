@@ -17,7 +17,7 @@ import Graph_Picture from "../img/graph_2.svg";
 import sendMessage from "../img/landing/SendMessage.gif"
 import kanbanBoard from "../img/landing/SearchKanban.gif"
 import graphDrag from "../img/landing/GraphDrag.gif"
-//import CreateTask from "../img/gif/CreateTask.gif";
+import statts1 from "../img/landing/statistics1.gif";
 
 function Landing({logInvalid}) {
 
@@ -41,15 +41,21 @@ function Landing({logInvalid}) {
                                <br/> <br/>
                                <h3>Collaborative Chat</h3>
                                <p className="landingText">The Graph Path has a Collaborative Chat intended for project users to interact with one another</p> <br/> <br/>
-                               <img src={sendMessage} alt-='ChatGIF' />
+                               <img src={sendMessage} alt-='ChatGIF' /> <br/><br/>
 
                                <h3>Kanban Board</h3>
                                <p className="landingText">Traditionally, the Kanban Board is used to display a single project. The Graph Path Kanban has an overview of all projects.</p> <br/> <br/>
-                               <img src={kanbanBoard} alt='KanbanGIF' />
+                               <img src={kanbanBoard} alt='KanbanGIF' /> <br/><br/>
 
                                <h3>Graph View</h3>
                                <p className="landingText">Tasks are organized as an interactive acyclic graph. The graph is user-friendly allowing for node linkage and dragging as the user wishes.</p>
-                               <img src={graphDrag} alt='GraphGIF'/>
+                               <img src={graphDrag} alt='GraphGIF'/> <br/><br/>
+
+                               <h3>Statistics</h3>
+                               <p className='landingText'>
+                                       Graph Path has different statistical views.
+                               </p>
+                               <img src={statts1} alt='StatsGIF'/> <br/><br/>
                        </div>
 
 
