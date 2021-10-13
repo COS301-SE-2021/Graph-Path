@@ -34,8 +34,8 @@ span{
 }
 
 #signin-btn {
-    position: absolute;
-    top: 60%;
+    position: fixed;
+    top: 50%;
     left: 76%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
@@ -78,7 +78,7 @@ span{
     background: #0c3b5c;
     width: 100%;
     display: flex;
-
+    overflow:scroll;
 }
 
 #left-div{
@@ -113,4 +113,11 @@ span{
     margin-left: 10%;
     margin-top: 10%;
     border-radius: 5px;
+}
+
+p.landingText{
+    width: 80%;
+
+    padding: 5px;
+    font-size: 1.5em;
 }
