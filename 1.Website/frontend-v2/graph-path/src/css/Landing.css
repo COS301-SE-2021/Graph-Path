@@ -2,7 +2,7 @@ p.aboutText{
     color: white;
     text-transform: uppercase;
     font-size: larger;
-    margin-top: 9%;
+    margin-top: 8%;
     margin-left: 9%;
 }
 p.introText{
@@ -34,20 +34,23 @@ span{
 }
 
 #signin-btn {
-    position: absolute;
-    top: 60%;
-    left: 76%;
+    /*position: fixed;*/
+    /*top: 50%;*/
+    /*left: 76%;*/
+    font-weight: bold;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     background-color: #f1f1f1;
     color: black;
     font-size: 16px;
-    padding: 16px 30px;
+    /*padding: 16px 30px;*/
     border: none;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 8px;
     text-align: center;
     float: right;
+    margin-top: 25px;
+    width: 200px;
 }
 
 #signin-btn:hover {
@@ -70,7 +73,7 @@ span{
 #pageName{
     /*color: #169DE0;*/
     color: white;
-    margin-top: 7%;
+    margin-top: 25%;
 
 }
 
@@ -78,7 +81,8 @@ span{
     background: #0c3b5c;
     width: 100%;
     display: flex;
-
+    padding-bottom: 20px;
+    /*overflow:scroll;*/
 }
 
 #left-div{
@@ -95,22 +99,51 @@ span{
     max-width: 50vw;
     min-height: 100vh;
     flex-grow: 1;
-    border-radius: 0 0 0 100% ;
+    border-radius: 0 0 0 100%;
 }
 
 #graph-picture{
     width: 70%;
-    margin-top: 10%;
+    margin-top: 30%;
 }
 
 #landing-btn{
-    background-color: pink;
+    /*background-color: #0c3b5c;*/
+    background: linear-gradient(to right, #0c3b5c 25%, #001122 80%);
+    width: 100%;
+    /*min-height: 5vh;*/
+    position: fixed;
+    opacity: inherit;
 }
 
-#carousel-id{
-    width: 80%;
-    height: 45%;
-    margin-left: 10%;
-    margin-top: 10%;
-    border-radius: 5px;
+/*#carousel-id{*/
+/*    width: 80%;*/
+/*    height: 45%;*/
+/*    margin-left: 10%;*/
+/*    margin-top: 10%;*/
+/*    border-radius: 5px;*/
+/*}*/
+
+p.landingText{
+    width: 75%;
+    /*background: pink;*/
+    margin-left: 95px;
+    padding: 5px;
+    font-size: 1.5em;
+}
+
+#logo-pi{
+    float: left;
+    margin-left: 100px;
+    width: 9%;
+    margin-top: 10px;
+}
+
+#footer-div{
+    position: fixed;
+    /*background-color: red;*/
+    width: 100%;
+    bottom: 0;
+    height: 23px;
+    background: linear-gradient(to right, #0c3b5c 0%, #001122 100%);
 }

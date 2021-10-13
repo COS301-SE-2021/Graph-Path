@@ -15,6 +15,7 @@ import PieChart from "./PieChart";
 import Calendar from "./Calendar";
 import BarChart from "./BarChart";
 import PropTypes from "prop-types";
+import Tooltip from "./Tooltip";
 
 
 class Dashboard extends React.Component{
@@ -66,6 +67,7 @@ class Dashboard extends React.Component{
                 <div data-testid="main-container-id" className="main-container">
                     {/* {this.reloadProjectsInManager()} */}
                     <Profile user={this.props.authUser} ref={this.profileModalRef} />
+                    <Tooltip />
                     <nav id="nav-bar"  >
                         <div style={{display:"table-row"}}>
                             <div id="side-bar-button">
@@ -132,7 +134,7 @@ class Dashboard extends React.Component{
                                                     to={`${match.url}/pieChart`}>Project Subtask</Dropdown.Item>
                                                     <Dropdown.Item id="nav-option" componentClass={Link}
                                                                    replace
-                                                                   to={`${match.url}/barChart`}>Assigned Task</Dropdown.Item>
+                                                                   to={`${match.url}/barChart`}>Assigned Subtask</Dropdown.Item>
                                                 </Dropdown>
 
                                             </Nav>
