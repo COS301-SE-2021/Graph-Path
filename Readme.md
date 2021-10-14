@@ -29,7 +29,15 @@ This provides a visual stimuli of how the project flows from node to node.
 <p><a href="https://github.com/nanitight" target="_blank"> Github</a></p>
 </td>
 <td style="border: 2px solid black;text-align: left; padding: 8px;" >
-<p>Interests: Music + Eating !!!</p>
+<ul>
+  <p>Interests: </p>
+  <li> Music: Drums, Piano </li>
+  <li> Technology </li>
+  <li> Aviation </li>
+  <li> Eating !!! </li>
+ </ul> 
+
+
 </td>
 </tr>
 <tr>
