@@ -24,6 +24,7 @@ class Kanban extends React.Component {
             projectsByEmail: [],
             projectsByEmail2: [],
             allTasks: [],
+            check:true
 
         };
         this.fields = [{text: 'Unique ID', key: '_id'},
@@ -44,7 +45,8 @@ class Kanban extends React.Component {
 
     firstSearch = () => {
         this.setState({
-            loading:true
+            loading:true,
+            check:true
         }) ;
         axios.get(`${this.props.api}/project/convertToKanbanBoard/${this.props.loggedUser.email}`, {
             headers: {
@@ -68,11 +70,13 @@ class Kanban extends React.Component {
                         }
 
                     }
-                    this.setState({projectsByEmail: tasks,  loading:false})
+                    this.setState({projectsByEmail: tasks,  loading:false, check:false})
                 }else {
+
                     this.setState({
-                        loading:false
-                    }) ;
+                        loading:false,
+                        check:false
+                    });
                 }
 
             })
@@ -192,10 +196,11 @@ class Kanban extends React.Component {
     }
 
     render() {
-        if (this.state.loading){
-            return <Loader backdrop={false} speed={'slow'} size={'lg'} />
-        }
-        else{
+        // if (this.state.loading  && !this.state.check){
+        //     return <Loader backdrop={false} speed={'slow'} size={'lg'} />
+        //     // return <div>NO PROJECTS TO DISPLAY. PLEASE CREATE A NEW PROJECT</div>
+        // }
+        // else{
             return (
 
                 <div className='schedule-control-section'>
@@ -251,7 +256,7 @@ class Kanban extends React.Component {
 
 
             )
-        }
+      //  }
 
 
     }

@@ -116,7 +116,7 @@
 }
 
 
-.kanban-card-template.e-kanban .complete::before {
+.kanban-card-template.e-kanban .complete_::before {
     content: '\e702';
     color: #9ACD32;
     font-size: 16px;
