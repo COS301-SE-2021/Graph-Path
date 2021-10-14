@@ -7,7 +7,8 @@ import AssignTask from "../img/gif/AssignTask.gif";
 import CreateProject from "../img/gif/CreateProject.gif";
 import CreateTask from "../img/gif/CreateTask.gif";
 import SearchKanban from "../img/gif/SearchKanban.gif";
-import Stats from "../img/landing/statistics2.gif"
+import Stats from "../img/landing/statistics2.gif";
+import Toolt from "../img/gif/Tooltip.gif";
 
 class Tooltip extends React.Component{
     constructor(props) {
@@ -43,11 +44,11 @@ class Tooltip extends React.Component{
     render() {
         return(
             <>
-                <Modal size={"lg"} backdrop={"backdrop"} keyboard={false} show={this.state.show} onHide={this.handleClose} >
+                <Modal id="modal-div" size={"lg"} backdrop={"backdrop"} keyboard={false} show={this.state.show} onHide={this.handleClose} >
                     <Modal.Header>
                         <Modal.Title>Graph Path Tool Tips</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body id="modal-div">
                         <div>
                             <Steps current={this.state.step} >
                                 <Steps.Item  />
@@ -57,6 +58,7 @@ class Tooltip extends React.Component{
                                 <Steps.Item  />
                                 <Steps.Item  />
                                 <Steps.Item  />
+                                <Steps.Item />
                                 <Steps.Item />
                             </Steps>
                             <Divider />
@@ -115,14 +117,20 @@ class Tooltip extends React.Component{
                                                                     <img src={Stats} />
                                                                     <p>To check any of our statistics, simply select a project you want to view the statistics for on the "Select Project" dropdown.</p>
                                                                 </>
-                                                                :""
+                                                                :this.state.step === 8?
+                                                                    <>
+                                                                        <h4>To access the tooltip</h4><br/>
+                                                                        <img src={Toolt} />
+                                                                        <p>To access the tooltip, click on "Profile" button on navigation bar and navigate to "Tool tips" button and the click on the button.</p>
+                                                                    </>
+                                                                    :""
 
 
                                 }
                             </Panel>
                             <ButtonGroup id="tooltip-btn">
                                 <Button onClick={this.onPrevious} disabled={this.state.step === 0} >Previous</Button>
-                                <Button onClick={this.onNext} disabled={this.state.step === 7} >Next</Button>
+                                <Button onClick={this.onNext} disabled={this.state.step === 8} >Next</Button>
                                 <Button onClick={this.handleClose}>Close</Button>
                             </ButtonGroup>
                         </div>

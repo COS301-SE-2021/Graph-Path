@@ -3,7 +3,8 @@ import PropTypes from 'prop-types' ;
 import {IconButton, Panel,Icon, Popover, Button, Whisper } from 'rsuite';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import "../../css/Common.css"
+import "../../css/Common.css" ;
+import PopUpMessage from './PopUpMessage' ;
 
 /*
 * ProjectCard is used to display the minimal description about the project
@@ -21,6 +22,9 @@ import "../../css/Common.css"
 */
 
 class ProjectCard extends Component { 
+  handleExampleAction=()=>{
+    return PopUpMessage('Please create new project ','info') ;
+  }
   render(){
     let {selectProject,deleteProject,project,link}= this.props ;
     const projectInfo = (
@@ -40,11 +44,20 @@ class ProjectCard extends Component {
 
         <br/>
         <div style={{textAlign:"right"}}>
-            <Link id="pop-btn" className="rs-btn rs-btn-default" to={`${link}/edit`}  onClick={()=>selectProject(project)}>
-                Edit Project
-            </Link>
+          {project._id.length > 8 ? 
+          <Link id="pop-btn" className="rs-btn rs-btn-default" to={`${link}/edit`}  
+          onClick={()=> selectProject(project)}>
+              Edit Project
+          </Link>
+        :<Button  id="pop-btn" className="rs-btn rs-btn-default"   
+        onClick={()=> this.handleExampleAction()}>
+            Edit Project
+        </Button>
+        
+        }
             <br/>
-            <Button id="pop-btn" onClick={()=>deleteProject(project)}>
+            <Button id="pop-btn" onClick={()=>typeof deleteProject === 'function' 
+            ? deleteProject(project): this.handleExampleAction()}>
                 Delete Project
             </Button>
 
