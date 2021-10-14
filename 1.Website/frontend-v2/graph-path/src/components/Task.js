@@ -53,6 +53,13 @@ class Task extends React.Component {
         due:this.DateType().min(this.dueDate,'The due date cannot be set to a date that has passed.')
             .isRequired('This field is required.') ,
     })
+
+    taskModel2 = Schema.Model({
+        description: this.StringType().minLength(5,'Please add more details on the description')
+            .isRequired('This field is required.') ,
+        due:this.DateType().min(this.dueDate,'The due date cannot be set to a date that has passed.')
+            .isRequired('This field is required.') ,
+    })
     // EOF provate fields
 
 
@@ -244,7 +251,7 @@ class Task extends React.Component {
                         <b>Issued</b> : {task.issued} <br/>
                        
                         <Form formValue={formValue}
-                            model={this.taskModel}
+                            model={this.taskModel2}
                             ref ={ ref =>(this.form = ref)}
                             onCheck={formError=>this.handleTaskErrors(formError)} 
                             onChange={(f)=>this.handleTaskCreation(f,task.issued)}> 
