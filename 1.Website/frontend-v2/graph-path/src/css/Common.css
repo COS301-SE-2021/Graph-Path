@@ -125,3 +125,7 @@ h6 {
     top:55%;
     border: 1px solid white;
 }
+
+#modal-div{
+    min-height: 50vh;
+}

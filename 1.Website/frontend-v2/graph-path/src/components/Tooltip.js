@@ -48,7 +48,7 @@ class Tooltip extends React.Component{
                     <Modal.Header>
                         <Modal.Title>Graph Path Tool Tips</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body id="modal-div">
                         <div>
                             <Steps current={this.state.step} >
                                 <Steps.Item  />
